@@ -8,15 +8,14 @@ class GeneralButton extends StatelessWidget {
   final Color splashColor;
   final String buttonText;
   final Color buttonTextColor;
-  final bool active;
-  GeneralButton(
-      {required this.onPressed,
-      this.borderRadius = const BorderRadius.all(Radius.circular(10)),
-      this.splashColor = AppColors.primaryColor,
-      required this.buttonText,
-      this.buttonTextColor = const Color(0xffFFFFFF),
-      this.borderColor = Colors.transparent,
-      this.active = true});
+  GeneralButton({
+    required this.onPressed,
+    this.borderRadius = const BorderRadius.all(Radius.circular(15)),
+    this.splashColor = AppColors.primaryColor,
+    required this.buttonText,
+    this.buttonTextColor = const Color(0xffFFFFFF),
+    this.borderColor = Colors.transparent,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +28,7 @@ class GeneralButton extends StatelessWidget {
             borderRadius: borderRadius,
             side: BorderSide(color: borderColor),
           ),
-          color: active ? splashColor : Color(0xff030033).withOpacity(0.5),
+          color: splashColor,
           onPressed: () {
             onPressed();
           },
@@ -37,6 +36,8 @@ class GeneralButton extends StatelessWidget {
             buttonText,
             style: TextStyle(
               color: buttonTextColor,
+              fontWeight: FontWeight.w500,
+              //fontSize: 15
             ),
           ),
         ));

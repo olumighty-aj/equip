@@ -63,4 +63,27 @@ class RegisterViewModel extends BaseModel {
   //     return SuccessModel(result.data);
   //   }
   // }
+  String? phoneNumber;
+  Future setPhoneNumber({
+    required String? phoneNumber,
+  }) async {
+    print("Called!!!");
+    this.phoneNumber = phoneNumber;
+
+    //setBusy(true);
+
+    //_authenticationService.currentUser.phone = phoneNumber;
+    //  final SharedPreferences prefs = await SharedPreferences.getInstance();
+    //  await prefs.setString('phoneNumber', phoneNumber);
+    notifyListeners();
+
+    // setBusy(false);
+  }
+  String sanitizePhoneNumberInput(String phoneNumberInput) {
+    if (phoneNumberInput.startsWith('0')) {
+      phoneNumberInput = phoneNumberInput.toString().substring(1);
+    }
+
+    return phoneNumberInput;
+  }
 }

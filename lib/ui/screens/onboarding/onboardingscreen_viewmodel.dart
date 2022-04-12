@@ -27,12 +27,12 @@ List<OnboardingScreenModel> getScreens() {
 
   screensModel = new OnboardingScreenModel();
 
-  //screen 2
-  screensModel.setSubtitle(
-      "Manage your employees and payroll schedule conveniently in one place");
-  screensModel.setImage("assets/images/onboard3.png");
-  screensModel.setTitle("HR & Payroll");
-  screens.add(screensModel);
+  // //screen 2
+  // screensModel.setSubtitle(
+  //     "Manage your employees and payroll schedule conveniently in one place");
+  // screensModel.setImage("assets/images/onboard3.png");
+  // screensModel.setTitle("HR & Payroll");
+  // screens.add(screensModel);
 
   return screens;
 }
@@ -56,10 +56,10 @@ class OnboardingScreenViewModel extends BaseModel {
   Widget pageIndicator(bool isCurrentPage) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 2.0),
-      height: isCurrentPage ? 10.0 : 10.0,
-      width: isCurrentPage ? 10.0 : 10.0,
+      height: isCurrentPage ? 7.0 : 10.0,
+      width: isCurrentPage ? 25.0 : 10.0,
       decoration: BoxDecoration(
-          color: isCurrentPage ? AppColors.secondaryColor : AppColors.grey,
+          color: isCurrentPage ? AppColors.primaryColor : AppColors.grey,
           borderRadius: BorderRadius.circular(12)),
     );
   }

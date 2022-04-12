@@ -107,3 +107,13 @@ class Validators {
   }
 
 }
+
+widthSizer(double value, BuildContext context, {figmaWidth: 414}) {// 414 is the default design screen width on figma
+  return MediaQuery.of(context).size.width *
+      (value / figmaWidth); // width size on figma
+}
+
+heightSizer(double value, BuildContext context, {figmaHeight: 896}) { // 896 is the default design screen height on figma
+  return MediaQuery.of(context).size.height *
+      (value / figmaHeight); // height size on figma
+}

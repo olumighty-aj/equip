@@ -64,13 +64,13 @@ class SplashScreenState extends State<AnimatedSplashScreen>
         body: Stack(
             fit: StackFit.expand,
             children: <Widget>[
-              Container(
-                  width: Responsive.width(context),
-                  height: Responsive.height(context)/1.1,
-                  child: Image.asset(
-                    "assets/images/background.png",
-                    // color: AppColors.white,
-                  )),
+              // Container(
+              //     width: Responsive.width(context),
+              //     height: Responsive.height(context)/1.1,
+              //     child: Image.asset(
+              //       "assets/images/background.png",
+              //       // color: AppColors.white,
+              //     )),
               Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[

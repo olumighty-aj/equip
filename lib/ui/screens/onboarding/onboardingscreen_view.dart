@@ -1,12 +1,11 @@
+import 'package:equipro/utils/screensize.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:equipro/core/model/onboarding_screen_model.dart';
 import 'package:equipro/ui/widget/pageview_card.dart';
 import 'package:equipro/utils/colors.dart';
 import 'package:equipro/utils/helpers.dart';
 import 'dart:io';
 import 'package:stacked/stacked.dart';
-
 import 'onboardingscreen_viewmodel.dart';
 
 class OnboardingScreen extends StatefulWidget {
@@ -33,122 +32,161 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         viewModelBuilder: () => OnboardingScreenViewModel(),
         // onModelReady: (model) => model.getScreens(),
         builder: (context, model, child) => Scaffold(
-              backgroundColor: Colors.white,
-              body: Container(
-                height: height(1.0, context),
-                child: Stack(
-                  children: [
-                    Container(
-                      height: height(0.75, context),
-                      child: PageView.builder(
-                          controller: pageController,
-                          itemCount: screens.length,
-                          onPageChanged: (val) {
-                            setState(() {
-                              currentIndex = val;
-                            });
-                          },
-                          itemBuilder: (context, index) {
-                            return ScreenTile(
-                              subtitle: screens[index].getSubtitle(),
-                              image: screens[index].getImage(),
-                              title: screens[index].getTitle(),
-                              screenvalue: currentIndex < screens.length - 1,
-                            );
-                          }),
-                    ),
-                    // SizedBox(height: 10),
 
-                    SizedBox(height: 20),
-                    currentIndex != screens.length - 1
-                        ? Container(
-                            padding: model.bottomIconPadding,
-                            child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(""),
-                                  Container(
-                                      margin: EdgeInsets.only(top: 20),
-                                      height: 30,
-                                      child: ElevatedButton(
-                                          style: ButtonStyle(
-                                              foregroundColor:
-                                                  MaterialStateProperty.all<Color>(
-                                                      Colors.black),
-                                              backgroundColor:
-                                                  MaterialStateProperty.all<
-                                                      Color>(Colors.white),
-                                              shape: MaterialStateProperty.all<
-                                                      RoundedRectangleBorder>(
-                                                  RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              20.0),
-                                                      side: BorderSide(color: Colors.black)))),
-                                          onPressed: () {
-                                            pageController.animateToPage(
-                                                screens.length - 1,
-                                                duration:
-                                                    Duration(milliseconds: 400),
-                                                curve: Curves.linear);
-                                          },
-                                          child: Text(
-                                            "SKIP",
-                                          )))
-                                ]))
-                        : Container(),
-                    Container(
-                      padding: EdgeInsets.only(bottom: 140),
+              body: Stack(
+                fit: StackFit.expand,
+                children: [
+                  Container(
+                    child: PageView.builder(
+                        controller: pageController,
+                        itemCount: screens.length,
+                        onPageChanged: (val) {
+                          setState(() {
+                            currentIndex = val;
+                          });
+                        },
+                        itemBuilder: (context, index) {
+                          return ScreenTile(
+                            subtitle: screens[index].getSubtitle(),
+                            image: screens[index].getImage(),
+                            title: screens[index].getTitle(),
+                            screenvalue: currentIndex < screens.length - 1,
+                          );
+                        }),
+                  ),
+                  Container(
+                      //color: AppColors.white,
+                      padding: EdgeInsets.only(bottom: 60),
                       child: Align(
                         alignment: Alignment.bottomCenter,
-                        child: Padding(
-                          padding: model.bottomIconPadding,
-                          child: GestureDetector(
-                            onTap: () {
-                              if (currentIndex != screens.length - 1) {
-                                pageController.animateToPage(currentIndex + 1,
-                                    duration: Duration(milliseconds: 400),
-                                    curve: Curves.linear);
-                              } else {
-                                model.navigateToWelcome();
-                              }
-                            },
-                            child: Container(
-                              height: Platform.isIOS ? 60 : 50,
-                              width: width(0.5, context),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: AppColors.primaryColor,
-                              ),
-                              alignment: Alignment.center,
-                              child: Text(
-                                currentIndex != screens.length - 1
-                                    ? "Next"
-                                    : "Start",style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 20),
-                              ),
+                        child: Container(
+                            height: Responsive.height(context) / 2,
+                            width: 350,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50),
+                              color: AppColors.white,
                             ),
-                          ),
-                        ),
-                      ),
-                    ),
-                      Center(
-                        child:
-                      Container(
-                        margin: EdgeInsets.only(top: height(0.8, context)),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            for (int i = 0; i < screens.length; i++)
-                              currentIndex == i
-                                  ? model.pageIndicator(true)
-                                  : model.pageIndicator(false)
-                          ],
-                        ),
-                      )
-                    ),
-                  ],
-                ),
+                            alignment: Alignment.center,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                currentIndex != screens.length - 1
+                                    ? Column(
+                                        children: [
+                                          Text(
+                                            "Equipment",
+                                            style: TextStyle(
+                                                fontSize: 30,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          SizedBox(
+                                            height: 5,
+                                          ),
+                                          Text(
+                                            "Owner",
+                                            style: TextStyle(
+                                                fontSize: 30,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          SizedBox(
+                                            height: 20,
+                                          ),
+                                          Container(
+                                              width: 250,
+                                              child: Text(
+                                                  "Lease out your construction equipment for a period of time and get paid instantly",
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      fontSize: 15,
+                                                      fontWeight:
+                                                          FontWeight.w100)))
+                                        ],
+                                      )
+                                    : Column(
+                                        children: [
+                                          Text(
+                                            "Equipment",
+                                            style: TextStyle(
+                                                fontSize: 30,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          SizedBox(
+                                            height: 5,
+                                          ),
+                                          Text(
+                                            "Hirer",
+                                            style: TextStyle(
+                                                fontSize: 30,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          SizedBox(
+                                            height: 20,
+                                          ),
+                                          Container(
+                                              width: 250,
+                                              child: Text(
+                                                  "Rent construction equipment quicly at a cheaper price directly from equipment owners",
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      fontSize: 15,
+                                                      fontWeight:
+                                                          FontWeight.w100)))
+                                        ],
+                                      ),
+                                SizedBox(
+                                  height: 40,
+                                ),
+                                Center(
+                                    child: Container(
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      for (int i = 0; i < screens.length; i++)
+                                        currentIndex == i
+                                            ? model.pageIndicator(true)
+                                            : model.pageIndicator(false)
+                                    ],
+                                  ),
+                                )),
+                                Padding(
+                                  padding: model.bottomIconPadding,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      if (currentIndex != screens.length - 1) {
+                                        pageController.animateToPage(
+                                            currentIndex + 1,
+                                            duration:
+                                                Duration(milliseconds: 400),
+                                            curve: Curves.linear);
+                                      } else {
+                                        model.navigateToWelcome();
+                                      }
+                                    },
+                                    child: Container(
+                                      height: Platform.isIOS ? 60 : 50,
+                                      width: width(0.5, context),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(20),
+                                        color: AppColors.primaryColor,
+                                      ),
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        currentIndex != screens.length - 1
+                                            ? "Next"
+                                            : "Login",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            )),
+                      ))
+                ],
               ),
             ));
   }

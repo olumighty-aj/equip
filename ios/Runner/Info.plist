@@ -13,7 +13,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>equipro</string>
+	<string>Equipro</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -28,6 +28,16 @@
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
+		<key>NSPhotoLibraryUsageDescription</key>
+        <string>Allow access to use PhotoLibrary to use for your display picture and send image related files</string>
+        <key>NSCameraUsageDescription</key>
+        <string>Allow access to use camera to set your display picture and send image files</string>
+    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+        	<string>This app needs access to location when open and in the background for easy track of your service.</string>
+        	<key>NSLocationAlwaysUsageDescription</key>
+        	<string>This app needs access to location when in the background for easy track of your service.</string>
+        	<key>NSLocationWhenInUseUsageDescription</key>
+        	<string>This app needs access to location for easy track of your delivery.</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

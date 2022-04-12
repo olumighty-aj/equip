@@ -1,4 +1,14 @@
-import 'package:equipro/ui/screens/bottom_navigation/bottom_navigation.dart';
+import 'package:equipro/ui/screens/chat/chat.dart';
+import 'package:equipro/ui/screens/chat/chats_widget/chat_details.dart';
+import 'package:equipro/ui/screens/hirer/active_rentals/active_rentals.dart';
+import 'package:equipro/ui/screens/hirer/active_rentals/rating.dart';
+import 'package:equipro/ui/screens/hirer/active_rentals/rentals_details.dart';
+import 'package:equipro/ui/screens/hirer/book/equip_details.dart';
+import 'package:equipro/ui/screens/hirer/book/place_booking.dart';
+import 'package:equipro/ui/screens/hirer/home/home_view.dart';
+import 'package:equipro/ui/screens/notification/notification.dart';
+import 'package:equipro/ui/screens/profile/edit_profile.dart';
+import 'package:equipro/ui/screens/profile/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:equipro/ui/screens/login/login_view.dart';
 import 'package:equipro/ui/screens/login/forgot_password.dart';
@@ -18,11 +28,6 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return _getPageRoute(
         routeName: settings.name!,
         viewToShow: const Register(),
-      );
-    case bottomNavigationRoute:
-      return _getPageRoute(
-        routeName: settings.name!,
-        viewToShow: const BottomNavigation(),
       );
 
     case verificationViewRoute:
@@ -45,6 +50,73 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         routeName: settings.name!,
         viewToShow:OnboardingScreen(),
       );
+
+    case homeRoute:
+      return _getPageRoute(
+        routeName: settings.name!,
+        viewToShow:Home(),
+      );
+    case EquipDetailsRoute:
+      return _getPageRoute(
+        routeName: settings.name!,
+        viewToShow:EquipDetails(),
+      );
+    case PlaceBookingRoute:
+      return _getPageRoute(
+        routeName: settings.name!,
+        viewToShow:PlaceBooking(),
+      );
+    case chatDetailsPageRoute:
+      return _getPageRoute(
+        routeName: settings.name!,
+        viewToShow:  ChatDetailsPage(),
+      );
+
+    case chatRoute:
+      return _getPageRoute(
+        routeName: settings.name!,
+        viewToShow:  Chat(),
+      );
+
+    case ProfileRoute:
+      return _getPageRoute(
+        routeName: settings.name!,
+        viewToShow:  Profile(),
+      );
+
+
+    case EditProfileRoute:
+      return _getPageRoute(
+        routeName: settings.name!,
+        viewToShow:  EditProfile(),
+      );
+
+    case NotificationRoute:
+      return _getPageRoute(
+        routeName: settings.name!,
+        viewToShow:  NotificationPage(),
+      );
+
+    case RentalsRoute:
+      return _getPageRoute(
+        routeName: settings.name!,
+        viewToShow:  Rentals(),
+      );
+    case RentalDetailsRoute:
+      return _getPageRoute(
+        routeName: settings.name!,
+        viewToShow:  RentalDetails(),
+      );
+
+    case RatingRoute:
+      return _getPageRoute(
+        routeName: settings.name!,
+        viewToShow:  Rating(),
+      );
+
+
+
+
 
     default:
       return MaterialPageRoute(

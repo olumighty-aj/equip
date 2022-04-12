@@ -1,0 +1,211 @@
+import 'package:badges/badges.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:equipro/ui/screens/drawer.dart';
+import 'package:equipro/ui/screens/profile/edit_profile.dart';
+import 'package:equipro/ui/screens/profile/profile_view_model.dart';
+import 'package:equipro/ui/widget/equip_tiles.dart';
+import 'package:equipro/ui/widget/general_button.dart';
+import 'package:equipro/ui/widget/reviews_widget.dart';
+import 'package:equipro/utils/helpers.dart';
+import 'package:equipro/utils/locator.dart';
+import 'package:equipro/utils/router/navigation_service.dart';
+import 'package:equipro/utils/router/route_names.dart';
+import 'package:equipro/utils/screensize.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
+import 'package:smooth_star_rating/smooth_star_rating.dart';
+import 'package:stacked/stacked.dart';
+import 'package:equipro/ui/screens/login/login_view_model.dart';
+import 'package:equipro/utils/colors.dart';
+
+class Rating extends StatefulWidget {
+  const Rating({Key? key}) : super(key: key);
+
+  @override
+  LoginState createState() => LoginState();
+}
+
+class LoginState extends State<Rating> with TickerProviderStateMixin {
+  final NavigationService _navigationService = locator<NavigationService>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  double? rate = 4.5;
+  TextEditingController emailController = TextEditingController();
+  AnimationController? _navController;
+  Animation<Offset>? _navAnimation;
+  @override
+  void initState() {
+    super.initState();
+    _navController = AnimationController(
+      duration: const Duration(milliseconds: 2000),
+      vsync: this,
+    )..forward();
+    _navAnimation = Tween<Offset>(
+      begin: const Offset(0.0, 0.99),
+      end: const Offset(0.0, 0.0),
+    ).animate(CurvedAnimation(
+      parent: _navController!,
+      curve: Curves.easeIn,
+    ));
+  }
+
+  @override
+  void dispose() {
+    _navController!.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ViewModelBuilder<ProfileViewModel>.reactive(
+        viewModelBuilder: () => ProfileViewModel(),
+        builder: (context, model, child) {
+          return Scaffold(
+            key: _scaffoldKey,
+            body: SingleChildScrollView(
+                child: Padding(
+                    padding: EdgeInsets.all(20),
+                    child: AnimationLimiter(
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: AnimationConfiguration.toStaggeredList(
+                                duration: const Duration(milliseconds: 200),
+                                childAnimationBuilder: (widget) =>
+                                    SlideAnimation(
+                                      horizontalOffset:
+                                          -MediaQuery.of(context).size.width /
+                                              4,
+                                      child: FadeInAnimation(
+                                          curve: Curves.fastOutSlowIn,
+                                          child: widget),
+                                    ),
+                                children: [
+                                  const SizedBox(
+                                    height: 40,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Container(
+                                          //  margin: EdgeInsets.all(20),
+                                          padding: EdgeInsets.only(left: 8),
+                                          height: 40,
+                                          width: 40,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                            color: AppColors.white,
+                                          ),
+                                          child: InkWell(
+                                              onTap: () {
+                                                Navigator.pop(context);
+                                              },
+                                              child: const Icon(
+                                                Icons.arrow_back_ios,
+                                                color: AppColors.primaryColor,
+                                              )))
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 30,
+                                  ),
+                                  Text(
+                                    "Return Successful",
+                                    style: TextStyle(
+                                        color: AppColors.black,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 25),
+                                  ),
+                                  SizedBox(
+                                    height: 30,
+                                  ),
+                                  Text(
+                                    "Thank you for returning this equipment",
+                                    style: TextStyle(
+                                        color: AppColors.black,
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 15),
+                                  ),
+                                  SizedBox(
+                                    height: 30,
+                                  ),
+                                  Text(
+                                    "Rate this equipment you hired:",
+                                    style: TextStyle(
+                                        color: Colors.grey,
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 18),
+                                  ),
+                                  SizedBox(
+                                    height: 50,
+                                  ),
+                                  SmoothStarRating(
+                                      defaultIconData:
+                                          Icons.star_outline_rounded,
+                                      allowHalfRating: true,
+                                      onRated: (v) {
+                                        rate = v;
+                                      },
+                                      starCount: 5,
+                                      rating: rate!,
+                                      size: 70,
+                                      isReadOnly: false,
+                                      filledIconData: Icons.star_rounded,
+                                      halfFilledIconData:
+                                          Icons.star_half_rounded,
+                                      color: AppColors.yellow,
+                                      borderColor: Colors.grey,
+                                      spacing: 0.5),
+                                  SizedBox(
+                                    height: 50,
+                                  ),
+                                  TextFormField(
+                                    maxLines: 4,
+                                    controller: emailController,
+                                    decoration: InputDecoration(
+                                      hintText: 'Comment goes here',
+                                      hintStyle: const TextStyle(
+                                        color: Colors.grey,
+                                      ),
+                                      focusedBorder: const OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(4)),
+                                        borderSide: BorderSide(
+                                            width: 1, color: Colors.grey),
+                                      ),
+                                      disabledBorder: const OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(4)),
+                                        borderSide: BorderSide(
+                                            width: 1, color: Colors.grey),
+                                      ),
+                                      enabledBorder: const OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(4)),
+                                        borderSide: BorderSide(
+                                            width: 1, color: Colors.grey),
+                                      ),
+                                      border: OutlineInputBorder(
+                                        borderRadius:
+                                        BorderRadius.circular(5.0),
+                                        borderSide: const BorderSide(),
+                                      ),
+                                    ),
+                                    keyboardType: TextInputType.emailAddress,
+                                    style: const TextStyle(color: Colors.black),
+                                    cursorColor: Colors.black,
+                                  ),
+                                  SizedBox(
+                                    height: 50,
+                                  ),
+                                  GeneralButton(
+                                      onPressed: () {
+                                        _navigationService.pushAndRemoveUntil(homeRoute);
+                                      }, buttonText: "Submit")
+                                ]))))),
+          );
+        });
+  }
+}

@@ -1,5 +1,4 @@
 import 'package:equipro/utils/locator.dart';
-import 'package:equipro/ui/screens/bottom_navigation/bottom_nav_model_view.dart';
 import 'package:equipro/utils/colors.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -11,11 +10,10 @@ import 'package:equipro/utils/progressBarManager/dialog_service.dart';
 import 'package:equipro/utils/router/navigation_service.dart';
 import 'package:equipro/utils/router/router.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:provider/provider.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
-
+late BuildContext contextB;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   setupLocator();
@@ -31,7 +29,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  late BuildContext contextB;
+
 
   late FirebaseMessaging messaging;
 
@@ -104,11 +102,13 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-        providers: [
-        ChangeNotifierProvider(create: (context) => AppStateProvider()),
-    ],
-    child: MaterialApp(
+    // return MultiProvider(
+    //     providers: [
+    //     ChangeNotifierProvider(create: (context) => AppStateProvider()),
+    // ],
+    // child:
+    return
+    MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Equipro',
       builder: (context, child) => Navigator(
@@ -118,7 +118,7 @@ class _MyAppState extends State<MyApp> {
         }),
       ),
       theme: ThemeData(
-
+backgroundColor: AppColors.backgroundColor,
         textTheme: GoogleFonts.mulishTextTheme(
           Theme.of(context).textTheme,
         ),
@@ -126,6 +126,6 @@ class _MyAppState extends State<MyApp> {
       navigatorKey: locator<NavigationService>().navigationKey,
       home: const AnimatedSplashScreen(),
       onGenerateRoute: generateRoute,
-    ));
+    );
   }
 }

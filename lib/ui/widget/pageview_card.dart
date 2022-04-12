@@ -15,85 +15,20 @@ class ScreenTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return screenvalue
-        ? Column(
-            children: [
-              Container(
-                  color: AppColors.lowGrey,
-                  height: Responsive.height(context) / 2,
-                  child: Container(
-                      margin: EdgeInsets.only(top: height(0.15, context)),
-                      alignment: Alignment.center,
-                      child: Image.asset(
-                        image,
-                        width: 350,
-                        height: 250,
-                      ))),
-              SizedBox(
-                height: 50,
-              ),
-              Container(
-                child:Text(
-                    title,
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
-                  ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Container(
-                width: 350,
-                child: Padding(
-                  padding: EdgeInsets.only(left: 30),
-                  child: Text(
-                    subtitle,
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              )
-            ],
-          )
-        : Column(
-            children: [
-              Container(
-                  color: AppColors.lowGrey,
-                  height: Responsive.height(context) / 2,
-                  child: Container(
-                      margin: EdgeInsets.only(top: height(0.15, context)),
-                      alignment: Alignment.center,
-                      child: Image.asset(
-                        image,
-                        width: 300,
-                        height: 200,
-                      ))),
-              SizedBox(
-                height: 50,
-              ),
-              Container(
-                child: Padding(
-                  padding: EdgeInsets.only(left: 30),
-                  child: Text(
-                    title,
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 35),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Container(
-                width: 300,
-                child: Padding(
-                  padding: EdgeInsets.only(left: 30),
-                  child: Text(
-                    subtitle,
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              )
-            ],
-          );
+   return
+    Container(
+      width: Responsive.width(context),
+    height: Responsive.height(context) ,
+    decoration: BoxDecoration(
+    image: DecorationImage(
+    image: AssetImage(image),
+    fit: BoxFit.fill,
+    colorFilter: ColorFilter.mode(
+    AppColors.black.withOpacity(0.3),
+    BlendMode.darken
+    ),
+    ),
+    ));
+
   }
 }
