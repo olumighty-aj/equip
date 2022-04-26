@@ -7,6 +7,11 @@ import 'package:equipro/ui/screens/hirer/book/equip_details.dart';
 import 'package:equipro/ui/screens/hirer/book/place_booking.dart';
 import 'package:equipro/ui/screens/hirer/home/home_view.dart';
 import 'package:equipro/ui/screens/notification/notification.dart';
+import 'package:equipro/ui/screens/owner/home_owner/equip_owner_details.dart';
+import 'package:equipro/ui/screens/owner/home_owner/home_owner.dart';
+import 'package:equipro/ui/screens/owner/home_owner/post_equipment.dart';
+import 'package:equipro/ui/screens/owner/home_owner/post_equipment_final.dart';
+import 'package:equipro/ui/screens/owner/setup_owner.dart';
 import 'package:equipro/ui/screens/profile/edit_profile.dart';
 import 'package:equipro/ui/screens/profile/profile.dart';
 import 'package:flutter/material.dart';
@@ -112,6 +117,33 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return _getPageRoute(
         routeName: settings.name!,
         viewToShow:  Rating(),
+      );
+
+    case SetupOwnerRoute:
+      return _getPageRoute(
+        routeName: settings.name!,
+        viewToShow:  SetupOwner(),
+      );
+
+    case HomeOwnerRoute:
+      return _getPageRoute(
+        routeName: settings.name!,
+        viewToShow:  HomeOwner(),
+      );
+    case PostEquipmentRoute:
+      return _getPageRoute(
+        routeName: settings.name!,
+        viewToShow:  PostEquipment(),
+      );
+    case PostEquipmentFinalRoute:
+      return _getPageRoute(
+        routeName: settings.name!,
+        viewToShow:  PostEquipmentFinal(),
+      );
+    case EquipOwnerDetailsRoute:
+      return _getPageRoute(
+        routeName: settings.name!,
+        viewToShow:  EquipOwnerDetails(),
       );
 
 

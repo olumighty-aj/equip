@@ -153,6 +153,7 @@ class LoginState extends State<Rentals> with SingleTickerProviderStateMixin{
                                               controller: _controller,
                                               unselectedLabelColor: Colors.grey,
                                               indicatorWeight: 3,
+                                              labelStyle: TextStyle(fontSize: 12),
                                               labelColor:
                                                   AppColors.primaryColor,
                                               indicatorColor:

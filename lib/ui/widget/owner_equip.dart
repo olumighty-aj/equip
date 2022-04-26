@@ -7,9 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:equipro/utils/colors.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class EquipTiles extends StatelessWidget {
+class OwnerEquipTiles extends StatelessWidget {
   // final Function onPressed;
-  EquipTiles(
+  OwnerEquipTiles(
       //{
       // required this.onPressed,
       // }
@@ -23,7 +23,7 @@ class EquipTiles extends StatelessWidget {
           //   context,
           //   MaterialPageRoute(builder: (context) => EquipDetails()),
           // );
-          _navigationService.navigateTo(EquipDetailsRoute);
+          _navigationService.navigateTo(EquipOwnerDetailsRoute);
         },
         child: Container(
           margin: EdgeInsets.only(bottom: 20),
@@ -42,11 +42,11 @@ class EquipTiles extends StatelessWidget {
             ],
           ),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //  mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                  height: 80,
-                  width: 80,
+                  height: 90,
+                  width: 90,
                   child: ClipRRect(
                       borderRadius: BorderRadius.circular(10.0),
                       child: Hero(
@@ -63,6 +63,7 @@ class EquipTiles extends StatelessWidget {
                               ),
                             ),
                           )))),
+              SizedBox(width: 30,),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -109,42 +110,7 @@ class EquipTiles extends StatelessWidget {
                   ),
                 ],
               ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Container(
-                      padding: EdgeInsets.only(bottom: 10),
-                      width: 80,
-                      child: SizedBox(
-                          height: 34,
-                          width: 70,
-                          child: RaisedButton(
-                            shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(7)),
-                            ),
-                            color: AppColors.primaryColor,
-                            onPressed: () {
-                              _navigationService.navigateTo(EquipDetailsRoute);
-                            },
-                            child: Text(
-                              "Book",
-                              style: TextStyle(
-                                color: AppColors.white,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                                //fontSize: 15
-                              ),
-                            ),
-                          ))
-                      // GeneralButton(onPressed: () {
-                      //   _navigationService.navigateTo(EquipDetailsRoute);
-                      // }, buttonText: "Book Now")
-
-                      )
-                ],
-              )
+      Text("")
             ],
           ),
         ));

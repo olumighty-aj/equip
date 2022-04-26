@@ -81,10 +81,8 @@ class LoginState extends State<Login> {
                                 topRight: Radius.circular(40)),
                           ),
                           height: Responsive.height(context) / 1.6,
-                          child:
-                          SingleChildScrollView(
-                          child:
-                          Column(
+                          child: SingleChildScrollView(
+                              child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
@@ -209,7 +207,10 @@ class LoginState extends State<Login> {
                                                         style: TextStyle(
                                                             fontSize: 15,
                                                             color: AppColors
-                                                                .primaryColor,decoration: TextDecoration.underline),
+                                                                .primaryColor,
+                                                            decoration:
+                                                                TextDecoration
+                                                                    .underline),
                                                       ),
                                                     ),
                                                     Text(''),
@@ -246,15 +247,15 @@ class LoginState extends State<Login> {
                                         _navigationService
                                             .navigateTo(registerRoute);
                                       },
-                                      child: Text(
-                                        "Sign Up",
-                                        style: TextStyle(
-                                            color: AppColors.primaryColor,decoration: TextDecoration.underline)
-                                      )),
+                                      child: Text("Sign Up",
+                                          style: TextStyle(
+                                              color: AppColors.primaryColor,
+                                              decoration:
+                                                  TextDecoration.underline))),
                                 ],
                               )
                             ],
-                          ) )),
+                          ))),
                     ],
                   ),
                 ],

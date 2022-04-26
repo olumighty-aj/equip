@@ -5,7 +5,7 @@ const String loginRoute  = "login";
 const String registerRoute  = "register";
 const String verificationViewRoute  = "verificationView";
 const String forgotPasswordRoute  = "forgotPassword";
-const String homeRoute  = "home";
+const String homeRoute  = "home_owner";
 const String OnBoardingScreenRoute  = "OnboardingScreen";
 const String EquipDetailsRoute  = "EquipDetails";
 const String PlaceBookingRoute  = "PlaceBooking";
@@ -17,6 +17,13 @@ const String NotificationRoute  = "Notification";
 const String RentalsRoute  = "Rentals";
 const String RentalDetailsRoute  = "RentalDetails";
 const String RatingRoute  = "Rating";
+const String SetupOwnerRoute  = "SetupOwner";
+const String HomeOwnerRoute  = "HomeOwner";
+const String PostEquipmentRoute  = "PostEquipment";
+const String PostEquipmentFinalRoute  = "PostEquipmentFinal";
+const String EquipOwnerDetailsRoute  = "EquipOwnerDetails";
+
+
 
 
 

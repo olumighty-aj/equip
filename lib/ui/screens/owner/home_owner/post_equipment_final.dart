@@ -12,24 +12,26 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:progress_indicator/progress_indicator.dart';
 import 'package:stacked/stacked.dart';
 import 'package:equipro/ui/screens/login/login_view_model.dart';
 import 'package:equipro/utils/colors.dart';
 
-class PlaceBooking extends StatefulWidget {
-  const PlaceBooking({Key? key}) : super(key: key);
+class PostEquipmentFinal extends StatefulWidget {
+  const PostEquipmentFinal({Key? key}) : super(key: key);
 
   @override
   LoginState createState() => LoginState();
 }
 
-class LoginState extends State<PlaceBooking> with TickerProviderStateMixin {
+class LoginState extends State<PostEquipmentFinal> with TickerProviderStateMixin {
   final NavigationService _navigationService = locator<NavigationService>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   int? selectedQuantity;
   String? pickupTime = DateTime.now().toString();
   String? selectedDate;
   String? selectedWeek;
+  String? selectedPer;
   TextEditingController emailController = TextEditingController();
   AnimationController? _navController;
   Animation<Offset>? _navAnimation;
@@ -183,75 +185,84 @@ class LoginState extends State<PlaceBooking> with TickerProviderStateMixin {
                                     height: 30,
                                   ),
                                   Text(
-                                    "Wheelbarrow",
+                                    "Post New Equipment",
                                     style: TextStyle(
-                                        color: AppColors.primaryColor,
+                                        color: AppColors.black,
                                         fontWeight: FontWeight.bold,
                                         fontSize: 25),
                                   ),
                                   SizedBox(
                                     height: 30,
                                   ),
-                                  Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          "N5000 per week",
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              color: AppColors.green,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        const SizedBox(
-                                          width: 10,
-                                        ),
-                                        Text(
-                                          "QTY Available: 4",
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ]),
-                                  SizedBox(
-                                    height: 30,
-                                  ),
                                   Text(
-                                    "Availlability: 02 Sept. 2022 - 09 Oct, 2022",
+                                    "Other Details",
                                     style: TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 12),
+                                        fontSize: 18,
+                                        color: AppColors.black,),
                                   ),
                                   SizedBox(
-                                    height: 30,
+                                    height: 20,
                                   ),
-                                  Container(
-                                      width: Responsive.width(context) / 2.3,
-                                      child: GeneralButton(
-                                          onPressed: () {   _navigationService.navigateTo(chatDetailsPageRoute);},
-                                          buttonText: "Chat Owner",
-                                          buttonTextColor: AppColors.black,
-                                          splashColor: Color.fromRGBO(
-                                              255, 235, 173, 0.85))),
-                                  SizedBox(
-                                    height: 30,
-                                  ),
-                                  Divider(
-                                    thickness: 3,
+                                  BarProgress(
+                                    percentage: 100,
+                                    backColor: AppColors.white,
+                                    color: AppColors.primaryColor,
+                                    showPercentage: false,
+                                    stroke: 9,
+                                    round: true,
                                   ),
                                   SizedBox(
-                                    height: 30,
+                                    height: 50,
                                   ),
+
                                   Text(
-                                    "Place a booking",
+                                    "Cost of hire",
                                     style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold),
+                                        fontSize: 15,),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+
+                                  TextFormField(
+                                    controller: emailController,
+                                    decoration: InputDecoration(
+                                      hintText: 'Cost',
+                                      hintStyle: const TextStyle(
+                                        color: Colors.grey,
+                                      ),
+                                      focusedBorder: const OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(4)),
+                                        borderSide: BorderSide(
+                                            width: 1, color: Colors.grey),
+                                      ),
+                                      disabledBorder: const OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(4)),
+                                        borderSide: BorderSide(
+                                            width: 1, color: Colors.grey),
+                                      ),
+                                      enabledBorder: const OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(4)),
+                                        borderSide: BorderSide(
+                                            width: 1, color: Colors.grey),
+                                      ),
+                                      border: OutlineInputBorder(
+                                        borderRadius:
+                                        BorderRadius.circular(5.0),
+                                        borderSide: const BorderSide(),
+                                      ),
+                                    ),
+                                    keyboardType: TextInputType.number,
+                                    style: const TextStyle(color: Colors.black),
+                                    cursorColor: Colors.black,
                                   ),
                                   SizedBox(
                                     height: 30,
                                   ),
+
                                   Container(
                                     padding: EdgeInsets.all(10),
                                     width: Responsive.width(context),
@@ -261,29 +272,42 @@ class LoginState extends State<PlaceBooking> with TickerProviderStateMixin {
                                       borderRadius: BorderRadius.circular(5.0),
                                     ),
                                     child: Center(
-                                      child: DropdownButtonFormField<int>(
+                                      child: DropdownButtonFormField<String>(
                                         decoration: InputDecoration.collapsed(
                                             hintText:
-                                                'Number of quantity to hire'),
+                                                'Per?'),
                                         isExpanded: true,
-                                        value: selectedQuantity,
+                                        value: selectedPer,
                                         onChanged: (newValue) {
                                           setState(() {
-                                            selectedQuantity = newValue;
+                                            selectedPer = newValue;
                                           });
                                         },
-                                        items:quantityList.map<DropdownMenuItem<int>>(
-                                            (int value) {
-                                          return DropdownMenuItem<int>(
-                                            value: value,
-                                            child: Text(value.toString()),
-                                          );
-                                        }).toList(),
+                                        items: <String>[
+                                          'Day',
+                                          'Week',
+                                          'Month',
+                                          'Costume',
+                                        ].map<DropdownMenuItem<String>>(
+                                                (String value) {
+                                              return DropdownMenuItem<String>(
+                                                value: value,
+                                                child: Text(value),
+                                              );
+                                            }).toList(),
                                       ),
                                     ),
                                   ),
                                   SizedBox(
                                     height: 20,
+                                  ),
+                                  Text(
+                                    "Availability",
+                                    style: TextStyle(
+                                      fontSize: 15,),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
                                   ),
                                   InkWell(
                                       onTap: () {
@@ -334,7 +358,7 @@ class LoginState extends State<PlaceBooking> with TickerProviderStateMixin {
                                                   Text(
                                                     selectedDate != null
                                                         ? selectedDate!
-                                                        : "Rental start date",
+                                                        : "From",
                                                     style: const TextStyle(
                                                         color: Colors.grey),
                                                   ),
@@ -348,6 +372,78 @@ class LoginState extends State<PlaceBooking> with TickerProviderStateMixin {
                                   SizedBox(
                                     height: 20,
                                   ),
+
+                                  InkWell(
+                                      onTap: () {
+                                        // YearPicker(firstDate: firstDate, lastDate: lastDate, selectedDate: selectedDate, onChanged: onChanged)
+                                        DatePicker.showDateTimePicker(context,
+                                            maxTime: DateTime.now(),
+                                            showTitleActions: true,
+                                            onChanged: (date) {
+                                              setState(() {
+                                                pickupTime = date.toString();
+                                                selectedDate =
+                                                    DateFormat('M/d/y - h:mm a')
+                                                        .format(date)
+                                                        .toString();
+                                                print(DateFormat('y')
+                                                    .format(date)
+                                                    .toString());
+                                              });
+                                              print('change $date in time zone ' +
+                                                  date.timeZoneOffset.inHours
+                                                      .toString());
+                                            }, onConfirm: (date) {
+                                              setState(() {
+                                                pickupTime = date.toString();
+                                              });
+                                            }, currentTime: DateTime.now());
+                                      },
+                                      child: Container(
+                                          height: 60,
+                                          width: Responsive.width(context),
+                                          decoration: BoxDecoration(
+                                            //   color: AppColors.primaryColor.withOpacity(0.1),
+                                              borderRadius: const BorderRadius
+                                                  .all(
+                                                  Radius.circular(
+                                                      5.0) //                 <--- border radius here
+                                              ),
+                                              border: Border.all(
+                                                  color: Colors.grey)),
+                                          child: Padding(
+                                              padding: EdgeInsets.only(
+                                                  left: 20, right: 20),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                MainAxisAlignment
+                                                    .spaceBetween,
+                                                children: [
+                                                  Text(
+                                                    selectedDate != null
+                                                        ? selectedDate!
+                                                        : "Till",
+                                                    style: const TextStyle(
+                                                        color: Colors.grey),
+                                                  ),
+                                                  Icon(
+                                                    Icons
+                                                        .calendar_today_outlined,
+                                                    color: Colors.grey,
+                                                  )
+                                                ],
+                                              )))),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  Text(
+                                    "Quantities available for hire",
+                                    style: TextStyle(
+                                      fontSize: 15,),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
                                   Container(
                                     padding: EdgeInsets.all(10),
                                     width: Responsive.width(context),
@@ -359,7 +455,7 @@ class LoginState extends State<PlaceBooking> with TickerProviderStateMixin {
                                     child: Center(
                                       child: DropdownButtonFormField<String>(
                                         decoration: InputDecoration.collapsed(
-                                            hintText: 'Number of weeks'),
+                                            hintText: 'Number of quantity for hire'),
                                         isExpanded: true,
                                         value: selectedWeek,
                                         onChanged: (newValue) {
@@ -372,6 +468,12 @@ class LoginState extends State<PlaceBooking> with TickerProviderStateMixin {
                                           '2',
                                           '3',
                                           '4',
+                                          '5',
+                                          '6',
+                                          '7',
+                                          '8',
+                                          '9',
+                                          '10',
                                         ].map<DropdownMenuItem<String>>(
                                             (String value) {
                                           return DropdownMenuItem<String>(
@@ -382,44 +484,7 @@ class LoginState extends State<PlaceBooking> with TickerProviderStateMixin {
                                       ),
                                     ),
                                   ),
-                                  SizedBox(
-                                    height: 30,
-                                  ),
-                                  TextFormField(
-                                    controller: emailController,
-                                    decoration: InputDecoration(
-                                      hintText: 'Enter delivery location',
-                                      hintStyle: const TextStyle(
-                                        color: Colors.grey,
-                                      ),
-                                      focusedBorder: const OutlineInputBorder(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(4)),
-                                        borderSide: BorderSide(
-                                            width: 1, color: Colors.grey),
-                                      ),
-                                      disabledBorder: const OutlineInputBorder(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(4)),
-                                        borderSide: BorderSide(
-                                            width: 1, color: Colors.grey),
-                                      ),
-                                      enabledBorder: const OutlineInputBorder(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(4)),
-                                        borderSide: BorderSide(
-                                            width: 1, color: Colors.grey),
-                                      ),
-                                      border: OutlineInputBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(5.0),
-                                        borderSide: const BorderSide(),
-                                      ),
-                                    ),
-                                    keyboardType: TextInputType.emailAddress,
-                                    style: const TextStyle(color: Colors.black),
-                                    cursorColor: Colors.black,
-                                  ),
+
                                   SizedBox(
                                     height: 30,
                                   ),
@@ -431,9 +496,9 @@ class LoginState extends State<PlaceBooking> with TickerProviderStateMixin {
                                           width: 300,
                                           child: GeneralButton(
                                               onPressed: () {
-                                                displayDialog( context);
+                                                _navigationService.pushAndRemoveUntil(HomeOwnerRoute);
                                               },
-                                              buttonText: "Book Now"))))
+                                              buttonText: "Post"))))
                                 ]))))),
             drawer: CollapsingNavigationDrawer(),
           );

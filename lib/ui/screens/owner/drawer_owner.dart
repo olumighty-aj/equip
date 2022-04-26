@@ -8,8 +8,8 @@ import 'package:equipro/utils/tiny_db.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
-class CollapsingNavigationDrawer extends StatefulWidget {
-  const CollapsingNavigationDrawer({Key? key}) : super(key: key);
+class OwnerDrawer extends StatefulWidget {
+  const OwnerDrawer({Key? key}) : super(key: key);
 
   @override
   CollapsingNavigationDrawerState createState() {
@@ -17,7 +17,7 @@ class CollapsingNavigationDrawer extends StatefulWidget {
   }
 }
 
-class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
+class CollapsingNavigationDrawerState extends State<OwnerDrawer>
     with TickerProviderStateMixin {
   double maxWidth = 300;
   double minWidth = 90;

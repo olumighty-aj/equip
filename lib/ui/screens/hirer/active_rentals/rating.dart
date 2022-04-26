@@ -141,6 +141,9 @@ class LoginState extends State<Rating> with TickerProviderStateMixin {
                                   SizedBox(
                                     height: 50,
                                   ),
+                                  Center(child:
+                                  FittedBox(
+                                    child:
                                   SmoothStarRating(
                                       defaultIconData:
                                           Icons.star_outline_rounded,
@@ -157,7 +160,7 @@ class LoginState extends State<Rating> with TickerProviderStateMixin {
                                           Icons.star_half_rounded,
                                       color: AppColors.yellow,
                                       borderColor: Colors.grey,
-                                      spacing: 0.5),
+                                      spacing: 0.5))),
                                   SizedBox(
                                     height: 50,
                                   ),

@@ -26,7 +26,8 @@ class ChatDetailsPage extends StatelessWidget {
       left: 10,
       right: 10,
       child: Container(
-        height: 80.0,
+        color: Colors.white,
+        height: 60.0,
         child: TextFormField(
           maxLines: null,
           keyboardType: TextInputType.multiline,

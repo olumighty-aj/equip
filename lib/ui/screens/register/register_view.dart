@@ -279,31 +279,7 @@ class LoginState extends State<Register> {
                                             const SizedBox(
                                               height: 20,
                                             ),
-                                            InkWell(
-                                                onTap: () {
-                                                  _navigationService.navigateTo(
-                                                      forgotPasswordRoute);
-                                                },
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: const [
-                                                    InkWell(
-                                                      child: Text(
-                                                        'Forgot Password?',
-                                                        style: TextStyle(
-                                                            fontSize: 15,
-                                                            color: AppColors
-                                                                .primaryColor,
-                                                            decoration:
-                                                                TextDecoration
-                                                                    .underline),
-                                                      ),
-                                                    ),
-                                                    Text(''),
-                                                  ],
-                                                )),
+
                                           ]))),
                               const SizedBox(
                                 height: 10,

@@ -70,7 +70,7 @@ class LoginState extends State<Chat> {
                           const Text(
                             'Chat',
                             style: TextStyle(
-                                fontSize: 20,
+                                fontSize: 25,
                                 color: AppColors.black,
                                 fontWeight: FontWeight.bold),
                           ),

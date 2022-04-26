@@ -185,27 +185,27 @@ class LoginState extends State<Profile> with TickerProviderStateMixin {
                                     height: 15,
                                   ),
                                   InkWell(
-                                    onTap: (){
-                                      _navigationService.navigateTo(EditProfileRoute);
-                                    },
+                                      onTap: () {
+                                        _navigationService
+                                            .navigateTo(EditProfileRoute);
+                                      },
                                       child: Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
                                           children: [
-                                        SvgPicture.asset(
-                                            "assets/images/edit.svg"),
-                                        const SizedBox(
-                                          width: 10,
-                                        ),
-
-                                        Text(
-                                          "Edit profile",
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              color: AppColors.primaryColor,
-                                              fontWeight: FontWeight.w400),
-                                        ),
-                                      ])),
+                                            SvgPicture.asset(
+                                                "assets/images/edit.svg"),
+                                            const SizedBox(
+                                              width: 10,
+                                            ),
+                                            Text(
+                                              "Edit profile",
+                                              style: TextStyle(
+                                                  fontSize: 15,
+                                                  color: AppColors.primaryColor,
+                                                  fontWeight: FontWeight.w400),
+                                            ),
+                                          ])),
                                   SizedBox(
                                     height: 20,
                                   ),
@@ -228,97 +228,131 @@ class LoginState extends State<Profile> with TickerProviderStateMixin {
                                         color: AppColors.white,
                                       ),
                                       alignment: Alignment.center,
-                                      child: Column(
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
                                           SizedBox(
                                             height: 30,
                                           ),
-                                          Row(
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
-                                              Text(
-                                                "Phone Number",
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 18),
-                                              ),
-                                              SizedBox(
-                                                width: 40,
-                                              ),
-                                              Text("+234 80128394"),
+                                              Container(
+                                                  height: 70,
+                                                  child: Text(
+                                                    "Phone Number",
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 18),
+                                                  )),
+                                              Container(
+                                                  height: 100,
+                                                  child: Text(
+                                                    "Address",
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 18),
+                                                  )),
+                                              Container(
+                                                  height: 80,
+                                                  child: Text(
+                                                    "Means of ID",
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 18),
+                                                  )),
                                             ],
                                           ),
-                                          SizedBox(
-                                            height: 30,
-                                          ),
-                                          Row(
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.end,
                                             children: [
-                                              Text(
-                                                "Address",
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 18),
-                                              ),
-                                              SizedBox(
-                                                width: 40,
-                                              ),
-                                              Expanded(
+                                              Container(
+                                                height: 70,
+                                                width: 200,
                                                 child: Text(
-                                                    "No 26, Gbemisola street, Allen Avenue, Ikeja, Lagos state"),
-                                              )
-                                            ],
-                                          ),
-                                          SizedBox(
-                                            height: 30,
-                                          ),
-                                          Row(
-                                            children: [
-                                              Text(
-                                                "Means of ID",
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 18),
+                                                  "+234 80128394",
+                                                  style: TextStyle(
+                                                      color: Colors.grey,
+                                                      fontSize: 15,
+                                                      fontWeight:
+                                                          FontWeight.w500),
+                                                ),
                                               ),
-                                              SizedBox(
-                                                width: 40,
+                                              Container(
+                                                height: 100,
+                                                width: 200,
+                                                child: Text(
+                                                    "No 26, Gbemisola street, Allen Avenue, Ikeja, Lagos state",
+                                                    style: TextStyle(
+                                                        color: Colors.grey,
+                                                        fontSize: 15,
+                                                        fontWeight:
+                                                            FontWeight.w500)),
                                               ),
-                                              Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                      "National Identification Card"),
-                                                  SizedBox(height: 10,),
-                                                  Container(
-                                                    width: 90,
-                                                    height: 30,
-                                                    child: GeneralButton(
-                                                      onPressed: () {},
-                                                      splashColor:
-                                                          Color(0xCC4EA14D)
+                                              Container(
+                                                  height: 80,
+                                                  width: 200,
+                                                  child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Text(
+                                                          "National Identification Card",
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.grey,
+                                                              fontSize: 15,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500)),
+                                                      SizedBox(
+                                                        height: 10,
+                                                      ),
+                                                      Container(
+                                                        width: 90,
+                                                        height: 30,
+                                                        child: GeneralButton(
+                                                          onPressed: () {},
+                                                          splashColor: Color(
+                                                                  0xCC4EA14D)
                                                               .withOpacity(0.3),
-                                                      buttonText: "Verified",
-                                                      buttonTextColor:
-                                                          Color(0xff247322),
-                                                    ),
-                                                  )
-                                                ],
-                                              )
+                                                          buttonText:
+                                                              "Verified",
+                                                          buttonTextColor:
+                                                              Color(0xff247322),
+                                                        ),
+                                                      )
+                                                    ],
+                                                  ))
                                             ],
                                           ),
                                         ],
                                       )),
-SizedBox(height: 10,),
-Row(
-  children: [
-
-
-                                  Text("Reviews(0)",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),)
-  ],
-),
-                                  SizedBox(height: 10,),
-
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        "Reviews(0)",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20),
+                                      )
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
                                   ReviewItem()
                                 ]))))),
             drawer: CollapsingNavigationDrawer(),
