@@ -22,6 +22,11 @@ const String HomeOwnerRoute  = "HomeOwner";
 const String PostEquipmentRoute  = "PostEquipment";
 const String PostEquipmentFinalRoute  = "PostEquipmentFinal";
 const String EquipOwnerDetailsRoute  = "EquipOwnerDetails";
+const String BookingDetailsRoute  = "BookingDetails";
+const String HirerProfileRoute  = "HirerProfile";
+const String EditEquipmentRoute  = "EditEquipment";
+const String EarningPageRoute  = "EarningPage";
+const String WithdrawRoute  = "Withdraw";
 
 
 

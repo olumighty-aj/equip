@@ -7,7 +7,12 @@ import 'package:equipro/ui/screens/hirer/book/equip_details.dart';
 import 'package:equipro/ui/screens/hirer/book/place_booking.dart';
 import 'package:equipro/ui/screens/hirer/home/home_view.dart';
 import 'package:equipro/ui/screens/notification/notification.dart';
+import 'package:equipro/ui/screens/owner/earnings/earning_page.dart';
+import 'package:equipro/ui/screens/owner/earnings/withdraw.dart';
+import 'package:equipro/ui/screens/owner/home_owner/booking_details.dart';
+import 'package:equipro/ui/screens/owner/home_owner/edit_equipment.dart';
 import 'package:equipro/ui/screens/owner/home_owner/equip_owner_details.dart';
+import 'package:equipro/ui/screens/owner/home_owner/hirer_profile.dart';
 import 'package:equipro/ui/screens/owner/home_owner/home_owner.dart';
 import 'package:equipro/ui/screens/owner/home_owner/post_equipment.dart';
 import 'package:equipro/ui/screens/owner/home_owner/post_equipment_final.dart';
@@ -53,100 +58,125 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case OnBoardingScreenRoute:
       return _getPageRoute(
         routeName: settings.name!,
-        viewToShow:OnboardingScreen(),
+        viewToShow: OnboardingScreen(),
       );
 
     case homeRoute:
       return _getPageRoute(
         routeName: settings.name!,
-        viewToShow:Home(),
+        viewToShow: Home(),
       );
     case EquipDetailsRoute:
       return _getPageRoute(
         routeName: settings.name!,
-        viewToShow:EquipDetails(),
+        viewToShow: EquipDetails(),
       );
     case PlaceBookingRoute:
       return _getPageRoute(
         routeName: settings.name!,
-        viewToShow:PlaceBooking(),
+        viewToShow: PlaceBooking(),
       );
     case chatDetailsPageRoute:
       return _getPageRoute(
         routeName: settings.name!,
-        viewToShow:  ChatDetailsPage(),
+        viewToShow: ChatDetailsPage(),
       );
 
     case chatRoute:
       return _getPageRoute(
         routeName: settings.name!,
-        viewToShow:  Chat(),
+        viewToShow: Chat(),
       );
 
     case ProfileRoute:
       return _getPageRoute(
         routeName: settings.name!,
-        viewToShow:  Profile(),
+        viewToShow: Profile(),
       );
-
 
     case EditProfileRoute:
       return _getPageRoute(
         routeName: settings.name!,
-        viewToShow:  EditProfile(),
+        viewToShow: EditProfile(),
       );
 
     case NotificationRoute:
       return _getPageRoute(
         routeName: settings.name!,
-        viewToShow:  NotificationPage(),
+        viewToShow: NotificationPage(),
       );
 
     case RentalsRoute:
       return _getPageRoute(
         routeName: settings.name!,
-        viewToShow:  Rentals(),
+        viewToShow: Rentals(),
       );
     case RentalDetailsRoute:
       return _getPageRoute(
         routeName: settings.name!,
-        viewToShow:  RentalDetails(),
+        viewToShow: RentalDetails(),
       );
 
     case RatingRoute:
       return _getPageRoute(
         routeName: settings.name!,
-        viewToShow:  Rating(),
+        viewToShow: Rating(),
       );
 
     case SetupOwnerRoute:
       return _getPageRoute(
         routeName: settings.name!,
-        viewToShow:  SetupOwner(),
+        viewToShow: SetupOwner(),
       );
 
     case HomeOwnerRoute:
       return _getPageRoute(
         routeName: settings.name!,
-        viewToShow:  HomeOwner(),
+        viewToShow: HomeOwner(),
       );
     case PostEquipmentRoute:
       return _getPageRoute(
         routeName: settings.name!,
-        viewToShow:  PostEquipment(),
+        viewToShow: PostEquipment(),
       );
     case PostEquipmentFinalRoute:
       return _getPageRoute(
         routeName: settings.name!,
-        viewToShow:  PostEquipmentFinal(),
+        viewToShow: PostEquipmentFinal(),
       );
     case EquipOwnerDetailsRoute:
       return _getPageRoute(
         routeName: settings.name!,
-        viewToShow:  EquipOwnerDetails(),
+        viewToShow: EquipOwnerDetails(),
+      );
+    case BookingDetailsRoute:
+      return _getPageRoute(
+        routeName: settings.name!,
+        viewToShow: BookingDetails(),
       );
 
+    case HirerProfileRoute:
+      return _getPageRoute(
+        routeName: settings.name!,
+        viewToShow: HirerProfile(),
+      );
 
+    case EditEquipmentRoute:
+      return _getPageRoute(
+        routeName: settings.name!,
+        viewToShow: EditEquipment(),
+      );
+    case EarningPageRoute:
+      return _getPageRoute(
+        routeName: settings.name!,
+        viewToShow: EarningPage(),
+      );
+
+    case WithdrawRoute:
+      return _getPageRoute(
+        routeName: settings.name!,
+        viewToShow: Withdraw(),
+      );
 
 
 

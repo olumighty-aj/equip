@@ -1,9 +1,11 @@
 import 'package:badges/badges.dart';
 import 'package:equipro/ui/screens/drawer.dart';
+import 'package:equipro/ui/widget/bank_tiles.dart';
 import 'package:equipro/ui/widget/booking_request.dart';
 import 'package:equipro/ui/widget/dash_painter.dart';
 import 'package:equipro/ui/widget/equip_tiles.dart';
 import 'package:equipro/ui/widget/general_button.dart';
+import 'package:equipro/ui/widget/transaction_tile.dart';
 import 'package:equipro/utils/helpers.dart';
 import 'package:equipro/utils/locator.dart';
 import 'package:equipro/utils/router/navigation_service.dart';
@@ -18,14 +20,14 @@ import 'package:stacked/stacked.dart';
 import 'package:equipro/ui/screens/login/login_view_model.dart';
 import 'package:equipro/utils/colors.dart';
 
-class EquipOwnerDetails extends StatefulWidget {
-  const EquipOwnerDetails({Key? key}) : super(key: key);
+class EarningPage extends StatefulWidget {
+  const EarningPage({Key? key}) : super(key: key);
 
   @override
   LoginState createState() => LoginState();
 }
 
-class LoginState extends State<EquipOwnerDetails>
+class LoginState extends State<EarningPage>
     with TickerProviderStateMixin {
   final NavigationService _navigationService = locator<NavigationService>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -112,67 +114,36 @@ class LoginState extends State<EquipOwnerDetails>
                                   SizedBox(
                                     height: 30,
                                   ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
+
                                       Text(
-                                        "Bulldozer",
+                                        "Earnings",
                                         style: TextStyle(
                                             color: AppColors.black,
                                             fontWeight: FontWeight.bold,
                                             fontSize: 25),
                                       ),
-                                      PopupMenuButton<int>(
-                                        offset: Offset(10, 10),
-                                        child: SvgPicture.asset(
-                                            "assets/images/more.svg"),
-                                        onSelected: (int selectedValue) async {
-                                          switch (selectedValue) {
-                                            case 0:
-                                              _navigationService.navigateTo(EditEquipmentRoute);
-                                              break;
-                                            case 1:
-                                              break;
-                                            default:
-                                          }
-                                        },
-                                        itemBuilder: (context) => [
-                                          PopupMenuItem(
-                                            value: 0,
-                                            child: Text(
-                                              "Edit Details",
-                                            ),
-                                          ),
-                                          PopupMenuItem(
-                                              value: 1,
-                                              child: Text(
-                                                "Delete",
-                                              )),
-                                        ],
-                                      )
-                                    ],
-                                  ),
+
+
                                   SizedBox(
                                     height: 30,
                                   ),
                                   Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+
                                       children: [
                                         Text(
-                                          "N5000 per week",
+                                          "Your balance :",
                                           style: TextStyle(
                                               fontSize: 15,
-                                              color: AppColors.green,
+                                              color: AppColors.black,
                                               fontWeight: FontWeight.bold),
                                         ),
                                         const SizedBox(
                                           width: 10,
                                         ),
                                         Text(
-                                          "QTY Available: 4",
+                                          " N5000",
                                           style: TextStyle(
+                                            color: AppColors.primaryColor,
                                               fontSize: 15,
                                               fontWeight: FontWeight.bold),
                                         ),
@@ -180,31 +151,58 @@ class LoginState extends State<EquipOwnerDetails>
                                   SizedBox(
                                     height: 20,
                                   ),
-                                  Text(
-                                    "Description:",
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 15),
+                                  Container(
+                                    height: 40,
+                                    width: 150,
+                                    child: GeneralButton(
+                                      borderRadius: const BorderRadius.all(Radius.circular(5)),
+                                      splashColor: Colors.white,
+                                      buttonTextColor: AppColors.primaryColor,
+                                      borderColor: AppColors.primaryColor,
+                                      onPressed: (){
+_navigationService.navigateTo(WithdrawRoute);
+                                      },
+                                      buttonText: "Withdraw",
+                                    ),
                                   ),
                                   SizedBox(
                                     height: 20,
                                   ),
+                                  Divider(thickness: 1,),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        "Payment Methods:",
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 15),
+                                      ),
+IconButton(onPressed: (){
+
+}, icon: Icon(
+  Icons.add,size: 40,color: AppColors.primaryColor,
+))
+
+                                    ],
+                                  ),
+
+                                  SizedBox(
+                                    height: 20,
+                                  ),
                                   Text(
-                                    "This wheelbarrow has four extented legs and can carry up to 4kg load. It has an extra tyre also",
+                                    "Preferred Method",
                                     style: TextStyle(
-                                        color: Colors.black, fontSize: 15),
+                                        color: Colors.grey, fontSize: 15),
                                   ),
                                   SizedBox(
                                     height: 30,
                                   ),
-                                  Text(
-                                    "Availlability: 02 Sept. 2022 - 09 Oct, 2022",
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 12),
-                                  ),
+                                  BankTile(),
                                   SizedBox(
                                     height: 30,
                                   ),
@@ -213,7 +211,7 @@ class LoginState extends State<EquipOwnerDetails>
                                     height: 20,
                                   ),
                                   Text(
-                                    "Booking requests (2)",
+                                    "Transaction History",
                                     style: TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.bold),
@@ -221,8 +219,8 @@ class LoginState extends State<EquipOwnerDetails>
                                   SizedBox(
                                     height: 30,
                                   ),
-                                  BookingRequest(),
-                                  BookingRequest(),
+                                  TransactionTile(),
+                                  TransactionTile(),
                                 ]))))),
             drawer: CollapsingNavigationDrawer(),
           );

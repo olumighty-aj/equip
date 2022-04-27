@@ -23,7 +23,7 @@ class BookingRequest extends StatelessWidget {
           //   context,
           //   MaterialPageRoute(builder: (context) => EquipDetails()),
           // );
-          _navigationService.navigateTo(EquipOwnerDetailsRoute);
+          _navigationService.navigateTo(BookingDetailsRoute);
         },
         child: Container(
           margin: EdgeInsets.only(bottom: 20),
@@ -55,17 +55,31 @@ class BookingRequest extends StatelessWidget {
                         radius: 20,
                         child:  CachedNetworkImage(
                           imageUrl: "https://i.pravatar.cc/",
+                          imageBuilder:
+                              (context, imageProvider) =>
+                              Container(
+                                width: 120.0,
+                                height: 120.0,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  image: DecorationImage(
+                                      image: imageProvider,
+                                      fit: BoxFit.contain),
+                                ),
+                              ),
                           placeholder: (context, url) =>
                               CircularProgressIndicator(),
-                          errorWidget: (context, url, error) => ClipRRect(
-                            borderRadius: BorderRadius.circular(8.0),
+                          errorWidget: (context, url, error) =>        CircleAvatar(
+                            radius: 40,
+                            backgroundColor: AppColors.grey,
                             child: Image.asset(
-                              "assets/images/user.png",
+                              "assets/images/logo.png",
                               scale: 2,
                             ),
                           ),
                         ),
                       ),
+                      SizedBox(width: 10,),
                       Text(
                         "Morgan Shalom",
                         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),

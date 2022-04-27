@@ -20,14 +20,14 @@ import 'package:stacked/stacked.dart';
 import 'package:equipro/ui/screens/login/login_view_model.dart';
 import 'package:equipro/utils/colors.dart';
 
-class Profile extends StatefulWidget {
-  const Profile({Key? key}) : super(key: key);
+class HirerProfile extends StatefulWidget {
+  const HirerProfile({Key? key}) : super(key: key);
 
   @override
   LoginState createState() => LoginState();
 }
 
-class LoginState extends State<Profile> with TickerProviderStateMixin {
+class LoginState extends State<HirerProfile> with TickerProviderStateMixin {
   final NavigationService _navigationService = locator<NavigationService>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -110,18 +110,6 @@ class LoginState extends State<Profile> with TickerProviderStateMixin {
                                   SizedBox(
                                     height: 30,
                                   ),
-                                  Row(children: [
-                                    Text(
-                                      "Profile",
-                                      style: TextStyle(
-                                          color: AppColors.black,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 25),
-                                    ),
-                                  ]),
-                                  SizedBox(
-                                    height: 30,
-                                  ),
                                   Stack(
                                     children: [
                                       Container(
@@ -182,46 +170,11 @@ class LoginState extends State<Profile> with TickerProviderStateMixin {
                                         fontWeight: FontWeight.w400),
                                   ),
                                   SizedBox(
-                                    height: 15,
-                                  ),
-                                  InkWell(
-                                      onTap: () {
-                                        _navigationService
-                                            .navigateTo(EditProfileRoute);
-                                      },
-                                      child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            SvgPicture.asset(
-                                                "assets/images/edit.svg"),
-                                            const SizedBox(
-                                              width: 10,
-                                            ),
-                                            Text(
-                                              "Edit profile",
-                                              style: TextStyle(
-                                                  fontSize: 15,
-                                                  color: AppColors.primaryColor,
-                                                  fontWeight: FontWeight.w400),
-                                            ),
-                                          ])),
-                                  SizedBox(
                                     height: 20,
-                                  ),
-                                  Text(
-                                    "Profile 60% Completed",
-                                    style: TextStyle(
-                                        color: AppColors.red,
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 15),
-                                  ),
-                                  SizedBox(
-                                    height: 30,
                                   ),
                                   Container(
                                       padding: EdgeInsets.all(20),
-                                      height: 300,
+                                      height: 200,
                                       width: Responsive.width(context),
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(20),
@@ -249,18 +202,9 @@ class LoginState extends State<Profile> with TickerProviderStateMixin {
                                                         fontSize: 18),
                                                   )),
                                               Container(
-                                                  height: 100,
+                                                  height: 70,
                                                   child: Text(
                                                     "Address",
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 18),
-                                                  )),
-                                              Container(
-                                                  height: 80,
-                                                  child: Text(
-                                                    "Means of ID",
                                                     style: TextStyle(
                                                         fontWeight:
                                                             FontWeight.bold,
@@ -285,7 +229,7 @@ class LoginState extends State<Profile> with TickerProviderStateMixin {
                                                 ),
                                               ),
                                               Container(
-                                                height: 100,
+                                                height: 70,
                                                 width: 200,
                                                 child: Text(
                                                     "No 26, Gbemisola street, Allen Avenue, Ikeja, Lagos state",
@@ -295,44 +239,6 @@ class LoginState extends State<Profile> with TickerProviderStateMixin {
                                                         fontWeight:
                                                             FontWeight.w500)),
                                               ),
-                                              Container(
-                                                  height: 80,
-                                                  width: 200,
-                                                  child: Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.start,
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Text(
-                                                          "National Identification Card",
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.grey,
-                                                              fontSize: 15,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w500)),
-                                                      SizedBox(
-                                                        height: 10,
-                                                      ),
-                                                      Container(
-                                                        width: 90,
-                                                        height: 30,
-                                                        child: GeneralButton(
-                                                          onPressed: () {},
-                                                          splashColor: Color(
-                                                                  0xCC4EA14D)
-                                                              .withOpacity(0.3),
-                                                          buttonText:
-                                                              "Verified",
-                                                          buttonTextColor:
-                                                              Color(0xff247322),
-                                                        ),
-                                                      )
-                                                    ],
-                                                  ))
                                             ],
                                           ),
                                         ],
@@ -349,6 +255,16 @@ class LoginState extends State<Profile> with TickerProviderStateMixin {
                                             fontSize: 20),
                                       )
                                     ],
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(
+                                    "Here are what other equipment owners have said about this hirer",
+                                    style: TextStyle(
+                                        color: Colors.grey,
+                                        // fontWeight: FontWeight.bold,
+                                        fontSize: 14),
                                   ),
                                   SizedBox(
                                     height: 10,

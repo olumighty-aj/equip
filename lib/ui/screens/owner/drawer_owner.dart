@@ -176,6 +176,15 @@ class CollapsingNavigationDrawerState extends State<OwnerDrawer>
               ),
               ListTile(
                 title: const Text(
+                  'Earnings',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                ),
+                onTap: () {
+                  _navigationService.navigateTo(EarningPageRoute);
+                },
+              ),
+              ListTile(
+                title: const Text(
                   'Chats',
                   style: TextStyle(
                     fontSize: 16,
@@ -215,17 +224,11 @@ class CollapsingNavigationDrawerState extends State<OwnerDrawer>
               SizedBox(
                 height: 30,
               ),
-              Text(
-                "Post your equipments for hire and generate instant revenue",
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(
-                height: 20,
-              ),
+
               GeneralButton(
-                buttonText: "Become An Equipment Owner",
+                buttonText: "Switch to Equipment Hirer",
                 onPressed: () {
-                  _navigationService.navigateTo(SetupOwnerRoute);
+                  _navigationService.pushAndRemoveUntil(HomeOwnerRoute);
                 },
               ),
               SizedBox(
