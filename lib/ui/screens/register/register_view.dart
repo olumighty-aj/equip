@@ -1,4 +1,5 @@
 import 'package:country_pickers/country.dart';
+import 'package:equipro/core/model/SignUpModel.dart';
 import 'package:equipro/ui/screens/register/register_view_model.dart';
 import 'package:equipro/ui/widget/phonenoTextInput.dart';
 import 'package:equipro/utils/screensize.dart';
@@ -25,21 +26,17 @@ class LoginState extends State<Register> {
   final NavigationService _navigationService = locator<NavigationService>();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  TextEditingController fullNameController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late bool passwordVisible;
-  late String fcmToken;
   String countryCode = "234";
 
   late bool active = false;
 
-  getFCMToken() async {
-    fcmToken = await NotificationHelper.getFcmToken();
-  }
-
   @override
   void initState() {
     super.initState();
-    getFCMToken();
     passwordVisible = true;
   }
 
@@ -75,7 +72,6 @@ class LoginState extends State<Register> {
                       const SizedBox(
                         height: 250,
                       ),
-
                       Container(
                           padding: EdgeInsets.all(30),
                           decoration: BoxDecoration(
@@ -156,7 +152,7 @@ class LoginState extends State<Register> {
                                             ),
                                             TextFormField(
                                               validator: Validators().isEmpty,
-                                              controller: emailController,
+                                              controller: fullNameController,
                                               // maxLength: 11,
                                               decoration: InputDecoration(
                                                 hintText: 'John Deo',
@@ -168,8 +164,7 @@ class LoginState extends State<Register> {
                                               onChanged: (v) {
                                                 setState(() {});
                                               },
-                                              keyboardType:
-                                                  TextInputType.emailAddress,
+                                              keyboardType: TextInputType.name,
                                               style: const TextStyle(
                                                   color: Colors.black),
                                               cursorColor: Colors.black,
@@ -214,31 +209,34 @@ class LoginState extends State<Register> {
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 14),
                                             ),
-                                                   PhoneNoTextInput(
-                                              onCountryChange: (Country country) {
-          setState(() {
-          countryCode = country.phoneCode;
-          });
+                                            PhoneNoTextInput(
+                                              onCountryChange:
+                                                  (Country country) {
+                                                setState(() {
+                                                  countryCode =
+                                                      country.phoneCode;
+                                                });
 
-          print("$countryCode}");
-          },
-          onSaved: (phoneNum) {
-          // if (val.startsWith('0')) {
-          //   setState(() {
-          //     val = val.toString().substring(1);
-          //     // phoneNumber = val;
-          //   });
-          // }
+                                                print("$countryCode}");
+                                              },
+                                              onSaved: (phoneNum) {
+                                                // if (val.startsWith('0')) {
+                                                //   setState(() {
+                                                //     val = val.toString().substring(1);
+                                                //     // phoneNumber = val;
+                                                //   });
+                                                // }
 
-          // model.setPhoneNumber(phoneNumber: val);
-          print("$countryCode");
-          model.setPhoneNumber(
-          phoneNumber: "+" +
-          countryCode +
-          model.sanitizePhoneNumberInput(
-          phoneNum));
-          },
-          ),
+                                                // model.setPhoneNumber(phoneNumber: val);
+                                                print("$countryCode");
+                                                model.setPhoneNumber(
+                                                    phoneNumber: "+" +
+                                                        countryCode +
+                                                        model
+                                                            .sanitizePhoneNumberInput(
+                                                                phoneNum));
+                                              },
+                                            ),
                                             const SizedBox(
                                               height: 30,
                                             ),
@@ -279,7 +277,6 @@ class LoginState extends State<Register> {
                                             const SizedBox(
                                               height: 20,
                                             ),
-
                                           ]))),
                               const SizedBox(
                                 height: 10,
@@ -289,10 +286,11 @@ class LoginState extends State<Register> {
                                   child: GeneralButton(
                                     onPressed: () {
                                       if (_formKey.currentState!.validate()) {
-                                        _navigationService
-                                            .pushAndRemoveUntil(homeRoute);
-                                        // model.signIn(LoginPayload(
-                                        //     email: emailController.text, password: passwordController.text, userToken: fcmToken));
+                                        model.signUp(SignUpModel(
+                                            fullname: fullNameController.text,
+                                            email: emailController.text,
+                                            phoneNumber: model.phoneNumber,
+                                            password: passwordController.text));
                                       }
                                     },
                                     buttonText: 'Register',

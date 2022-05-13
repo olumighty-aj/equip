@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'package:equipro/ui/screens/drawer.dart';
+import 'package:equipro/ui/screens/owner/home_owner/home_view_model.dart';
 import 'package:equipro/ui/widget/general_button.dart';
+import 'package:equipro/utils/helpers.dart';
 import 'package:equipro/utils/locator.dart';
 import 'package:equipro/utils/router/navigation_service.dart';
 import 'package:equipro/utils/router/route_names.dart';
@@ -65,7 +67,6 @@ class LoginState extends State<PostEquipment> with TickerProviderStateMixin {
           );
       setState(() {
         listImages = pickedFileList!;
-        imageType = "listImage";
       });
     } catch (e) {
       print(e);
@@ -78,8 +79,8 @@ class LoginState extends State<PostEquipment> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<LoginViewModel>.reactive(
-        viewModelBuilder: () => LoginViewModel(),
+    return ViewModelBuilder<HomeOwnerViewModel>.reactive(
+        viewModelBuilder: () => HomeOwnerViewModel(),
         builder: (context, model, child) {
           return Scaffold(
             key: _scaffoldKey,
@@ -377,7 +378,24 @@ class LoginState extends State<PostEquipment> with TickerProviderStateMixin {
                                               width: 300,
                                               child: GeneralButton(
                                                   onPressed: () {
-                                                   _navigationService.navigateTo(PostEquipmentFinalRoute);
+                                                    if (
+                                                    nameController.text
+                                                        .isNotEmpty &&
+                                                        listImages.isNotEmpty) {
+                                                      _navigationService
+                                                          .navigateTo(
+                                                          PostEquipmentFinalRoute,
+                                                          arguments: {
+                                                            "equipName": nameController
+                                                                .text,
+                                                            "images": listImages,
+                                                            "description":
+                                                            descriptionController
+                                                                .text,
+                                                          });
+                                                    }else{
+                                                      showErrorToast("Name and images are compulsory");
+                                                    }
                                                   },
                                                   buttonText:
                                                       "Save & Proceed")))),

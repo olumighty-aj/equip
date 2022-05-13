@@ -5,6 +5,7 @@ const String loginRoute  = "login";
 const String registerRoute  = "register";
 const String verificationViewRoute  = "verificationView";
 const String forgotPasswordRoute  = "forgotPassword";
+const String VerifyForgotPasswordPageRoute  = "VerifyForgotPasswordPage";
 const String homeRoute  = "home_owner";
 const String OnBoardingScreenRoute  = "OnboardingScreen";
 const String EquipDetailsRoute  = "EquipDetails";

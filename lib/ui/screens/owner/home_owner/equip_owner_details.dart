@@ -1,5 +1,7 @@
 import 'package:badges/badges.dart';
+import 'package:equipro/core/model/EquipmentModel.dart';
 import 'package:equipro/ui/screens/drawer.dart';
+import 'package:equipro/ui/screens/owner/home_owner/home_view_model.dart';
 import 'package:equipro/ui/widget/booking_request.dart';
 import 'package:equipro/ui/widget/dash_painter.dart';
 import 'package:equipro/ui/widget/equip_tiles.dart';
@@ -19,7 +21,8 @@ import 'package:equipro/ui/screens/login/login_view_model.dart';
 import 'package:equipro/utils/colors.dart';
 
 class EquipOwnerDetails extends StatefulWidget {
-  const EquipOwnerDetails({Key? key}) : super(key: key);
+  final EquipmentModel model;
+  const EquipOwnerDetails({Key? key, required this.model}) : super(key: key);
 
   @override
   LoginState createState() => LoginState();
@@ -36,6 +39,67 @@ class LoginState extends State<EquipOwnerDetails>
   TextEditingController emailController = TextEditingController();
   AnimationController? _navController;
   Animation<Offset>? _navAnimation;
+
+  displayDialog(BuildContext context, HomeOwnerViewModel model) {
+    return showDialog(
+      barrierDismissible: true,
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: new BorderRadius.circular(15),
+        ),
+        content: Container(
+            height: 150,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  "Delete Equipment?",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      width: 100,
+                      child: GeneralButton(
+                        splashColor: AppColors.grey,
+                        buttonTextColor: AppColors.black,
+                        buttonText: 'No',
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+
+                    ),
+
+                    Container(
+                      width: 100,
+                      child: GeneralButton(
+                        buttonText: 'Yes',
+                        onPressed: () {
+                          Navigator.pop(context);
+                         model.deleteEquip(widget.model.id.toString());
+                        },
+                      ),
+
+                    ),
+
+                  ],
+                )
+
+              ],
+            )),
+      ),
+    );
+  }
   @override
   void initState() {
     super.initState();
@@ -60,8 +124,8 @@ class LoginState extends State<EquipOwnerDetails>
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<LoginViewModel>.reactive(
-        viewModelBuilder: () => LoginViewModel(),
+    return ViewModelBuilder<HomeOwnerViewModel>.reactive(
+        viewModelBuilder: () => HomeOwnerViewModel(),
         builder: (context, model, child) {
           return Scaffold(
             key: _scaffoldKey,
@@ -117,7 +181,7 @@ class LoginState extends State<EquipOwnerDetails>
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        "Bulldozer",
+                                        widget.model.equipName!,
                                         style: TextStyle(
                                             color: AppColors.black,
                                             fontWeight: FontWeight.bold,
@@ -130,9 +194,11 @@ class LoginState extends State<EquipOwnerDetails>
                                         onSelected: (int selectedValue) async {
                                           switch (selectedValue) {
                                             case 0:
-                                              _navigationService.navigateTo(EditEquipmentRoute);
+                                              _navigationService.navigateTo(
+                                                  EditEquipmentRoute,arguments: widget.model);
                                               break;
                                             case 1:
+                                              displayDialog( context,  model);
                                               break;
                                             default:
                                           }
@@ -161,7 +227,7 @@ class LoginState extends State<EquipOwnerDetails>
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          "N5000 per week",
+                                          "${widget.model.costOfHire} per ${widget.model.costOfHireInterval == "1" ? "Day" : widget.model.costOfHireInterval == "7" ? "Week" : "Month"}",
                                           style: TextStyle(
                                               fontSize: 15,
                                               color: AppColors.green,
@@ -171,7 +237,7 @@ class LoginState extends State<EquipOwnerDetails>
                                           width: 10,
                                         ),
                                         Text(
-                                          "QTY Available: 4",
+                                          "QTY Available: ${widget.model.quantity!}",
                                           style: TextStyle(
                                               fontSize: 15,
                                               fontWeight: FontWeight.bold),
@@ -191,7 +257,7 @@ class LoginState extends State<EquipOwnerDetails>
                                     height: 20,
                                   ),
                                   Text(
-                                    "This wheelbarrow has four extented legs and can carry up to 4kg load. It has an extra tyre also",
+                                    widget.model.description!,
                                     style: TextStyle(
                                         color: Colors.black, fontSize: 15),
                                   ),
@@ -199,7 +265,11 @@ class LoginState extends State<EquipOwnerDetails>
                                     height: 30,
                                   ),
                                   Text(
-                                    "Availlability: 02 Sept. 2022 - 09 Oct, 2022",
+                                    "Availability: ${DateFormat(
+                                      "y-MM-dd",
+                                    ).format(DateTime.parse(widget.model.availFrom!)).toString()} - ${DateFormat(
+                                      "y-MM-dd",
+                                    ).format(DateTime.parse(widget.model.availTo!)).toString()}",
                                     style: TextStyle(
                                         color: Colors.black,
                                         fontWeight: FontWeight.bold,

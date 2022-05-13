@@ -1,3 +1,4 @@
+import 'package:equipro/core/model/SignUpModel.dart';
 import 'package:equipro/core/model/error_model.dart';
 import 'package:equipro/core/model/success_model.dart';
 import 'package:equipro/core/services/auth_service.dart';
@@ -10,24 +11,25 @@ import 'package:equipro/utils/router/route_names.dart';
 class RegisterViewModel extends BaseModel {
   final Authentication _authentication = locator<Authentication>();
   final NavigationService _navigationService = locator<NavigationService>();
-  // signUp(SignUpModel signUpModel) async {
-  //   setBusy(true);
-  //   var result = await _authentication.signUp(signUpModel.toJson());
-  //
-  //   if (result is ErrorModel) {
-  //     setBusy(false);
-  //     showErrorToast(result.error);
-  //     notifyListeners();
-  //     return ErrorModel(result.error);
-  //   }
-  //   if (result is SuccessModel) {
-  //     setBusy(false);
-  //
-  //     notifyListeners();
-  //     return SuccessModel(result.data);
-  //   }
-  // }
-  //
+  signUp(SignUpModel signUpModel) async {
+    setBusy(true);
+    var result = await _authentication.signUp(signUpModel.toJson());
+
+    if (result is ErrorModel) {
+      setBusy(false);
+      showErrorToast(result.error);
+      notifyListeners();
+      return ErrorModel(result.error);
+    }
+    if (result is SuccessModel) {
+      setBusy(false);
+      showToast(result.data['message']);
+      _navigationService.navigateReplacementTo(loginRoute);
+      notifyListeners();
+      return SuccessModel(result.data);
+    }
+  }
+
   // verifyOTP(VerifyPayload verifyPayload) async {
   //   setBusy(true);
   //   var result = await _authentication.verifyOtp(verifyPayload.toJson());
@@ -79,6 +81,7 @@ class RegisterViewModel extends BaseModel {
 
     // setBusy(false);
   }
+
   String sanitizePhoneNumberInput(String phoneNumberInput) {
     if (phoneNumberInput.startsWith('0')) {
       phoneNumberInput = phoneNumberInput.toString().substring(1);

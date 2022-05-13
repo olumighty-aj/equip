@@ -1,4 +1,5 @@
 import 'package:equipro/core/services/auth_service.dart';
+import 'package:equipro/ui/screens/owner/home_owner/home_view_model.dart';
 import 'package:equipro/ui/widget/general_button.dart';
 import 'package:equipro/utils/colors.dart';
 import 'package:equipro/utils/locator.dart';
@@ -26,7 +27,70 @@ class CollapsingNavigationDrawerState extends State<OwnerDrawer>
   late Animation<double> widthAnimation;
   final NavigationService _navigationService = locator<NavigationService>();
   final Authentication _authentication = locator<Authentication>();
+  HomeOwnerViewModel model = HomeOwnerViewModel();
 
+
+  displayDialog(BuildContext context, HomeOwnerViewModel model) {
+    return showDialog(
+      barrierDismissible: true,
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: new BorderRadius.circular(15),
+        ),
+        content: Container(
+            height: 150,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  "Confirm switch to hirer?",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      width: 100,
+                      child: GeneralButton(
+                        splashColor: AppColors.grey,
+                        buttonTextColor: AppColors.black,
+                        buttonText: 'No',
+                        onPressed: () {
+                          Navigator.pop(context);
+                          _navigationService.pushAndRemoveUntil(homeRoute);
+                        },
+                      ),
+
+                    ),
+
+                    Container(
+                      width: 100,
+                      child: GeneralButton(
+                        buttonText: 'Yes',
+                        onPressed: () {
+                          Navigator.pop(context);
+                          model.switchHirer();
+                        },
+                      ),
+
+                    ),
+
+                  ],
+                )
+
+              ],
+            )),
+      ),
+    );
+  }
   @override
   void initState() {
     super.initState();
@@ -228,7 +292,8 @@ class CollapsingNavigationDrawerState extends State<OwnerDrawer>
               GeneralButton(
                 buttonText: "Switch to Equipment Hirer",
                 onPressed: () {
-                  _navigationService.pushAndRemoveUntil(HomeOwnerRoute);
+                  displayDialog( context,  model);
+
                 },
               ),
               SizedBox(

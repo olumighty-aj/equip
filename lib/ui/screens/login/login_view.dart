@@ -1,5 +1,5 @@
+import 'package:equipro/core/model/LoginPayload.dart';
 import 'package:equipro/utils/screensize.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:equipro/ui/screens/login/login_view_model.dart';
@@ -24,7 +24,7 @@ class LoginState extends State<Login> {
   TextEditingController passwordController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late bool passwordVisible;
-  late String fcmToken;
+   String? fcmToken;
 
   late bool active = false;
 
@@ -225,10 +225,10 @@ class LoginState extends State<Login> {
                                   child: GeneralButton(
                                     onPressed: () {
                                       if (_formKey.currentState!.validate()) {
-                                        _navigationService
-                                            .pushAndRemoveUntil(homeRoute);
-                                        // model.signIn(LoginPayload(
-                                        //     email: emailController.text, password: passwordController.text, userToken: fcmToken));
+                                        // _navigationService
+                                        //     .pushAndRemoveUntil(homeRoute);
+                                         model.signIn(LoginPayload(
+                                             email: emailController.text, password: passwordController.text, fcmToken: fcmToken));
                                       }
                                     },
                                     buttonText: 'Log In',

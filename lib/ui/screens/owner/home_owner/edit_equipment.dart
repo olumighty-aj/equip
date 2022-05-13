@@ -1,9 +1,13 @@
 import 'dart:io';
+import 'dart:math';
+import 'package:equipro/core/model/EquipmentModel.dart';
+import 'package:equipro/core/services/index.dart';
 import 'package:equipro/ui/screens/drawer.dart';
+import 'package:equipro/ui/screens/owner/home_owner/home_view_model.dart';
 import 'package:equipro/ui/widget/general_button.dart';
+import 'package:equipro/utils/helpers.dart';
 import 'package:equipro/utils/locator.dart';
 import 'package:equipro/utils/router/navigation_service.dart';
-import 'package:equipro/utils/router/route_names.dart';
 import 'package:equipro/utils/screensize.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
@@ -15,9 +19,13 @@ import 'package:progress_indicator/progress_indicator.dart';
 import 'package:stacked/stacked.dart';
 import 'package:equipro/ui/screens/login/login_view_model.dart';
 import 'package:equipro/utils/colors.dart';
+import 'package:image/image.dart' as IM;
+import 'package:path_provider/path_provider.dart';
+import 'package:http/http.dart' as http;
 
 class EditEquipment extends StatefulWidget {
-  const EditEquipment({Key? key}) : super(key: key);
+  final EquipmentModel model;
+  const EditEquipment({Key? key, required this.model}) : super(key: key);
 
   @override
   LoginState createState() => LoginState();
@@ -31,19 +39,64 @@ class LoginState extends State<EditEquipment> with TickerProviderStateMixin {
   File? video;
   final imagePicker = ImagePicker();
   String? imageType;
-  int? selectedQuantity;
+  String? selectedQuantity;
   String? pickupTime = DateTime.now().toString();
   String? selectedDate;
-  String? selectedWeek;
+  String? selectedDateTo;
   String? selectedPer;
+  String? selectedPerNumber;
   TextEditingController nameController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   AnimationController? _navController;
   Animation<Offset>? _navAnimation;
   List<XFile> listImages = [];
+
+  convertCatalogue() async {
+    for (EquipImages multipleFile in widget.model.equipImages!) {
+      // count++;
+      print(multipleFile);
+
+      var rng = new Random();
+// get temporary directory of device.
+      Directory tempDir = await getTemporaryDirectory();
+// get temporary path from temporary directory.
+      String tempPath = tempDir.path;
+// create a new file in temporary path with random file name.
+      File file =
+          new File('$tempPath' + (rng.nextInt(1000)).toString() + '.png');
+// call http.get method and pass imageUrl into it to get response.
+      http.Response response = await http
+          .get(Uri.parse(baseUrlFlat + multipleFile.equipImagesPath!));
+// write bodyBytes received in response to file.
+      await file.writeAsBytes(response.bodyBytes);
+// now return the file which is created with random name in
+// temporary directory and image bytes from response is written to // that file.
+      setState(() {
+        listImages.add(XFile(file.path));
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
+    convertCatalogue();
+    nameController.text = widget.model.equipName!;
+    costController.text = widget.model.costOfHire!;
+    descriptionController.text = widget.model.description!;
+    selectedQuantity = widget.model.quantity!;
+    selectedDate = DateFormat(
+      "y-MM-dd",
+    ).format(DateTime.parse(widget.model.availFrom!)).toString();
+    selectedDateTo = DateFormat(
+      "y-MM-dd",
+    ).format(DateTime.parse(widget.model.availTo!)).toString();
+    selectedPer = widget.model.costOfHireInterval == "1"
+        ? "Day 1"
+        : widget.model.costOfHireInterval == "7"
+            ? "Week 7"
+            : "Month 30";
+    selectedPerNumber = widget.model.costOfHireInterval!;
     _navController = AnimationController(
       duration: const Duration(milliseconds: 2000),
       vsync: this,
@@ -73,7 +126,6 @@ class LoginState extends State<EditEquipment> with TickerProviderStateMixin {
           );
       setState(() {
         listImages = pickedFileList!;
-        imageType = "listImage";
       });
     } catch (e) {
       print(e);
@@ -83,10 +135,27 @@ class LoginState extends State<EditEquipment> with TickerProviderStateMixin {
     }
   }
 
+  void _startUploading(HomeOwnerViewModel model) async {
+    var response = await model.updateEquip(
+        listImages,
+        nameController.text,
+        costController.text,
+        selectedPerNumber!,
+        selectedDate!,
+        selectedDateTo!,
+        selectedQuantity!,
+        descriptionController.text,
+        widget.model.id!);
+    print(response);
+    if (response == null) {
+      print('error');
+    } else {}
+  }
+
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<LoginViewModel>.reactive(
-        viewModelBuilder: () => LoginViewModel(),
+    return ViewModelBuilder<HomeOwnerViewModel>.reactive(
+        viewModelBuilder: () => HomeOwnerViewModel(),
         builder: (context, model, child) {
           return Scaffold(
             key: _scaffoldKey,
@@ -205,7 +274,7 @@ class LoginState extends State<EditEquipment> with TickerProviderStateMixin {
                                     height: 30,
                                   ),
                                   Text(
-                                    "Upload equipment images",
+                                    "Upload new equipment images",
                                     style: TextStyle(
                                         fontSize: 15,
                                         fontWeight: FontWeight.w500),
@@ -426,13 +495,18 @@ class LoginState extends State<EditEquipment> with TickerProviderStateMixin {
                                         onChanged: (newValue) {
                                           setState(() {
                                             selectedPer = newValue;
+                                            newValue == "Day 1"
+                                                ? selectedPerNumber = "1"
+                                                : newValue == "Week 7"
+                                                    ? selectedPerNumber =
+                                                        "Month 30"
+                                                    : selectedPerNumber = "30";
                                           });
                                         },
                                         items: <String>[
-                                          'Day',
-                                          'Week',
-                                          'Month',
-                                          'Costume',
+                                          'Day 1',
+                                          'Week 7',
+                                          'Month 30',
                                         ].map<DropdownMenuItem<String>>(
                                             (String value) {
                                           return DropdownMenuItem<String>(
@@ -458,27 +532,20 @@ class LoginState extends State<EditEquipment> with TickerProviderStateMixin {
                                   InkWell(
                                       onTap: () {
                                         // YearPicker(firstDate: firstDate, lastDate: lastDate, selectedDate: selectedDate, onChanged: onChanged)
-                                        DatePicker.showDateTimePicker(context,
-                                            maxTime: DateTime.now(),
+                                        DatePicker.showDatePicker(context,
+                                            minTime: DateTime.now(),
                                             showTitleActions: true,
                                             onChanged: (date) {
                                           setState(() {
-                                            pickupTime = date.toString();
-                                            selectedDate =
-                                                DateFormat('M/d/y - h:mm a')
-                                                    .format(date)
-                                                    .toString();
-                                            print(DateFormat('y')
+                                            selectedDate = DateFormat('y-MM-dd')
                                                 .format(date)
-                                                .toString());
+                                                .toString();
                                           });
                                           print('change $date in time zone ' +
                                               date.timeZoneOffset.inHours
                                                   .toString());
                                         }, onConfirm: (date) {
-                                          setState(() {
-                                            pickupTime = date.toString();
-                                          });
+                                          setState(() {});
                                         }, currentTime: DateTime.now());
                                       },
                                       child: Container(
@@ -505,8 +572,11 @@ class LoginState extends State<EditEquipment> with TickerProviderStateMixin {
                                                     selectedDate != null
                                                         ? selectedDate!
                                                         : "From",
-                                                    style: const TextStyle(
-                                                        color: Colors.grey),
+                                                    style: TextStyle(
+                                                        color:
+                                                            selectedDate != null
+                                                                ? Colors.black
+                                                                : Colors.grey),
                                                   ),
                                                   Icon(
                                                     Icons
@@ -521,27 +591,21 @@ class LoginState extends State<EditEquipment> with TickerProviderStateMixin {
                                   InkWell(
                                       onTap: () {
                                         // YearPicker(firstDate: firstDate, lastDate: lastDate, selectedDate: selectedDate, onChanged: onChanged)
-                                        DatePicker.showDateTimePicker(context,
-                                            maxTime: DateTime.now(),
+                                        DatePicker.showDatePicker(context,
+                                            minTime: DateTime.now(),
                                             showTitleActions: true,
                                             onChanged: (date) {
                                           setState(() {
-                                            pickupTime = date.toString();
-                                            selectedDate =
-                                                DateFormat('M/d/y - h:mm a')
+                                            selectedDateTo =
+                                                DateFormat('y-MM-dd')
                                                     .format(date)
                                                     .toString();
                                             print(DateFormat('y')
                                                 .format(date)
                                                 .toString());
                                           });
-                                          print('change $date in time zone ' +
-                                              date.timeZoneOffset.inHours
-                                                  .toString());
                                         }, onConfirm: (date) {
-                                          setState(() {
-                                            pickupTime = date.toString();
-                                          });
+                                          setState(() {});
                                         }, currentTime: DateTime.now());
                                       },
                                       child: Container(
@@ -565,11 +629,14 @@ class LoginState extends State<EditEquipment> with TickerProviderStateMixin {
                                                         .spaceBetween,
                                                 children: [
                                                   Text(
-                                                    selectedDate != null
-                                                        ? selectedDate!
+                                                    selectedDateTo != null
+                                                        ? selectedDateTo!
                                                         : "Till",
-                                                    style: const TextStyle(
-                                                        color: Colors.grey),
+                                                    style: TextStyle(
+                                                        color: selectedDateTo !=
+                                                                null
+                                                            ? Colors.black
+                                                            : Colors.grey),
                                                   ),
                                                   Icon(
                                                     Icons
@@ -604,10 +671,10 @@ class LoginState extends State<EditEquipment> with TickerProviderStateMixin {
                                             hintText:
                                                 'Number of quantity for hire'),
                                         isExpanded: true,
-                                        value: selectedWeek,
+                                        value: selectedQuantity!,
                                         onChanged: (newValue) {
                                           setState(() {
-                                            selectedWeek = newValue;
+                                            selectedQuantity = newValue;
                                           });
                                         },
                                         items: <String>[
@@ -621,6 +688,8 @@ class LoginState extends State<EditEquipment> with TickerProviderStateMixin {
                                           '8',
                                           '9',
                                           '10',
+                                          '11',
+                                          '12',
                                         ].map<DropdownMenuItem<String>>(
                                             (String value) {
                                           return DropdownMenuItem<String>(
@@ -642,8 +711,21 @@ class LoginState extends State<EditEquipment> with TickerProviderStateMixin {
                                               width: 300,
                                               child: GeneralButton(
                                                   onPressed: () {
-                                                    _navigationService.navigateTo(
-                                                        PostEquipmentFinalRoute);
+                                                    if (nameController.text.isNotEmpty &&
+                                                        listImages.isNotEmpty &&
+                                                        costController
+                                                            .text.isNotEmpty &&
+                                                        selectedDate != null &&
+                                                        selectedDateTo !=
+                                                            null &&
+                                                        selectedPer != null &&
+                                                        selectedQuantity !=
+                                                            null) {
+                                                      _startUploading(model);
+                                                    } else {
+                                                      showErrorToast(
+                                                          "Name and images are compulsory");
+                                                    }
                                                   },
                                                   buttonText:
                                                       "Save & Proceed")))),

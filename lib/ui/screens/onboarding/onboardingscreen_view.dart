@@ -126,7 +126,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                           Container(
                                               width: 250,
                                               child: Text(
-                                                  "Rent construction equipment quicly at a cheaper price directly from equipment owners",
+                                                  "Rent construction equipment quickly at a cheaper price directly from equipment owners",
                                                   textAlign: TextAlign.center,
                                                   style: TextStyle(
                                                       fontSize: 15,

@@ -14,7 +14,7 @@ class HttpService {
     final String url = baseUrl + path;
     print('Request::URL: $url');
     final response =
-        await http.get(Uri.parse(url)).timeout(const Duration(seconds: 40));
+        await http.get(Uri.parse(url), headers: await getHeaders(),).timeout(const Duration(seconds: 40),);
 
     return handleResponse(response);
   }
@@ -72,8 +72,9 @@ class HttpService {
   getHeaders() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     Object? accessToken = prefs.get('token');
-   // print('token $accessToken');
+   print('token $accessToken');
     return <String, String>{
+      'X-APP-KEY': '37T8O89O445568u89WELrVl',
       'Content-Type': 'application/json; charset=UTF-8',
       "Authorization": "Bearer $accessToken"
     };

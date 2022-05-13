@@ -1,3 +1,4 @@
+import 'package:equipro/core/model/EquipmentModel.dart';
 import 'package:equipro/ui/screens/chat/chat.dart';
 import 'package:equipro/ui/screens/chat/chats_widget/chat_details.dart';
 import 'package:equipro/ui/screens/hirer/active_rentals/active_rentals.dart';
@@ -6,6 +7,7 @@ import 'package:equipro/ui/screens/hirer/active_rentals/rentals_details.dart';
 import 'package:equipro/ui/screens/hirer/book/equip_details.dart';
 import 'package:equipro/ui/screens/hirer/book/place_booking.dart';
 import 'package:equipro/ui/screens/hirer/home/home_view.dart';
+import 'package:equipro/ui/screens/login/verify_forgot_otp.dart';
 import 'package:equipro/ui/screens/notification/notification.dart';
 import 'package:equipro/ui/screens/owner/earnings/earning_page.dart';
 import 'package:equipro/ui/screens/owner/earnings/withdraw.dart';
@@ -54,6 +56,14 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         routeName: settings.name!,
         viewToShow: const ForgotPasswordPage(),
       );
+    case VerifyForgotPasswordPageRoute:
+      var email = settings.arguments as String;
+      return _getPageRoute(
+        routeName: settings.name!,
+        viewToShow: VerifyForgotPasswordPage(
+          email: email,
+        ),
+      );
 
     case OnBoardingScreenRoute:
       return _getPageRoute(
@@ -67,14 +77,16 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         viewToShow: Home(),
       );
     case EquipDetailsRoute:
+      EquipmentModel model = settings.arguments as EquipmentModel;
       return _getPageRoute(
         routeName: settings.name!,
-        viewToShow: EquipDetails(),
+        viewToShow: EquipDetails(model: model,),
       );
     case PlaceBookingRoute:
+      EquipmentModel model = settings.arguments as EquipmentModel;
       return _getPageRoute(
         routeName: settings.name!,
-        viewToShow: PlaceBooking(),
+        viewToShow: PlaceBooking(model: model,),
       );
     case chatDetailsPageRoute:
       return _getPageRoute(
@@ -140,14 +152,23 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         viewToShow: PostEquipment(),
       );
     case PostEquipmentFinalRoute:
+      Map<String, dynamic> argss = settings.arguments as Map<String, dynamic>;
+      String equipName = argss['equipName'];
+      List images = argss['images'];
+      String description = argss['description'];
       return _getPageRoute(
         routeName: settings.name!,
-        viewToShow: PostEquipmentFinal(),
+        viewToShow: PostEquipmentFinal(
+          equipName: equipName,
+          images: images,
+          description: description,
+        ),
       );
     case EquipOwnerDetailsRoute:
+      EquipmentModel model = settings.arguments as EquipmentModel;
       return _getPageRoute(
         routeName: settings.name!,
-        viewToShow: EquipOwnerDetails(),
+        viewToShow: EquipOwnerDetails(model: model),
       );
     case BookingDetailsRoute:
       return _getPageRoute(
@@ -162,9 +183,10 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       );
 
     case EditEquipmentRoute:
+      EquipmentModel model = settings.arguments as EquipmentModel;
       return _getPageRoute(
         routeName: settings.name!,
-        viewToShow: EditEquipment(),
+        viewToShow: EditEquipment(model: model,),
       );
     case EarningPageRoute:
       return _getPageRoute(
@@ -177,8 +199,6 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         routeName: settings.name!,
         viewToShow: Withdraw(),
       );
-
-
 
     default:
       return MaterialPageRoute(

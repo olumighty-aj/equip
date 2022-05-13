@@ -1,15 +1,11 @@
 import 'package:equipro/utils/screensize.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:equipro/ui/screens/login/login_view_model.dart';
 import 'package:equipro/ui/widget/general_button.dart';
 import 'package:equipro/utils/colors.dart';
 import 'package:equipro/utils/helpers.dart';
-import 'package:equipro/utils/locator.dart';
 import 'package:equipro/utils/notification_helper.dart';
-import 'package:equipro/utils/router/navigation_service.dart';
-import 'package:equipro/utils/router/route_names.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({Key? key}) : super(key: key);
@@ -19,9 +15,7 @@ class ForgotPasswordPage extends StatefulWidget {
 }
 
 class LoginState extends State<ForgotPasswordPage> {
-  final NavigationService _navigationService = locator<NavigationService>();
   TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late bool passwordVisible;
   late String fcmToken;
@@ -171,10 +165,8 @@ class LoginState extends State<ForgotPasswordPage> {
                                   child: GeneralButton(
                                     onPressed: () {
                                       if (_formKey.currentState!.validate()) {
-                                        _navigationService
-                                            .navigateTo(verificationViewRoute);
-                                        // model.signIn(LoginPayload(
-                                        //     email: emailController.text, password: passwordController.text, userToken: fcmToken));
+                                        model.forgotPassword(
+                                            emailController.text);
                                       }
                                     },
                                     buttonText: 'Reset Password',

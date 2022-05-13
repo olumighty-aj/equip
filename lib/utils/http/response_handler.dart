@@ -9,7 +9,8 @@ handleResponse(http.Response response) {
 
     final int code = response.statusCode;
     final dynamic body = json.decode(response.body);
-    if(code == 200 || code == 201) {
+   // if(code == 200 || code == 201) {
+      if(body["status"] == true) {
       return SuccessModel(body);
     }
 

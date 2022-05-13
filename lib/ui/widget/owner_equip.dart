@@ -1,4 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:equipro/core/model/EquipmentModel.dart';
+import 'package:equipro/core/services/index.dart';
 import 'package:equipro/ui/widget/general_button.dart';
 import 'package:equipro/utils/locator.dart';
 import 'package:equipro/utils/router/navigation_service.dart';
@@ -8,11 +10,11 @@ import 'package:equipro/utils/colors.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class OwnerEquipTiles extends StatelessWidget {
-  // final Function onPressed;
+  final EquipmentModel model;
   OwnerEquipTiles(
-      //{
-      // required this.onPressed,
-      // }
+      {
+      required this.model,
+      }
       );
   final NavigationService _navigationService = locator<NavigationService>();
   @override
@@ -23,12 +25,12 @@ class OwnerEquipTiles extends StatelessWidget {
           //   context,
           //   MaterialPageRoute(builder: (context) => EquipDetails()),
           // );
-          _navigationService.navigateTo(EquipOwnerDetailsRoute);
+          _navigationService.navigateTo(EquipOwnerDetailsRoute,arguments: model);
         },
         child: Container(
           margin: EdgeInsets.only(bottom: 20),
           padding: EdgeInsets.all(10),
-          height: 120,
+          height: 150,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
             color: AppColors.white,
@@ -50,15 +52,15 @@ class OwnerEquipTiles extends StatelessWidget {
                   child: ClipRRect(
                       borderRadius: BorderRadius.circular(10.0),
                       child: Hero(
-                          tag: "profile",
+                          tag: model.id!,
                           child: CachedNetworkImage(
-                            imageUrl: "https://i.pravatar.cc/",
+                            imageUrl: '$baseUrlFlat${model.equipImages!.first.equipImagesPath!}',
                             placeholder: (context, url) =>
                                 CircularProgressIndicator(),
                             errorWidget: (context, url, error) => ClipRRect(
                               borderRadius: BorderRadius.circular(8.0),
                               child: Image.asset(
-                                "assets/images/user.png",
+                                "assets/images/logo.png",
                                 scale: 2,
                               ),
                             ),
@@ -69,7 +71,7 @@ class OwnerEquipTiles extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "Driller & Harmer",
+                    model.equipName!,
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                   ),
                   SizedBox(
@@ -78,12 +80,12 @@ class OwnerEquipTiles extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        "N5000 ",
+                       model.costOfHire!,
                         style: TextStyle(
                             fontWeight: FontWeight.w500, fontSize: 14),
                       ),
                       Text(
-                        "per week",
+                        " per ${model.costOfHireInterval == "1"? "Day":model.costOfHireInterval == "7"?"Week":"Month"}",
                         style: TextStyle(
                             fontWeight: FontWeight.w500, fontSize: 14),
                       ),
@@ -101,11 +103,14 @@ class OwnerEquipTiles extends StatelessWidget {
                       SizedBox(
                         width: 10,
                       ),
-                      Text(
-                        "Surulere Lagos",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w500, fontSize: 12),
-                      ),
+                      Container(
+                          width: 150,
+                          child:
+                          Text(
+                            model.owners!.address!,
+                            style: TextStyle(
+                                fontWeight: FontWeight.w500, fontSize: 12),
+                          )),
                     ],
                   ),
                 ],

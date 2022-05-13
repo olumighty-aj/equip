@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "225402323374",
+    "project_id": "equipro-23916",
+    "storage_bucket": "equipro-23916.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:225402323374:android:1c379be3e61ee8ce73883f",
+        "android_client_info": {
+          "package_name": "com.equipro.equipro"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "225402323374-3hh14msfir3ju56874s6cr1btdcddpnb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAlfc65-SxSKTs16-4eJ0wjvojRJCzTERM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "225402323374-3hh14msfir3ju56874s6cr1btdcddpnb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

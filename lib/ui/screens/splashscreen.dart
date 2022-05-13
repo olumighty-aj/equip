@@ -32,9 +32,8 @@ class SplashScreenState extends State<AnimatedSplashScreen>
 
     var id = prefs.getString('profile');
     if (id != null) {
-      // _authentication.alreadyLoggedIn();
+      _authentication.alreadyLoggedIn();
     } else {
-
       _navigationService.navigateReplacementTo(OnBoardingScreenRoute);
      // _navigationService.navigateReplacementTo(loginRoute);
     }

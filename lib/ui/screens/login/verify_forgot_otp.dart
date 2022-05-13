@@ -1,27 +1,25 @@
-
+import 'package:equipro/core/model/VerifyForgotPassword.dart';
+import 'package:equipro/utils/screensize.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
-import 'package:equipro/core/services/auth_service.dart';
 import 'package:equipro/ui/screens/login/login_view_model.dart';
 import 'package:equipro/ui/widget/general_button.dart';
 import 'package:equipro/utils/colors.dart';
 import 'package:equipro/utils/helpers.dart';
-import 'package:equipro/utils/locator.dart';
-import 'package:equipro/utils/router/navigation_service.dart';
-import 'package:equipro/utils/router/route_names.dart';
 
 class VerifyForgotPasswordPage extends StatefulWidget {
-  const VerifyForgotPasswordPage({Key? key}) : super(key: key);
+  final String email;
+  const VerifyForgotPasswordPage({Key? key, required this.email})
+      : super(key: key);
 
   @override
-  VerifyForgotPasswordPageState createState() => VerifyForgotPasswordPageState();
+  VerifyForgotPasswordPageState createState() =>
+      VerifyForgotPasswordPageState();
 }
 
 class VerifyForgotPasswordPageState extends State<VerifyForgotPasswordPage> {
-  final NavigationService _navigationService = locator<NavigationService>();
-  TextEditingController otpController = TextEditingController();
+ TextEditingController otpController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  final Authentication _authentication = locator<Authentication>();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late bool passwordVisible;
   @override
@@ -36,193 +34,199 @@ class VerifyForgotPasswordPageState extends State<VerifyForgotPasswordPage> {
         viewModelBuilder: () => LoginViewModel(),
         builder: (context, model, child) {
           return Scaffold(
-              backgroundColor: AppColors.secondaryColor,
-              body: SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    const SizedBox(
-                      height: 40,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const [
-                        Padding(
-                            padding: EdgeInsets.all(10),
-                            child: Icon(
-                              Icons.arrow_back_ios,
-                              size: 25,
-                              color: Colors.white,
-                            )),
-                        Text('')
-                      ],
-                    ),
-                    Center(
-                        child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
+              body: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Stack(
+                // fit: StackFit.expand,
+                children: <Widget>[
+                  Container(
+                      width: Responsive.width(context),
+                      height: Responsive.height(context) / 3,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image:
+                              AssetImage("assets/images/login_background.png"),
+                          fit: BoxFit.fill,
+                          colorFilter: ColorFilter.mode(
+                              AppColors.black.withOpacity(0.3),
+                              BlendMode.darken),
+                        ),
+                      )),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      const SizedBox(
+                        height: 250,
+                      ),
+                      Container(
+                          padding: EdgeInsets.all(20),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(40),
+                                topRight: Radius.circular(40)),
+                          ),
+                          height: Responsive.height(context) / 1.6,
+                          child: SingleChildScrollView(
+                              child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                          SizedBox(
-                            height: 50,
-                            width: 50,
-                            child: Image.asset('assets/images/logo.png'),
-                          ),
-                          const Text(
-                            'Muve',
-                            style: TextStyle(
-                                fontSize: 25,
-                                color: AppColors.white,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          const Text(
-                            'Forgot password',
-                            style: TextStyle(
-                                fontSize: 28,
-                                color: AppColors.white,
-                                fontWeight: FontWeight.w400),
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                        ])),
-                    Form(
-                        key: _formKey,
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        child: Padding(
-                            padding: const EdgeInsets.only(left: 20, right: 20),
-                            child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Text(
-                                    'Please enter your OTP',
-                                    style: TextStyle(
-                                        fontSize: 15, color: AppColors.white),
-                                  ),
-                                  const SizedBox(
-                                    height: 5,
-                                  ),
-                                  TextFormField(
-                                    validator: Validators().isEmpty,
-                                    controller: otpController,
-                                    decoration: InputDecoration(
-//
-                                      hintText: '',
-                                      hintStyle: const TextStyle(
-                                        color: Colors.white,
-                                      ),
-                                      focusedBorder: const OutlineInputBorder(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(4)),
-                                        borderSide: BorderSide(
-                                            width: 1, color: Colors.white),
-                                      ),
-                                      disabledBorder: const OutlineInputBorder(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(4)),
-                                        borderSide: BorderSide(
-                                            width: 1, color: Colors.white),
-                                      ),
-                                      enabledBorder: const OutlineInputBorder(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(4)),
-                                        borderSide: BorderSide(
-                                            width: 1, color: Colors.white),
-                                      ),
-                                      labelStyle: const TextStyle(
-                                          color: AppColors.green),
-                                      border: OutlineInputBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(5.0),
-                                        borderSide: const BorderSide(),
-                                      ),
+                              SizedBox(
+                                height: 30,
+                              ),
+                              Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: <Widget>[
+                                    const Text(
+                                      'Reset ',
+                                      style: TextStyle(
+                                          fontSize: 24,
+                                          color: AppColors.black,
+                                          fontWeight: FontWeight.bold),
                                     ),
-                                    keyboardType: TextInputType.number,
-                                    style: const TextStyle(color: Colors.white),
-                                    cursorColor: Colors.white,
-                                  ),
-                                  const SizedBox(
-                                    height: 30,
-                                  ),
-                                  const Text(
-                                    'Please enter your new password',
-                                    style: TextStyle(
-                                        fontSize: 15, color: AppColors.white),
-                                  ),
-                                  const SizedBox(
-                                    height: 5,
-                                  ),
-                                  TextFormField(
-                                    validator: Validators().isEmpty,
-                                    controller: passwordController,
-                                    decoration: InputDecoration(
-                                      suffixIcon: IconButton(
-                                        icon: Icon(
-                                          // Based on passwordVisible state choose the icon
-                                          passwordVisible
-                                              ? Icons.visibility
-                                              : Icons.visibility_off,
-                                          color: Colors.white,
-                                        ),
-                                        onPressed: () {
-                                          setState(() {
-                                            passwordVisible = !passwordVisible;
-                                          });
-                                        },
-                                      ),
-                                      hintText: '******',
-                                      hintStyle: const TextStyle(
-                                        color: Colors.white,
-                                      ),
-                                      labelStyle: const TextStyle(
-                                          color: AppColors.white),
-                                      focusedBorder: const OutlineInputBorder(
-                                        borderRadius: BorderRadius.all(Radius.circular(4)),
-                                        borderSide: BorderSide(width: 1,color: Colors.white),
-                                      ),
-                                      disabledBorder: const OutlineInputBorder(
-                                        borderRadius: BorderRadius.all(Radius.circular(4)),
-                                        borderSide: BorderSide(width: 1,color: Colors.white),
-                                      ),
-                                      enabledBorder: const OutlineInputBorder(
-                                        borderRadius: BorderRadius.all(Radius.circular(4)),
-                                        borderSide: BorderSide(width: 1,color: Colors.white),
-                                      ),
-                                      border: OutlineInputBorder(
-                                        borderRadius:
-                                        BorderRadius.circular(5.0),
-                                        borderSide: const BorderSide(),
-                                      ),
+                                    const Text(
+                                      'Password',
+                                      style: TextStyle(
+                                          fontSize: 24,
+                                          color: AppColors.primaryColor,
+                                          fontWeight: FontWeight.bold),
                                     ),
-                                    obscureText: passwordVisible,
-                                    keyboardType: TextInputType.visiblePassword,
-                                    style: const TextStyle(color: Colors.white),
-                                    cursorColor: Colors.white,
-                                  ),
-                                ]))),
-                    Container(
-                        padding: const EdgeInsets.all(20),
-                        child: GeneralButton(
-                          onPressed: () {
-    if (_formKey.currentState!.validate()) {
-      // _navigationService.navigateTo(verificationViewRoute);
-      // model.verifyForgotPassword(VerifyForgotPassword(
-      //     userId:_authentication.userId, password: passwordController.text, code: otpController.text));
-    } },
-                          buttonText: 'Verify',
-                          splashColor: const Color(0xff8CD96B),
-                          buttonTextColor: AppColors.white,
-                        )),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                  ],
-                ),
-              ));
+                                  ]),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Text(
+                                "Type the otp you received on ${widget.email} and your new password",
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 14),
+                              ),
+                              Form(
+                                  key: _formKey,
+                                  autovalidateMode:
+                                      AutovalidateMode.onUserInteraction,
+                                  child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 20, right: 20),
+                                      child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            const Text(
+                                              'Please enter your OTP',
+                                              style: TextStyle(
+                                                  fontSize: 15,
+                                                  color: AppColors.white),
+                                            ),
+                                            const SizedBox(
+                                              height: 5,
+                                            ),
+                                            TextFormField(
+                                              validator: Validators().isEmpty,
+                                              controller: otpController,
+                                              // maxLength: 11,
+                                              decoration: InputDecoration(
+                                                hintText: '',
+                                                hintStyle: const TextStyle(
+                                                    color: Colors.grey),
+                                                labelStyle: const TextStyle(
+                                                    color: AppColors.black),
+                                              ),
+                                              onChanged: (v) {
+                                                setState(() {});
+                                              },
+                                              keyboardType:
+                                                  TextInputType.number,
+                                              style: const TextStyle(
+                                                  color: Colors.black),
+                                              cursorColor: Colors.black,
+                                            ),
+                                            const SizedBox(
+                                              height: 30,
+                                            ),
+                                            const Text(
+                                              'Please enter your new password',
+                                              style: TextStyle(
+                                                  fontSize: 15,
+                                                  color: AppColors.white),
+                                            ),
+                                            const SizedBox(
+                                              height: 5,
+                                            ),
+                                            TextFormField(
+                                              validator: Validators().isEmpty,
+                                              controller: passwordController,
+                                              decoration: InputDecoration(
+                                                suffixIcon: IconButton(
+                                                  icon: Icon(
+                                                    // Based on passwordVisible state choose the icon
+                                                    passwordVisible
+                                                        ? Icons.visibility
+                                                        : Icons.visibility_off,
+                                                    color: Colors.black,
+                                                  ),
+                                                  onPressed: () {
+                                                    setState(() {
+                                                      passwordVisible =
+                                                          !passwordVisible;
+                                                    });
+                                                  },
+                                                ),
+                                                hintText: '******',
+                                                hintStyle: const TextStyle(
+                                                  color: Colors.grey,
+                                                ),
+                                              ),
+                                              onChanged: (v) {
+                                                setState(() {});
+                                              },
+                                              obscureText: passwordVisible,
+                                              keyboardType:
+                                                  TextInputType.visiblePassword,
+                                              style: const TextStyle(
+                                                  color: Colors.black),
+                                              cursorColor: Colors.black,
+                                            ),
+                                          ]))),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              Container(
+                                  padding: const EdgeInsets.all(20),
+                                  child: GeneralButton(
+                                    onPressed: () {
+                                      if (_formKey.currentState!.validate()) {
+                                        model.verifyForgotPassword(
+                                            VerifyForgotPassword(
+                                                password:
+                                                    passwordController.text,
+                                                otp: otpController.text,
+                                                email: widget.email));
+                                      }
+                                    },
+                                    buttonText: 'Verify',
+                                    buttonTextColor: AppColors.white,
+                                  )),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              const SizedBox(
+                                height: 30,
+                              ),
+                            ],
+                          ))),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ));
         });
   }
 }

@@ -1,4 +1,5 @@
 import 'package:equipro/core/services/auth_service.dart';
+import 'package:equipro/ui/screens/hirer/home/home_view_model.dart';
 import 'package:equipro/ui/widget/general_button.dart';
 import 'package:equipro/utils/colors.dart';
 import 'package:equipro/utils/locator.dart';
@@ -27,6 +28,69 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
   final NavigationService _navigationService = locator<NavigationService>();
   final Authentication _authentication = locator<Authentication>();
 
+  HomeViewModel model = HomeViewModel();
+
+  displayDialog(BuildContext context, HomeViewModel model) {
+    return showDialog(
+      barrierDismissible: true,
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: new BorderRadius.circular(15),
+        ),
+        content: Container(
+            height: 150,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  "Confirm switch to hirer?",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      width: 100,
+                      child: GeneralButton(
+                        splashColor: AppColors.grey,
+                        buttonTextColor: AppColors.black,
+                        buttonText: 'No',
+                        onPressed: () {
+                          Navigator.pop(context);
+                          _navigationService.pushAndRemoveUntil(HomeOwnerRoute);
+                        },
+                      ),
+
+                    ),
+
+                    Container(
+                      width: 100,
+                      child: GeneralButton(
+                        buttonText: 'Yes',
+                        onPressed: () {
+                          Navigator.pop(context);
+                          model.switchOwner();
+                        },
+                      ),
+
+                    ),
+
+                  ],
+                )
+
+              ],
+            )),
+      ),
+    );
+  }
   @override
   void initState() {
     super.initState();
@@ -118,15 +182,8 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  "Amandan ",
+                                  _authentication.currentUser.details!.fullname!,
                                   //  _authentication.currentUser.firstName! + " " + _authentication.currentUser.lastName!,
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20,
-                                  ),
-                                ),
-                                Text(
-                                  "Banks",
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 20,
@@ -225,7 +282,7 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
               GeneralButton(
                 buttonText: "Become An Equipment Owner",
                 onPressed: () {
-                  _navigationService.navigateTo(SetupOwnerRoute);
+                  displayDialog( context,  model);
                 },
               ),
               SizedBox(

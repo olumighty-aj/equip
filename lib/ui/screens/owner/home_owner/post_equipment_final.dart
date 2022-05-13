@@ -1,5 +1,6 @@
 import 'package:badges/badges.dart';
 import 'package:equipro/ui/screens/drawer.dart';
+import 'package:equipro/ui/screens/owner/home_owner/home_view_model.dart';
 import 'package:equipro/ui/widget/equip_tiles.dart';
 import 'package:equipro/ui/widget/general_button.dart';
 import 'package:equipro/utils/helpers.dart';
@@ -18,26 +19,53 @@ import 'package:equipro/ui/screens/login/login_view_model.dart';
 import 'package:equipro/utils/colors.dart';
 
 class PostEquipmentFinal extends StatefulWidget {
-  const PostEquipmentFinal({Key? key}) : super(key: key);
-
+  final String equipName;
+  final List images;
+  final description;
+  const PostEquipmentFinal(
+      {Key? key,
+      required this.equipName,
+      required this.images,
+      this.description})
+      : super(key: key);
   @override
   LoginState createState() => LoginState();
 }
 
-class LoginState extends State<PostEquipmentFinal> with TickerProviderStateMixin {
+class LoginState extends State<PostEquipmentFinal>
+    with TickerProviderStateMixin {
   final NavigationService _navigationService = locator<NavigationService>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  int? selectedQuantity;
-  String? pickupTime = DateTime.now().toString();
+  String? selectedQuantity;
   String? selectedDate;
-  String? selectedWeek;
+  String? selectedDateTo;
   String? selectedPer;
-  TextEditingController emailController = TextEditingController();
+  String? selectedPerNumber;
+  TextEditingController costController = TextEditingController();
   AnimationController? _navController;
   Animation<Offset>? _navAnimation;
+
+  void _startUploading(HomeOwnerViewModel model) async {
+    var response = await model.postEquip(
+      widget.images,
+      widget.equipName,
+      costController.text,
+      selectedPerNumber!,
+      selectedDate!,
+      selectedDateTo!,
+      selectedQuantity!,
+      widget.description,
+    );
+    print(response);
+    if (response == null) {
+      print('error');
+    } else {}
+  }
+
   @override
   void initState() {
     super.initState();
+    print(widget.images);
     _navController = AnimationController(
       duration: const Duration(milliseconds: 2000),
       vsync: this,
@@ -50,6 +78,7 @@ class LoginState extends State<PostEquipmentFinal> with TickerProviderStateMixin
       curve: Curves.easeIn,
     ));
   }
+
   @override
   void dispose() {
     _navController!.dispose();
@@ -62,44 +91,49 @@ class LoginState extends State<PostEquipmentFinal> with TickerProviderStateMixin
       barrierDismissible: false,
       context: context,
       builder: (context) => AlertDialog(
-        contentPadding:EdgeInsets.zero ,
-        shape:
-            RoundedRectangleBorder(borderRadius: new BorderRadius.circular(15),),
-        content:
-        Container(
-          width: Responsive.width(context)/1.2,
-          height: 245,
-          child:
-        Column(
-          children: [
-            SizedBox(height: 10,),
-            Text(
-              "Booking Request",
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 5,),
-            Text(
-              "Sent",
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 20,),
-            Container(
-              width: 250,
-              child:
-            Text(
-              "Booking request has been sent to equipment owner. You will be notified ones your request is approved",
-              textAlign: TextAlign.center,
-            )  ),
-            SizedBox(height: 20,),
-            Container(
-              width: 200,
-              child:
-                  GeneralButton(buttonText: 'Okay',
-                    onPressed: (){
+        contentPadding: EdgeInsets.zero,
+        shape: RoundedRectangleBorder(
+          borderRadius: new BorderRadius.circular(15),
+        ),
+        content: Container(
+            width: Responsive.width(context) / 1.2,
+            height: 245,
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  "Booking Request",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                Text(
+                  "Sent",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Container(
+                    width: 250,
+                    child: Text(
+                      "Booking request has been sent to equipment owner. You will be notified ones your request is approved",
+                      textAlign: TextAlign.center,
+                    )),
+                SizedBox(
+                  height: 20,
+                ),
+                Container(
+                  width: 200,
+                  child: GeneralButton(
+                    buttonText: 'Okay',
+                    onPressed: () {
                       Navigator.pop(context);
                       _navigationService.pushAndRemoveUntil(homeRoute);
                     },
-
                   ),
                   // InkWell(
                   //   onTap: (){
@@ -107,34 +141,33 @@ class LoginState extends State<PostEquipmentFinal> with TickerProviderStateMixin
                   //     _navigationService.pushAndRemoveUntil(homeRoute);
                   //   },
                   //   child:
-            // Container(
-            //   height:70,
-            //  // width: Responsive.width(context)/1.5,
-            //   decoration: BoxDecoration(
-            //     borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10),bottomRight: Radius.circular(10)),
-            //     color: AppColors.primaryColor,
-            //   ),
-            //   alignment: Alignment.center,
-            //   child: Text(
-            //     "Okay",
-            //     style: TextStyle(
-            //         color: Colors.white,
-            //         fontWeight: FontWeight.bold,
-            //         fontSize: 20),
-            //   ),
-            // ))
-
-            ),
-          ],
-        ) ),
+                  // Container(
+                  //   height:70,
+                  //  // width: Responsive.width(context)/1.5,
+                  //   decoration: BoxDecoration(
+                  //     borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10),bottomRight: Radius.circular(10)),
+                  //     color: AppColors.primaryColor,
+                  //   ),
+                  //   alignment: Alignment.center,
+                  //   child: Text(
+                  //     "Okay",
+                  //     style: TextStyle(
+                  //         color: Colors.white,
+                  //         fontWeight: FontWeight.bold,
+                  //         fontSize: 20),
+                  //   ),
+                  // ))
+                ),
+              ],
+            )),
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<LoginViewModel>.reactive(
-        viewModelBuilder: () => LoginViewModel(),
+    return ViewModelBuilder<HomeOwnerViewModel>.reactive(
+        viewModelBuilder: () => HomeOwnerViewModel(),
         builder: (context, model, child) {
           return Scaffold(
             key: _scaffoldKey,
@@ -163,12 +196,13 @@ class LoginState extends State<PostEquipmentFinal> with TickerProviderStateMixin
                                   Row(
                                     children: [
                                       Container(
-                                        //  margin: EdgeInsets.all(20),
+                                          //  margin: EdgeInsets.all(20),
                                           padding: EdgeInsets.only(left: 8),
                                           height: 40,
                                           width: 40,
                                           decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(12),
+                                            borderRadius:
+                                                BorderRadius.circular(12),
                                             color: AppColors.white,
                                           ),
                                           child: InkWell(
@@ -197,8 +231,9 @@ class LoginState extends State<PostEquipmentFinal> with TickerProviderStateMixin
                                   Text(
                                     "Other Details",
                                     style: TextStyle(
-                                        fontSize: 18,
-                                        color: AppColors.black,),
+                                      fontSize: 18,
+                                      color: AppColors.black,
+                                    ),
                                   ),
                                   SizedBox(
                                     height: 20,
@@ -214,18 +249,17 @@ class LoginState extends State<PostEquipmentFinal> with TickerProviderStateMixin
                                   SizedBox(
                                     height: 50,
                                   ),
-
                                   Text(
                                     "Cost of hire",
                                     style: TextStyle(
-                                        fontSize: 15,),
+                                      fontSize: 15,
+                                    ),
                                   ),
                                   SizedBox(
                                     height: 10,
                                   ),
-
                                   TextFormField(
-                                    controller: emailController,
+                                    controller: costController,
                                     decoration: InputDecoration(
                                       hintText: 'Cost',
                                       hintStyle: const TextStyle(
@@ -251,7 +285,7 @@ class LoginState extends State<PostEquipmentFinal> with TickerProviderStateMixin
                                       ),
                                       border: OutlineInputBorder(
                                         borderRadius:
-                                        BorderRadius.circular(5.0),
+                                            BorderRadius.circular(5.0),
                                         borderSide: const BorderSide(),
                                       ),
                                     ),
@@ -262,7 +296,6 @@ class LoginState extends State<PostEquipmentFinal> with TickerProviderStateMixin
                                   SizedBox(
                                     height: 30,
                                   ),
-
                                   Container(
                                     padding: EdgeInsets.all(10),
                                     width: Responsive.width(context),
@@ -274,27 +307,31 @@ class LoginState extends State<PostEquipmentFinal> with TickerProviderStateMixin
                                     child: Center(
                                       child: DropdownButtonFormField<String>(
                                         decoration: InputDecoration.collapsed(
-                                            hintText:
-                                                'Per?'),
+                                            hintText: 'Per?'),
                                         isExpanded: true,
                                         value: selectedPer,
                                         onChanged: (newValue) {
                                           setState(() {
                                             selectedPer = newValue;
+                                            newValue == "Day 1"
+                                                ? selectedPerNumber = "1"
+                                                : newValue == "Week 7"
+                                                    ? selectedPerNumber =
+                                                        "Month 30"
+                                                    : selectedPerNumber = "30";
                                           });
                                         },
                                         items: <String>[
-                                          'Day',
-                                          'Week',
-                                          'Month',
-                                          'Costume',
+                                          'Day 1',
+                                          'Week 7',
+                                          'Month 30',
                                         ].map<DropdownMenuItem<String>>(
-                                                (String value) {
-                                              return DropdownMenuItem<String>(
-                                                value: value,
-                                                child: Text(value),
-                                              );
-                                            }).toList(),
+                                            (String value) {
+                                          return DropdownMenuItem<String>(
+                                            value: value,
+                                            child: Text(value),
+                                          );
+                                        }).toList(),
                                       ),
                                     ),
                                   ),
@@ -304,7 +341,8 @@ class LoginState extends State<PostEquipmentFinal> with TickerProviderStateMixin
                                   Text(
                                     "Availability",
                                     style: TextStyle(
-                                      fontSize: 15,),
+                                      fontSize: 15,
+                                    ),
                                   ),
                                   SizedBox(
                                     height: 10,
@@ -312,27 +350,20 @@ class LoginState extends State<PostEquipmentFinal> with TickerProviderStateMixin
                                   InkWell(
                                       onTap: () {
                                         // YearPicker(firstDate: firstDate, lastDate: lastDate, selectedDate: selectedDate, onChanged: onChanged)
-                                        DatePicker.showDateTimePicker(context,
-                                            maxTime: DateTime.now(),
+                                        DatePicker.showDatePicker(context,
+                                            minTime: DateTime.now(),
                                             showTitleActions: true,
                                             onChanged: (date) {
                                           setState(() {
-                                            pickupTime = date.toString();
-                                            selectedDate =
-                                                DateFormat('M/d/y - h:mm a')
-                                                    .format(date)
-                                                    .toString();
-                                            print(DateFormat('y')
+                                            selectedDate = DateFormat('y-MM-dd')
                                                 .format(date)
-                                                .toString());
+                                                .toString();
                                           });
                                           print('change $date in time zone ' +
                                               date.timeZoneOffset.inHours
                                                   .toString());
                                         }, onConfirm: (date) {
-                                          setState(() {
-                                            pickupTime = date.toString();
-                                          });
+                                          setState(() {});
                                         }, currentTime: DateTime.now());
                                       },
                                       child: Container(
@@ -359,8 +390,11 @@ class LoginState extends State<PostEquipmentFinal> with TickerProviderStateMixin
                                                     selectedDate != null
                                                         ? selectedDate!
                                                         : "From",
-                                                    style: const TextStyle(
-                                                        color: Colors.grey),
+                                                    style: TextStyle(
+                                                        color:
+                                                            selectedDate != null
+                                                                ? Colors.black
+                                                                : Colors.grey),
                                                   ),
                                                   Icon(
                                                     Icons
@@ -372,43 +406,36 @@ class LoginState extends State<PostEquipmentFinal> with TickerProviderStateMixin
                                   SizedBox(
                                     height: 20,
                                   ),
-
                                   InkWell(
                                       onTap: () {
                                         // YearPicker(firstDate: firstDate, lastDate: lastDate, selectedDate: selectedDate, onChanged: onChanged)
-                                        DatePicker.showDateTimePicker(context,
-                                            maxTime: DateTime.now(),
+                                        DatePicker.showDatePicker(context,
+                                            minTime: DateTime.now(),
                                             showTitleActions: true,
                                             onChanged: (date) {
-                                              setState(() {
-                                                pickupTime = date.toString();
-                                                selectedDate =
-                                                    DateFormat('M/d/y - h:mm a')
-                                                        .format(date)
-                                                        .toString();
-                                                print(DateFormat('y')
+                                          setState(() {
+                                            selectedDateTo =
+                                                DateFormat('y-MM-dd')
                                                     .format(date)
-                                                    .toString());
-                                              });
-                                              print('change $date in time zone ' +
-                                                  date.timeZoneOffset.inHours
-                                                      .toString());
-                                            }, onConfirm: (date) {
-                                              setState(() {
-                                                pickupTime = date.toString();
-                                              });
-                                            }, currentTime: DateTime.now());
+                                                    .toString();
+                                            print(DateFormat('y')
+                                                .format(date)
+                                                .toString());
+                                          });
+                                        }, onConfirm: (date) {
+                                          setState(() {});
+                                        }, currentTime: DateTime.now());
                                       },
                                       child: Container(
                                           height: 60,
                                           width: Responsive.width(context),
                                           decoration: BoxDecoration(
-                                            //   color: AppColors.primaryColor.withOpacity(0.1),
+                                              //   color: AppColors.primaryColor.withOpacity(0.1),
                                               borderRadius: const BorderRadius
-                                                  .all(
+                                                      .all(
                                                   Radius.circular(
                                                       5.0) //                 <--- border radius here
-                                              ),
+                                                  ),
                                               border: Border.all(
                                                   color: Colors.grey)),
                                           child: Padding(
@@ -416,15 +443,18 @@ class LoginState extends State<PostEquipmentFinal> with TickerProviderStateMixin
                                                   left: 20, right: 20),
                                               child: Row(
                                                 mainAxisAlignment:
-                                                MainAxisAlignment
-                                                    .spaceBetween,
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
                                                 children: [
                                                   Text(
-                                                    selectedDate != null
-                                                        ? selectedDate!
+                                                    selectedDateTo != null
+                                                        ? selectedDateTo!
                                                         : "Till",
-                                                    style: const TextStyle(
-                                                        color: Colors.grey),
+                                                    style: TextStyle(
+                                                        color: selectedDateTo !=
+                                                                null
+                                                            ? Colors.black
+                                                            : Colors.grey),
                                                   ),
                                                   Icon(
                                                     Icons
@@ -439,7 +469,8 @@ class LoginState extends State<PostEquipmentFinal> with TickerProviderStateMixin
                                   Text(
                                     "Quantities available for hire",
                                     style: TextStyle(
-                                      fontSize: 15,),
+                                      fontSize: 15,
+                                    ),
                                   ),
                                   SizedBox(
                                     height: 10,
@@ -455,12 +486,13 @@ class LoginState extends State<PostEquipmentFinal> with TickerProviderStateMixin
                                     child: Center(
                                       child: DropdownButtonFormField<String>(
                                         decoration: InputDecoration.collapsed(
-                                            hintText: 'Number of quantity for hire'),
+                                            hintText:
+                                                'Number of quantity for hire'),
                                         isExpanded: true,
-                                        value: selectedWeek,
+                                        value: selectedQuantity,
                                         onChanged: (newValue) {
                                           setState(() {
-                                            selectedWeek = newValue;
+                                            selectedQuantity = newValue;
                                           });
                                         },
                                         items: <String>[
@@ -484,21 +516,32 @@ class LoginState extends State<PostEquipmentFinal> with TickerProviderStateMixin
                                       ),
                                     ),
                                   ),
-
                                   SizedBox(
                                     height: 30,
                                   ),
                                   Center(
-                                      child:  SlideTransition(
+                                      child: SlideTransition(
                                           position: _navAnimation!,
-                                        //  textDirection: TextDirection.rtl,
-                                          child:Container(
-                                          width: 300,
-                                          child: GeneralButton(
-                                              onPressed: () {
-                                                _navigationService.pushAndRemoveUntil(HomeOwnerRoute);
-                                              },
-                                              buttonText: "Post"))))
+                                          //  textDirection: TextDirection.rtl,
+                                          child: Container(
+                                              width: 300,
+                                              child: GeneralButton(
+                                                  onPressed: () {
+                                                    if (costController
+                                                            .text.isNotEmpty &&
+                                                        selectedDate != null &&
+                                                        selectedDateTo !=
+                                                            null &&
+                                                        selectedPer != null &&
+                                                        selectedQuantity !=
+                                                            null) {
+                                                      _startUploading(model);
+                                                    } else {
+                                                      showErrorToast(
+                                                          "All fields are compulsory");
+                                                    }
+                                                  },
+                                                  buttonText: "Post"))))
                                 ]))))),
             drawer: CollapsingNavigationDrawer(),
           );

@@ -1,27 +1,28 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:equipro/core/model/EquipmentModel.dart';
 import 'package:equipro/ui/screens/hirer/book/details_view_model.dart';
 import 'package:equipro/ui/widget/dash_painter.dart';
 import 'package:equipro/utils/screensize.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:intl/intl.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 import 'package:stacked/stacked.dart';
 import 'package:equipro/ui/widget/general_button.dart';
 import 'package:equipro/utils/colors.dart';
-import 'package:equipro/utils/helpers.dart';
 import 'package:equipro/utils/locator.dart';
-import 'package:equipro/utils/notification_helper.dart';
 import 'package:equipro/utils/router/navigation_service.dart';
 import 'package:equipro/utils/router/route_names.dart';
 
 class EquipDetails extends StatefulWidget {
-  const EquipDetails({Key? key}) : super(key: key);
+  final EquipmentModel model;
+  const EquipDetails({Key? key, required this.model}) : super(key: key);
 
   @override
   LoginState createState() => LoginState();
 }
 
-class LoginState extends State<EquipDetails> with TickerProviderStateMixin{
+class LoginState extends State<EquipDetails> with TickerProviderStateMixin {
   final NavigationService _navigationService = locator<NavigationService>();
 
   String? selected = "1";
@@ -45,6 +46,7 @@ class LoginState extends State<EquipDetails> with TickerProviderStateMixin{
       curve: Curves.easeIn,
     ));
   }
+
   @override
   void dispose() {
     _navController!.dispose();
@@ -57,10 +59,8 @@ class LoginState extends State<EquipDetails> with TickerProviderStateMixin{
         viewModelBuilder: () => DetailsViewModel(),
         builder: (context, model, child) {
           return Scaffold(
-              body:
-              SingleChildScrollView(
-                child:
-              Column(
+              body: SingleChildScrollView(
+                  child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -68,9 +68,10 @@ class LoginState extends State<EquipDetails> with TickerProviderStateMixin{
                 // fit: StackFit.expand,
                 children: <Widget>[
                   Hero(
-                      tag: "profile",
+                      tag: widget.model.id.toString(),
                       child: CachedNetworkImage(
-                        imageUrl: "https://i.pravatar.cc/",
+                        imageUrl:
+                            widget.model.equipImages!.first.equipImagesPath!,
                         imageBuilder: (context, imageProvider) => Container(
                           width: Responsive.width(context),
                           height: Responsive.height(context) / 2.5,
@@ -87,11 +88,11 @@ class LoginState extends State<EquipDetails> with TickerProviderStateMixin{
                         ),
                         placeholder: (context, url) =>
                             CircularProgressIndicator(),
-                        errorWidget: (context, url, error) => CircleAvatar(
-                          radius: 40,
-                          backgroundColor: AppColors.grey,
+                        errorWidget: (context, url, error) => Container(
+                          width: Responsive.width(context),
+                          height: Responsive.height(context) / 2.5,
                           child: Image.asset(
-                            "assets/images/user.png",
+                            "assets/images/logo.png",
                             scale: 2,
                           ),
                         ),
@@ -113,7 +114,7 @@ class LoginState extends State<EquipDetails> with TickerProviderStateMixin{
                           child: InkWell(
                               onTap: () {
                                 _navigationService.pop();
-                              //  Navigator.pop(context);
+                                //  Navigator.pop(context);
                               },
                               child: const Icon(
                                 Icons.arrow_back_ios,
@@ -121,152 +122,253 @@ class LoginState extends State<EquipDetails> with TickerProviderStateMixin{
                               )))
                     ],
                   ),
-                  Column(children: [
-                    SizedBox(
-                      height: Responsive.height(context) / 4,
-                    ),
-                    AnimationLimiter(
-                        child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: AnimationConfiguration.toStaggeredList(
+                  AnimationLimiter(
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: AnimationConfiguration.toStaggeredList(
                               duration: const Duration(milliseconds: 1000),
                               childAnimationBuilder: (widget) => SlideAnimation(
-                                horizontalOffset:
-                                    MediaQuery.of(context).size.width / 4,
-                                child: FadeInAnimation(
-                                    curve: Curves.fastOutSlowIn, child: widget),
-                              ),
+                                    horizontalOffset:
+                                        MediaQuery.of(context).size.width / 4,
+                                    child: FadeInAnimation(
+                                        curve: Curves.fastOutSlowIn,
+                                        child: widget),
+                                  ),
                               children: [
-                                InkWell(
-                                    onTap: () {
-                                      setState(() {
-                                        selected = "1";
-                                      });
-                                    },
-                                    child: Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          color: selected != "1"
-                                              ? AppColors.primaryColor
-                                              : AppColors.white,
-                                        ),
-                                        height: 70,
-                                        width: 70,
-                                        child: Container(
-                                            height: 60,
-                                            width: 60,
-                                            padding: EdgeInsets.all(3),
-                                            child: ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(10.0),
-                                                child: CachedNetworkImage(
-                                                  imageUrl:
-                                                      "https://i.pravatar.cc/",
-                                                  placeholder: (context, url) =>
-                                                      CircularProgressIndicator(),
-                                                  errorWidget:
-                                                      (context, url, error) =>
-                                                          ClipRRect(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            8.0),
-                                                    child: Image.asset(
-                                                      "assets/images/user.png",
-                                                      scale: 2,
-                                                    ),
-                                                  ),
-                                                ))))),
                                 SizedBox(
-                                  width: 10,
+                                  height: Responsive.height(context) / 4,
                                 ),
-                                InkWell(
-                                    onTap: () {
-                                      setState(() {
-                                        selected = "2";
-                                      });
-                                    },
-                                    child: Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          color: selected != "2"
-                                              ? AppColors.primaryColor
-                                              : AppColors.white,
+                                widget.model.equipImages != null
+                                    ? Container(
+                                        height: 100,
+                                        child: Center(
+                                            child: ListView.builder(
+                                                shrinkWrap: true,
+                                                itemCount: widget
+                                                    .model.equipImages!.length,
+                                                scrollDirection:
+                                                    Axis.horizontal,
+                                                itemBuilder:
+                                                    (BuildContext context,
+                                                        int index) {
+                                                  return Padding(
+                                                    padding: EdgeInsets.all(5),
+                                                    child: InkWell(
+                                                        onTap: () {
+                                                          setState(() {
+                                                            selected = widget
+                                                                .model
+                                                                .equipImages![
+                                                                    index]
+                                                                .id!
+                                                                .toString();
+                                                          });
+                                                        },
+                                                        child: Container(
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10),
+                                                              color: widget
+                                                                          .model
+                                                                          .equipImages![
+                                                                              index]
+                                                                          .id!
+                                                                          .toString() !=
+                                                                      selected
+                                                                  ? AppColors
+                                                                      .primaryColor
+                                                                  : AppColors
+                                                                      .white,
+                                                            ),
+                                                            height: 70,
+                                                            width: 70,
+                                                            child: Container(
+                                                                height: 60,
+                                                                width: 60,
+                                                                padding:
+                                                                    EdgeInsets
+                                                                        .all(3),
+                                                                child:
+                                                                    ClipRRect(
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(
+                                                                                10.0),
+                                                                        child:
+                                                                            CachedNetworkImage(
+                                                                          imageUrl: widget
+                                                                              .model
+                                                                              .equipImages![index]
+                                                                              .equipImagesPath!,
+                                                                          placeholder: (context, url) =>
+                                                                              CircularProgressIndicator(),
+                                                                          errorWidget: (context, url, error) =>
+                                                                              ClipRRect(
+                                                                            borderRadius:
+                                                                                BorderRadius.circular(8.0),
+                                                                            child:
+                                                                                Image.asset(
+                                                                              "assets/images/logo.png",
+                                                                              scale: 2,
+                                                                            ),
+                                                                          ),
+                                                                        ))))),
+                                                  );
+                                                })))
+                                    : Container(
+                                        child: Text(
+                                          "",
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w400,
+                                          ),
                                         ),
-                                        height: 70,
-                                        width: 70,
-                                        child: Container(
-                                            height: 60,
-                                            width: 60,
-                                            padding: EdgeInsets.all(3),
-                                            child: ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(10.0),
-                                                child: CachedNetworkImage(
-                                                  imageUrl:
-                                                      "https://i.pravatar.cc/",
-                                                  placeholder: (context, url) =>
-                                                      CircularProgressIndicator(),
-                                                  errorWidget:
-                                                      (context, url, error) =>
-                                                          ClipRRect(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            8.0),
-                                                    child: Image.asset(
-                                                      "assets/images/user.png",
-                                                      scale: 2,
-                                                    ),
-                                                  ),
-                                                ))))),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                InkWell(
-                                    onTap: () {
-                                      setState(() {
-                                        selected = "3";
-                                      });
-                                    },
-                                    child: Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          color: selected != "3"
-                                              ? AppColors.primaryColor
-                                              : AppColors.white,
-                                        ),
-                                        height: 70,
-                                        width: 70,
-                                        child: Container(
-                                            height: 70,
-                                            width: 70,
-                                            padding: EdgeInsets.all(3),
-                                            child: ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(10.0),
-                                                child: CachedNetworkImage(
-                                                  imageUrl:
-                                                      "https://i.pravatar.cc/",
-                                                  placeholder: (context, url) =>
-                                                      CircularProgressIndicator(),
-                                                  errorWidget:
-                                                      (context, url, error) =>
-                                                          ClipRRect(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            8.0),
-                                                    child: Image.asset(
-                                                      "assets/images/user.png",
-                                                      scale: 2,
-                                                    ),
-                                                  ),
-                                                )))))
-                              ],
-                            )))
-                  ]),
+                                      ),
 
+                                // AnimationLimiter(
+                                //     child: Row(
+                                //         mainAxisAlignment: MainAxisAlignment.center,
+                                //         children: AnimationConfiguration.toStaggeredList(
+                                //           duration: const Duration(milliseconds: 1000),
+                                //           childAnimationBuilder: (widget) => SlideAnimation(
+                                //             horizontalOffset:
+                                //                 MediaQuery.of(context).size.width / 4,
+                                //             child: FadeInAnimation(
+                                //                 curve: Curves.fastOutSlowIn, child: widget),
+                                //           ),
+                                //           children: [
+                                //             InkWell(
+                                //                 onTap: () {
+                                //                   setState(() {
+                                //                     selected = "1";
+                                //                   });
+                                //                 },
+                                //                 child: Container(
+                                //                     decoration: BoxDecoration(
+                                //                       borderRadius:
+                                //                           BorderRadius.circular(10),
+                                //                       color: selected != "1"
+                                //                           ? AppColors.primaryColor
+                                //                           : AppColors.white,
+                                //                     ),
+                                //                     height: 70,
+                                //                     width: 70,
+                                //                     child: Container(
+                                //                         height: 60,
+                                //                         width: 60,
+                                //                         padding: EdgeInsets.all(3),
+                                //                         child: ClipRRect(
+                                //                             borderRadius:
+                                //                                 BorderRadius.circular(10.0),
+                                //                             child: CachedNetworkImage(
+                                //                               imageUrl:
+                                //                                   "https://i.pravatar.cc/",
+                                //                               placeholder: (context, url) =>
+                                //                                   CircularProgressIndicator(),
+                                //                               errorWidget:
+                                //                                   (context, url, error) =>
+                                //                                       ClipRRect(
+                                //                                 borderRadius:
+                                //                                     BorderRadius.circular(
+                                //                                         8.0),
+                                //                                 child: Image.asset(
+                                //                                   "assets/images/logo.png",
+                                //                                   scale: 2,
+                                //                                 ),
+                                //                               ),
+                                //                             ))))),
+                                //             SizedBox(
+                                //               width: 10,
+                                //             ),
+                                //             InkWell(
+                                //                 onTap: () {
+                                //                   setState(() {
+                                //                     selected = "2";
+                                //                   });
+                                //                 },
+                                //                 child: Container(
+                                //                     decoration: BoxDecoration(
+                                //                       borderRadius:
+                                //                           BorderRadius.circular(10),
+                                //                       color: selected != "2"
+                                //                           ? AppColors.primaryColor
+                                //                           : AppColors.white,
+                                //                     ),
+                                //                     height: 70,
+                                //                     width: 70,
+                                //                     child: Container(
+                                //                         height: 60,
+                                //                         width: 60,
+                                //                         padding: EdgeInsets.all(3),
+                                //                         child: ClipRRect(
+                                //                             borderRadius:
+                                //                                 BorderRadius.circular(10.0),
+                                //                             child: CachedNetworkImage(
+                                //                               imageUrl:
+                                //                                   "https://i.pravatar.cc/",
+                                //                               placeholder: (context, url) =>
+                                //                                   CircularProgressIndicator(),
+                                //                               errorWidget:
+                                //                                   (context, url, error) =>
+                                //                                       ClipRRect(
+                                //                                 borderRadius:
+                                //                                     BorderRadius.circular(
+                                //                                         8.0),
+                                //                                 child: Image.asset(
+                                //                                   "assets/images/user.png",
+                                //                                   scale: 2,
+                                //                                 ),
+                                //                               ),
+                                //                             ))))),
+                                //             SizedBox(
+                                //               width: 10,
+                                //             ),
+                                //             InkWell(
+                                //                 onTap: () {
+                                //                   setState(() {
+                                //                     selected = "3";
+                                //                   });
+                                //                 },
+                                //                 child: Container(
+                                //                     decoration: BoxDecoration(
+                                //                       borderRadius:
+                                //                           BorderRadius.circular(10),
+                                //                       color: selected != "3"
+                                //                           ? AppColors.primaryColor
+                                //                           : AppColors.white,
+                                //                     ),
+                                //                     height: 70,
+                                //                     width: 70,
+                                //                     child: Container(
+                                //                         height: 70,
+                                //                         width: 70,
+                                //                         padding: EdgeInsets.all(3),
+                                //                         child: ClipRRect(
+                                //                             borderRadius:
+                                //                                 BorderRadius.circular(10.0),
+                                //                             child: CachedNetworkImage(
+                                //                               imageUrl:
+                                //                                   "https://i.pravatar.cc/",
+                                //                               placeholder: (context, url) =>
+                                //                                   CircularProgressIndicator(),
+                                //                               errorWidget:
+                                //                                   (context, url, error) =>
+                                //                                       ClipRRect(
+                                //                                 borderRadius:
+                                //                                     BorderRadius.circular(
+                                //                                         8.0),
+                                //                                 child: Image.asset(
+                                //                                   "assets/images/user.png",
+                                //                                   scale: 2,
+                                //                                 ),
+                                //                               ),
+                                //                             )))))
+                                //           ],
+                                //         )))
+                              ]))),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -274,7 +376,6 @@ class LoginState extends State<EquipDetails> with TickerProviderStateMixin{
                       SizedBox(
                         height: Responsive.height(context) / 2.8,
                       ),
-
                       Container(
                           width: Responsive.width(context),
                           padding: EdgeInsets.all(20),
@@ -293,8 +394,8 @@ class LoginState extends State<EquipDetails> with TickerProviderStateMixin{
                               SizedBox(
                                 height: 30,
                               ),
-                              const Text(
-                                'Wheelbarrow',
+                               Text(
+                                widget.model.equipName!,
                                 style: TextStyle(
                                     fontSize: 24,
                                     color: AppColors.primaryColor,
@@ -307,15 +408,15 @@ class LoginState extends State<EquipDetails> with TickerProviderStateMixin{
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  const Text(
-                                    'N5000 per week',
+                                   Text(
+                                    "${widget.model.costOfHire} per ${widget.model.costOfHireInterval == "1" ? "Day" : widget.model.costOfHireInterval == "7" ? "Week" : "Month"}",
                                     style: TextStyle(
                                         fontSize: 15,
                                         color: AppColors.green,
                                         fontWeight: FontWeight.bold),
                                   ),
-                                  const Text(
-                                    'QTY Available: 4',
+                                   Text(
+                                    'QTY Available: ${widget.model.quantity!}',
                                     style: TextStyle(
                                         fontSize: 15,
                                         fontWeight: FontWeight.bold),
@@ -348,19 +449,23 @@ class LoginState extends State<EquipDetails> with TickerProviderStateMixin{
                               SizedBox(
                                 height: 20,
                               ),
-                              const Text(
-                                'This wheelbarrow has four extented legs and can carry up to 4kg load. It has an extra tyre also',
+                               Text(
+                                widget.model.description!,
                                 style: TextStyle(fontSize: 14),
                               ),
                               SizedBox(
                                 height: 20,
                               ),
-                              const Text(
-                                'Availlability: 02 Sept. 2022 - 09 Oct, 2022',
+                              Text(
+                                "Availability: ${DateFormat(
+                                  "dd MMM, yyyy",
+                                ).format(DateTime.parse(widget.model.availFrom!)).toString()} - ${DateFormat(
+                                  "dd MMM, yyyy",
+                                ).format(DateTime.parse(widget.model.availTo!)).toString()}",
                                 style: TextStyle(
-                                    fontSize: 12,
+                                    color: Colors.black,
                                     fontWeight: FontWeight.bold,
-                                    decoration: TextDecoration.underline),
+                                    fontSize: 12),
                               ),
                               SizedBox(
                                 height: 30,
@@ -385,7 +490,7 @@ class LoginState extends State<EquipDetails> with TickerProviderStateMixin{
                                       allowHalfRating: true,
                                       onRated: (v) {},
                                       starCount: 5,
-                                      rating: 4.5,
+                                      rating: double.parse(widget.model.averageRating!.toString()),
                                       size: 20,
                                       isReadOnly: true,
                                       filledIconData: Icons.star_rounded,
@@ -399,59 +504,62 @@ class LoginState extends State<EquipDetails> with TickerProviderStateMixin{
                               SizedBox(
                                 height: 30,
                               ),
-                              const Text(
-                                'Name: Alex Johnson',
+                               Text(
+                                'Name: ${widget.model.owners!.fullname!}',
                                 style: TextStyle(
                                     fontSize: 15, fontWeight: FontWeight.w600),
                               ),
                               SizedBox(
                                 height: 20,
                               ),
-                              const Text(
-                                'Location: Ikeja, Lagos',
+                               Text(
+                                'Location: ${widget.model.owners!.address!}',
                                 style: TextStyle(
                                     fontSize: 15, fontWeight: FontWeight.w600),
                               ),
-
                               SizedBox(
                                 height: 30,
                               ),
                               SlideTransition(
-                                position: _navAnimation!,
-                                textDirection: TextDirection.rtl,
-                                child:
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Container(
-                                      width: Responsive.width(context) / 2.3,
-                                      child: GeneralButton(
-                                          onPressed: () {
-                                            _navigationService.navigateTo(chatDetailsPageRoute);
-                                          },
-                                          buttonText: "Chat Owner",
-                                          buttonTextColor: AppColors.black,
-                                          splashColor: Color.fromRGBO(
-                                              255, 235, 173, 0.85))),
-                                  Container(
-                                      width: Responsive.width(context) / 2.3,
-                                      child: GeneralButton(
-                                        onPressed: () {_navigationService.navigateTo(PlaceBookingRoute);
-                                        },
-                                        buttonText: "Book Now",
-                                        splashColor: AppColors.primaryColor,
-                                      )),
-                                ],
-                              ) )
+                                  position: _navAnimation!,
+                               //   textDirection: TextDirection.r,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Container(
+                                          width:
+                                              Responsive.width(context) / 2.3,
+                                          child: GeneralButton(
+                                              onPressed: () {
+                                                _navigationService.navigateTo(
+                                                    chatDetailsPageRoute);
+                                              },
+                                              buttonText: "Chat Owner",
+                                              buttonTextColor: AppColors.black,
+                                              splashColor: Color.fromRGBO(
+                                                  255, 235, 173, 0.85))),
+                                      Container(
+                                          width:
+                                              Responsive.width(context) / 2.3,
+                                          child: GeneralButton(
+                                            onPressed: () {
+                                              _navigationService.navigateTo(
+                                                  PlaceBookingRoute,arguments: widget.model);
+                                            },
+                                            buttonText: "Book Now",
+                                            splashColor: AppColors.primaryColor,
+                                          )),
+                                    ],
+                                  ))
                             ],
                           ))),
                     ],
-                   ),
+                  ),
                 ],
               ),
             ],
-              ) ));
+          )));
         });
   }
 }
