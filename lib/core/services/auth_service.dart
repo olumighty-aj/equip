@@ -69,6 +69,7 @@ class Authentication {
     var d = prefs.getString('profile');
     SignInResponse user = SignInResponse.fromJson(json.decode(d!));
     _currentUser = user;
+    print(_currentUser.details!.id.toString());
    // _userId = user.id!;
     var t = prefs.getString('token');
     final AuthModel auth = AuthModel.fromJson(t!);
