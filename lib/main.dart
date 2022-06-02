@@ -1,3 +1,4 @@
+import 'package:equipro/ui/screens/notification/notification.dart';
 import 'package:equipro/utils/locator.dart';
 import 'package:equipro/utils/colors.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -47,25 +48,51 @@ class _MyAppState extends State<MyApp> {
         ),
       );
   }
+  void selectNotification(String? payload) async {
+    if (payload != null) {
+      debugPrint('notification payload: $payload');
+    }
+    await Navigator.push(
+      context,
+      MaterialPageRoute<void>(builder: (context) => NotificationPage()),
+    );
+  }
 
   /// Initialize the [FlutterLocalNotificationsPlugin] package.
   late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
   void registerNotification() async {
-    var initializationSettings = InitializationSettings();
-    channel = const AndroidNotificationChannel(
-      'high_importance_channel', // id
-      'High Importance Notifications', // title
-      //'This channel is used for important notifications.', // description
-      importance: Importance.high,
-    );
 
-    flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-    flutterLocalNotificationsPlugin.initialize(initializationSettings);
-    await flutterLocalNotificationsPlugin
-        .resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin>()
-        ?.createNotificationChannel(channel);
+    FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
+// initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
+    const AndroidInitializationSettings initializationSettingsAndroid =
+    AndroidInitializationSettings('app_icon');
+    final IOSInitializationSettings initializationSettingsIOS =
+    IOSInitializationSettings();
+    final MacOSInitializationSettings initializationSettingsMacOS =
+    MacOSInitializationSettings();
+    final InitializationSettings initializationSettings =
+    InitializationSettings(
+        android: initializationSettingsAndroid,
+        iOS: initializationSettingsIOS,
+        macOS: initializationSettingsMacOS);
+    await flutterLocalNotificationsPlugin.initialize(initializationSettings,
+        onSelectNotification: selectNotification);
+    // var initializationSettings = InitializationSettings();
+    // channel = const AndroidNotificationChannel(
+    //   'high_importance_channel', // id
+    //   'High Importance Notifications', // title
+    //   //'This channel is used for important notifications.', // description
+    //   importance: Importance.high,
+    // );
+    //
+    // flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+    // flutterLocalNotificationsPlugin.initialize(initializationSettings);
+    // await flutterLocalNotificationsPlugin
+    //     .resolvePlatformSpecificImplementation<
+    //         AndroidFlutterLocalNotificationsPlugin>()
+    //     ?.createNotificationChannel(channel);
 
     /// Update the iOS foreground notification presentation options to allow
     /// heads up notifications.

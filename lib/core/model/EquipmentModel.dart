@@ -1,21 +1,22 @@
-/// ID : "4"
+/// ID : "3"
 /// user_id : "11"
 /// owners_id : "1"
-/// equip_name : "Wheel Barrow"
-/// equip_images_id : "4"
-/// cost_of_hire : "1000"
+/// equip_name : "Tractor"
+/// equip_images_id : "3"
+/// cost_of_hire : "10000"
 /// cost_of_hire_interval : "7"
 /// avail_from : "2022-05-05 00:00:00"
 /// avail_to : "2022-12-25 00:00:00"
 /// quantity : "12"
-/// description : "This is a wheelbarrow useful for farming and item carriage"
+/// description : "This is a tractor useful for farming and item carriage"
 /// status : "1"
-/// date_modified : "2022-05-10 16:49:36"
-/// date_created : "2022-05-05 02:57:30"
-/// equip_images : [{"ID":"4","equipments_id":"Wheel Barrow","equip_images_path":"/var/www/holynation/gig/equipro/writable/uploads/equipments/1651719451_bdebd019a0dc4d5f6b43.txt","status":"1","date_created":"2022-05-05 03:57:31"}]
-/// owners : {"ID":"8","fullname":"Oluwaseun Alatise","email":"holynationdevelopment@gmail.com","phone_number":"+2348109994485","gender":"male","address":"No 26, Gbemisola street, Allen Avenue, Ikeja","address_opt":null,"local_state":"Oyo","country":"Nigeria","hirers_path":null,"status":"1","date_modified":"2022-05-10 16:49:36","date_created":"2022-05-05 00:02:24"}
-/// reviews : []
-/// average_rating : 0
+/// date_modified : "2022-05-26 14:40:04"
+/// date_created : "2022-05-05 02:50:08"
+/// equip_images : [{"ID":"3","equipments_id":"Tractor","equip_images_path":"/var/www/holynation/gig/equipro/writable/uploads/equipments/1651719008_62f86c3484822082a67a.png","status":"1","date_created":"2022-05-05 03:50:08"}]
+/// equip_request : [{"ID":"17","equip_order_id":"18","hirers_id":"8","equipments_id":"3","quantity":"1","rental_from":"2022-05-06 00:00:00","rental_to":"2022-05-08 00:00:00","delivery_location":"No 10, Kwara road, Ibadan","request_status":"pending","date_modified":"2022-05-08 17:14:54","date_created":"2022-05-06 19:01:23","hirers":{"ID":"8","fullname":"Oluwaseun Alatise","email":"holynationdevelopment@gmail.com","phone_number":"+2348109994485","gender":"male","address":"No 26, Gbemisola street, Allen Avenue, Ikeja","address_opt":null,"local_state":"Oyo","country":"Nigeria","hirers_path":"http://localhost/gig/equipro/public/uploads/hirers/34ef022624a898f02776d2d050_2022-05-14.png","status":"1","date_modified":"2022-05-14 02:48:28","date_created":"2022-05-14 02:48:28"}}]
+/// owners : {"ID":"8","fullname":"Oluwaseun Alatise","email":"holynationdevelopment@gmail.com","phone_number":"+2348109994485","gender":"male","address":"No 26, Gbemisola street, Allen Avenue, Ikeja","address_opt":null,"local_state":"Oyo","country":"Nigeria","hirers_path":"http://localhost/gig/equipro/public/uploads/hirers/34ef022624a898f02776d2d050_2022-05-14.png","status":"1","date_modified":"2022-05-14 02:48:28","date_created":"2022-05-14 02:48:28"}
+/// reviews : [{"ID":"3","hirers_id":"8","is_owners":"True","equipments_id":"3","comment":"This is the review for these equipments from the owners","rating":"4","date_created":"2022-05-26 14:34:26","fullname":"Oluwaseun Alatise","hirers_path":"http://localhost/gig/equipro/public/uploads/hirers/34ef022624a898f02776d2d050_2022-05-14.png"},{"ID":"2","hirers_id":"8","is_owners":"FALSE","equipments_id":"3","comment":"This is the review for these equipments","rating":"4","date_created":"2022-05-24 11:22:13","fullname":"Oluwaseun Alatise","hirers_path":"http://localhost/gig/equipro/public/uploads/hirers/34ef022624a898f02776d2d050_2022-05-14.png"},{"ID":"1","hirers_id":"9","is_owners":"FALSE","equipments_id":"3","comment":"This is the review for these equipments","rating":"4","date_created":"2022-05-24 11:17:07","fullname":"Holynation developer","hirers_path":null}]
+/// average_rating : "4.00"
 
 class EquipmentModel {
   EquipmentModel({
@@ -34,9 +35,10 @@ class EquipmentModel {
       String? dateModified, 
       String? dateCreated, 
       List<EquipImages>? equipImages, 
+      List<EquipRequest>? equipRequest, 
       Owners? owners, 
-      List<dynamic>? reviews,
-    dynamic? averageRating,}){
+      List<Reviews>? reviews, 
+      dynamic averageRating,}){
     _id = id;
     _userId = userId;
     _ownersId = ownersId;
@@ -52,6 +54,7 @@ class EquipmentModel {
     _dateModified = dateModified;
     _dateCreated = dateCreated;
     _equipImages = equipImages;
+    _equipRequest = equipRequest;
     _owners = owners;
     _reviews = reviews;
     _averageRating = averageRating;
@@ -78,11 +81,17 @@ class EquipmentModel {
         _equipImages?.add(EquipImages.fromJson(v));
       });
     }
+    if (json['equip_request'] != null) {
+      _equipRequest = [];
+      json['equip_request'].forEach((v) {
+        _equipRequest?.add(EquipRequest.fromJson(v));
+      });
+    }
     _owners = json['owners'] != null ? Owners.fromJson(json['owners']) : null;
     if (json['reviews'] != null) {
       _reviews = [];
       json['reviews'].forEach((v) {
-       // _reviews?.add(Dynamic.fromJson(v));
+        _reviews?.add(Reviews.fromJson(v));
       });
     }
     _averageRating = json['average_rating'];
@@ -102,8 +111,9 @@ class EquipmentModel {
   String? _dateModified;
   String? _dateCreated;
   List<EquipImages>? _equipImages;
+  List<EquipRequest>? _equipRequest;
   Owners? _owners;
-  List<dynamic>? _reviews;
+  List<Reviews>? _reviews;
   dynamic _averageRating;
 EquipmentModel copyWith({  String? id,
   String? userId,
@@ -120,8 +130,9 @@ EquipmentModel copyWith({  String? id,
   String? dateModified,
   String? dateCreated,
   List<EquipImages>? equipImages,
+  List<EquipRequest>? equipRequest,
   Owners? owners,
-  List<dynamic>? reviews,
+  List<Reviews>? reviews,
   dynamic averageRating,
 }) => EquipmentModel(  id: id ?? _id,
   userId: userId ?? _userId,
@@ -138,6 +149,7 @@ EquipmentModel copyWith({  String? id,
   dateModified: dateModified ?? _dateModified,
   dateCreated: dateCreated ?? _dateCreated,
   equipImages: equipImages ?? _equipImages,
+  equipRequest: equipRequest ?? _equipRequest,
   owners: owners ?? _owners,
   reviews: reviews ?? _reviews,
   averageRating: averageRating ?? _averageRating,
@@ -157,8 +169,9 @@ EquipmentModel copyWith({  String? id,
   String? get dateModified => _dateModified;
   String? get dateCreated => _dateCreated;
   List<EquipImages>? get equipImages => _equipImages;
+  List<EquipRequest>? get equipRequest => _equipRequest;
   Owners? get owners => _owners;
-  List<dynamic>? get reviews => _reviews;
+  List<Reviews>? get reviews => _reviews;
   dynamic get averageRating => _averageRating;
 
   Map<String, dynamic> toJson() {
@@ -180,6 +193,9 @@ EquipmentModel copyWith({  String? id,
     if (_equipImages != null) {
       map['equip_images'] = _equipImages?.map((v) => v.toJson()).toList();
     }
+    if (_equipRequest != null) {
+      map['equip_request'] = _equipRequest?.map((v) => v.toJson()).toList();
+    }
     if (_owners != null) {
       map['owners'] = _owners?.toJson();
     }
@@ -187,6 +203,103 @@ EquipmentModel copyWith({  String? id,
       map['reviews'] = _reviews?.map((v) => v.toJson()).toList();
     }
     map['average_rating'] = _averageRating;
+    return map;
+  }
+
+}
+
+/// ID : "3"
+/// hirers_id : "8"
+/// is_owners : "True"
+/// equipments_id : "3"
+/// comment : "This is the review for these equipments from the owners"
+/// rating : "4"
+/// date_created : "2022-05-26 14:34:26"
+/// fullname : "Oluwaseun Alatise"
+/// hirers_path : "http://localhost/gig/equipro/public/uploads/hirers/34ef022624a898f02776d2d050_2022-05-14.png"
+
+class Reviews {
+  Reviews({
+      String? id, 
+      String? hirersId, 
+      String? isOwners, 
+      String? equipmentsId, 
+      String? comment, 
+      String? rating, 
+      String? dateCreated, 
+      String? fullname, 
+      String? hirersPath,}){
+    _id = id;
+    _hirersId = hirersId;
+    _isOwners = isOwners;
+    _equipmentsId = equipmentsId;
+    _comment = comment;
+    _rating = rating;
+    _dateCreated = dateCreated;
+    _fullname = fullname;
+    _hirersPath = hirersPath;
+}
+
+  Reviews.fromJson(dynamic json) {
+    _id = json['ID'];
+    _hirersId = json['hirers_id'];
+    _isOwners = json['is_owners'];
+    _equipmentsId = json['equipments_id'];
+    _comment = json['comment'];
+    _rating = json['rating'];
+    _dateCreated = json['date_created'];
+    _fullname = json['fullname'];
+    _hirersPath = json['hirers_path'];
+  }
+  String? _id;
+  String? _hirersId;
+  String? _isOwners;
+  String? _equipmentsId;
+  String? _comment;
+  String? _rating;
+  String? _dateCreated;
+  String? _fullname;
+  String? _hirersPath;
+Reviews copyWith({  String? id,
+  String? hirersId,
+  String? isOwners,
+  String? equipmentsId,
+  String? comment,
+  String? rating,
+  String? dateCreated,
+  String? fullname,
+  String? hirersPath,
+}) => Reviews(  id: id ?? _id,
+  hirersId: hirersId ?? _hirersId,
+  isOwners: isOwners ?? _isOwners,
+  equipmentsId: equipmentsId ?? _equipmentsId,
+  comment: comment ?? _comment,
+  rating: rating ?? _rating,
+  dateCreated: dateCreated ?? _dateCreated,
+  fullname: fullname ?? _fullname,
+  hirersPath: hirersPath ?? _hirersPath,
+);
+  String? get id => _id;
+  String? get hirersId => _hirersId;
+  String? get isOwners => _isOwners;
+  String? get equipmentsId => _equipmentsId;
+  String? get comment => _comment;
+  String? get rating => _rating;
+  String? get dateCreated => _dateCreated;
+  String? get fullname => _fullname;
+  String? get hirersPath => _hirersPath;
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['ID'] = _id;
+    map['hirers_id'] = _hirersId;
+    map['is_owners'] = _isOwners;
+    map['equipments_id'] = _equipmentsId;
+    map['comment'] = _comment;
+    map['rating'] = _rating;
+    map['date_created'] = _dateCreated;
+    map['fullname'] = _fullname;
+    map['hirers_path'] = _hirersPath;
     return map;
   }
 
@@ -201,10 +314,10 @@ EquipmentModel copyWith({  String? id,
 /// address_opt : null
 /// local_state : "Oyo"
 /// country : "Nigeria"
-/// hirers_path : null
+/// hirers_path : "http://localhost/gig/equipro/public/uploads/hirers/34ef022624a898f02776d2d050_2022-05-14.png"
 /// status : "1"
-/// date_modified : "2022-05-10 16:49:36"
-/// date_created : "2022-05-05 00:02:24"
+/// date_modified : "2022-05-14 02:48:28"
+/// date_created : "2022-05-14 02:48:28"
 
 class Owners {
   Owners({
@@ -217,7 +330,7 @@ class Owners {
       dynamic addressOpt, 
       String? localState, 
       String? country, 
-      dynamic hirersPath, 
+      String? hirersPath, 
       String? status, 
       String? dateModified, 
       String? dateCreated,}){
@@ -260,7 +373,7 @@ class Owners {
   dynamic _addressOpt;
   String? _localState;
   String? _country;
-  dynamic _hirersPath;
+  String? _hirersPath;
   String? _status;
   String? _dateModified;
   String? _dateCreated;
@@ -273,7 +386,7 @@ Owners copyWith({  String? id,
   dynamic addressOpt,
   String? localState,
   String? country,
-  dynamic hirersPath,
+  String? hirersPath,
   String? status,
   String? dateModified,
   String? dateCreated,
@@ -300,7 +413,7 @@ Owners copyWith({  String? id,
   dynamic get addressOpt => _addressOpt;
   String? get localState => _localState;
   String? get country => _country;
-  dynamic get hirersPath => _hirersPath;
+  String? get hirersPath => _hirersPath;
   String? get status => _status;
   String? get dateModified => _dateModified;
   String? get dateCreated => _dateCreated;
@@ -325,11 +438,270 @@ Owners copyWith({  String? id,
 
 }
 
-/// ID : "4"
-/// equipments_id : "Wheel Barrow"
-/// equip_images_path : "/var/www/holynation/gig/equipro/writable/uploads/equipments/1651719451_bdebd019a0dc4d5f6b43.txt"
+/// ID : "17"
+/// equip_order_id : "18"
+/// hirers_id : "8"
+/// equipments_id : "3"
+/// quantity : "1"
+/// rental_from : "2022-05-06 00:00:00"
+/// rental_to : "2022-05-08 00:00:00"
+/// delivery_location : "No 10, Kwara road, Ibadan"
+/// request_status : "pending"
+/// date_modified : "2022-05-08 17:14:54"
+/// date_created : "2022-05-06 19:01:23"
+/// hirers : {"ID":"8","fullname":"Oluwaseun Alatise","email":"holynationdevelopment@gmail.com","phone_number":"+2348109994485","gender":"male","address":"No 26, Gbemisola street, Allen Avenue, Ikeja","address_opt":null,"local_state":"Oyo","country":"Nigeria","hirers_path":"http://localhost/gig/equipro/public/uploads/hirers/34ef022624a898f02776d2d050_2022-05-14.png","status":"1","date_modified":"2022-05-14 02:48:28","date_created":"2022-05-14 02:48:28"}
+
+class EquipRequest {
+  EquipRequest({
+      String? id, 
+      String? equipOrderId, 
+      String? hirersId, 
+      String? equipmentsId, 
+      String? quantity, 
+      String? rentalFrom, 
+      String? rentalTo, 
+      String? deliveryLocation, 
+      String? requestStatus, 
+      String? dateModified, 
+      String? dateCreated, 
+      Hirers? hirers,}){
+    _id = id;
+    _equipOrderId = equipOrderId;
+    _hirersId = hirersId;
+    _equipmentsId = equipmentsId;
+    _quantity = quantity;
+    _rentalFrom = rentalFrom;
+    _rentalTo = rentalTo;
+    _deliveryLocation = deliveryLocation;
+    _requestStatus = requestStatus;
+    _dateModified = dateModified;
+    _dateCreated = dateCreated;
+    _hirers = hirers;
+}
+
+  EquipRequest.fromJson(dynamic json) {
+    _id = json['ID'];
+    _equipOrderId = json['equip_order_id'];
+    _hirersId = json['hirers_id'];
+    _equipmentsId = json['equipments_id'];
+    _quantity = json['quantity'];
+    _rentalFrom = json['rental_from'];
+    _rentalTo = json['rental_to'];
+    _deliveryLocation = json['delivery_location'];
+    _requestStatus = json['request_status'];
+    _dateModified = json['date_modified'];
+    _dateCreated = json['date_created'];
+    _hirers = json['hirers'] != null ? Hirers.fromJson(json['hirers']) : null;
+  }
+  String? _id;
+  String? _equipOrderId;
+  String? _hirersId;
+  String? _equipmentsId;
+  String? _quantity;
+  String? _rentalFrom;
+  String? _rentalTo;
+  String? _deliveryLocation;
+  String? _requestStatus;
+  String? _dateModified;
+  String? _dateCreated;
+  Hirers? _hirers;
+EquipRequest copyWith({  String? id,
+  String? equipOrderId,
+  String? hirersId,
+  String? equipmentsId,
+  String? quantity,
+  String? rentalFrom,
+  String? rentalTo,
+  String? deliveryLocation,
+  String? requestStatus,
+  String? dateModified,
+  String? dateCreated,
+  Hirers? hirers,
+}) => EquipRequest(  id: id ?? _id,
+  equipOrderId: equipOrderId ?? _equipOrderId,
+  hirersId: hirersId ?? _hirersId,
+  equipmentsId: equipmentsId ?? _equipmentsId,
+  quantity: quantity ?? _quantity,
+  rentalFrom: rentalFrom ?? _rentalFrom,
+  rentalTo: rentalTo ?? _rentalTo,
+  deliveryLocation: deliveryLocation ?? _deliveryLocation,
+  requestStatus: requestStatus ?? _requestStatus,
+  dateModified: dateModified ?? _dateModified,
+  dateCreated: dateCreated ?? _dateCreated,
+  hirers: hirers ?? _hirers,
+);
+  String? get id => _id;
+  String? get equipOrderId => _equipOrderId;
+  String? get hirersId => _hirersId;
+  String? get equipmentsId => _equipmentsId;
+  String? get quantity => _quantity;
+  String? get rentalFrom => _rentalFrom;
+  String? get rentalTo => _rentalTo;
+  String? get deliveryLocation => _deliveryLocation;
+  String? get requestStatus => _requestStatus;
+  String? get dateModified => _dateModified;
+  String? get dateCreated => _dateCreated;
+  Hirers? get hirers => _hirers;
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['ID'] = _id;
+    map['equip_order_id'] = _equipOrderId;
+    map['hirers_id'] = _hirersId;
+    map['equipments_id'] = _equipmentsId;
+    map['quantity'] = _quantity;
+    map['rental_from'] = _rentalFrom;
+    map['rental_to'] = _rentalTo;
+    map['delivery_location'] = _deliveryLocation;
+    map['request_status'] = _requestStatus;
+    map['date_modified'] = _dateModified;
+    map['date_created'] = _dateCreated;
+    if (_hirers != null) {
+      map['hirers'] = _hirers?.toJson();
+    }
+    return map;
+  }
+
+}
+
+/// ID : "8"
+/// fullname : "Oluwaseun Alatise"
+/// email : "holynationdevelopment@gmail.com"
+/// phone_number : "+2348109994485"
+/// gender : "male"
+/// address : "No 26, Gbemisola street, Allen Avenue, Ikeja"
+/// address_opt : null
+/// local_state : "Oyo"
+/// country : "Nigeria"
+/// hirers_path : "http://localhost/gig/equipro/public/uploads/hirers/34ef022624a898f02776d2d050_2022-05-14.png"
 /// status : "1"
-/// date_created : "2022-05-05 03:57:31"
+/// date_modified : "2022-05-14 02:48:28"
+/// date_created : "2022-05-14 02:48:28"
+
+class Hirers {
+  Hirers({
+      String? id, 
+      String? fullname, 
+      String? email, 
+      String? phoneNumber, 
+      String? gender, 
+      String? address, 
+      dynamic addressOpt, 
+      String? localState, 
+      String? country, 
+      String? hirersPath, 
+      String? status, 
+      String? dateModified, 
+      String? dateCreated,}){
+    _id = id;
+    _fullname = fullname;
+    _email = email;
+    _phoneNumber = phoneNumber;
+    _gender = gender;
+    _address = address;
+    _addressOpt = addressOpt;
+    _localState = localState;
+    _country = country;
+    _hirersPath = hirersPath;
+    _status = status;
+    _dateModified = dateModified;
+    _dateCreated = dateCreated;
+}
+
+  Hirers.fromJson(dynamic json) {
+    _id = json['ID'];
+    _fullname = json['fullname'];
+    _email = json['email'];
+    _phoneNumber = json['phone_number'];
+    _gender = json['gender'];
+    _address = json['address'];
+    _addressOpt = json['address_opt'];
+    _localState = json['local_state'];
+    _country = json['country'];
+    _hirersPath = json['hirers_path'];
+    _status = json['status'];
+    _dateModified = json['date_modified'];
+    _dateCreated = json['date_created'];
+  }
+  String? _id;
+  String? _fullname;
+  String? _email;
+  String? _phoneNumber;
+  String? _gender;
+  String? _address;
+  dynamic _addressOpt;
+  String? _localState;
+  String? _country;
+  String? _hirersPath;
+  String? _status;
+  String? _dateModified;
+  String? _dateCreated;
+Hirers copyWith({  String? id,
+  String? fullname,
+  String? email,
+  String? phoneNumber,
+  String? gender,
+  String? address,
+  dynamic addressOpt,
+  String? localState,
+  String? country,
+  String? hirersPath,
+  String? status,
+  String? dateModified,
+  String? dateCreated,
+}) => Hirers(  id: id ?? _id,
+  fullname: fullname ?? _fullname,
+  email: email ?? _email,
+  phoneNumber: phoneNumber ?? _phoneNumber,
+  gender: gender ?? _gender,
+  address: address ?? _address,
+  addressOpt: addressOpt ?? _addressOpt,
+  localState: localState ?? _localState,
+  country: country ?? _country,
+  hirersPath: hirersPath ?? _hirersPath,
+  status: status ?? _status,
+  dateModified: dateModified ?? _dateModified,
+  dateCreated: dateCreated ?? _dateCreated,
+);
+  String? get id => _id;
+  String? get fullname => _fullname;
+  String? get email => _email;
+  String? get phoneNumber => _phoneNumber;
+  String? get gender => _gender;
+  String? get address => _address;
+  dynamic get addressOpt => _addressOpt;
+  String? get localState => _localState;
+  String? get country => _country;
+  String? get hirersPath => _hirersPath;
+  String? get status => _status;
+  String? get dateModified => _dateModified;
+  String? get dateCreated => _dateCreated;
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['ID'] = _id;
+    map['fullname'] = _fullname;
+    map['email'] = _email;
+    map['phone_number'] = _phoneNumber;
+    map['gender'] = _gender;
+    map['address'] = _address;
+    map['address_opt'] = _addressOpt;
+    map['local_state'] = _localState;
+    map['country'] = _country;
+    map['hirers_path'] = _hirersPath;
+    map['status'] = _status;
+    map['date_modified'] = _dateModified;
+    map['date_created'] = _dateCreated;
+    return map;
+  }
+
+}
+
+/// ID : "3"
+/// equipments_id : "Tractor"
+/// equip_images_path : "/var/www/holynation/gig/equipro/writable/uploads/equipments/1651719008_62f86c3484822082a67a.png"
+/// status : "1"
+/// date_created : "2022-05-05 03:50:08"
 
 class EquipImages {
   EquipImages({

@@ -10,14 +10,14 @@ import 'package:shimmer/shimmer.dart';
 import 'package:stacked/stacked.dart';
 import 'package:equipro/utils/colors.dart';
 
-class Rentals extends StatefulWidget {
-  const Rentals({Key? key}) : super(key: key);
+class OwnerRentals extends StatefulWidget {
+  const OwnerRentals({Key? key}) : super(key: key);
 
   @override
   LoginState createState() => LoginState();
 }
 
-class LoginState extends State<Rentals> with SingleTickerProviderStateMixin {
+class LoginState extends State<OwnerRentals> with SingleTickerProviderStateMixin {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final NavigationService _navigationService = locator<NavigationService>();
   late final TabController _controller;

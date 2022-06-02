@@ -1,3 +1,4 @@
+import 'package:equipro/core/model/ActiveRentalsModel.dart';
 import 'package:equipro/core/model/EquipmentModel.dart';
 import 'package:equipro/ui/screens/chat/chat.dart';
 import 'package:equipro/ui/screens/chat/chats_widget/chat_details.dart';
@@ -9,6 +10,7 @@ import 'package:equipro/ui/screens/hirer/book/place_booking.dart';
 import 'package:equipro/ui/screens/hirer/home/home_view.dart';
 import 'package:equipro/ui/screens/login/verify_forgot_otp.dart';
 import 'package:equipro/ui/screens/notification/notification.dart';
+import 'package:equipro/ui/screens/owner/active_rentals/active_rentals.dart';
 import 'package:equipro/ui/screens/owner/earnings/earning_page.dart';
 import 'package:equipro/ui/screens/owner/earnings/withdraw.dart';
 import 'package:equipro/ui/screens/owner/home_owner/booking_details.dart';
@@ -80,13 +82,17 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       EquipmentModel model = settings.arguments as EquipmentModel;
       return _getPageRoute(
         routeName: settings.name!,
-        viewToShow: EquipDetails(model: model,),
+        viewToShow: EquipDetails(
+          model: model,
+        ),
       );
     case PlaceBookingRoute:
       EquipmentModel model = settings.arguments as EquipmentModel;
       return _getPageRoute(
         routeName: settings.name!,
-        viewToShow: PlaceBooking(model: model,),
+        viewToShow: PlaceBooking(
+          model: model,
+        ),
       );
     case chatDetailsPageRoute:
       return _getPageRoute(
@@ -123,16 +129,28 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         routeName: settings.name!,
         viewToShow: Rentals(),
       );
-    case RentalDetailsRoute:
+    case OwnerRentalsRoute:
       return _getPageRoute(
         routeName: settings.name!,
-        viewToShow: RentalDetails(),
+        viewToShow: OwnerRentals(),
+      );
+
+    case RentalDetailsRoute:
+      ActiveRentalsModel feed = settings.arguments as ActiveRentalsModel;
+
+      return _getPageRoute(
+        routeName: settings.name!,
+        viewToShow: RentalDetails(feed: feed),
       );
 
     case RatingRoute:
+      String id = settings.arguments as String;
+
       return _getPageRoute(
         routeName: settings.name!,
-        viewToShow: Rating(),
+        viewToShow: Rating(
+          id: id,
+        ),
       );
 
     case SetupOwnerRoute:
@@ -171,9 +189,10 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         viewToShow: EquipOwnerDetails(model: model),
       );
     case BookingDetailsRoute:
+      EquipRequest model = settings.arguments as EquipRequest;
       return _getPageRoute(
         routeName: settings.name!,
-        viewToShow: BookingDetails(),
+        viewToShow: BookingDetails(feed: model,),
       );
 
     case HirerProfileRoute:
@@ -186,7 +205,9 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       EquipmentModel model = settings.arguments as EquipmentModel;
       return _getPageRoute(
         routeName: settings.name!,
-        viewToShow: EditEquipment(model: model,),
+        viewToShow: EditEquipment(
+          model: model,
+        ),
       );
     case EarningPageRoute:
       return _getPageRoute(

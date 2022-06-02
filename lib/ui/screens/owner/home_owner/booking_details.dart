@@ -1,27 +1,20 @@
-import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:equipro/ui/screens/drawer.dart';
-import 'package:equipro/ui/screens/profile/edit_profile.dart';
+import 'package:equipro/core/model/EquipmentModel.dart';
+import 'package:equipro/ui/screens/owner/home_owner/home_view_model.dart';
 import 'package:equipro/ui/screens/profile/profile_view_model.dart';
-import 'package:equipro/ui/widget/equip_tiles.dart';
 import 'package:equipro/ui/widget/general_button.dart';
-import 'package:equipro/ui/widget/reviews_widget.dart';
-import 'package:equipro/utils/helpers.dart';
 import 'package:equipro/utils/locator.dart';
 import 'package:equipro/utils/router/navigation_service.dart';
 import 'package:equipro/utils/router/route_names.dart';
-import 'package:equipro/utils/screensize.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
-import 'package:equipro/ui/screens/login/login_view_model.dart';
 import 'package:equipro/utils/colors.dart';
 
 class BookingDetails extends StatefulWidget {
-  const BookingDetails({Key? key}) : super(key: key);
+  final EquipRequest feed;
+  const BookingDetails({Key? key, required this.feed}) : super(key: key);
 
   @override
   LoginState createState() => LoginState();
@@ -58,8 +51,8 @@ class LoginState extends State<BookingDetails> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<ProfileViewModel>.reactive(
-        viewModelBuilder: () => ProfileViewModel(),
+    return ViewModelBuilder<HomeOwnerViewModel>.reactive(
+        viewModelBuilder: () => HomeOwnerViewModel(),
         builder: (context, model, child) {
           return Scaffold(
             key: _scaffoldKey,
@@ -111,52 +104,54 @@ class LoginState extends State<BookingDetails> with TickerProviderStateMixin {
                                     height: 20,
                                   ),
                                   InkWell(
-                                      onTap: (){
-                                        _navigationService.navigateTo(HirerProfileRoute);
+                                      onTap: () {
+                                        _navigationService
+                                            .navigateTo(HirerProfileRoute);
                                       },
-                                      child:Row(
-                                    children: [
-
-                                      CircleAvatar(
-                                        radius: 25,
-                                        child: CachedNetworkImage(
-                                          imageUrl: "https://i.pravatar.cc/",
-                                          imageBuilder:
-                                              (context, imageProvider) =>
-                                                  Container(
-                                            width: 120.0,
-                                            height: 120.0,
-                                            decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              image: DecorationImage(
-                                                  image: imageProvider,
-                                                  fit: BoxFit.contain),
+                                      child: Row(
+                                        children: [
+                                          CircleAvatar(
+                                            radius: 25,
+                                            child: CachedNetworkImage(
+                                              imageUrl: widget
+                                                  .feed.hirers!.hirersPath!,
+                                              imageBuilder:
+                                                  (context, imageProvider) =>
+                                                      Container(
+                                                width: 120.0,
+                                                height: 120.0,
+                                                decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  image: DecorationImage(
+                                                      image: imageProvider,
+                                                      fit: BoxFit.contain),
+                                                ),
+                                              ),
+                                              placeholder: (context, url) =>
+                                                  CircularProgressIndicator(),
+                                              errorWidget:
+                                                  (context, url, error) =>
+                                                      CircleAvatar(
+                                                radius: 40,
+                                                backgroundColor: AppColors.grey,
+                                                child: Image.asset(
+                                                  "assets/images/logo.png",
+                                                  scale: 2,
+                                                ),
+                                              ),
                                             ),
                                           ),
-                                          placeholder: (context, url) =>
-                                              CircularProgressIndicator(),
-                                          errorWidget: (context, url, error) =>
-                                              CircleAvatar(
-                                            radius: 40,
-                                            backgroundColor: AppColors.grey,
-                                            child: Image.asset(
-                                              "assets/images/logo.png",
-                                              scale: 2,
-                                            ),
+                                          SizedBox(
+                                            width: 10,
                                           ),
-                                        ),
-                                       ),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      Text(
-                                        "Morgan Shalom",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 18),
-                                      ),
-                                    ],
-                                      ) ),
+                                          Text(
+                                            widget.feed.hirers!.fullname!,
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 18),
+                                          ),
+                                        ],
+                                      )),
                                   SizedBox(
                                     height: 30,
                                   ),
@@ -259,7 +254,7 @@ class LoginState extends State<BookingDetails> with TickerProviderStateMixin {
                                             height: 70,
                                             width: 200,
                                             child: Text(
-                                              "1",
+                                              widget.feed.quantity!,
                                               style: TextStyle(
                                                   color: Colors.black,
                                                   fontSize: 15,
@@ -270,7 +265,7 @@ class LoginState extends State<BookingDetails> with TickerProviderStateMixin {
                                             height: 70,
                                             width: 200,
                                             child: Text(
-                                              "02 Sept, 2022",
+                                              widget.feed.rentalFrom!,
                                               style: TextStyle(
                                                   color: Colors.black,
                                                   fontSize: 15,
@@ -281,7 +276,14 @@ class LoginState extends State<BookingDetails> with TickerProviderStateMixin {
                                             height: 70,
                                             width: 200,
                                             child: Text(
-                                              "One Week",
+                                              DateTime.parse(widget
+                                                          .feed.rentalFrom!)
+                                                      .difference(
+                                                          DateTime.parse(widget
+                                                              .feed.rentalTo!))
+                                                      .inDays
+                                                      .toString() +
+                                                  " day(s)",
                                               style: TextStyle(
                                                   color: Colors.black,
                                                   fontSize: 15,
@@ -292,7 +294,7 @@ class LoginState extends State<BookingDetails> with TickerProviderStateMixin {
                                             height: 100,
                                             width: 200,
                                             child: Text(
-                                                "No 26, Gbemisola street, Allen Avenue, Ikeja, Lagos state",
+                                                widget.feed.deliveryLocation!,
                                                 style: TextStyle(
                                                     color: Colors.black,
                                                     fontSize: 15,
@@ -332,7 +334,7 @@ class LoginState extends State<BookingDetails> with TickerProviderStateMixin {
                                         width: 10,
                                       ),
                                       Text(
-                                        "N 5000",
+                                        widget.feed.rentalFrom!,
                                         style: TextStyle(
                                             color: AppColors.primaryColor,
                                             fontWeight: FontWeight.w500,
@@ -345,15 +347,20 @@ class LoginState extends State<BookingDetails> with TickerProviderStateMixin {
                                   ),
                                   GeneralButton(
                                       onPressed: () {
-                                        _navigationService
-                                            .navigateTo(RatingRoute);
+                                        model.updateBooking(
+                                            widget.feed.equipOrderId.toString(),
+                                            "accepted");
                                       },
                                       buttonText: "Accept Booking"),
                                   SizedBox(
                                     height: 20,
                                   ),
                                   InkWell(
-                                      onTap: () {},
+                                      onTap: () {
+                                        model.updateBooking(
+                                            widget.feed.equipOrderId.toString(),
+                                            "rejected");
+                                      },
                                       child: Center(
                                           child: Text(
                                         "Decline Booking",

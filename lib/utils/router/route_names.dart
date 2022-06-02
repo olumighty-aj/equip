@@ -16,6 +16,7 @@ const String EditProfileRoute  = "EditProfile";
 const String ProfileRoute  = "Profile";
 const String NotificationRoute  = "Notification";
 const String RentalsRoute  = "Rentals";
+const String OwnerRentalsRoute  = "OwnerRentals";
 const String RentalDetailsRoute  = "RentalDetails";
 const String RatingRoute  = "Rating";
 const String SetupOwnerRoute  = "SetupOwner";

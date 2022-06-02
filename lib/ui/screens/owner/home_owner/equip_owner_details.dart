@@ -1,23 +1,17 @@
-import 'package:badges/badges.dart';
 import 'package:equipro/core/model/EquipmentModel.dart';
 import 'package:equipro/ui/screens/drawer.dart';
 import 'package:equipro/ui/screens/owner/home_owner/home_view_model.dart';
 import 'package:equipro/ui/widget/booking_request.dart';
 import 'package:equipro/ui/widget/dash_painter.dart';
-import 'package:equipro/ui/widget/equip_tiles.dart';
 import 'package:equipro/ui/widget/general_button.dart';
-import 'package:equipro/utils/helpers.dart';
 import 'package:equipro/utils/locator.dart';
 import 'package:equipro/utils/router/navigation_service.dart';
 import 'package:equipro/utils/router/route_names.dart';
-import 'package:equipro/utils/screensize.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
-import 'package:equipro/ui/screens/login/login_view_model.dart';
 import 'package:equipro/utils/colors.dart';
 
 class EquipOwnerDetails extends StatefulWidget {
@@ -77,29 +71,25 @@ class LoginState extends State<EquipOwnerDetails>
                           Navigator.pop(context);
                         },
                       ),
-
                     ),
-
                     Container(
                       width: 100,
                       child: GeneralButton(
                         buttonText: 'Yes',
                         onPressed: () {
                           Navigator.pop(context);
-                         model.deleteEquip(widget.model.id.toString());
+                          model.deleteEquip(widget.model.id.toString());
                         },
                       ),
-
                     ),
-
                   ],
                 )
-
               ],
             )),
       ),
     );
   }
+
   @override
   void initState() {
     super.initState();
@@ -195,10 +185,11 @@ class LoginState extends State<EquipOwnerDetails>
                                           switch (selectedValue) {
                                             case 0:
                                               _navigationService.navigateTo(
-                                                  EditEquipmentRoute,arguments: widget.model);
+                                                  EditEquipmentRoute,
+                                                  arguments: widget.model);
                                               break;
                                             case 1:
-                                              displayDialog( context,  model);
+                                              displayDialog(context, model);
                                               break;
                                             default:
                                           }
@@ -283,7 +274,7 @@ class LoginState extends State<EquipOwnerDetails>
                                     height: 20,
                                   ),
                                   Text(
-                                    "Booking requests (2)",
+                                    "Booking requests (${widget.model.equipRequest != null ? widget.model.equipRequest.toString() : "0"})",
                                     style: TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.bold),
@@ -291,8 +282,31 @@ class LoginState extends State<EquipOwnerDetails>
                                   SizedBox(
                                     height: 30,
                                   ),
-                                  BookingRequest(),
-                                  BookingRequest(),
+                                  widget.model
+                                      .equipRequest != null
+                                      ? Container(
+                                      height: 70.0,
+                                      child: Container(
+                                        child: ListView.builder(
+                                            itemCount: widget
+                                                .model
+                                                .equipRequest!
+                                                .length,
+                                            scrollDirection:
+                                            Axis.horizontal,
+                                            itemBuilder: (context, i) {
+                                              return  BookingRequest(
+                                                feed: widget
+                                                    .model
+                                                    .equipRequest![i],
+                                              );
+                                            }),
+                                      ))
+                                      : Container(
+                                    child: Text(
+                                      "Not available",
+                                    ),
+                                  ),
                                 ]))))),
             drawer: CollapsingNavigationDrawer(),
           );

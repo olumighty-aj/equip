@@ -33,10 +33,8 @@ class HomeOwnerViewModel extends BaseModel {
   int? _count;
   int get orderCount => _count!;
 
-
   int _nextPage = 2;
   int get nextPage => _nextPage;
-
 
   List<EquipmentModel> _packageList = [];
   List<EquipmentModel> get packageList => _packageList;
@@ -62,7 +60,7 @@ class HomeOwnerViewModel extends BaseModel {
     setBusy(false);
 
     _navigationService.pushAndRemoveUntil(HomeOwnerRoute);
-   notifyListeners();
+    notifyListeners();
     return result;
   }
 
@@ -74,10 +72,11 @@ class HomeOwnerViewModel extends BaseModel {
       String availFrom,
       String availTo,
       String quantity,
-      String description,String id) async {
+      String description,
+      String id) async {
     setBusy(true);
     var result = await _activities.updateEquip(images, equipName, costHire,
-        costHireInterval, availFrom, availTo, quantity, description,id);
+        costHireInterval, availFrom, availTo, quantity, description, id);
     if (result == null) {
       setBusy(false);
       showErrorToast(result.error);
@@ -158,7 +157,6 @@ class HomeOwnerViewModel extends BaseModel {
     }
   }
 
-
   switchHirer() async {
     setBusy(true);
     var result = await _activities.switchRole();
@@ -188,5 +186,27 @@ class HomeOwnerViewModel extends BaseModel {
     }
     // print(result);
     return result;
+  }
+
+  updateBooking(String id, String status) async {
+    setBusy(true);
+    var result = await _activities.updateBooking(id, status);
+
+    if (result is ErrorModel) {
+      setBusy(false);
+      showErrorToast(result.error);
+      notifyListeners();
+      return ErrorModel(result.error);
+    }
+    if (result is SuccessModel) {
+      setBusy(false);
+      if (status == "rejected") {
+        _navigationService.pop();
+      } else {
+        _navigationService.navigateReplacementTo(RentalsRoute);
+      }
+      notifyListeners();
+      return SuccessModel(result.data);
+    }
   }
 }

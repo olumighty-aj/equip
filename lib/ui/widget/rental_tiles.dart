@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:equipro/core/model/ActiveRentalsModel.dart';
 import 'package:equipro/ui/widget/general_button.dart';
 import 'package:equipro/utils/locator.dart';
 import 'package:equipro/utils/router/navigation_service.dart';
@@ -6,14 +7,11 @@ import 'package:equipro/utils/router/route_names.dart';
 import 'package:flutter/material.dart';
 import 'package:equipro/utils/colors.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 
 class RentalTiles extends StatelessWidget {
-  // final Function onPressed;
-  RentalTiles(
-      //{
-      // required this.onPressed,
-      // }
-      );
+  final ActiveRentalsModel feed;
+  RentalTiles({required this.feed});
   final NavigationService _navigationService = locator<NavigationService>();
   @override
   Widget build(BuildContext context) {
@@ -23,12 +21,11 @@ class RentalTiles extends StatelessWidget {
           //   context,
           //   MaterialPageRoute(builder: (context) => EquipDetails()),
           // );
-          _navigationService.navigateTo(RentalDetailsRoute);
+          _navigationService.navigateTo(RentalDetailsRoute,arguments: feed);
         },
         child: Container(
           margin: EdgeInsets.only(bottom: 20),
           padding: EdgeInsets.all(10),
-          height: 130,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
             color: AppColors.white,
@@ -52,13 +49,13 @@ class RentalTiles extends StatelessWidget {
                       child: Hero(
                           tag: "profile",
                           child: CachedNetworkImage(
-                            imageUrl: "https://i.pravatar.cc/",
+                            imageUrl: feed.equipments!.equipImagesId!,
                             placeholder: (context, url) =>
                                 CircularProgressIndicator(),
                             errorWidget: (context, url, error) => ClipRRect(
                               borderRadius: BorderRadius.circular(8.0),
                               child: Image.asset(
-                                "assets/images/user.png",
+                                "assets/images/logo.png",
                                 scale: 2,
                               ),
                             ),
@@ -67,11 +64,11 @@ class RentalTiles extends StatelessWidget {
                 width: 20,
               ),
               Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    "Driller & Harmer",
+                    feed.equipments!.equipName!,
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                   ),
                   SizedBox(
@@ -86,11 +83,13 @@ class RentalTiles extends StatelessWidget {
                       SizedBox(
                         width: 10,
                       ),
-                      Text(
-                        "Surulere Lagos",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w500, fontSize: 12),
-                      ),
+                      Container(
+                          width: 150,
+                          child: Text(
+                            feed.deliveryLocation!,
+                            style: TextStyle(
+                                fontWeight: FontWeight.w500, fontSize: 12),
+                          )),
                     ],
                   ),
                   SizedBox(
@@ -101,12 +100,20 @@ class RentalTiles extends StatelessWidget {
                       height: 40,
                       width: 100,
                       child: GeneralButton(
-                          buttonTextColor: AppColors.green,
-                          splashColor: Colors.greenAccent.shade100,
+                          buttonTextColor: AppColors.white,
+                          splashColor: feed.requestStatus! == "pending"
+                              ? Colors.blue
+                              : feed.requestStatus! == "rejected"
+                                  ? AppColors.red
+                                  : feed.requestStatus! == "returned"
+                                      ? AppColors.green
+                                      : feed.requestStatus! == "received"
+                                          ? AppColors.blue
+                                          : AppColors.primaryColor,
                           onPressed: () {
-                            _navigationService.navigateTo(EquipDetailsRoute);
+                            // _navigationService.navigateTo(EquipDetailsRoute);
                           },
-                          buttonText: "Booked"))
+                          buttonText: toBeginningOfSentenceCase(feed.requestStatus!)!))
                 ],
               ),
             ],

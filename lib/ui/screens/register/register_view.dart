@@ -46,7 +46,8 @@ class LoginState extends State<Register> {
         viewModelBuilder: () => RegisterViewModel(),
         builder: (context, model, child) {
           return Scaffold(
-              body: Column(
+              body: SingleChildScrollView(
+              child:Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -323,7 +324,7 @@ class LoginState extends State<Register> {
                 ],
               ),
             ],
-          ));
+          )));
         });
   }
 }

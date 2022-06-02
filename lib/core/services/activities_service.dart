@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:equipro/core/model/ActiveRentalsModel.dart';
 import 'package:equipro/core/model/EquipmentModel.dart';
 import 'package:equipro/core/model/error_model.dart';
 import 'package:equipro/core/model/success_model.dart';
@@ -335,6 +336,103 @@ class Activities {
                   "TimeoutException after 0:00:40.000000: Future not completed"
               ? "Your internet is not stable kindly reconnect and try again"
               : e.toString());
+    }
+  }
+
+  updateBooking(String id, String status) async {
+    try {
+      final result = await http.post(Paths.updateBookings + id, {
+        "request_status":status
+      });
+      if (result is ErrorModel) {
+        return ErrorModel(result.error);
+      }
+
+      return SuccessModel(result.data);
+    } catch (e) {
+      return ErrorModel(e.toString() ==
+          "SocketException: Failed host lookup: '$baseUrlError' (OS Error: nodename nor servname provided, or not known, errno = 8)"
+          ? "Your internet is not stable kindly reconnect and try again"
+          : e.toString() ==
+          "TimeoutException after 0:00:40.000000: Future not completed"
+          ? "Your internet is not stable kindly reconnect and try again"
+          : e.toString());
+    }
+  }
+  rate(String id, String comment, double rating) async {
+    try {
+      final result = await http.post(Paths.rate,  {
+        "equipments_id":id,
+        "comment":comment,
+        "rating":rating
+      });
+      if (result is ErrorModel) {
+        return ErrorModel(result.error);
+      }
+
+      return SuccessModel(result.data);
+    } catch (e) {
+      return ErrorModel(e.toString() ==
+          "SocketException: Failed host lookup: '$baseUrlError' (OS Error: nodename nor servname provided, or not known, errno = 8)"
+          ? "Your internet is not stable kindly reconnect and try again"
+          : e.toString() ==
+          "TimeoutException after 0:00:40.000000: Future not completed"
+          ? "Your internet is not stable kindly reconnect and try again"
+          : e.toString());
+    }
+  }
+
+  rateOwner(String id, String comment, double rating) async {
+    try {
+      final result = await http.post(Paths.rate, {
+        "equipments_id":id,
+        "comment":comment,
+        "rating":rating
+      });
+      if (result is ErrorModel) {
+        return ErrorModel(result.error);
+      }
+
+      return SuccessModel(result.data);
+    } catch (e) {
+      return ErrorModel(e.toString() ==
+          "SocketException: Failed host lookup: '$baseUrlError' (OS Error: nodename nor servname provided, or not known, errno = 8)"
+          ? "Your internet is not stable kindly reconnect and try again"
+          : e.toString() ==
+          "TimeoutException after 0:00:40.000000: Future not completed"
+          ? "Your internet is not stable kindly reconnect and try again"
+          : e.toString());
+    }
+  }
+
+  activeRentals(String type) async {
+    try {
+      final result = await http.get(
+        Paths.active_rentals + type
+      );
+      if (result is ErrorModel) {
+        print("ERROR");
+        print(result.error);
+        var data = result.error;
+        List<ActiveRentalsModel> packageList = List<ActiveRentalsModel>.from(
+            data.map((item) => ActiveRentalsModel.fromJson(item)));
+        return ErrorModel(packageList);
+      }
+      //print(result.data);
+      var data = result.data["payload"]["content"];
+      List<ActiveRentalsModel> packageList = List<ActiveRentalsModel>.from(
+          data.map((item) => ActiveRentalsModel.fromJson(item)));
+      print(packageList);
+      return packageList;
+    } catch (e) {
+      print(e.toString());
+      return ErrorModel(e.toString() ==
+          "SocketException: Failed host lookup: '$baseUrlError' (OS Error: nodename nor servname provided, or not known, errno = 8)"
+          ? "Your internet is not stable kindly reconnect and try again"
+          : e.toString() ==
+          "TimeoutException after 0:00:40.000000: Future not completed"
+          ? "Your internet is not stable kindly reconnect and try again"
+          : e.toString());
     }
   }
 }

@@ -13,9 +13,10 @@ class Paths {
   static const String searchMyEquipment = 'owners/equipments?q=';
   static const String searchEquipments = 'equipments?q=';
   static const String book = 'equip_booking';
-
-
-
+  static const String active_rentals = 'rentals?active_status=';
+  static const String rate = 'reviews';
+  static const String rate_owner = 'owners/reviews';
+  static const String updateBookings = 'owners/equip_approval/';
 
 
 

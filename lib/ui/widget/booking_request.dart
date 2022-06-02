@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:equipro/core/model/EquipmentModel.dart';
 import 'package:equipro/ui/widget/general_button.dart';
 import 'package:equipro/utils/locator.dart';
 import 'package:equipro/utils/router/navigation_service.dart';
@@ -8,22 +9,18 @@ import 'package:equipro/utils/colors.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class BookingRequest extends StatelessWidget {
-  // final Function onPressed;
+ final EquipRequest feed;
   BookingRequest(
-      //{
-      // required this.onPressed,
-      // }
+      {
+      required this.feed,
+      }
       );
   final NavigationService _navigationService = locator<NavigationService>();
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
         onTap: () {
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(builder: (context) => EquipDetails()),
-          // );
-          _navigationService.navigateTo(BookingDetailsRoute);
+          _navigationService.navigateTo(BookingDetailsRoute,arguments: feed);
         },
         child: Container(
           margin: EdgeInsets.only(bottom: 20),
@@ -54,7 +51,7 @@ class BookingRequest extends StatelessWidget {
                       CircleAvatar(
                         radius: 20,
                         child:  CachedNetworkImage(
-                          imageUrl: "https://i.pravatar.cc/",
+                          imageUrl: feed.hirers!.hirersPath!,
                           imageBuilder:
                               (context, imageProvider) =>
                               Container(
@@ -81,7 +78,7 @@ class BookingRequest extends StatelessWidget {
                       ),
                       SizedBox(width: 10,),
                       Text(
-                        "Morgan Shalom",
+                        feed.hirers!.fullname!,
                         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                       ),
                     ],
@@ -98,7 +95,7 @@ class BookingRequest extends StatelessWidget {
                             fontWeight: FontWeight.w500, fontSize: 14),
                       ),
                       Text(
-                        "1",
+                        feed.quantity!,
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 14,),
                       ),
@@ -115,7 +112,7 @@ class BookingRequest extends StatelessWidget {
                             fontWeight: FontWeight.w500, fontSize: 14),
                       ),
                       Text(
-                        "One week",
+                        DateTime.parse(feed.rentalFrom!).difference(DateTime.parse(feed.rentalTo!)).inDays.toString() + " day(s)",
                         style: TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 14,),
                       ),

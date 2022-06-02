@@ -9,7 +9,7 @@ import 'package:equipro/utils/locator.dart';
 import 'package:equipro/utils/router/navigation_service.dart';
 import 'package:equipro/utils/router/route_names.dart';
 
-class RentalsViewModel extends BaseModel {
+class OwnerRentalsViewModel extends BaseModel {
   final Authentication _authentication = locator<Authentication>();
   final NavigationService _navigationService = locator<NavigationService>();
   final Activities _activities = locator<Activities>();

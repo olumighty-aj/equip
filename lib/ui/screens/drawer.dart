@@ -68,9 +68,7 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
                           _navigationService.pushAndRemoveUntil(HomeOwnerRoute);
                         },
                       ),
-
                     ),
-
                     Container(
                       width: 100,
                       child: GeneralButton(
@@ -80,17 +78,15 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
                           model.switchOwner();
                         },
                       ),
-
                     ),
-
                   ],
                 )
-
               ],
             )),
       ),
     );
   }
+
   @override
   void initState() {
     super.initState();
@@ -154,8 +150,8 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
                               imageUrl: "https://i.pravatar.cc/",
                               imageBuilder: (context, imageProvider) =>
                                   Container(
-                                width: 80.0,
-                                height: 80.0,
+                                width: 70.0,
+                                height: 70.0,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   image: DecorationImage(
@@ -182,13 +178,14 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  _authentication.currentUser.details!.fullname!,
+                                  _authentication
+                                      .currentUser.details!.fullname!,
                                   //  _authentication.currentUser.firstName! + " " + _authentication.currentUser.lastName!,
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 20,
+                                    fontSize: 18,
                                   ),
-                                ),
+                                )
                               ],
                             ),
                           ]),
@@ -228,7 +225,7 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
                 ),
                 onTap: () {
-                  _navigationService.navigateTo(RentalsRoute);
+                  _navigationService.navigateTo(OwnerRentalsRoute);
                 },
               ),
               ListTile(
@@ -239,7 +236,7 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
                   ),
                 ),
                 onTap: () {
-                   _navigationService.navigateTo(chatRoute);
+                  _navigationService.navigateTo(chatRoute);
                 },
               ),
               ListTile(
@@ -250,7 +247,7 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
                   ),
                 ),
                 onTap: () {
-                   _navigationService.navigateTo(ProfileRoute);
+                  _navigationService.navigateTo(ProfileRoute);
                 },
               ),
               // ListTile(
@@ -282,7 +279,7 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
               GeneralButton(
                 buttonText: "Become An Equipment Owner",
                 onPressed: () {
-                  displayDialog( context,  model);
+                  displayDialog(context, model);
                 },
               ),
               SizedBox(
