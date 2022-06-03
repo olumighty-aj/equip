@@ -18,7 +18,7 @@ class OwnerRentalsViewModel extends BaseModel {
 
   Future<List<ActiveRentalsModel>> activeRentals(String type) async {
     //setBusy(true);
-    var result = await _activities.activeRentals(type);
+    var result = await _activities.activeOwnerRentals(type);
     if (result is ErrorModel) {
       // showToast('Login failed');
       print(result.error);

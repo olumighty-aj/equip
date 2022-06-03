@@ -10,7 +10,7 @@ import 'package:equipro/ui/screens/hirer/book/place_booking.dart';
 import 'package:equipro/ui/screens/hirer/home/home_view.dart';
 import 'package:equipro/ui/screens/login/verify_forgot_otp.dart';
 import 'package:equipro/ui/screens/notification/notification.dart';
-import 'package:equipro/ui/screens/owner/active_rentals/active_rentals.dart';
+import 'package:equipro/ui/screens/owner/active_rentals/owner_active_rentals.dart';
 import 'package:equipro/ui/screens/owner/earnings/earning_page.dart';
 import 'package:equipro/ui/screens/owner/earnings/withdraw.dart';
 import 'package:equipro/ui/screens/owner/home_owner/booking_details.dart';

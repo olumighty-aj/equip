@@ -1,5 +1,6 @@
 import 'package:equipro/core/model/ActiveRentalsModel.dart';
 import 'package:equipro/ui/screens/hirer/active_rentals/rentals_view_model.dart';
+import 'package:equipro/ui/screens/owner/active_rentals/rentals_view_model.dart';
 import 'package:equipro/ui/widget/rental_tiles.dart';
 import 'package:equipro/utils/locator.dart';
 import 'package:equipro/utils/router/navigation_service.dart';
@@ -31,8 +32,8 @@ class LoginState extends State<OwnerRentals> with SingleTickerProviderStateMixin
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<RentalsViewModel>.reactive(
-        viewModelBuilder: () => RentalsViewModel(),
+    return ViewModelBuilder<OwnerRentalsViewModel>.reactive(
+        viewModelBuilder: () => OwnerRentalsViewModel(),
         builder: (context, model, child) {
           return Scaffold(
               key: _scaffoldKey,

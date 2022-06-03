@@ -382,9 +382,48 @@ class Activities {
     }
   }
 
+  withdraw(String amount) async {
+    try {
+      final result = await http.post(Paths.ownersEarnings,  {
+        "amount":amount
+      });
+      if (result is ErrorModel) {
+        return ErrorModel(result.error);
+      }
+
+      return SuccessModel(result.data);
+    } catch (e) {
+      return ErrorModel(e.toString() ==
+          "SocketException: Failed host lookup: '$baseUrlError' (OS Error: nodename nor servname provided, or not known, errno = 8)"
+          ? "Your internet is not stable kindly reconnect and try again"
+          : e.toString() ==
+          "TimeoutException after 0:00:40.000000: Future not completed"
+          ? "Your internet is not stable kindly reconnect and try again"
+          : e.toString());
+    }
+  }
+  getEarnings(String amount) async {
+    try {
+      final result = await http.get(Paths.ownersEarnings);
+      if (result is ErrorModel) {
+        return ErrorModel(result.error);
+      }
+
+      return SuccessModel(result.data);
+    } catch (e) {
+      return ErrorModel(e.toString() ==
+          "SocketException: Failed host lookup: '$baseUrlError' (OS Error: nodename nor servname provided, or not known, errno = 8)"
+          ? "Your internet is not stable kindly reconnect and try again"
+          : e.toString() ==
+          "TimeoutException after 0:00:40.000000: Future not completed"
+          ? "Your internet is not stable kindly reconnect and try again"
+          : e.toString());
+    }
+  }
+
   rateOwner(String id, String comment, double rating) async {
     try {
-      final result = await http.post(Paths.rate, {
+      final result = await http.post(Paths.rate_owner, {
         "equipments_id":id,
         "comment":comment,
         "rating":rating
@@ -409,6 +448,38 @@ class Activities {
     try {
       final result = await http.get(
         Paths.active_rentals + type
+      );
+      if (result is ErrorModel) {
+        print("ERROR");
+        print(result.error);
+        var data = result.error;
+        List<ActiveRentalsModel> packageList = List<ActiveRentalsModel>.from(
+            data.map((item) => ActiveRentalsModel.fromJson(item)));
+        return ErrorModel(packageList);
+      }
+      //print(result.data);
+      var data = result.data["payload"]["content"];
+      List<ActiveRentalsModel> packageList = List<ActiveRentalsModel>.from(
+          data.map((item) => ActiveRentalsModel.fromJson(item)));
+      print(packageList);
+      return packageList;
+    } catch (e) {
+      print(e.toString());
+      return ErrorModel(e.toString() ==
+          "SocketException: Failed host lookup: '$baseUrlError' (OS Error: nodename nor servname provided, or not known, errno = 8)"
+          ? "Your internet is not stable kindly reconnect and try again"
+          : e.toString() ==
+          "TimeoutException after 0:00:40.000000: Future not completed"
+          ? "Your internet is not stable kindly reconnect and try again"
+          : e.toString());
+    }
+  }
+
+
+  activeOwnerRentals(String type) async {
+    try {
+      final result = await http.get(
+          Paths.active_owner_rentals + type
       );
       if (result is ErrorModel) {
         print("ERROR");

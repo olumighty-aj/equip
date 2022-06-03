@@ -154,8 +154,8 @@ class CollapsingNavigationDrawerState extends State<OwnerDrawer>
                               imageUrl: "https://i.pravatar.cc/",
                               imageBuilder: (context, imageProvider) =>
                                   Container(
-                                width: 80.0,
-                                height: 80.0,
+                                width: 70.0,
+                                height: 70.0,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   image: DecorationImage(
@@ -182,20 +182,14 @@ class CollapsingNavigationDrawerState extends State<OwnerDrawer>
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  "Amandan ",
+                                _authentication.currentUser.details!.fullname!,
                                   //  _authentication.currentUser.firstName! + " " + _authentication.currentUser.lastName!,
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 20,
+                                    fontSize: 18,
                                   ),
                                 ),
-                                Text(
-                                  "Banks",
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20,
-                                  ),
-                                ),
+
                               ],
                             ),
                           ]),
@@ -235,7 +229,7 @@ class CollapsingNavigationDrawerState extends State<OwnerDrawer>
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
                 ),
                 onTap: () {
-                  _navigationService.navigateTo(RentalsRoute);
+                  _navigationService.navigateTo(OwnerRentalsRoute);
                 },
               ),
               ListTile(

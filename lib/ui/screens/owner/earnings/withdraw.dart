@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:equipro/ui/screens/drawer.dart';
+import 'package:equipro/ui/screens/owner/earnings/earnings_view_model.dart';
 import 'package:equipro/ui/widget/general_button.dart';
 import 'package:equipro/utils/locator.dart';
 import 'package:equipro/utils/router/navigation_service.dart';
@@ -28,8 +29,7 @@ class LoginState extends State<Withdraw> with TickerProviderStateMixin {
   File? video;
   final imagePicker = ImagePicker();
   String? imageType;
-  TextEditingController nameController = TextEditingController();
-  TextEditingController descriptionController = TextEditingController();
+  TextEditingController amountController = TextEditingController();
   AnimationController? _navController;
   Animation<Offset>? _navAnimation;
   List<XFile> listImages = [];
@@ -77,8 +77,8 @@ class LoginState extends State<Withdraw> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<LoginViewModel>.reactive(
-        viewModelBuilder: () => LoginViewModel(),
+    return ViewModelBuilder<EarningsViewModel>.reactive(
+        viewModelBuilder: () => EarningsViewModel(),
         builder: (context, model, child) {
           return Scaffold(
             key: _scaffoldKey,
@@ -176,7 +176,7 @@ class LoginState extends State<Withdraw> with TickerProviderStateMixin {
                                     height: 30,
                                   ),
                                   TextFormField(
-                                    controller: nameController,
+                                    controller: amountController,
                                     decoration: InputDecoration(
                                       hintText: '',
                                       hintStyle: const TextStyle(
@@ -227,8 +227,7 @@ class LoginState extends State<Withdraw> with TickerProviderStateMixin {
                                               width: 300,
                                               child: GeneralButton(
                                                   onPressed: () {
-                                                    _navigationService.navigateTo(
-                                                        PostEquipmentFinalRoute);
+                                                  model.withdraw(amountController.text);
                                                   },
                                                   buttonText:
                                                       "Withdraw")))),

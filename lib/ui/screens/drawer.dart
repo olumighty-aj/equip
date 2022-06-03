@@ -48,7 +48,7 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
                   height: 10,
                 ),
                 Text(
-                  "Confirm switch to hirer?",
+                  "Confirm switch to Owner?",
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 SizedBox(
@@ -225,7 +225,7 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
                 ),
                 onTap: () {
-                  _navigationService.navigateTo(OwnerRentalsRoute);
+                  _navigationService.navigateTo(RentalsRoute);
                 },
               ),
               ListTile(
