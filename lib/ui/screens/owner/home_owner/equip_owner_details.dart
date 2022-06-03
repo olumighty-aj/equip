@@ -7,6 +7,7 @@ import 'package:equipro/ui/widget/general_button.dart';
 import 'package:equipro/utils/locator.dart';
 import 'package:equipro/utils/router/navigation_service.dart';
 import 'package:equipro/utils/router/route_names.dart';
+import 'package:equipro/utils/screensize.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -274,39 +275,31 @@ class LoginState extends State<EquipOwnerDetails>
                                     height: 20,
                                   ),
                                   Text(
-                                    "Booking requests (${widget.model.equipRequest != null ? widget.model.equipRequest.toString() : "0"})",
+                                    "Booking requests (${widget.model.equipRequest != null ? widget.model.equipRequest!.length.toString() : "0"})",
                                     style: TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.bold),
                                   ),
-                                  SizedBox(
-                                    height: 30,
-                                  ),
-                                  widget.model
-                                      .equipRequest != null
+
+                                  widget.model.equipRequest != null
                                       ? Container(
-                                      height: 70.0,
-                                      child: Container(
-                                        child: ListView.builder(
-                                            itemCount: widget
-                                                .model
-                                                .equipRequest!
-                                                .length,
-                                            scrollDirection:
-                                            Axis.horizontal,
-                                            itemBuilder: (context, i) {
-                                              return  BookingRequest(
-                                                feed: widget
-                                                    .model
-                                                    .equipRequest![i],
-                                              );
-                                            }),
-                                      ))
+                                          height:
+                                              Responsive.height(context) / 2,
+                                          child: ListView.builder(
+                                              itemCount: widget
+                                                  .model.equipRequest!.length,
+                                              itemBuilder: (context, i) {
+                                                return BookingRequest(
+                                                  feed: widget
+                                                      .model.equipRequest![i],
+                                                );
+                                              }),
+                                        )
                                       : Container(
-                                    child: Text(
-                                      "Not available",
-                                    ),
-                                  ),
+                                          child: Text(
+                                            "Not available",
+                                          ),
+                                        ),
                                 ]))))),
             drawer: CollapsingNavigationDrawer(),
           );

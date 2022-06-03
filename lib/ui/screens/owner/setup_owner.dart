@@ -1,9 +1,12 @@
 import 'package:badges/badges.dart';
+import 'package:equipro/core/model/success_model.dart';
 import 'package:equipro/ui/screens/drawer.dart';
 import 'package:equipro/ui/screens/hirer/active_rentals/rentals_view_model.dart';
+import 'package:equipro/ui/screens/owner/home_owner/home_view_model.dart';
 import 'package:equipro/ui/widget/equip_tiles.dart';
 import 'package:equipro/ui/widget/general_button.dart';
 import 'package:equipro/ui/widget/rental_tiles.dart';
+import 'package:equipro/utils/helpers.dart';
 import 'package:equipro/utils/locator.dart';
 import 'package:equipro/utils/router/navigation_service.dart';
 import 'package:equipro/utils/router/route_names.dart';
@@ -37,12 +40,13 @@ class LoginState extends State<SetupOwner> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<RentalsViewModel>.reactive(
-        viewModelBuilder: () => RentalsViewModel(),
+    return ViewModelBuilder<HomeOwnerViewModel>.reactive(
+        viewModelBuilder: () => HomeOwnerViewModel(),
         builder: (context, model, child) {
           return Scaffold(
               key: _scaffoldKey,
-              body: Padding(
+              body:SingleChildScrollView(
+                child: Padding(
                   padding: EdgeInsets.all(20),
                   child: AnimationLimiter(
                       child: Column(
@@ -136,65 +140,6 @@ class LoginState extends State<SetupOwner> with SingleTickerProviderStateMixin {
                                         ListView(
                                           children: [
                                             Text(
-                                              "Phone Number",
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.grey),
-                                            ),
-                                            SizedBox(
-                                              height: 10,
-                                            ),
-                                            TextFormField(
-                                              controller: phoneController,
-                                              decoration: InputDecoration(
-                                                hintText: '',
-                                                hintStyle: const TextStyle(
-                                                  color: Colors.grey,
-                                                ),
-                                                focusedBorder:
-                                                    const OutlineInputBorder(
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(4)),
-                                                  borderSide: BorderSide(
-                                                      width: 1,
-                                                      color: Colors.grey),
-                                                ),
-                                                disabledBorder:
-                                                    const OutlineInputBorder(
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(4)),
-                                                  borderSide: BorderSide(
-                                                      width: 1,
-                                                      color: Colors.grey),
-                                                ),
-                                                enabledBorder:
-                                                    const OutlineInputBorder(
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(4)),
-                                                  borderSide: BorderSide(
-                                                      width: 1,
-                                                      color: Colors.grey),
-                                                ),
-                                                border: OutlineInputBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          5.0),
-                                                  borderSide:
-                                                      const BorderSide(),
-                                                ),
-                                              ),
-                                              keyboardType: TextInputType.phone,
-                                              style: const TextStyle(
-                                                  color: Colors.black),
-                                              cursorColor: Colors.black,
-                                            ),
-                                            SizedBox(
-                                              height: 20,
-                                            ),
-                                            Text(
                                               "Address",
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold,
@@ -254,8 +199,17 @@ class LoginState extends State<SetupOwner> with SingleTickerProviderStateMixin {
                                               height: 50,
                                             ),
                                             GeneralButton(
-                                                onPressed: () {
-                                                 _controller.animateTo(1);
+                                                onPressed: () async{
+                                                  if (addressController.text.isNotEmpty) {
+                                                    var result = await model
+                                                        .updateAddress(
+                                                        addressController.text);
+                                                    if (result != null) {
+                                                      _controller.animateTo(1);
+                                                    }
+                                                  }else{
+                                                    showErrorToast("Address is compulsory");
+                                                  }
                                                 },
                                                 buttonText: "Save & Proceed")
                                           ],
@@ -365,7 +319,7 @@ class LoginState extends State<SetupOwner> with SingleTickerProviderStateMixin {
                                                       height: 30,
                                                       child: GeneralButton(
                                                           onPressed: () {
-                                                            _navigationService.navigateTo(HomeOwnerRoute);
+                                                            _navigationService.pushAndRemoveUntil(HomeOwnerRoute);
                                                           },
                                                           buttonText: "SETUP",
                                                           borderRadius:
@@ -380,7 +334,7 @@ class LoginState extends State<SetupOwner> with SingleTickerProviderStateMixin {
                                         ),
                                       ],
                                     ))
-                              ])))));
+                              ]))))));
         });
   }
 }

@@ -9,6 +9,7 @@ import 'package:equipro/utils/router/route_names.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 import 'package:equipro/utils/colors.dart';
 
@@ -114,7 +115,8 @@ class LoginState extends State<BookingDetails> with TickerProviderStateMixin {
                                             radius: 25,
                                             child: CachedNetworkImage(
                                               imageUrl: widget
-                                                  .feed.hirers!.hirersPath!,
+                                                  .feed.hirers!.hirersPath!= null?widget
+                                                  .feed.hirers!.hirersPath!:"",
                                               imageBuilder:
                                                   (context, imageProvider) =>
                                                       Container(
@@ -265,7 +267,13 @@ class LoginState extends State<BookingDetails> with TickerProviderStateMixin {
                                             height: 70,
                                             width: 200,
                                             child: Text(
-                                              widget.feed.rentalFrom!,
+                                              DateFormat(
+                                                  "dd MMM, yyyy",
+                                                  )
+                                                  .format(DateTime
+                                                  .parse( widget.feed.rentalFrom!,))
+                                                  .toString(),
+
                                               style: TextStyle(
                                                   color: Colors.black,
                                                   fontSize: 15,
@@ -277,10 +285,10 @@ class LoginState extends State<BookingDetails> with TickerProviderStateMixin {
                                             width: 200,
                                             child: Text(
                                               DateTime.parse(widget
-                                                          .feed.rentalFrom!)
+                                                          .feed.rentalTo!)
                                                       .difference(
                                                           DateTime.parse(widget
-                                                              .feed.rentalTo!))
+                                                              .feed.rentalFrom!))
                                                       .inDays
                                                       .toString() +
                                                   " day(s)",
@@ -308,40 +316,40 @@ class LoginState extends State<BookingDetails> with TickerProviderStateMixin {
                                   SizedBox(
                                     height: 40,
                                   ),
-                                  Text(
-                                    "Charges",
-                                    style: TextStyle(
-                                        color: Colors.grey,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 18),
-                                  ),
-                                  Divider(
-                                    thickness: 2,
-                                  ),
-                                  SizedBox(
-                                    height: 30,
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        "Equipment charges:",
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 18),
-                                      ),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      Text(
-                                        widget.feed.rentalFrom!,
-                                        style: TextStyle(
-                                            color: AppColors.primaryColor,
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 18),
-                                      ),
-                                    ],
-                                  ),
+                                  // Text(
+                                  //   "Charges",
+                                  //   style: TextStyle(
+                                  //       color: Colors.grey,
+                                  //       fontWeight: FontWeight.w500,
+                                  //       fontSize: 18),
+                                  // ),
+                                  // Divider(
+                                  //   thickness: 2,
+                                  // ),
+                                  // SizedBox(
+                                  //   height: 30,
+                                  // ),
+                                  // Row(
+                                  //   children: [
+                                  //     Text(
+                                  //       "Equipment charges:",
+                                  //       style: TextStyle(
+                                  //           color: Colors.black,
+                                  //           fontWeight: FontWeight.w600,
+                                  //           fontSize: 18),
+                                  //     ),
+                                  //     SizedBox(
+                                  //       width: 10,
+                                  //     ),
+                                  //     Text(
+                                  //       widget.feed.rentalFrom!,
+                                  //       style: TextStyle(
+                                  //           color: AppColors.primaryColor,
+                                  //           fontWeight: FontWeight.w500,
+                                  //           fontSize: 18),
+                                  //     ),
+                                  //   ],
+                                  // ),
                                   SizedBox(
                                     height: 50,
                                   ),

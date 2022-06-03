@@ -1,5 +1,7 @@
 import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:equipro/core/services/auth_service.dart';
+import 'package:equipro/core/services/index.dart';
 import 'package:equipro/ui/screens/drawer.dart';
 import 'package:equipro/ui/screens/profile/edit_profile.dart';
 import 'package:equipro/ui/screens/profile/profile_view_model.dart';
@@ -30,7 +32,7 @@ class Profile extends StatefulWidget {
 class LoginState extends State<Profile> with TickerProviderStateMixin {
   final NavigationService _navigationService = locator<NavigationService>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
+  final Authentication _authentication = locator<Authentication>();
   TextEditingController emailController = TextEditingController();
   AnimationController? _navController;
   Animation<Offset>? _navAnimation;
@@ -134,7 +136,13 @@ class LoginState extends State<Profile> with TickerProviderStateMixin {
                                           padding: EdgeInsets.only(
                                               left: 15, top: 13),
                                           child: CachedNetworkImage(
-                                            imageUrl: "https://i.pravatar.cc/",
+                                            imageUrl: _authentication
+                                                        .currentUser
+                                                        .hirersPath !=
+                                                    null
+                                                ? _authentication
+                                                    .currentUser.hirersPath!
+                                                : baseUrl,
                                             imageBuilder:
                                                 (context, imageProvider) =>
                                                     Container(
@@ -152,10 +160,10 @@ class LoginState extends State<Profile> with TickerProviderStateMixin {
                                             errorWidget:
                                                 (context, url, error) =>
                                                     CircleAvatar(
-                                              radius: 40,
+                                              radius: 60,
                                               backgroundColor: AppColors.grey,
                                               child: Image.asset(
-                                                "assets/images/logo.png",
+                                                "assets/images/icon.png",
                                                 scale: 2,
                                               ),
                                             ),
@@ -166,7 +174,7 @@ class LoginState extends State<Profile> with TickerProviderStateMixin {
                                     height: 20,
                                   ),
                                   Text(
-                                    "Juliet Daniels",
+                                    _authentication.currentUser.fullname!,
                                     style: TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold),
@@ -175,7 +183,7 @@ class LoginState extends State<Profile> with TickerProviderStateMixin {
                                     height: 10,
                                   ),
                                   Text(
-                                    "dansjillie@gmail.com",
+                                    _authentication.currentUser.email!,
                                     style: TextStyle(
                                         fontSize: 15,
                                         color: Colors.grey,
@@ -206,16 +214,16 @@ class LoginState extends State<Profile> with TickerProviderStateMixin {
                                                   fontWeight: FontWeight.w400),
                                             ),
                                           ])),
-                                  SizedBox(
-                                    height: 20,
-                                  ),
-                                  Text(
-                                    "Profile 60% Completed",
-                                    style: TextStyle(
-                                        color: AppColors.red,
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 15),
-                                  ),
+                                  // SizedBox(
+                                  //   height: 20,
+                                  // ),
+                                  // Text(
+                                  //   "Profile 60% Completed",
+                                  //   style: TextStyle(
+                                  //       color: AppColors.red,
+                                  //       fontWeight: FontWeight.w400,
+                                  //       fontSize: 15),
+                                  // ),
                                   SizedBox(
                                     height: 30,
                                   ),
@@ -276,7 +284,13 @@ class LoginState extends State<Profile> with TickerProviderStateMixin {
                                                 height: 70,
                                                 width: 200,
                                                 child: Text(
-                                                  "+234 80128394",
+                                                  _authentication.currentUser
+                                                              .phoneNumber !=
+                                                          null
+                                                      ? _authentication
+                                                          .currentUser
+                                                          .phoneNumber!
+                                                      : "Not updated",
                                                   style: TextStyle(
                                                       color: Colors.grey,
                                                       fontSize: 15,
@@ -288,7 +302,13 @@ class LoginState extends State<Profile> with TickerProviderStateMixin {
                                                 height: 100,
                                                 width: 200,
                                                 child: Text(
-                                                    "No 26, Gbemisola street, Allen Avenue, Ikeja, Lagos state",
+                                                    _authentication.currentUser
+                                                                .address !=
+                                                            null
+                                                        ? _authentication
+                                                            .currentUser
+                                                            .address!
+                                                        : "Not updated ",
                                                     style: TextStyle(
                                                         color: Colors.grey,
                                                         fontSize: 15,

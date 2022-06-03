@@ -4,6 +4,8 @@
         android:label="Equipro"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
+       <meta-data android:name="com.google.android.geo.API_KEY"
+           android:value="AIzaSyCN55Eaaol4NW22SiO752Nb8LB22nPn4ok"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"

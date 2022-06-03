@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 
 class HomeOwnerViewModel extends BaseModel {
   final Activities _activities = locator<Activities>();
+  final Authentication _authentication = locator<Authentication>();
   final NavigationService _navigationService = locator<NavigationService>();
   ScrollController? controller;
 
@@ -208,5 +209,21 @@ class HomeOwnerViewModel extends BaseModel {
       notifyListeners();
       return SuccessModel(result.data);
     }
+  }
+
+  updateAddress(
+      String address) async {
+    setBusy(true);
+    var result = await _authentication.updateAddress(address);
+    if (result == null) {
+      setBusy(false);
+      showErrorToast(result.error);
+      notifyListeners();
+      return result;
+    }
+    setBusy(false);
+   // _navigationService.pushAndRemoveUntil(HomeOwnerRoute);
+    notifyListeners();
+    return result;
   }
 }

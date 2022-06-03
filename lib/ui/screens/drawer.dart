@@ -65,7 +65,12 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
                         buttonText: 'No',
                         onPressed: () {
                           Navigator.pop(context);
-                          _navigationService.pushAndRemoveUntil(HomeOwnerRoute);
+                          if(_authentication.currentUser.address == null){
+                            _navigationService.navigateTo(SetupOwnerRoute);
+                          }else{
+                            _navigationService.pushAndRemoveUntil(HomeOwnerRoute);
+                          }
+
                         },
                       ),
                     ),
@@ -147,7 +152,7 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
                           // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             CachedNetworkImage(
-                              imageUrl: "https://i.pravatar.cc/",
+                              imageUrl:  _authentication.currentUser.hirersPath!= null?  _authentication.currentUser.hirersPath!:"",
                               imageBuilder: (context, imageProvider) =>
                                   Container(
                                 width: 70.0,
@@ -166,7 +171,7 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
                                 radius: 40,
                                 backgroundColor: AppColors.grey,
                                 child: Image.asset(
-                                  "assets/images/user.png",
+                                  "assets/images/icon.png",
                                   scale: 2,
                                 ),
                               ),
@@ -179,7 +184,7 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
                               children: [
                                 Text(
                                   _authentication
-                                      .currentUser.details!.fullname!,
+                                      .currentUser.fullname!,
                                   //  _authentication.currentUser.firstName! + " " + _authentication.currentUser.lastName!,
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,

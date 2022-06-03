@@ -151,7 +151,7 @@ class CollapsingNavigationDrawerState extends State<OwnerDrawer>
                           // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             CachedNetworkImage(
-                              imageUrl: "https://i.pravatar.cc/",
+                              imageUrl:  _authentication.currentUser.hirersPath!= null?  _authentication.currentUser.hirersPath!:"",
                               imageBuilder: (context, imageProvider) =>
                                   Container(
                                 width: 70.0,
@@ -170,7 +170,7 @@ class CollapsingNavigationDrawerState extends State<OwnerDrawer>
                                 radius: 40,
                                 backgroundColor: AppColors.grey,
                                 child: Image.asset(
-                                  "assets/images/user.png",
+                                  "assets/images/icon.png",
                                   scale: 2,
                                 ),
                               ),
@@ -182,7 +182,7 @@ class CollapsingNavigationDrawerState extends State<OwnerDrawer>
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                _authentication.currentUser.details!.fullname!,
+                                _authentication.currentUser.fullname!,
                                   //  _authentication.currentUser.firstName! + " " + _authentication.currentUser.lastName!,
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,

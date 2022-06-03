@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 
 import 'package:equipro/core/model/SignInResponse.dart';
@@ -12,12 +11,13 @@ import 'package:equipro/utils/locator.dart';
 import 'package:equipro/utils/router/navigation_service.dart';
 import 'package:equipro/utils/router/route_names.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as htp;
 
 class Authentication {
   final NavigationService _navigationService = locator<NavigationService>();
 
-  late SignInResponse _currentUser;
-  SignInResponse get currentUser => _currentUser;
+  late Details _currentUser;
+  Details get currentUser => _currentUser;
 
   // WalletBalance? _walletBalance;
   // WalletBalance? get walletBalance => _walletBalance;
@@ -42,17 +42,17 @@ class Authentication {
         return ErrorModel(result.error);
       }
 
-      final AuthModel auth = AuthModel.fromJson(result.data['payload']['token']);
+      final AuthModel auth =
+          AuthModel.fromJson(result.data['payload']['token']);
       _token = auth;
-      SignInResponse user =
-          SignInResponse.fromJson(result.data['payload']);
+      Details user = Details.fromJson(result.data['payload']["details"]);
       showToast(result.data['message']);
       _currentUser = user;
-     // _userId = user.id!;
+      // _userId = user.id!;
       SharedPreferences prefs;
       prefs = await SharedPreferences.getInstance();
       await prefs.setString('token', auth.token);
-    //  await prefs.setString('userId', user.id.toString());
+      //  await prefs.setString('userId', user.id.toString());
       await prefs.setString("profile", json.encode(user));
       //print('firstname' + user.firstName!);
       // return SuccessModel({'auth': auth, 'user': user});
@@ -62,15 +62,16 @@ class Authentication {
       return ErrorModel('Login failed, try again.');
     }
   }
+
   //
   alreadyLoggedIn() async {
     SharedPreferences prefs;
     prefs = await SharedPreferences.getInstance();
     var d = prefs.getString('profile');
-    SignInResponse user = SignInResponse.fromJson(json.decode(d!));
+    Details user = Details.fromJson(json.decode(d!));
     _currentUser = user;
-    print(_currentUser.details!.id.toString());
-   // _userId = user.id!;
+    print(_currentUser.id.toString());
+    // _userId = user.id!;
     var t = prefs.getString('token');
     final AuthModel auth = AuthModel.fromJson(t!);
     //   print("TOKEN AGBA::::::::: ${auth.token}");
@@ -88,10 +89,16 @@ class Authentication {
 
       return SuccessModel(result.data);
     } catch (e) {
-      return ErrorModel(e.toString() =="SocketException: Failed host lookup: '$baseUrlError' (OS Error: nodename nor servname provided, or not known, errno = 8)"?"Your internet is not stable kindly reconnect and try again":e.toString() == "TimeoutException after 0:00:40.000000: Future not completed"?"Your internet is not stable kindly reconnect and try again":e.toString());
-
+      return ErrorModel(e.toString() ==
+              "SocketException: Failed host lookup: '$baseUrlError' (OS Error: nodename nor servname provided, or not known, errno = 8)"
+          ? "Your internet is not stable kindly reconnect and try again"
+          : e.toString() ==
+                  "TimeoutException after 0:00:40.000000: Future not completed"
+              ? "Your internet is not stable kindly reconnect and try again"
+              : e.toString());
     }
   }
+
   //
   // editProfile(Map<dynamic, dynamic> payload) async {
   //   try {
@@ -155,10 +162,16 @@ class Authentication {
 
       return SuccessModel(result.data);
     } catch (e) {
-      return ErrorModel(e.toString() =="SocketException: Failed host lookup: '$baseUrlError' (OS Error: nodename nor servname provided, or not known, errno = 8)"?"Your internet is not stable kindly reconnect and try again":e.toString() == "TimeoutException after 0:00:40.000000: Future not completed"?"Your internet is not stable kindly reconnect and try again":e.toString());
-
+      return ErrorModel(e.toString() ==
+              "SocketException: Failed host lookup: '$baseUrlError' (OS Error: nodename nor servname provided, or not known, errno = 8)"
+          ? "Your internet is not stable kindly reconnect and try again"
+          : e.toString() ==
+                  "TimeoutException after 0:00:40.000000: Future not completed"
+              ? "Your internet is not stable kindly reconnect and try again"
+              : e.toString());
     }
   }
+
   //
   verifyForgotPassword(Map<dynamic, dynamic> payload) async {
     try {
@@ -171,108 +184,118 @@ class Authentication {
 
       return SuccessModel(result.data);
     } catch (e) {
-      return ErrorModel(e.toString() =="SocketException: Failed host lookup: '$baseUrlError' (OS Error: nodename nor servname provided, or not known, errno = 8)"?"Your internet is not stable kindly reconnect and try again":e.toString() == "TimeoutException after 0:00:40.000000: Future not completed"?"Your internet is not stable kindly reconnect and try again":e.toString());
-
+      return ErrorModel(e.toString() ==
+              "SocketException: Failed host lookup: '$baseUrlError' (OS Error: nodename nor servname provided, or not known, errno = 8)"
+          ? "Your internet is not stable kindly reconnect and try again"
+          : e.toString() ==
+                  "TimeoutException after 0:00:40.000000: Future not completed"
+              ? "Your internet is not stable kindly reconnect and try again"
+              : e.toString());
     }
   }
-  //
-  // packageList() async {
-  //   try {
-  //     final result = await http.get(Paths.packageType);
-  //     if (result is ErrorModel) {
-  //       print("ERROR");
-  //       print(result.error);
-  //       return ErrorModel(result.error);
-  //     }
-  //     //  print("RESULT");
-  //     // print(result.data['result1']);
-  //     return SuccessModel(result.data['result1']);
-  //   } catch (e) {
-  //     print(e.toString());
-  //     return ErrorModel('$e');
-  //   }
-  // }
-  //
-  // getRideModes() async {
-  //   try {
-  //     final result = await http.get(Paths.vehicles);
-  //     if (result is ErrorModel) {
-  //       print("ERROR");
-  //       var data = result.error;
-  //       print(result.error);
-  //       List<VehicleLists> packageList = List<VehicleLists>.from(
-  //           data.map((item) => VehicleLists.fromJson(item)));
-  //       return ErrorModel(packageList);
-  //     }
-  //     var data = result.data["result"];
-  //     List<VehicleLists> packageList = List<VehicleLists>.from(
-  //         data.map((item) => VehicleLists.fromJson(item)));
-  //     // print(packageList);
-  //     return packageList;
-  //   } catch (e) {
-  //     print(e.toString());
-  //     return ErrorModel('$e');
-  //   }
-  // }
-  //
-  // fetchChat(String carrierId, String deliveryId) async {
-  //   try {
-  //     final result = await http.get(Paths.fetchChat + "${currentUser.id}&CarrierId=$carrierId&DeliveryId=$deliveryId");
-  //     if (result is ErrorModel) {
-  //       print("ERROR");
-  //       var data = result.error;
-  //       print(result.error);
-  //       List<ChatMessages> packageList = List<ChatMessages>.from(
-  //           data.map((item) => ChatMessages.fromJson(item)));
-  //       return ErrorModel(packageList);
-  //     }
-  //     var data = result.data["result1"];
-  //     List<ChatMessages> packageList = List<ChatMessages>.from(
-  //         data.map((item) => ChatMessages.fromJson(item)));
-  //     // print(packageList);
-  //     return packageList;
-  //   } catch (e) {
-  //     print(e.toString());
-  //     return ErrorModel('$e');
-  //   }
-  // }
-  //
-  // walletBalanceCall() async {
-  //   try {
-  //     final result = await http.post(Paths.walletBalance + currentUser.id!, {});
-  //     if (result is ErrorModel) {
-  //       print("ERROR");
-  //       print(result.error);
-  //
-  //       return ErrorModel(result.error);
-  //     }
-  //     //  print("RESULT");
-  //     print(result.data);
-  //     //  return   _walletBalance
-  //     // VerifyOtpResponse verifyOtpResponse =
-  //     //     VerifyOtpResponse.fromJson(result.data);
-  //     WalletBalance walletBalance =
-  //         WalletBalance.fromJson(result.data['result']);
-  //     _walletBalance = walletBalance;
-  //     return SuccessModel(result.data);
-  //   } catch (e) {
-  //     print(e.toString());
-  //     return ErrorModel('$e');
-  //   }
-  // }
-  //
-  // requestCarrier(Map<dynamic, dynamic> payload) async {
-  //   try {
-  //     final result = await http.post(Paths.requestCarrier, payload);
-  //     if (result is ErrorModel) {
-  //       return ErrorModel(result.error);
-  //     }
-  //
-  //     showToast(result.data['message']);
-  //
-  //     return SuccessModel(result.data);
-  //   } catch (e) {
-  //     return ErrorModel('$e');
-  //   }
-  // }
+
+  updateAddress(
+    String address,
+  ) async {
+    var header = {
+      'X-APP-KEY': '37T8O89O445568u89WELrVl',
+      'Content-Type': 'application/json; charset=UTF-8',
+      "Authorization": "Bearer ${token.token}"
+    };
+    var file;
+    int count = 0;
+    dynamic catalogueFile;
+    final imageUploadRequest =
+        htp.MultipartRequest('POST', Uri.parse(baseUrl + Paths.ownersProfile));
+    imageUploadRequest.headers.addAll(header);
+    //  imageUploadRequest.fields['UserType'] = currentUser.userInformation.roleId;
+
+    imageUploadRequest.fields['address'] = address;
+
+    try {
+      final streamedResponse = await imageUploadRequest.send();
+      final response = await htp.Response.fromStream(streamedResponse);
+      if (response.statusCode != 200) {
+        print(response.body);
+        print(response.statusCode);
+        return null;
+      }
+      print(response.statusCode);
+      final Map<String, dynamic> result = json.decode(response.body);
+      print(result);
+      Details user = Details.fromJson(result['payload']);
+      showToast(result['message']);
+      _currentUser = user;
+      // _userId = user.id!;
+      SharedPreferences prefs;
+      prefs = await SharedPreferences.getInstance();
+      await prefs.setString("profile", json.encode(user));
+      return result;
+    } catch (e) {
+      print("from code");
+      print(e);
+      return null;
+    }
+  }
+
+  editProfile(
+    String displayPicture,
+    String address,
+    String fullName,
+    String phone,
+    String lat,
+    String lng,
+  ) async {
+    var header = {
+      'X-APP-KEY': '37T8O89O445568u89WELrVl',
+      'Content-Type': 'application/json; charset=UTF-8',
+      "Authorization": "Bearer ${token.token}"
+    };
+
+    dynamic catalogueFile;
+    final imageUploadRequest =
+        htp.MultipartRequest('POST', Uri.parse(baseUrl + Paths.ownersProfile));
+    imageUploadRequest.headers.addAll(header);
+    //  imageUploadRequest.fields['UserType'] = currentUser.userInformation.roleId;
+
+    // Attach the file in the request
+    if (displayPicture != "") {
+      catalogueFile =
+          await htp.MultipartFile.fromPath('hirers_path', displayPicture);
+      //print(catalogueFile);
+      imageUploadRequest.files.add(catalogueFile);
+    }
+
+    imageUploadRequest.fields['address'] = address;
+    imageUploadRequest.fields['fullname'] = fullName;
+    imageUploadRequest.fields['phone_number'] = phone;
+    imageUploadRequest.fields['avail_from'] = lat;
+    imageUploadRequest.fields['avail_to'] = lng;
+
+    try {
+      print(imageUploadRequest.files);
+      final streamedResponse = await imageUploadRequest.send();
+      final response = await htp.Response.fromStream(streamedResponse);
+      if (response.statusCode != 200) {
+        print(response.body);
+        print(response.statusCode);
+        return null;
+      }
+      print(response.statusCode);
+      final Map<String, dynamic> result = json.decode(response.body);
+      print(result);
+      Details user = Details.fromJson(result['payload']);
+      showToast(result['message']);
+      _currentUser = user;
+      // _userId = user.id!;
+      SharedPreferences prefs;
+      prefs = await SharedPreferences.getInstance();
+      await prefs.setString("profile", json.encode(user));
+      return result;
+    } catch (e) {
+      print("from code");
+      print(e);
+      return null;
+    }
+  }
 }

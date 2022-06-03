@@ -300,7 +300,7 @@ class Activities {
     try {
       var url = Paths.switchOwner;
       final result = await http
-          .post(url, {"hirers_id": _authentication.currentUser.details!.id});
+          .post(url, {"hirers_id": _authentication.currentUser.id});
       if (result is ErrorModel) {
         print("ERROR");
         print(result.error);

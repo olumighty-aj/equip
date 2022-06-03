@@ -197,7 +197,7 @@ class LoginState extends State<Rating> with TickerProviderStateMixin {
                                   ),
                                   GeneralButton(
                                       onPressed: () {
-                                        _authentication.currentUser.details!
+                                        _authentication.currentUser
                                                     .userType ==
                                                 "hirers"
                                             ? model.rate(widget.id,

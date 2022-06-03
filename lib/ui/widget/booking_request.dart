@@ -51,7 +51,7 @@ class BookingRequest extends StatelessWidget {
                       CircleAvatar(
                         radius: 20,
                         child:  CachedNetworkImage(
-                          imageUrl: feed.hirers!.hirersPath!,
+                          imageUrl: feed.hirers!.hirersPath!= null?feed.hirers!.hirersPath!:"",
                           imageBuilder:
                               (context, imageProvider) =>
                               Container(
@@ -112,7 +112,7 @@ class BookingRequest extends StatelessWidget {
                             fontWeight: FontWeight.w500, fontSize: 14),
                       ),
                       Text(
-                        DateTime.parse(feed.rentalFrom!).difference(DateTime.parse(feed.rentalTo!)).inDays.toString() + " day(s)",
+                        DateTime.parse(feed.rentalTo!).difference(DateTime.parse(feed.rentalFrom!)).inDays.toString() + " day(s)",
                         style: TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 14,),
                       ),

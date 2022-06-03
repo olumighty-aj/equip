@@ -320,14 +320,14 @@ class LoginState extends State<Rentals> with SingleTickerProviderStateMixin {
                                                             height: 10,
                                                           ),
                                                           Text(
-                                                            "Categories not added yet.",
+                                                            "No rentals in this category yet",
                                                             style: TextStyle(
-                                                                fontSize: 11,
+                                                                fontSize: 15,
                                                                 fontWeight:
-                                                                    FontWeight
-                                                                        .w500,
+                                                                FontWeight
+                                                                    .bold,
                                                                 color: AppColors
-                                                                    .grey),
+                                                                    .black),
                                                             textAlign: TextAlign
                                                                 .center,
                                                           ),

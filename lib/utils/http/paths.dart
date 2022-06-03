@@ -19,6 +19,7 @@ class Paths {
   static const String rate_owner = 'owners/reviews';
   static const String updateBookings = 'owners/equip_approval/';
   static const String ownersEarnings = 'owners/earnings';
+  static const String ownersProfile = 'owners/profile';
 
 
 
