@@ -16,6 +16,7 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:place_picker/place_picker.dart';
 import 'package:stacked/stacked.dart';
 import 'package:equipro/ui/screens/login/login_view_model.dart';
 import 'package:equipro/utils/colors.dart';
@@ -36,10 +37,27 @@ class LoginState extends State<PlaceBooking> with TickerProviderStateMixin {
   String? selectedDate;
   String? selectedWeek;
   String? selectedDateTo;
+  double? pickLat;
+  double? pickLng;
   TextEditingController deliveryController = TextEditingController();
   AnimationController? _navController;
   Animation<Offset>? _navAnimation;
   var quantityList;
+  void showPlacePicker() async {
+    LocationResult result = await Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) =>
+            PlacePicker("AIzaSyCN55Eaaol4NW22SiO752Nb8LB22nPn4ok")));
+    // Handle the result in your way
+    print(result);
+
+    setState(() {
+      print(result);
+      deliveryController.text = result.formattedAddress!;
+      pickLat = result.latLng!.latitude;
+      pickLng = result.latLng!.longitude;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -465,7 +483,12 @@ class LoginState extends State<PlaceBooking> with TickerProviderStateMixin {
                                   SizedBox(
                                     height: 30,
                                   ),
+                                  InkWell(onTap: (){
+                                    showPlacePicker();
+                                  },
+                                    child:
                                   TextFormField(
+                                    enabled: false,
                                     controller: deliveryController,
                                     decoration: InputDecoration(
                                       hintText: 'Enter delivery location',
@@ -499,7 +522,7 @@ class LoginState extends State<PlaceBooking> with TickerProviderStateMixin {
                                     keyboardType: TextInputType.emailAddress,
                                     style: const TextStyle(color: Colors.black),
                                     cursorColor: Colors.black,
-                                  ),
+                                  )  ),
                                   SizedBox(
                                     height: 30,
                                   ),
@@ -516,6 +539,8 @@ var result = await model.book(BookModel(
   quantity: selectedQuantity.toString(),
   rentalFrom: selectedDate,
   rentalTo: selectedDateTo,
+  latitude:pickLat.toString(),
+  longitude:pickLng.toString() ,
   deliveryLocation: deliveryController.text
 ));
 

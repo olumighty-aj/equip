@@ -12,19 +12,21 @@ class ProfileViewModel extends BaseModel {
   editProfile(
     String displayPicture,
     String address,
-    String fullName,
-    String phone,
+    String gender,
     String lat,
     String lng,
+      String kyc_name,
+      String kyc_document_path,
   ) async {
     setBusy(true);
     var result = await _authentication.editProfile(
       displayPicture,
       address,
-      fullName,
-      phone,
+      gender,
       lat,
       lng,
+       kyc_name,
+       kyc_document_path,
     );
     if (result == null) {
       setBusy(false);

@@ -9,7 +9,7 @@ class Paths {
   static const String ownerEquipment = 'owners/equipments';
   static const String equipments = 'equipments';
   static const String deleteEquipment = 'owners/equipments/delete/';
-  static const String switchOwner = 'switch_to_owner';
+  static const String switchOwner = 'toggle_users';
   static const String searchMyEquipment = 'owners/equipments?q=';
   static const String searchEquipments = 'equipments?q=';
   static const String book = 'equip_booking';
@@ -20,6 +20,7 @@ class Paths {
   static const String updateBookings = 'owners/equip_approval/';
   static const String ownersEarnings = 'owners/earnings';
   static const String ownersProfile = 'owners/profile';
+  static const String profile = 'profile';
 
 
 

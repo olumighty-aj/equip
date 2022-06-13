@@ -227,136 +227,145 @@ class LoginState extends State<Profile> with TickerProviderStateMixin {
                                   SizedBox(
                                     height: 30,
                                   ),
-                                  Container(
-                                      padding: EdgeInsets.all(20),
-                                      height: 300,
-                                      width: Responsive.width(context),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(20),
-                                        color: AppColors.white,
-                                      ),
-                                      alignment: Alignment.center,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          SizedBox(
-                                            height: 30,
+                                  FittedBox(
+                                      child: Container(
+                                          padding: EdgeInsets.all(20),
+                                          height: 300,
+                                          width: Responsive.width(context),
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                            color: AppColors.white,
                                           ),
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                          alignment: Alignment.center,
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
                                             children: [
-                                              Container(
-                                                  height: 70,
-                                                  child: Text(
-                                                    "Phone Number",
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 18),
-                                                  )),
-                                              Container(
-                                                  height: 100,
-                                                  child: Text(
-                                                    "Address",
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 18),
-                                                  )),
-                                              Container(
-                                                  height: 80,
-                                                  child: Text(
-                                                    "Means of ID",
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 18),
-                                                  )),
-                                            ],
-                                          ),
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.end,
-                                            children: [
-                                              Container(
-                                                height: 70,
-                                                width: 200,
-                                                child: Text(
-                                                  _authentication.currentUser
-                                                              .phoneNumber !=
-                                                          null
-                                                      ? _authentication
-                                                          .currentUser
-                                                          .phoneNumber!
-                                                      : "Not updated",
-                                                  style: TextStyle(
-                                                      color: Colors.grey,
-                                                      fontSize: 15,
-                                                      fontWeight:
-                                                          FontWeight.w500),
-                                                ),
+                                              SizedBox(
+                                                height: 30,
                                               ),
-                                              Container(
-                                                height: 100,
-                                                width: 200,
-                                                child: Text(
-                                                    _authentication.currentUser
-                                                                .address !=
-                                                            null
-                                                        ? _authentication
-                                                            .currentUser
-                                                            .address!
-                                                        : "Not updated ",
-                                                    style: TextStyle(
-                                                        color: Colors.grey,
-                                                        fontSize: 15,
-                                                        fontWeight:
-                                                            FontWeight.w500)),
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Container(
+                                                      height: 70,
+                                                      child: Text(
+                                                        "Phone Number",
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize: 18),
+                                                      )),
+                                                  Container(
+                                                      height: 100,
+                                                      child: Text(
+                                                        "Address",
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize: 18),
+                                                      )),
+                                                  Container(
+                                                      height: 80,
+                                                      child: Text(
+                                                        "Means of ID",
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize: 18),
+                                                      )),
+                                                ],
                                               ),
-                                              Container(
-                                                  height: 80,
-                                                  width: 200,
-                                                  child: Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.start,
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Text(
-                                                          "National Identification Card",
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.grey,
-                                                              fontSize: 15,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w500)),
-                                                      SizedBox(
-                                                        height: 10,
-                                                      ),
-                                                      Container(
-                                                        width: 90,
-                                                        height: 30,
-                                                        child: GeneralButton(
-                                                          onPressed: () {},
-                                                          splashColor: Color(
-                                                                  0xCC4EA14D)
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.end,
+                                                children: [
+                                                  Container(
+                                                    height: 70,
+                                                    width: 200,
+                                                    child: Text(
+                                                      _authentication
+                                                                  .currentUser
+                                                                  .phoneNumber !=
+                                                              null
+                                                          ? _authentication
+                                                              .currentUser
+                                                              .phoneNumber!
+                                                          : "Not updated",
+                                                      style: TextStyle(
+                                                          color: Colors.grey,
+                                                          fontSize: 15,
+                                                          fontWeight:
+                                                              FontWeight.w500),
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                    height: 100,
+                                                    width: 200,
+                                                    child: Text(
+                                                        _authentication
+                                                                    .currentUser
+                                                                    .address !=
+                                                                null
+                                                            ? _authentication
+                                                                .currentUser
+                                                                .address!
+                                                            : "Not updated ",
+                                                        style: TextStyle(
+                                                            color: Colors.grey,
+                                                            fontSize: 15,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w500)),
+                                                  ),
+                                                  // Container(
+                                                  //     height: 80,
+                                                  //     width: 200,
+                                                  //     child: Column(
+                                                  //       mainAxisAlignment:
+                                                  //           MainAxisAlignment.start,
+                                                  //       crossAxisAlignment:
+                                                  //           CrossAxisAlignment
+                                                  //               .start,
+                                                  //       children: [
+                                                  // Text(
+                                                  //     "National Identification Card",
+                                                  //     style: TextStyle(
+                                                  //         color:
+                                                  //             Colors.grey,
+                                                  //         fontSize: 15,
+                                                  //         fontWeight:
+                                                  //             FontWeight
+                                                  //                 .w500)),
+                                                  // SizedBox(
+                                                  //   height: 10,
+                                                  // ),
+                                                  Container(
+                                                    width: 110,
+                                                    height: 30,
+                                                    child: GeneralButton(
+                                                      onPressed: () {},
+                                                      splashColor:
+                                                          Color(0xCC4EA14D)
                                                               .withOpacity(0.3),
-                                                          buttonText:
-                                                              "Verified",
-                                                          buttonTextColor:
-                                                              Color(0xff247322),
-                                                        ),
-                                                      )
-                                                    ],
-                                                  ))
+                                                      buttonText:
+                                                          _authentication
+                                                                  .currentUser
+                                                                  .kycApproved!
+                                                              ? "Verified"
+                                                              : "Not Verified",
+                                                      buttonTextColor:
+                                                          Color(0xff247322),
+                                                    ),
+                                                  )
+                                                  //   ],
+                                                  // ))
+                                                ],
+                                              ),
                                             ],
-                                          ),
-                                        ],
-                                      )),
+                                          ))),
                                   SizedBox(
                                     height: 10,
                                   ),

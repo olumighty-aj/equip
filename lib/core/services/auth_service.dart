@@ -63,6 +63,41 @@ class Authentication {
     }
   }
 
+  switchRole(String role) async {
+    try {
+      var url = Paths.switchOwner;
+      final result = await http
+          .post(url, {"hirers_id": currentUser.id,"toggle":role});
+      if (result is ErrorModel) {
+        print("ERROR");
+        print(result.error);
+        return ErrorModel(result.error);
+      }
+      final AuthModel auth =
+      AuthModel.fromJson(result.data['payload']['token']);
+      _token = auth;
+      Details user = Details.fromJson(result.data['payload']["details"]);
+      showToast(result.data['message']);
+      _currentUser = user;
+      // _userId = user.id!;
+      SharedPreferences prefs;
+      prefs = await SharedPreferences.getInstance();
+      await prefs.setString('token', auth.token);
+      //  await prefs.setString('userId', user.id.toString());
+      await prefs.setString("profile", json.encode(user));
+      showToast(result.data['message']);
+      return SuccessModel(result.data["payload"]);
+    } catch (e) {
+      print(e.toString());
+      return ErrorModel(e.toString() ==
+          "SocketException: Failed host lookup: '$baseUrlError' (OS Error: nodename nor servname provided, or not known, errno = 8)"
+          ? "Your internet is not stable kindly reconnect and try again"
+          : e.toString() ==
+          "TimeoutException after 0:00:40.000000: Future not completed"
+          ? "Your internet is not stable kindly reconnect and try again"
+          : e.toString());
+    }
+  }
   //
   alreadyLoggedIn() async {
     SharedPreferences prefs;
@@ -71,11 +106,12 @@ class Authentication {
     Details user = Details.fromJson(json.decode(d!));
     _currentUser = user;
     print(_currentUser.id.toString());
-    // _userId = user.id!;
     var t = prefs.getString('token');
     final AuthModel auth = AuthModel.fromJson(t!);
     //   print("TOKEN AGBA::::::::: ${auth.token}");
     _token = auth;
+   // "is_owner": true,
+
     _navigationService.navigateReplacementTo(homeRoute);
     return SuccessModel(user);
   }
@@ -195,7 +231,7 @@ class Authentication {
   }
 
   updateAddress(
-    String address,
+    String address, String lat ,String lng
   ) async {
     var header = {
       'X-APP-KEY': '37T8O89O445568u89WELrVl',
@@ -210,7 +246,9 @@ class Authentication {
     imageUploadRequest.headers.addAll(header);
     //  imageUploadRequest.fields['UserType'] = currentUser.userInformation.roleId;
 
-    imageUploadRequest.fields['address'] = address;
+    imageUploadRequest.fields['longitude'] = lng;
+    imageUploadRequest.fields['latitude'] = lat;
+    imageUploadRequest.fields['location'] = address;
 
     try {
       final streamedResponse = await imageUploadRequest.send();
@@ -241,10 +279,11 @@ class Authentication {
   editProfile(
     String displayPicture,
     String address,
-    String fullName,
-    String phone,
+    String gender,
     String lat,
     String lng,
+      String kyc_name,
+      String kyc_document_path,
   ) async {
     var header = {
       'X-APP-KEY': '37T8O89O445568u89WELrVl',
@@ -253,9 +292,17 @@ class Authentication {
     };
 
     dynamic catalogueFile;
-    final imageUploadRequest =
-        htp.MultipartRequest('POST', Uri.parse(baseUrl + Paths.ownersProfile));
-    imageUploadRequest.headers.addAll(header);
+    dynamic meansOfId;
+    final imageUploadRequest;
+    if(currentUser.userType! =="hirers"){
+      imageUploadRequest = htp.MultipartRequest('POST', Uri.parse(baseUrl +   Paths.profile));
+      imageUploadRequest.headers.addAll(header);
+    }else{
+       imageUploadRequest =
+      htp.MultipartRequest('POST', Uri.parse(baseUrl +  Paths.ownersProfile));
+      imageUploadRequest.headers.addAll(header);
+    }
+
     //  imageUploadRequest.fields['UserType'] = currentUser.userInformation.roleId;
 
     // Attach the file in the request
@@ -266,14 +313,30 @@ class Authentication {
       imageUploadRequest.files.add(catalogueFile);
     }
 
-    imageUploadRequest.fields['address'] = address;
-    imageUploadRequest.fields['fullname'] = fullName;
-    imageUploadRequest.fields['phone_number'] = phone;
-    imageUploadRequest.fields['avail_from'] = lat;
-    imageUploadRequest.fields['avail_to'] = lng;
+    if (kyc_document_path != "") {
+      meansOfId =
+      await htp.MultipartFile.fromPath('kyc_document_path', kyc_document_path);
+      //print(catalogueFile);
+      imageUploadRequest.files.add(meansOfId);
+    }
+
+if(kyc_name == ""){
+  imageUploadRequest.fields['address'] = address;
+  imageUploadRequest.fields['gender'] = gender;
+  imageUploadRequest.fields['latitude'] = lat;
+  imageUploadRequest.fields['longitude'] = lng;
+}else{
+  imageUploadRequest.fields['address'] = address;
+  imageUploadRequest.fields['kyc_name'] = kyc_name;
+  imageUploadRequest.fields['gender'] = gender;
+  imageUploadRequest.fields['latitude'] = lat;
+  imageUploadRequest.fields['longitude'] = lng;
+}
+
 
     try {
       print(imageUploadRequest.files);
+      print(imageUploadRequest.fields);
       final streamedResponse = await imageUploadRequest.send();
       final response = await htp.Response.fromStream(streamedResponse);
       if (response.statusCode != 200) {

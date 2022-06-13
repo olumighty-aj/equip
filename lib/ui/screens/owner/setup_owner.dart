@@ -14,6 +14,7 @@ import 'package:equipro/utils/screensize.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:place_picker/place_picker.dart';
 import 'package:stacked/stacked.dart';
 import 'package:equipro/ui/screens/login/login_view_model.dart';
 import 'package:equipro/utils/colors.dart';
@@ -31,7 +32,23 @@ class LoginState extends State<SetupOwner> with SingleTickerProviderStateMixin {
   TextEditingController addressController = TextEditingController();
   final NavigationService _navigationService = locator<NavigationService>();
   late final TabController _controller;
+  double? pickLat;
+  double? pickLng;
 
+  void showPlacePicker() async {
+    LocationResult result = await Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) =>
+            PlacePicker("AIzaSyCN55Eaaol4NW22SiO752Nb8LB22nPn4ok")));
+    // Handle the result in your way
+    print(result);
+
+    setState(() {
+      print(result);
+      addressController.text = result.formattedAddress!;
+      pickLat = result.latLng!.latitude;
+      pickLng = result.latLng!.longitude;
+    });
+  }
   @override
   void initState() {
     super.initState();
@@ -148,7 +165,12 @@ class LoginState extends State<SetupOwner> with SingleTickerProviderStateMixin {
                                             SizedBox(
                                               height: 10,
                                             ),
+                                  InkWell(onTap: (){
+                                    showPlacePicker();
+                                  },
+                                    child:
                                             TextFormField(
+                                              enabled: false,
                                               controller: addressController,
                                               decoration: InputDecoration(
                                                 hintText: '',
@@ -194,7 +216,7 @@ class LoginState extends State<SetupOwner> with SingleTickerProviderStateMixin {
                                               style: const TextStyle(
                                                   color: Colors.black),
                                               cursorColor: Colors.black,
-                                            ),
+                                            )  ),
                                             SizedBox(
                                               height: 50,
                                             ),
@@ -203,7 +225,9 @@ class LoginState extends State<SetupOwner> with SingleTickerProviderStateMixin {
                                                   if (addressController.text.isNotEmpty) {
                                                     var result = await model
                                                         .updateAddress(
-                                                        addressController.text);
+                                                        addressController.text,
+                                                      pickLat.toString(),pickLng.toString()
+                                                    );
                                                     if (result != null) {
                                                       _controller.animateTo(1);
                                                     }

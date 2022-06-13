@@ -65,7 +65,7 @@ class CollapsingNavigationDrawerState extends State<OwnerDrawer>
                         buttonText: 'No',
                         onPressed: () {
                           Navigator.pop(context);
-                          _navigationService.pushAndRemoveUntil(homeRoute);
+                         // _navigationService.pushAndRemoveUntil(homeRoute);
                         },
                       ),
 
@@ -178,20 +178,22 @@ class CollapsingNavigationDrawerState extends State<OwnerDrawer>
                             const SizedBox(
                               width: 10,
                             ),
+
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
+
                                 Text(
                                 _authentication.currentUser.fullname!,
                                   //  _authentication.currentUser.firstName! + " " + _authentication.currentUser.lastName!,
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 18,
+                                    fontSize: 15,
                                   ),
                                 ),
 
                               ],
-                            ),
+                             ),
                           ]),
                     ],
                   )),

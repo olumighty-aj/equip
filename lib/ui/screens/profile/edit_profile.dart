@@ -37,12 +37,12 @@ class LoginState extends State<EditProfile> with TickerProviderStateMixin {
   final Authentication _authentication = locator<Authentication>();
   int? selectedQuantity;
   String? pickupTime = DateTime.now().toString();
-  String? selectedDate;
-  String? selectedWeek;
-  double? pickLat;
-  double? pickLng;
+  String? selectedGender;
+  String? selectedMOI;
+  String? pickLat;
+  String? pickLng;
   TextEditingController nameController = TextEditingController();
-  //TextEditingController uploadController = TextEditingController();
+  TextEditingController uploadController = TextEditingController();
   TextEditingController addressController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
@@ -105,23 +105,46 @@ class LoginState extends State<EditProfile> with TickerProviderStateMixin {
     });
   }
 
+  handleChooseFromGalleryId() async {
+    File file = File(await imagePicker
+        .pickImage(
+          source: ImageSource.gallery,
+        )
+        .then((pickedFile) => pickedFile!.path));
+    // Navigator.pop(context);
+    setState(() {
+      //  fileName = file.path.split('/').last;
+      uploadController.text = file.path;
+      // _startUploading();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<ProfileViewModel>.reactive(
         onModelReady: (v) {
           nameController.text = _authentication.currentUser.fullname!;
-          addressController.text =
-              _authentication.currentUser.address != null
-                  ? _authentication.currentUser.address!
-                  : "";
-          emailController.text =
-              _authentication.currentUser.email != null
-                  ? _authentication.currentUser.email!
-                  : "";
-          phoneController.text =
-              _authentication.currentUser.phoneNumber != null
-                  ? _authentication.currentUser.phoneNumber!
-                  : "";
+          addressController.text = _authentication.currentUser.address != null
+              ? _authentication.currentUser.address!
+              : "";
+          emailController.text = _authentication.currentUser.email != null
+              ? _authentication.currentUser.email!
+              : "";
+          phoneController.text = _authentication.currentUser.phoneNumber != null
+              ? _authentication.currentUser.phoneNumber!
+              : "";
+          pickLat = _authentication.currentUser.latitude != null
+              ? _authentication.currentUser.latitude!
+              : "";
+
+          pickLng = _authentication.currentUser.longitude != null
+              ? _authentication.currentUser.longitude!
+              : "";
+          selectedGender = _authentication.currentUser.gender != ""
+              ? _authentication.currentUser.gender == "male"
+                  ? "Male"
+                  : "Female"
+              : null;
         },
         viewModelBuilder: () => ProfileViewModel(),
         builder: (context, model, child) {
@@ -185,7 +208,6 @@ class LoginState extends State<EditProfile> with TickerProviderStateMixin {
                                       ),
                                     ],
                                   ),
-
                                   SizedBox(
                                     height: 20,
                                   ),
@@ -215,12 +237,10 @@ class LoginState extends State<EditProfile> with TickerProviderStateMixin {
                                                 child: CachedNetworkImage(
                                                   imageUrl: _authentication
                                                               .currentUser
-
                                                               .hirersPath !=
                                                           null
                                                       ? _authentication
                                                           .currentUser
-
                                                           .hirersPath!
                                                       : baseUrl,
                                                   imageBuilder: (context,
@@ -289,6 +309,7 @@ class LoginState extends State<EditProfile> with TickerProviderStateMixin {
                                     height: 10,
                                   ),
                                   TextFormField(
+                                    enabled: false,
                                     controller: nameController,
                                     decoration: InputDecoration(
                                       hintText: '',
@@ -336,6 +357,7 @@ class LoginState extends State<EditProfile> with TickerProviderStateMixin {
                                     height: 10,
                                   ),
                                   TextFormField(
+                                    enabled: false,
                                     controller: emailController,
                                     decoration: InputDecoration(
                                       hintText: '',
@@ -422,6 +444,50 @@ class LoginState extends State<EditProfile> with TickerProviderStateMixin {
                                     height: 20,
                                   ),
                                   Text(
+                                    "Gender",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.grey),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Container(
+                                    padding: EdgeInsets.all(10),
+                                    width: Responsive.width(context),
+                                    height: 60,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.grey),
+                                      borderRadius: BorderRadius.circular(5.0),
+                                    ),
+                                    child: Center(
+                                      child: DropdownButtonFormField<String>(
+                                        decoration: InputDecoration.collapsed(
+                                            hintText: 'Select Gender'),
+                                        isExpanded: true,
+                                        value: selectedGender,
+                                        onChanged: (newValue) {
+                                          setState(() {
+                                            selectedGender = newValue;
+                                          });
+                                        },
+                                        items: <String>[
+                                          'Male',
+                                          'Female',
+                                        ].map<DropdownMenuItem<String>>(
+                                            (String value) {
+                                          return DropdownMenuItem<String>(
+                                            value: value,
+                                            child: Text(value),
+                                          );
+                                        }).toList(),
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 30,
+                                  ),
+                                  Text(
                                     "Address",
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
@@ -431,131 +497,167 @@ class LoginState extends State<EditProfile> with TickerProviderStateMixin {
                                     height: 10,
                                   ),
                                   InkWell(
-                                    onTap: (){
-                                      showPlacePicker();
-                                    },
-                                    child:
-                                  TextFormField(
-                                    enabled: false,
-                                    controller: addressController,
-                                    decoration: InputDecoration(
-                                      hintText: '',
-                                      hintStyle: const TextStyle(
-                                        color: Colors.grey,
-                                      ),
-                                      focusedBorder: const OutlineInputBorder(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(4)),
-                                        borderSide: BorderSide(
-                                            width: 1, color: Colors.grey),
-                                      ),
-                                      disabledBorder: const OutlineInputBorder(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(4)),
-                                        borderSide: BorderSide(
-                                            width: 1, color: Colors.grey),
-                                      ),
-                                      enabledBorder: const OutlineInputBorder(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(4)),
-                                        borderSide: BorderSide(
-                                            width: 1, color: Colors.grey),
-                                      ),
-                                      border: OutlineInputBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(5.0),
-                                        borderSide: const BorderSide(),
-                                      ),
-                                    ),
-                                    keyboardType: TextInputType.emailAddress,
-                                    style: const TextStyle(color: Colors.black),
-                                    cursorColor: Colors.black,
-                                  )),
+                                      onTap: () {
+                                        showPlacePicker();
+                                      },
+                                      child: TextFormField(
+                                        enabled: false,
+                                        controller: addressController,
+                                        decoration: InputDecoration(
+                                          hintText: '',
+                                          hintStyle: const TextStyle(
+                                            color: Colors.grey,
+                                          ),
+                                          focusedBorder:
+                                              const OutlineInputBorder(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(4)),
+                                            borderSide: BorderSide(
+                                                width: 1, color: Colors.grey),
+                                          ),
+                                          disabledBorder:
+                                              const OutlineInputBorder(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(4)),
+                                            borderSide: BorderSide(
+                                                width: 1, color: Colors.grey),
+                                          ),
+                                          enabledBorder:
+                                              const OutlineInputBorder(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(4)),
+                                            borderSide: BorderSide(
+                                                width: 1, color: Colors.grey),
+                                          ),
+                                          border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(5.0),
+                                            borderSide: const BorderSide(),
+                                          ),
+                                        ),
+                                        keyboardType:
+                                            TextInputType.emailAddress,
+                                        style: const TextStyle(
+                                            color: Colors.black),
+                                        cursorColor: Colors.black,
+                                      )),
                                   SizedBox(
                                     height: 20,
                                   ),
-
-//                                   Text("Means Of Identification",style: TextStyle(fontWeight: FontWeight.bold,color: Colors.grey),),
-//                                   SizedBox(
-//                                     height: 10,
-//                                   ),
-//                                   Container(
-//                                     padding: EdgeInsets.all(10),
-//                                     width: Responsive.width(context),
-//                                     height: 60,
-//                                     decoration: BoxDecoration(
-//                                       border: Border.all(color: Colors.grey),
-//                                       borderRadius: BorderRadius.circular(5.0),
-//                                     ),
-//                                     child: Center(
-//                                       child: DropdownButtonFormField<String>(
-//                                         decoration: InputDecoration.collapsed(
-//                                             hintText: 'National Identification Card'),
-//                                         isExpanded: true,
-//                                         value: selectedWeek,
-//                                         onChanged: (newValue) {
-//                                           setState(() {
-//                                             selectedWeek = newValue;
-//                                           });
-//                                         },
-//                                         items: <String>[
-//                                           'Driver\'s Licence',
-//                                           'NIMC card',
-//                                           'Passport',
-//                                         ].map<DropdownMenuItem<String>>(
-//                                             (String value) {
-//                                           return DropdownMenuItem<String>(
-//                                             value: value,
-//                                             child: Text(value),
-//                                           );
-//                                         }).toList(),
-//                                       ),
-//                                     ),
-//                                   ),
-//                                   SizedBox(
-//                                     height: 30,
-//                                   ),
-// InkWell(
-//   onTap: (){
-//
-//   },
-//   child:
-//                                   TextFormField(
-//                                     enabled: false,
-//                                     controller: uploadController,
-//                                     decoration: InputDecoration(
-//                                       hintText: 'Upload ID',
-//                                       hintStyle: const TextStyle(
-//                                         color: Colors.grey,
-//                                       ),
-//                                       focusedBorder: const OutlineInputBorder(
-//                                         borderRadius: BorderRadius.all(
-//                                             Radius.circular(4)),
-//                                         borderSide: BorderSide(
-//                                             width: 1, color: Colors.grey),
-//                                       ),
-//                                       disabledBorder: const OutlineInputBorder(
-//                                         borderRadius: BorderRadius.all(
-//                                             Radius.circular(4)),
-//                                         borderSide: BorderSide(
-//                                             width: 1, color: Colors.grey),
-//                                       ),
-//                                       enabledBorder: const OutlineInputBorder(
-//                                         borderRadius: BorderRadius.all(
-//                                             Radius.circular(4)),
-//                                         borderSide: BorderSide(
-//                                             width: 1, color: Colors.grey),
-//                                       ),
-//                                       border: OutlineInputBorder(
-//                                         borderRadius:
-//                                             BorderRadius.circular(5.0),
-//                                         borderSide: const BorderSide(),
-//                                       ),
-//                                     ),
-//                                     keyboardType: TextInputType.emailAddress,
-//                                     style: const TextStyle(color: Colors.black),
-//                                     cursorColor: Colors.black,
-//                                   )),
+                                  _authentication.currentUser.kycUpdated!
+                                      ? Container()
+                                      : Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              "Means Of Identification",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.grey),
+                                            ),
+                                            SizedBox(
+                                              height: 10,
+                                            ),
+                                            Container(
+                                              padding: EdgeInsets.all(10),
+                                              width: Responsive.width(context),
+                                              height: 60,
+                                              decoration: BoxDecoration(
+                                                border: Border.all(
+                                                    color: Colors.grey),
+                                                borderRadius:
+                                                    BorderRadius.circular(5.0),
+                                              ),
+                                              child: Center(
+                                                child: DropdownButtonFormField<
+                                                    String>(
+                                                  decoration:
+                                                      InputDecoration.collapsed(
+                                                          hintText:
+                                                              'Select One'),
+                                                  isExpanded: true,
+                                                  value: selectedMOI,
+                                                  onChanged: (newValue) {
+                                                    setState(() {
+                                                      selectedMOI = newValue;
+                                                    });
+                                                  },
+                                                  items: <String>[
+                                                    'International Passport',
+                                                    'Voters Card',
+                                                    'National ID',
+                                                    'Driver License',
+                                                  ].map<
+                                                          DropdownMenuItem<
+                                                              String>>(
+                                                      (String value) {
+                                                    return DropdownMenuItem<
+                                                        String>(
+                                                      value: value,
+                                                      child: Text(value),
+                                                    );
+                                                  }).toList(),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                  SizedBox(
+                                    height: 20,
+                                  ),  Text(
+                                    "Upload the image",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.grey),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  InkWell(
+                                      onTap: () {
+                                        handleChooseFromGalleryId();
+                                      },
+                                      child: TextFormField(
+                                        enabled: false,
+                                        controller: uploadController,
+                                        decoration: InputDecoration(
+                                          hintText: 'Upload ID',
+                                          hintStyle: const TextStyle(
+                                            color: Colors.grey,
+                                          ),
+                                          focusedBorder:
+                                              const OutlineInputBorder(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(4)),
+                                            borderSide: BorderSide(
+                                                width: 1, color: Colors.grey),
+                                          ),
+                                          disabledBorder:
+                                              const OutlineInputBorder(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(4)),
+                                            borderSide: BorderSide(
+                                                width: 1, color: Colors.grey),
+                                          ),
+                                          enabledBorder:
+                                              const OutlineInputBorder(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(4)),
+                                            borderSide: BorderSide(
+                                                width: 1, color: Colors.grey),
+                                          ),
+                                          border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(5.0),
+                                            borderSide: const BorderSide(),
+                                          ),
+                                        ),
+                                        keyboardType:
+                                            TextInputType.emailAddress,
+                                        style: const TextStyle(
+                                            color: Colors.black),
+                                        cursorColor: Colors.black,
+                                      )),
                                   SizedBox(
                                     height: 20,
                                   ),
@@ -568,13 +670,27 @@ class LoginState extends State<EditProfile> with TickerProviderStateMixin {
                                               child: GeneralButton(
                                                   onPressed: () {
                                                     model.editProfile(
-                                                     image != null ? image!.path:"",
-                                                  addressController.text,
-                                                     nameController.text,
-                                                     phoneController.text.isNotEmpty? phoneController.text:"2348169545791",
-                                                   pickLat.toString(),
-                                                    pickLng.toString(),
-                                                    );
+                                                        image != null
+                                                            ? image!.path
+                                                            : "",
+                                                        addressController.text,
+                                                        selectedGender == "Male"? "male":"female",
+                                                        pickLat.toString(),
+                                                        pickLng.toString(),
+                                                        selectedMOI ==
+                                                                "International Passport"
+                                                            ? "international_passport"
+                                                            : selectedMOI ==
+                                                                    "Voters Card"
+                                                                ? "voters_card"
+                                                                : selectedMOI ==
+                                                                        "National ID"
+                                                                    ? "national_id_card"
+                                                                    : selectedMOI ==
+                                                                            "Driver License"
+                                                                        ? "driver_license"
+                                                                        : "",
+                                                        uploadController.text);
                                                   },
                                                   buttonText: "Save"))))
                                 ]))))),
@@ -593,9 +709,8 @@ class LoginState extends State<EditProfile> with TickerProviderStateMixin {
     setState(() {
       print(result);
       addressController.text = result.formattedAddress!;
-      pickLat = result.latLng!.latitude;
-      pickLng = result.latLng!.longitude;
+      pickLat = result.latLng!.latitude.toString();
+      pickLng = result.latLng!.longitude.toString();
     });
   }
-
 }

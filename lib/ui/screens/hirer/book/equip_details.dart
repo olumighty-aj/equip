@@ -374,7 +374,7 @@ class LoginState extends State<EquipDetails> with TickerProviderStateMixin {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       SizedBox(
-                        height: Responsive.height(context) / 2.8,
+                        height: Responsive.height(context) / 2.5,
                       ),
                       Container(
                           width: Responsive.width(context),

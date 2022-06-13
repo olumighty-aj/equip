@@ -18,10 +18,10 @@ class EquipTiles extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
         onTap: () {
-
-          _navigationService.navigateTo(EquipDetailsRoute,arguments: model);
+          _navigationService.navigateTo(EquipDetailsRoute, arguments: model);
         },
-        child: Container(
+        child: FittedBox(
+            child: Container(
           margin: EdgeInsets.only(bottom: 20),
           padding: EdgeInsets.all(10),
           height: 150,
@@ -56,6 +56,7 @@ class EquipTiles extends StatelessWidget {
                               child: Image.asset(
                                 "assets/images/logo.png",
                                 scale: 2,
+                                width: 80,
                               ),
                             ),
                           )))),
@@ -97,13 +98,12 @@ class EquipTiles extends StatelessWidget {
                         width: 10,
                       ),
                       Container(
-                        width: 150,
-                        child:
-                      Text(
-                        model.owners!.address!,
-                        style: TextStyle(
-                            fontWeight: FontWeight.w500, fontSize: 12),
-                      )),
+                          width: 150,
+                          child: Text(
+                            model.owners!.address!,
+                            style: TextStyle(
+                                fontWeight: FontWeight.w500, fontSize: 12),
+                          )),
                     ],
                   ),
                 ],
@@ -125,7 +125,8 @@ class EquipTiles extends StatelessWidget {
                             ),
                             color: AppColors.primaryColor,
                             onPressed: () {
-                              _navigationService.navigateTo(EquipDetailsRoute,arguments: model);
+                              _navigationService.navigateTo(EquipDetailsRoute,
+                                  arguments: model);
                             },
                             child: Text(
                               "Book",
@@ -146,6 +147,6 @@ class EquipTiles extends StatelessWidget {
               )
             ],
           ),
-        ));
+        )));
   }
 }

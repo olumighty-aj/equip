@@ -13,6 +13,7 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:place_picker/place_picker.dart';
 import 'package:progress_indicator/progress_indicator.dart';
 import 'package:stacked/stacked.dart';
 import 'package:equipro/ui/screens/login/login_view_model.dart';
@@ -44,6 +45,24 @@ class LoginState extends State<PostEquipmentFinal>
   TextEditingController costController = TextEditingController();
   AnimationController? _navController;
   Animation<Offset>? _navAnimation;
+  TextEditingController deliveryController = TextEditingController();
+  double? pickLat;
+  double? pickLng;
+
+  void showPlacePicker() async {
+    LocationResult result = await Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) =>
+            PlacePicker("AIzaSyCN55Eaaol4NW22SiO752Nb8LB22nPn4ok")));
+    // Handle the result in your way
+    print(result);
+
+    setState(() {
+      print(result);
+      deliveryController.text = result.formattedAddress!;
+      pickLat = result.latLng!.latitude;
+      pickLng = result.latLng!.longitude;
+    });
+  }
 
   void _startUploading(HomeOwnerViewModel model) async {
     var response = await model.postEquip(
@@ -55,6 +74,9 @@ class LoginState extends State<PostEquipmentFinal>
       selectedDateTo!,
       selectedQuantity!,
       widget.description,
+      pickLat.toString(),
+      pickLng.toString(),
+        deliveryController.text
     );
     print(response);
     if (response == null) {
@@ -516,6 +538,49 @@ class LoginState extends State<PostEquipmentFinal>
                                       ),
                                     ),
                                   ),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  InkWell(onTap: (){
+                                    showPlacePicker();
+                                  },
+                                      child:
+                                      TextFormField(
+                                        enabled: false,
+                                        controller: deliveryController,
+                                        decoration: InputDecoration(
+                                          hintText: 'Enter delivery location',
+                                          hintStyle: const TextStyle(
+                                            color: Colors.grey,
+                                          ),
+                                          focusedBorder: const OutlineInputBorder(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(4)),
+                                            borderSide: BorderSide(
+                                                width: 1, color: Colors.grey),
+                                          ),
+                                          disabledBorder: const OutlineInputBorder(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(4)),
+                                            borderSide: BorderSide(
+                                                width: 1, color: Colors.grey),
+                                          ),
+                                          enabledBorder: const OutlineInputBorder(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(4)),
+                                            borderSide: BorderSide(
+                                                width: 1, color: Colors.grey),
+                                          ),
+                                          border: OutlineInputBorder(
+                                            borderRadius:
+                                            BorderRadius.circular(5.0),
+                                            borderSide: const BorderSide(),
+                                          ),
+                                        ),
+                                        keyboardType: TextInputType.emailAddress,
+                                        style: const TextStyle(color: Colors.black),
+                                        cursorColor: Colors.black,
+                                      )  ),
                                   SizedBox(
                                     height: 30,
                                   ),

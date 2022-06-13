@@ -65,11 +65,11 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
                         buttonText: 'No',
                         onPressed: () {
                           Navigator.pop(context);
-                          if(_authentication.currentUser.address == null){
-                            _navigationService.navigateTo(SetupOwnerRoute);
-                          }else{
-                            _navigationService.pushAndRemoveUntil(HomeOwnerRoute);
-                          }
+                          // if(_authentication.currentUser.address == null){
+                          //   _navigationService.navigateTo(SetupOwnerRoute);
+                          // }else{
+                          //   _navigationService.pushAndRemoveUntil(HomeOwnerRoute);
+                          // }
 
                         },
                       ),
@@ -188,7 +188,7 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
                                   //  _authentication.currentUser.firstName! + " " + _authentication.currentUser.lastName!,
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 18,
+                                    fontSize: 15,
                                   ),
                                 )
                               ],

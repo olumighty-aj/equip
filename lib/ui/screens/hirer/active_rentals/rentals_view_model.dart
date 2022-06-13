@@ -7,7 +7,6 @@ import 'package:equipro/utils/base_model.dart';
 import 'package:equipro/utils/helpers.dart';
 import 'package:equipro/utils/locator.dart';
 import 'package:equipro/utils/router/navigation_service.dart';
-import 'package:equipro/utils/router/route_names.dart';
 
 class RentalsViewModel extends BaseModel {
   final Authentication _authentication = locator<Authentication>();

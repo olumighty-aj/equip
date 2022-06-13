@@ -48,10 +48,14 @@ class HomeOwnerViewModel extends BaseModel {
       String availFrom,
       String availTo,
       String quantity,
-      String description) async {
+      String description,    String latitude,
+      String longitude,
+      String address,) async {
     setBusy(true);
     var result = await _activities.postEquip(images, equipName, costHire,
-        costHireInterval, availFrom, availTo, quantity, description);
+        costHireInterval, availFrom, availTo, quantity, description,     latitude,
+       longitude,
+       address,);
     if (result == null) {
       setBusy(false);
       showErrorToast(result.error);
@@ -74,10 +78,14 @@ class HomeOwnerViewModel extends BaseModel {
       String availTo,
       String quantity,
       String description,
-      String id) async {
+      String id, String latitude,
+      String longitude,
+      String address,) async {
     setBusy(true);
     var result = await _activities.updateEquip(images, equipName, costHire,
-        costHireInterval, availFrom, availTo, quantity, description, id);
+        costHireInterval, availFrom, availTo, quantity, description, id,  latitude,
+       longitude,
+       address,);
     if (result == null) {
       setBusy(false);
       showErrorToast(result.error);
@@ -160,7 +168,7 @@ class HomeOwnerViewModel extends BaseModel {
 
   switchHirer() async {
     setBusy(true);
-    var result = await _activities.switchRole();
+    var result = await _authentication.switchRole("hirer");
     if (result is ErrorModel) {
       setBusy(false);
       showErrorToast(result.error);
@@ -212,9 +220,9 @@ class HomeOwnerViewModel extends BaseModel {
   }
 
   updateAddress(
-      String address) async {
+      String address, String lat ,String lng) async {
     setBusy(true);
-    var result = await _authentication.updateAddress(address);
+    var result = await _authentication.updateAddress(address,lat,lng);
     if (result == null) {
       setBusy(false);
       showErrorToast(result.error);

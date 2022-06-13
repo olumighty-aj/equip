@@ -27,6 +27,9 @@ class Activities {
     String availTo,
     String quantity,
     String description,
+      String latitude,
+      String longitude,
+      String address,
   ) async {
     var header = {
       'X-APP-KEY': '37T8O89O445568u89WELrVl',
@@ -59,22 +62,26 @@ class Activities {
       imageUploadRequest.fields['avail_to'] = availTo;
       imageUploadRequest.fields['quantity'] = quantity;
       imageUploadRequest.fields['description'] = description;
+      imageUploadRequest.fields['latitude'] = latitude;
+      imageUploadRequest.fields['longitude'] = longitude;
+      imageUploadRequest.fields['address'] = address;
     }
 
     try {
       print(imageUploadRequest.files);
       final streamedResponse = await imageUploadRequest.send();
       final response = await htp.Response.fromStream(streamedResponse);
-      if (response.statusCode != 200) {
+      final Map<String, dynamic> result = json.decode(response.body);
+      if (result["status"]  == false) {
         print(response.body);
         print(response.statusCode);
         return null;
       }
       print(response.statusCode);
-      final Map<String, dynamic> result = json.decode(response.body);
-      print(result);
+      final Map<String, dynamic> result2 = json.decode(response.body);
+      print(result2);
 
-      return result;
+      return result2;
     } catch (e) {
       print("from code");
       print(e);
@@ -91,7 +98,9 @@ class Activities {
       String availTo,
       String quantity,
       String description,
-      String id) async {
+      String id, String latitude,
+      String longitude,
+      String address,) async {
     var header = {
       'X-APP-KEY': '37T8O89O445568u89WELrVl',
       'Content-Type': 'application/json; charset=UTF-8',
@@ -123,6 +132,9 @@ class Activities {
       imageUploadRequest.fields['avail_to'] = availTo;
       imageUploadRequest.fields['quantity'] = quantity;
       imageUploadRequest.fields['description'] = description;
+      imageUploadRequest.fields['latitude'] = latitude;
+      imageUploadRequest.fields['longitude'] = longitude;
+      imageUploadRequest.fields['address'] = address;
     }
 
     try {
@@ -241,9 +253,11 @@ class Activities {
     }
   }
 
-  getEquipments({int page = 1}) async {
+  getEquipments({int page = 1, String? lat, String? lng}) async {
     try {
+      //var url = Paths.equipments + "?lat=$lat&lng=$lng";
       var url = Paths.equipments + "?start=$page&len=5";
+    //  var url = Paths.equipments + "?start=0&len=5&paging=$page&lat=$lat&lng=$lng";
       final result = await http.get(
         url,
       );
@@ -296,29 +310,7 @@ class Activities {
     }
   }
 
-  switchRole() async {
-    try {
-      var url = Paths.switchOwner;
-      final result = await http
-          .post(url, {"hirers_id": _authentication.currentUser.id});
-      if (result is ErrorModel) {
-        print("ERROR");
-        print(result.error);
-        return ErrorModel(result.error);
-      }
-      showToast(result.data['message']);
-      return SuccessModel(result.data);
-    } catch (e) {
-      print(e.toString());
-      return ErrorModel(e.toString() ==
-              "SocketException: Failed host lookup: '$baseUrlError' (OS Error: nodename nor servname provided, or not known, errno = 8)"
-          ? "Your internet is not stable kindly reconnect and try again"
-          : e.toString() ==
-                  "TimeoutException after 0:00:40.000000: Future not completed"
-              ? "Your internet is not stable kindly reconnect and try again"
-              : e.toString());
-    }
-  }
+
 
   book(Map<dynamic, dynamic> payload) async {
     try {
