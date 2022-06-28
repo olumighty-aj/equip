@@ -1,31 +1,41 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:equipro/core/model/ChatListModel.dart';
+import 'package:equipro/ui/screens/chat/chat_view_model.dart';
 import 'package:equipro/utils/colors.dart';
+import 'package:equipro/utils/locator.dart';
+import 'package:equipro/utils/router/navigation_service.dart';
+import 'package:equipro/utils/router/route_names.dart';
 import 'package:equipro/utils/screensize.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class ChatItem extends StatelessWidget {
-  final Function onPressed;
+  final ChatListModel model;
 
   ChatItem({
-    required this.onPressed,
+    required this.model,
   });
+  final NavigationService _navigationService = locator<NavigationService>();
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
         onTap: () {
-          onPressed();
+          _navigationService.navigateTo(chatDetailsPageRoute,
+              arguments: model);
         },
         child: Container(
             padding: EdgeInsets.all(10),
-          //  color: AppColors.white,
+            //  color: AppColors.white,
             height: 80,
             child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   CachedNetworkImage(
-                    imageUrl: "https://i.pravatar.cc/",
+                    imageUrl: model.chatWith!.hirersPath != null
+                        ? model.chatWith!.hirersPath!
+                        : "",
                     imageBuilder: (context, imageProvider) => Container(
                       width: 35.0,
                       height: 35.0,
@@ -37,26 +47,27 @@ class ChatItem extends StatelessWidget {
                     ),
                     placeholder: (context, url) => CircularProgressIndicator(),
                     errorWidget: (context, url, error) => CircleAvatar(
-                      radius: 40,
+                      radius: 17,
                       backgroundColor: AppColors.grey,
                       child: Image.asset(
-                        "assets/images/user.png",
+                        "assets/images/icon.png",
                         scale: 2,
                       ),
                     ),
                   ),
                   SizedBox(
-                    width: 20,
+                    width: 10,
                   ),
                   Expanded(
                       child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                         Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                "Amandan Makdan",
+                                model.chatWith!.fullname!,
                                 //  _authentication.currentUser.firstName! + " " + _authentication.currentUser.lastName!,
                                 style: const TextStyle(
                                   fontWeight: FontWeight.w600,
@@ -67,23 +78,27 @@ class ChatItem extends StatelessWidget {
                                 width: 5,
                               ),
                               Text(
-                                "04:24pm",
+                                DateFormat(
+                                  "dd MMM, hh:mm aa",
+                                ).format(DateTime.parse(
+                                    model.dateCreated.toString())),
                                 //  _authentication.currentUser.firstName! + " " + _authentication.currentUser.lastName!,
                                 style: const TextStyle(
                                   color: Colors.grey,
-                                  fontSize: 15,
+                                  fontSize: 12,
                                 ),
                               ),
                             ]),
-                        SizedBox(height: 5,),
+                        SizedBox(
+                          height: 5,
+                        ),
                         Text(
-                          "There are three aspects of design that you should know about. Layout.",
+                          model.lastMessage!,
                           //  _authentication.currentUser.firstName! + " " + _authentication.currentUser.lastName!,
                           style: const TextStyle(
                             fontSize: 13,
                           ),
                         ),
-
                       ])),
                 ])));
   }

@@ -1,4 +1,5 @@
 import 'package:equipro/core/model/ActiveRentalsModel.dart';
+import 'package:equipro/core/model/ChatListModel.dart';
 import 'package:equipro/core/model/EquipmentModel.dart';
 import 'package:equipro/core/model/EquipmentModel.dart' as eq;
 import 'package:equipro/ui/screens/chat/chat.dart';
@@ -97,9 +98,13 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         ),
       );
     case chatDetailsPageRoute:
+      ChatListModel model = settings.arguments as ChatListModel;
+
       return _getPageRoute(
         routeName: settings.name!,
-        viewToShow: ChatDetailsPage(),
+        viewToShow: ChatDetailsPage(
+          feed: model,
+        ),
       );
 
     case chatRoute:

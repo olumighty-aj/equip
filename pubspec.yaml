@@ -54,6 +54,7 @@ dependencies:
   shimmer:
   place_picker: ^0.9.20-nullsafety
   location: ^4.3.0
+  pusher_channels_flutter: ^2.0.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

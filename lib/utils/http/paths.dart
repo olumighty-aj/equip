@@ -23,5 +23,8 @@ class Paths {
   static const String reviews = 'reviews?hirers_id=';
   static const String pickDate = 'owners/pickup_date/';
   static const String  earnings = 'owners/earnings';
+  static const String  chatList = 'get_user_inbox';
+  static const String  chatDetails = 'get_chat_details/';
+  static const String  sendChat = 'send_chat';
 
 }

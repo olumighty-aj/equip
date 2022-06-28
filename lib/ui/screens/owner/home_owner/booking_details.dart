@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:equipro/core/model/ChatListModel.dart';
 import 'package:equipro/core/model/EquipmentModel.dart';
 import 'package:equipro/ui/screens/owner/home_owner/home_view_model.dart';
 import 'package:equipro/ui/screens/profile/profile_view_model.dart';
@@ -172,8 +173,35 @@ class LoginState extends State<BookingDetails> with TickerProviderStateMixin {
                                         ),
                                         InkWell(
                                             onTap: () {
+
                                               _navigationService.navigateTo(
-                                                  chatDetailsPageRoute);
+                                                  chatDetailsPageRoute, arguments: ChatListModel(
+                                                  id:widget.feed.id,
+                                                  userId            :"",
+                                                  chatWithId         :"",
+                                                  messageCount       :"",
+                                                  lastMessage        :"",
+                                                  dateCreated        :"",
+                                                  dateModified       :"",
+                                                chatWith:  ChatWith(
+                                                    id:widget.feed.hirers!.id!,
+                                                    fullname :widget.feed.hirers!.fullname!,
+                                                    email        :"",
+                                                    phoneNumber  :"",
+                                                    gender       :"",
+                                                    address    :"",
+                                                    addressOpt   :"",
+                                                    localState   :"",
+                                                    country      :"",
+                                                    latitude     :"",
+                                                    longitude    :"",
+                                                    hirersPath   :widget.feed.hirers!.hirersPath!= null?widget.feed.hirers!.hirersPath!:"",
+                                                    status       :"",
+                                                    dateModified :"",
+                                                    dateCreated  :"",
+                                                  )
+
+                                              ));
                                             },
                                             child: Row(
                                               children: [

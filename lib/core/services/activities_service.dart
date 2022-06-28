@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'package:equipro/core/model/ActiveRentalsModel.dart';
+import 'package:equipro/core/model/ChatListModel.dart';
+import 'package:equipro/core/model/ChatMessages.dart';
 import 'package:equipro/core/model/EquipmentModel.dart';
 import 'package:equipro/core/model/ReviewsModel.dart';
 import 'package:equipro/core/model/error_model.dart';
@@ -506,6 +508,35 @@ class Activities {
     }
   }
 
+  chatList() async {
+    try {
+      final result = await http.get(Paths.chatList);
+      if (result is ErrorModel) {
+        print("ERROR");
+        print(result.error);
+        var data = result.error;
+        List<ChatListModel> packageList = List<ChatListModel>.from(
+            data.map((item) => ChatListModel.fromJson(item)));
+        return ErrorModel(packageList);
+      }
+      //print(result.data);
+      var data = result.data["payload"];
+      List<ChatListModel> packageList = List<ChatListModel>.from(
+          data.map((item) => ChatListModel.fromJson(item)));
+      print(packageList);
+      return packageList;
+    } catch (e) {
+      print(e.toString());
+      return ErrorModel(e.toString() ==
+          "SocketException: Failed host lookup: '$baseUrlError' (OS Error: nodename nor servname provided, or not known, errno = 8)"
+          ? "Your internet is not stable kindly reconnect and try again"
+          : e.toString() ==
+          "TimeoutException after 0:00:40.000000: Future not completed"
+          ? "Your internet is not stable kindly reconnect and try again"
+          : e.toString());
+    }
+  }
+
   activeOwnerRentals(String type) async {
     try {
       final result = await http.get(Paths.active_owner_rentals + type);
@@ -532,6 +563,44 @@ class Activities {
                   "TimeoutException after 0:00:40.000000: Future not completed"
               ? "Your internet is not stable kindly reconnect and try again"
               : e.toString());
+    }
+  }
+
+  fetchChat(String inboxId) async {
+    try {
+      final result = await http.get(
+          Paths.chatDetails + inboxId);
+      if (result is ErrorModel) {
+        print("ERROR");
+        var data = result.error;
+        // print(result.error);
+        List<ChatMessages> packageList = List<ChatMessages>.from(
+            data.map((item) => ChatMessages.fromJson(item)));
+        return ErrorModel(packageList);
+      }
+      var data = result.data["payload"];
+      List<ChatMessages> packageList = List<ChatMessages>.from(
+          data.map((item) => ChatMessages.fromJson(item)));
+      // print(packageList);
+      return packageList;
+    } catch (e) {
+      print(e.toString());
+      return ErrorModel(e.toString() =="SocketException: Failed host lookup: '$baseUrlError' (OS Error: nodename nor servname provided, or not known, errno = 8)"?"Your internet is not stable kindly reconnect and try again":e.toString() == "TimeoutException after 0:00:40.000000: Future not completed"?"Your internet is not stable kindly reconnect and try again":e.toString());
+    }
+  }
+
+  sendChat(Map<dynamic, dynamic> payload) async {
+    try {
+      final result = await http.post(Paths.sendChat, payload);
+      if (result is ErrorModel) {
+        print("ERROR");
+        print(result.error);
+        return ErrorModel(result.error);
+      }
+      return SuccessModel(result.data);
+    } catch (e) {
+      print(e.toString());
+      return ErrorModel(e.toString() =="SocketException: Failed host lookup: '$baseUrlError' (OS Error: nodename nor servname provided, or not known, errno = 8)"?"Your internet is not stable kindly reconnect and try again":e.toString() == "TimeoutException after 0:00:40.000000: Future not completed"?"Your internet is not stable kindly reconnect and try again":e.toString());
     }
   }
 }

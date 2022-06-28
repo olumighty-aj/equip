@@ -1,4 +1,6 @@
 
+import 'package:equipro/core/model/ChatMessages.dart';
+import 'package:equipro/core/services/auth_service.dart';
 import 'package:equipro/ui/screens/chat/chats_widget/colors.dart';
 import 'package:equipro/ui/screens/chat/chats_widget/message.dart';
 import 'package:flutter/material.dart';
@@ -6,13 +8,14 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 
 class ChatBubble extends StatelessWidget {
-  final Message message;
+  final ChatMessages message;
 
-  const ChatBubble({ Key? key, required this.message}) : super(key: key);
+  const ChatBubble({ Key? key, required this.message, required this.authentication}) : super(key: key);
+  final Authentication authentication;
   @override
   Widget build(BuildContext context) {
-    final messageBody = message.body;
-    final fromMe = message.fromMe;
+    final messageBody = message.message;
+    final bool fromMe = message.senderId ==  authentication.currentUser.id;
     return
       InkWell(
         onTap: (){
@@ -144,7 +147,7 @@ class ChatBubble extends StatelessWidget {
           maxWidth: MediaQuery.of(context).size.width * 0.7,
         ),
         child: Text(
-            messageBody,
+            messageBody!,
             style: TextStyle(
               color: fromMe ? Colors.black : Colors.black,
               fontSize: 15.0,
