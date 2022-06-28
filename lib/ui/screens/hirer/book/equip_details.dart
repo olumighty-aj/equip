@@ -203,6 +203,8 @@ class LoginState extends State<EquipDetails> with TickerProviderStateMixin {
                                                                               .model
                                                                               .equipImages![index]
                                                                               .equipImagesPath!,
+                                                                          fit: BoxFit
+                                                                              .fill,
                                                                           placeholder: (context, url) =>
                                                                               CircularProgressIndicator(),
                                                                           errorWidget: (context, url, error) =>
@@ -394,7 +396,7 @@ class LoginState extends State<EquipDetails> with TickerProviderStateMixin {
                               SizedBox(
                                 height: 30,
                               ),
-                               Text(
+                              Text(
                                 widget.model.equipName!,
                                 style: TextStyle(
                                     fontSize: 24,
@@ -408,14 +410,14 @@ class LoginState extends State<EquipDetails> with TickerProviderStateMixin {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                   Text(
+                                  Text(
                                     "${widget.model.costOfHire} per ${widget.model.costOfHireInterval == "1" ? "Day" : widget.model.costOfHireInterval == "7" ? "Week" : "Month"}",
                                     style: TextStyle(
                                         fontSize: 15,
                                         color: AppColors.green,
                                         fontWeight: FontWeight.bold),
                                   ),
-                                   Text(
+                                  Text(
                                     'QTY Available: ${widget.model.quantity!}',
                                     style: TextStyle(
                                         fontSize: 15,
@@ -449,7 +451,7 @@ class LoginState extends State<EquipDetails> with TickerProviderStateMixin {
                               SizedBox(
                                 height: 20,
                               ),
-                               Text(
+                              Text(
                                 widget.model.description!,
                                 style: TextStyle(fontSize: 14),
                               ),
@@ -490,7 +492,9 @@ class LoginState extends State<EquipDetails> with TickerProviderStateMixin {
                                       allowHalfRating: true,
                                       onRated: (v) {},
                                       starCount: 5,
-                                      rating: double.parse(widget.model.averageRating!.toString()),
+                                      rating: double.parse(widget
+                                          .model.averageRating!
+                                          .toString()),
                                       size: 20,
                                       isReadOnly: true,
                                       filledIconData: Icons.star_rounded,
@@ -504,16 +508,16 @@ class LoginState extends State<EquipDetails> with TickerProviderStateMixin {
                               SizedBox(
                                 height: 30,
                               ),
-                               Text(
-                                'Name: ${widget.model.owners!.fullname!}',
+                              Text(
+                                'Name: ${widget.model.owners!.fullname}',
                                 style: TextStyle(
                                     fontSize: 15, fontWeight: FontWeight.w600),
                               ),
                               SizedBox(
                                 height: 20,
                               ),
-                               Text(
-                                'Location: ${widget.model.owners!.address!}',
+                              Text(
+                                'Location: ${widget.model.owners!.address}',
                                 style: TextStyle(
                                     fontSize: 15, fontWeight: FontWeight.w600),
                               ),
@@ -522,7 +526,7 @@ class LoginState extends State<EquipDetails> with TickerProviderStateMixin {
                               ),
                               SlideTransition(
                                   position: _navAnimation!,
-                               //   textDirection: TextDirection.r,
+                                  //   textDirection: TextDirection.r,
                                   child: Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
@@ -545,7 +549,8 @@ class LoginState extends State<EquipDetails> with TickerProviderStateMixin {
                                           child: GeneralButton(
                                             onPressed: () {
                                               _navigationService.navigateTo(
-                                                  PlaceBookingRoute,arguments: widget.model);
+                                                  PlaceBookingRoute,
+                                                  arguments: widget.model);
                                             },
                                             buttonText: "Book Now",
                                             splashColor: AppColors.primaryColor,

@@ -18,7 +18,6 @@ import 'package:intl/intl.dart';
 import 'package:place_picker/place_picker.dart';
 import 'package:progress_indicator/progress_indicator.dart';
 import 'package:stacked/stacked.dart';
-import 'package:equipro/ui/screens/login/login_view_model.dart';
 import 'package:equipro/utils/colors.dart';
 import 'package:image/image.dart' as IM;
 import 'package:path_provider/path_provider.dart';
@@ -52,8 +51,8 @@ class LoginState extends State<EditEquipment> with TickerProviderStateMixin {
   Animation<Offset>? _navAnimation;
   List<XFile> listImages = [];
   TextEditingController deliveryController = TextEditingController();
-  double? pickLat;
-  double? pickLng;
+  String? pickLat;
+  String? pickLng;
 
   void showPlacePicker() async {
     LocationResult result = await Navigator.of(context).push(MaterialPageRoute(
@@ -65,10 +64,11 @@ class LoginState extends State<EditEquipment> with TickerProviderStateMixin {
     setState(() {
       print(result);
       deliveryController.text = result.formattedAddress!;
-      pickLat = result.latLng!.latitude;
-      pickLng = result.latLng!.longitude;
+      pickLat = result.latLng!.latitude.toString();
+      pickLng = result.latLng!.longitude.toString();
     });
   }
+
   convertCatalogue() async {
     for (EquipImages multipleFile in widget.model.equipImages!) {
       // count++;
@@ -84,7 +84,7 @@ class LoginState extends State<EditEquipment> with TickerProviderStateMixin {
           new File('$tempPath' + (rng.nextInt(1000)).toString() + '.png');
 // call http.get method and pass imageUrl into it to get response.
       http.Response response = await http
-          .get(Uri.parse(baseUrlFlat + multipleFile.equipImagesPath!));
+          .get(Uri.parse(multipleFile.equipImagesPath!));
 // write bodyBytes received in response to file.
       await file.writeAsBytes(response.bodyBytes);
 // now return the file which is created with random name in
@@ -115,6 +115,9 @@ class LoginState extends State<EditEquipment> with TickerProviderStateMixin {
             ? "Week 7"
             : "Month 30";
     selectedPerNumber = widget.model.costOfHireInterval!;
+    deliveryController.text = widget.model.address!;
+    pickLng = widget.model.longitude;
+    pickLat = widget.model.latitude;
     _navController = AnimationController(
       duration: const Duration(milliseconds: 2000),
       vsync: this,
@@ -166,9 +169,7 @@ class LoginState extends State<EditEquipment> with TickerProviderStateMixin {
         widget.model.id!,
         pickLat.toString(),
         pickLng.toString(),
-        deliveryController.text
-
-    );
+        deliveryController.text);
     print(response);
     if (response == null) {
       print('error');
@@ -723,15 +724,14 @@ class LoginState extends State<EditEquipment> with TickerProviderStateMixin {
                                       ),
                                     ),
                                   ),
-
                                   SizedBox(
                                     height: 20,
                                   ),
-                                  InkWell(onTap: (){
-                                    showPlacePicker();
-                                  },
-                                      child:
-                                      TextFormField(
+                                  InkWell(
+                                      onTap: () {
+                                        showPlacePicker();
+                                      },
+                                      child: TextFormField(
                                         enabled: false,
                                         controller: deliveryController,
                                         decoration: InputDecoration(
@@ -739,19 +739,22 @@ class LoginState extends State<EditEquipment> with TickerProviderStateMixin {
                                           hintStyle: const TextStyle(
                                             color: Colors.grey,
                                           ),
-                                          focusedBorder: const OutlineInputBorder(
+                                          focusedBorder:
+                                              const OutlineInputBorder(
                                             borderRadius: BorderRadius.all(
                                                 Radius.circular(4)),
                                             borderSide: BorderSide(
                                                 width: 1, color: Colors.grey),
                                           ),
-                                          disabledBorder: const OutlineInputBorder(
+                                          disabledBorder:
+                                              const OutlineInputBorder(
                                             borderRadius: BorderRadius.all(
                                                 Radius.circular(4)),
                                             borderSide: BorderSide(
                                                 width: 1, color: Colors.grey),
                                           ),
-                                          enabledBorder: const OutlineInputBorder(
+                                          enabledBorder:
+                                              const OutlineInputBorder(
                                             borderRadius: BorderRadius.all(
                                                 Radius.circular(4)),
                                             borderSide: BorderSide(
@@ -759,14 +762,16 @@ class LoginState extends State<EditEquipment> with TickerProviderStateMixin {
                                           ),
                                           border: OutlineInputBorder(
                                             borderRadius:
-                                            BorderRadius.circular(5.0),
+                                                BorderRadius.circular(5.0),
                                             borderSide: const BorderSide(),
                                           ),
                                         ),
-                                        keyboardType: TextInputType.emailAddress,
-                                        style: const TextStyle(color: Colors.black),
+                                        keyboardType:
+                                            TextInputType.emailAddress,
+                                        style: const TextStyle(
+                                            color: Colors.black),
                                         cursorColor: Colors.black,
-                                      )  ),
+                                      )),
                                   SizedBox(
                                     height: 30,
                                   ),

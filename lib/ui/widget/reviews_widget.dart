@@ -1,14 +1,18 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:equipro/core/model/ReviewsModel.dart';
 import 'package:equipro/utils/colors.dart';
 import 'package:equipro/utils/screensize.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 class ReviewItem extends StatelessWidget {
- // final Function onPressed;
+  final ReviewsModel feed;
 
   ReviewItem(
-   // required this.onPressed,
+  {
+ required this.feed,
+}
+
   );
 
   @override
@@ -22,7 +26,7 @@ class ReviewItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   CachedNetworkImage(
-                    imageUrl: "https://i.pravatar.cc/",
+                    imageUrl: feed.hirers!.hirersPath!,
                     imageBuilder: (context, imageProvider) => Container(
                       width: 35.0,
                       height: 35.0,
@@ -37,7 +41,7 @@ class ReviewItem extends StatelessWidget {
                       radius: 40,
                       backgroundColor: AppColors.grey,
                       child: Image.asset(
-                        "assets/images/user.png",
+                        "assets/images/logo.png",
                         scale: 2,
                       ),
                     ),
@@ -53,7 +57,7 @@ class ReviewItem extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                "Amandan Makdan",
+                             feed.hirers!.fullname!,
                                 //  _authentication.currentUser.firstName! + " " + _authentication.currentUser.lastName!,
                                 style: const TextStyle(
                                   fontWeight: FontWeight.w600,
@@ -69,7 +73,7 @@ class ReviewItem extends StatelessWidget {
                                   allowHalfRating: true,
                                   onRated: (v) {},
                                   starCount: 5,
-                                  rating: 4.5,
+                                  rating: double.parse(feed.rating!),
                                   size: 20,
                                   isReadOnly: true,
                                   filledIconData: Icons.star_rounded,
@@ -81,7 +85,7 @@ class ReviewItem extends StatelessWidget {
                             ]),
                         SizedBox(height: 5,),
                         Text(
-                          "Mr Juliet returned my equipment in a very good and clean condition.",
+                         feed.comment!,
                           //  _authentication.currentUser.firstName! + " " + _authentication.currentUser.lastName!,
                           style: const TextStyle(
                             fontSize: 13,

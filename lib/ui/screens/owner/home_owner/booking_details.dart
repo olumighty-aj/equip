@@ -59,7 +59,7 @@ class LoginState extends State<BookingDetails> with TickerProviderStateMixin {
             key: _scaffoldKey,
             body: SingleChildScrollView(
                 child: Padding(
-                    padding: EdgeInsets.all(20),
+                    padding: EdgeInsets.all(10),
                     child: AnimationLimiter(
                         child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
@@ -107,16 +107,19 @@ class LoginState extends State<BookingDetails> with TickerProviderStateMixin {
                                   InkWell(
                                       onTap: () {
                                         _navigationService
-                                            .navigateTo(HirerProfileRoute);
+                                            .navigateTo(HirerProfileRoute, arguments: widget.feed.hirers);
                                       },
                                       child: Row(
                                         children: [
                                           CircleAvatar(
                                             radius: 25,
                                             child: CachedNetworkImage(
-                                              imageUrl: widget
-                                                  .feed.hirers!.hirersPath!= null?widget
-                                                  .feed.hirers!.hirersPath!:"",
+                                              imageUrl: widget.feed.hirers!
+                                                          .hirersPath !=
+                                                      null
+                                                  ? widget
+                                                      .feed.hirers!.hirersPath!
+                                                  : "",
                                               imageBuilder:
                                                   (context, imageProvider) =>
                                                       Container(
@@ -268,12 +271,12 @@ class LoginState extends State<BookingDetails> with TickerProviderStateMixin {
                                             width: 200,
                                             child: Text(
                                               DateFormat(
-                                                  "dd MMM, yyyy",
-                                                  )
-                                                  .format(DateTime
-                                                  .parse( widget.feed.rentalFrom!,))
+                                                "dd MMM, yyyy",
+                                              )
+                                                  .format(DateTime.parse(
+                                                    widget.feed.rentalFrom!,
+                                                  ))
                                                   .toString(),
-
                                               style: TextStyle(
                                                   color: Colors.black,
                                                   fontSize: 15,
@@ -284,11 +287,12 @@ class LoginState extends State<BookingDetails> with TickerProviderStateMixin {
                                             height: 70,
                                             width: 200,
                                             child: Text(
-                                              DateTime.parse(widget
-                                                          .feed.rentalTo!)
+                                              DateTime.parse(
+                                                          widget.feed.rentalTo!)
                                                       .difference(
                                                           DateTime.parse(widget
-                                                              .feed.rentalFrom!))
+                                                              .feed
+                                                              .rentalFrom!))
                                                       .inDays
                                                       .toString() +
                                                   " day(s)",
@@ -353,32 +357,54 @@ class LoginState extends State<BookingDetails> with TickerProviderStateMixin {
                                   SizedBox(
                                     height: 50,
                                   ),
-                                  GeneralButton(
-                                      onPressed: () {
-                                        model.updateBooking(
-                                            widget.feed.equipOrderId.toString(),
-                                            "accepted");
-                                      },
-                                      buttonText: "Accept Booking"),
-                                  SizedBox(
-                                    height: 20,
-                                  ),
-                                  InkWell(
-                                      onTap: () {
-                                        model.updateBooking(
-                                            widget.feed.equipOrderId.toString(),
-                                            "rejected");
-                                      },
-                                      child: Center(
+                                  widget.feed.equipOrder!.orderStatus ==
+                                          "pending"
+                                      ? Column(
+                                          children: [
+                                            GeneralButton(
+                                                onPressed: () {
+                                                  model.equipApproval(
+                                                      widget.feed.equipOrderId
+                                                          .toString(),
+                                                      "accepted");
+                                                },
+                                                buttonText: "Accept Booking"),
+                                            SizedBox(
+                                              height: 20,
+                                            ),
+                                            InkWell(
+                                                onTap: () {
+                                                  model.equipApproval(
+                                                      widget.feed.equipOrderId
+                                                          .toString(),
+                                                      "rejected");
+                                                },
+                                                child: Center(
+                                                    child: Text(
+                                                  "Decline Booking",
+                                                  style: TextStyle(
+                                                      decoration: TextDecoration
+                                                          .underline,
+                                                      color: Colors.black,
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      fontSize: 16),
+                                                ))),
+                                          ],
+                                        )
+                                      : Center(
                                           child: Text(
-                                        "Decline Booking",
-                                        style: TextStyle(
-                                            decoration:
-                                                TextDecoration.underline,
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 16),
-                                      ))),
+                                          widget.feed.equipOrder!.orderStatus!
+                                              .toUpperCase(),
+                                          style: TextStyle(
+                                              color: widget.feed.equipOrder!
+                                                          .orderStatus ==
+                                                      "accepted"
+                                                  ? AppColors.green
+                                                  : AppColors.red,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 15),
+                                        ))
                                 ]))))),
           );
         });

@@ -225,6 +225,7 @@ class LoginState extends State<PostEquipment> with TickerProviderStateMixin {
                                       ? Container(
                                           height: 200,
                                           child: ListView.builder(
+                                              physics: ClampingScrollPhysics(),
                                               itemCount: listImages.length,
                                               scrollDirection: Axis.vertical,
                                               itemBuilder:

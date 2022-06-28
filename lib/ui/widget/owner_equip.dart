@@ -54,7 +54,7 @@ class OwnerEquipTiles extends StatelessWidget {
                       child: Hero(
                           tag: model.id!,
                           child: CachedNetworkImage(
-                            imageUrl: '$baseUrlFlat${model.equipImages!.first.equipImagesPath!}',
+                            imageUrl: model.equipImages!.first.equipImagesPath!,
                             placeholder: (context, url) =>
                                 CircularProgressIndicator(),
                             errorWidget: (context, url, error) => ClipRRect(
@@ -107,7 +107,7 @@ class OwnerEquipTiles extends StatelessWidget {
                           width: 150,
                           child:
                           Text(
-                            model.owners!.address!,
+                            model.address!,
                             style: TextStyle(
                                 fontWeight: FontWeight.w500, fontSize: 12),
                           )),

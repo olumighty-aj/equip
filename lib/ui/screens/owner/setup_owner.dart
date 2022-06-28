@@ -38,7 +38,7 @@ class LoginState extends State<SetupOwner> with SingleTickerProviderStateMixin {
   void showPlacePicker() async {
     LocationResult result = await Navigator.of(context).push(MaterialPageRoute(
         builder: (context) =>
-            PlacePicker("AIzaSyCN55Eaaol4NW22SiO752Nb8LB22nPn4ok")));
+            PlacePicker("AIzaSyBft6BLJ4SxdeYWPwhUhR82iK7_qm1U4nc")));
     // Handle the result in your way
     print(result);
 

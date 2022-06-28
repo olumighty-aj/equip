@@ -1,27 +1,25 @@
 import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:equipro/core/model/ReviewsModel.dart';
+import 'package:equipro/core/model/EquipmentModel.dart' as eq;
 import 'package:equipro/ui/screens/drawer.dart';
 import 'package:equipro/ui/screens/profile/edit_profile.dart';
 import 'package:equipro/ui/screens/profile/profile_view_model.dart';
-import 'package:equipro/ui/widget/equip_tiles.dart';
-import 'package:equipro/ui/widget/general_button.dart';
 import 'package:equipro/ui/widget/reviews_widget.dart';
-import 'package:equipro/utils/helpers.dart';
 import 'package:equipro/utils/locator.dart';
 import 'package:equipro/utils/router/navigation_service.dart';
-import 'package:equipro/utils/router/route_names.dart';
 import 'package:equipro/utils/screensize.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:intl/intl.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:stacked/stacked.dart';
 import 'package:equipro/ui/screens/login/login_view_model.dart';
 import 'package:equipro/utils/colors.dart';
 
 class HirerProfile extends StatefulWidget {
-  const HirerProfile({Key? key}) : super(key: key);
+  final eq.Hirers feed;
+
+  const HirerProfile({Key? key, required this.feed}) : super(key: key);
 
   @override
   LoginState createState() => LoginState();
@@ -122,7 +120,7 @@ class LoginState extends State<HirerProfile> with TickerProviderStateMixin {
                                           padding: EdgeInsets.only(
                                               left: 15, top: 13),
                                           child: CachedNetworkImage(
-                                            imageUrl: "https://i.pravatar.cc/",
+                                            imageUrl: widget.feed.hirersPath != null?widget.feed.hirersPath!:"",
                                             imageBuilder:
                                                 (context, imageProvider) =>
                                                     Container(
@@ -140,7 +138,7 @@ class LoginState extends State<HirerProfile> with TickerProviderStateMixin {
                                             errorWidget:
                                                 (context, url, error) =>
                                                     CircleAvatar(
-                                              radius: 40,
+                                              radius: 60,
                                               backgroundColor: AppColors.grey,
                                               child: Image.asset(
                                                 "assets/images/logo.png",
@@ -154,7 +152,7 @@ class LoginState extends State<HirerProfile> with TickerProviderStateMixin {
                                     height: 20,
                                   ),
                                   Text(
-                                    "Juliet Daniels",
+                                    widget.feed.fullname!,
                                     style: TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold),
@@ -163,7 +161,7 @@ class LoginState extends State<HirerProfile> with TickerProviderStateMixin {
                                     height: 10,
                                   ),
                                   Text(
-                                    "dansjillie@gmail.com",
+                                    widget.feed.email!,
                                     style: TextStyle(
                                         fontSize: 15,
                                         color: Colors.grey,
@@ -173,7 +171,7 @@ class LoginState extends State<HirerProfile> with TickerProviderStateMixin {
                                     height: 20,
                                   ),
                                   Container(
-                                      padding: EdgeInsets.all(20),
+                                      padding: EdgeInsets.all(10),
                                       height: 200,
                                       width: Responsive.width(context),
                                       decoration: BoxDecoration(
@@ -195,7 +193,7 @@ class LoginState extends State<HirerProfile> with TickerProviderStateMixin {
                                               Container(
                                                   height: 70,
                                                   child: Text(
-                                                    "Phone Number",
+                                                    "Phone Number ",
                                                     style: TextStyle(
                                                         fontWeight:
                                                             FontWeight.bold,
@@ -220,7 +218,7 @@ class LoginState extends State<HirerProfile> with TickerProviderStateMixin {
                                                 height: 70,
                                                 width: 200,
                                                 child: Text(
-                                                  "+234 80128394",
+                                                  widget.feed.phoneNumber!,
                                                   style: TextStyle(
                                                       color: Colors.grey,
                                                       fontSize: 15,
@@ -229,10 +227,9 @@ class LoginState extends State<HirerProfile> with TickerProviderStateMixin {
                                                 ),
                                               ),
                                               Container(
-                                                height: 70,
                                                 width: 200,
                                                 child: Text(
-                                                    "No 26, Gbemisola street, Allen Avenue, Ikeja, Lagos state",
+                                                    widget.feed.address!,
                                                     style: TextStyle(
                                                         color: Colors.grey,
                                                         fontSize: 15,
@@ -249,7 +246,7 @@ class LoginState extends State<HirerProfile> with TickerProviderStateMixin {
                                   Row(
                                     children: [
                                       Text(
-                                        "Reviews(0)",
+                                        "Reviews",
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 20),
@@ -269,7 +266,150 @@ class LoginState extends State<HirerProfile> with TickerProviderStateMixin {
                                   SizedBox(
                                     height: 10,
                                   ),
-                                  ReviewItem()
+                                  Container(
+                                    height: Responsive.height(context) / 3,
+                                    child: FutureBuilder<List<ReviewsModel>>(
+                                        future: model.getHirerReviews(widget.feed.id.toString()),
+                                        builder: (context, snapshot) {
+                                          if (!snapshot.hasData) {
+                                            return Container(
+                                                height: 400,
+                                                padding: EdgeInsets.only(
+                                                    left: 20.0, right: 20),
+                                                child: Center(
+                                                  child: Shimmer.fromColors(
+                                                      direction:
+                                                      ShimmerDirection.ltr,
+                                                      period:
+                                                      Duration(seconds: 2),
+                                                      child: ListView(
+                                                        scrollDirection:
+                                                        Axis.vertical,
+                                                        // shrinkWrap: true,
+                                                        children: [0, 1, 2, 3]
+                                                            .map((_) => Padding(
+                                                          padding:
+                                                          const EdgeInsets
+                                                              .all(
+                                                              8.0),
+                                                          child: Row(
+                                                            crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                            children: [
+                                                              Padding(
+                                                                padding: const EdgeInsets
+                                                                    .symmetric(
+                                                                    horizontal:
+                                                                    8.0),
+                                                              ),
+                                                              Expanded(
+                                                                child:
+                                                                Column(
+                                                                  crossAxisAlignment:
+                                                                  CrossAxisAlignment.start,
+                                                                  children: [
+                                                                    Container(
+                                                                      width:
+                                                                      double.infinity,
+                                                                      height:
+                                                                      8.0,
+                                                                      color:
+                                                                      Colors.white,
+                                                                    ),
+                                                                    Padding(
+                                                                      padding:
+                                                                      const EdgeInsets.symmetric(vertical: 2.0),
+                                                                    ),
+                                                                    Container(
+                                                                      width:
+                                                                      double.infinity,
+                                                                      height:
+                                                                      8.0,
+                                                                      color:
+                                                                      Colors.white,
+                                                                    ),
+                                                                    Padding(
+                                                                      padding:
+                                                                      const EdgeInsets.symmetric(vertical: 2.0),
+                                                                    ),
+                                                                    Container(
+                                                                      width:
+                                                                      40.0,
+                                                                      height:
+                                                                      8.0,
+                                                                      color:
+                                                                      Colors.white,
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              )
+                                                            ],
+                                                          ),
+                                                        ))
+                                                            .toList(),
+                                                      ),
+                                                      baseColor: AppColors.grey,
+                                                      highlightColor:
+                                                      Colors.white),
+                                                ));
+                                          } else if (snapshot.data!.isNotEmpty) {
+                                            return ListView(
+                                                scrollDirection: Axis.vertical,
+                                                // shrinkWrap: true,
+                                                children: snapshot.data!
+                                                    .map((feed) =>Padding(
+                                                    padding:
+                                                    EdgeInsets.all(5),
+                                                    child:  ReviewItem(
+                                                      feed: feed,
+
+                                                    )))
+                                                    .toList());
+                                          } else if (snapshot.hasError) {
+                                            return Center(
+                                                child: Column(
+                                                  children: <Widget>[
+                                                    SizedBox(
+                                                      height: 100,
+                                                    ),
+                                                    Text(
+                                                      'Network error',
+                                                      style: TextStyle(
+                                                        fontWeight: FontWeight.bold,
+                                                        fontSize: 20,
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      height: 10,
+                                                    ),
+                                                    Text('Network error'),
+                                                    SizedBox(
+                                                      height: 100,
+                                                    ),
+                                                  ],
+                                                ));
+                                          } else {
+                                            return Center(
+                                                child: Column(
+                                                  children: [
+SizedBox(height: 20,),
+                                                    Text(
+                                                      "No reviews yet.",
+                                                      style: TextStyle(
+                                                          fontSize: 15,
+                                                          fontWeight: FontWeight.bold,
+                                                          color: AppColors.black),
+                                                      textAlign: TextAlign.center,
+                                                    ),
+                                                    SizedBox(
+                                                      height: 30,
+                                                    ),
+                                                  ],
+                                                ));
+                                          }
+                                        }),
+                                  ),
                                 ]))))),
             drawer: CollapsingNavigationDrawer(),
           );

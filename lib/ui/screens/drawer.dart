@@ -2,6 +2,7 @@ import 'package:equipro/core/services/auth_service.dart';
 import 'package:equipro/ui/screens/hirer/home/home_view_model.dart';
 import 'package:equipro/ui/widget/general_button.dart';
 import 'package:equipro/utils/colors.dart';
+import 'package:equipro/utils/helpers.dart';
 import 'package:equipro/utils/locator.dart';
 import 'package:equipro/utils/router/navigation_service.dart';
 import 'package:equipro/utils/router/route_names.dart';
@@ -284,7 +285,14 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
               GeneralButton(
                 buttonText: "Become An Equipment Owner",
                 onPressed: () {
-                  displayDialog(context, model);
+                  print(_authentication.currentUser.address);
+                  if(_authentication.currentUser.address != null && _authentication.currentUser.kycUpdated!){
+                    displayDialog(context, model);
+                  }else{
+                    _navigationService.navigateTo(ProfileRoute);
+                    showErrorToast("Update your address and means of identification");
+                  }
+
                 },
               ),
               SizedBox(

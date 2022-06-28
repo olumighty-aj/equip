@@ -3,6 +3,7 @@ import 'package:equipro/core/model/error_model.dart';
 import 'package:equipro/core/model/success_model.dart';
 import 'package:equipro/core/services/activities_service.dart';
 import 'package:equipro/core/services/auth_service.dart';
+import 'package:equipro/ui/screens/owner/home_owner/home_owner.dart';
 import 'package:equipro/utils/base_model.dart';
 import 'package:equipro/utils/helpers.dart';
 import 'package:equipro/utils/locator.dart';
@@ -44,6 +45,43 @@ class OwnerRentalsViewModel extends BaseModel {
     if (result is SuccessModel) {
       setBusy(false);
 _navigationService.pop();
+      notifyListeners();
+      return SuccessModel(result.data);
+    }
+  }
+
+  sendDate(String date, String id, ) async {
+    setBusy(true);
+    var result = await _activities.sendDate( date,  id);
+
+    if (result is ErrorModel) {
+      setBusy(false);
+      showErrorToast(result.error);
+      notifyListeners();
+      return ErrorModel(result.error);
+    }
+    if (result is SuccessModel) {
+      setBusy(false);
+      _navigationService.pushAndRemoveUntil(HomeOwnerRoute);
+      notifyListeners();
+      return SuccessModel(result.data);
+    }
+  }
+
+  updateBooking(String id, String status) async {
+    setBusy(true);
+    var result = await _activities.updateBooking(id, status);
+
+    if (result is ErrorModel) {
+      setBusy(false);
+      showErrorToast(result.error);
+      notifyListeners();
+      return ErrorModel(result.error);
+    }
+    if (result is SuccessModel) {
+      setBusy(false);
+      _navigationService.navigateReplacementTo(OwnerRentalsRoute);
+
       notifyListeners();
       return SuccessModel(result.data);
     }

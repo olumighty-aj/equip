@@ -1,4 +1,5 @@
 import 'package:equipro/core/model/EquipmentModel.dart';
+import 'package:equipro/core/model/ReviewsModel.dart';
 import 'package:equipro/core/model/enums.dart';
 import 'package:equipro/core/model/error_model.dart';
 import 'package:equipro/core/model/success_model.dart';
@@ -168,7 +169,7 @@ class HomeOwnerViewModel extends BaseModel {
 
   switchHirer() async {
     setBusy(true);
-    var result = await _authentication.switchRole("hirer");
+    var result = await _authentication.switchRole("hirers");
     if (result is ErrorModel) {
       setBusy(false);
       showErrorToast(result.error);
@@ -197,9 +198,9 @@ class HomeOwnerViewModel extends BaseModel {
     return result;
   }
 
-  updateBooking(String id, String status) async {
+  equipApproval(String id, String status) async {
     setBusy(true);
-    var result = await _activities.updateBooking(id, status);
+    var result = await _activities.equipApproval(id, status);
 
     if (result is ErrorModel) {
       setBusy(false);
@@ -232,6 +233,20 @@ class HomeOwnerViewModel extends BaseModel {
     setBusy(false);
    // _navigationService.pushAndRemoveUntil(HomeOwnerRoute);
     notifyListeners();
+    return result;
+  }
+
+  Future<List<ReviewsModel>> getReviews() async {
+    //setBusy(true);
+    var result = await _authentication.getReviews();
+    if (result is ErrorModel) {
+      // showToast('Login failed');
+      print(result.error);
+      notifyListeners();
+      throw Exception('Failed to load internet');
+      //return ErrorModel(result.error);
+    }
+    // print(result);
     return result;
   }
 }

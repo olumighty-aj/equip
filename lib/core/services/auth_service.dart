@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:equipro/core/model/ReviewsModel.dart';
 import 'package:equipro/core/model/SignInResponse.dart';
 import 'package:equipro/core/model/auth_model.dart';
 import 'package:equipro/core/model/error_model.dart';
@@ -48,14 +49,10 @@ class Authentication {
       Details user = Details.fromJson(result.data['payload']["details"]);
       showToast(result.data['message']);
       _currentUser = user;
-      // _userId = user.id!;
       SharedPreferences prefs;
       prefs = await SharedPreferences.getInstance();
       await prefs.setString('token', auth.token);
-      //  await prefs.setString('userId', user.id.toString());
       await prefs.setString("profile", json.encode(user));
-      //print('firstname' + user.firstName!);
-      // return SuccessModel({'auth': auth, 'user': user});
 
       return SuccessModel(user);
     } catch (e) {
@@ -111,8 +108,8 @@ class Authentication {
     //   print("TOKEN AGBA::::::::: ${auth.token}");
     _token = auth;
    // "is_owner": true,
-
-    _navigationService.navigateReplacementTo(homeRoute);
+user.userType == "hirers"?
+    _navigationService.navigateReplacementTo(homeRoute): _navigationService.navigateReplacementTo(HomeOwnerRoute);
     return SuccessModel(user);
   }
 
@@ -207,6 +204,7 @@ class Authentication {
               : e.toString());
     }
   }
+
 
   //
   verifyForgotPassword(Map<dynamic, dynamic> payload) async {
@@ -359,6 +357,71 @@ if(kyc_name == ""){
       print("from code");
       print(e);
       return null;
+    }
+  }
+
+
+  getReviews() async {
+    try {
+      var url = Paths.reviews + currentUser.id.toString();
+
+      final result = await http.get(
+        url,
+      );
+      if (result is ErrorModel) {
+        print("ERROR");
+        print(result.error);
+        var data = result.error;
+        List<ReviewsModel> packageList = List<ReviewsModel>.from(
+            data.map((item) => ReviewsModel.fromJson(item)));
+        return ErrorModel(packageList);
+      }
+      var data = result.data["payload"]['content'];
+      List<ReviewsModel> packageList = List<ReviewsModel>.from(
+          data.map((item) => ReviewsModel.fromJson(item)));
+      print(packageList);
+      return packageList;
+    } catch (e) {
+      print(e.toString());
+      return ErrorModel(e.toString() ==
+          "SocketException: Failed host lookup: '$baseUrlError' (OS Error: nodename nor servname provided, or not known, errno = 8)"
+          ? "Your internet is not stable kindly reconnect and try again"
+          : e.toString() ==
+          "TimeoutException after 0:00:40.000000: Future not completed"
+          ? "Your internet is not stable kindly reconnect and try again"
+          : e.toString());
+    }
+  }
+
+  getHirerReviews(String id) async {
+    try {
+      var url = Paths.reviews + id;
+
+      final result = await http.get(
+        url,
+      );
+      if (result is ErrorModel) {
+        print("ERROR");
+        print(result.error);
+        var data = result.error;
+        List<ReviewsModel> packageList = List<ReviewsModel>.from(
+            data.map((item) => ReviewsModel.fromJson(item)));
+        return ErrorModel(packageList);
+      }
+      var data = result.data["payload"]['content'];
+      List<ReviewsModel> packageList = List<ReviewsModel>.from(
+          data.map((item) => ReviewsModel.fromJson(item)));
+      print(packageList);
+      return packageList;
+    } catch (e) {
+      print(e.toString());
+      return ErrorModel(e.toString() ==
+          "SocketException: Failed host lookup: '$baseUrlError' (OS Error: nodename nor servname provided, or not known, errno = 8)"
+          ? "Your internet is not stable kindly reconnect and try again"
+          : e.toString() ==
+          "TimeoutException after 0:00:40.000000: Future not completed"
+          ? "Your internet is not stable kindly reconnect and try again"
+          : e.toString());
     }
   }
 }

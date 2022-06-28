@@ -1,10 +1,14 @@
 import 'package:badges/badges.dart';
+import 'package:equipro/core/model/TransactionModel.dart';
+import 'package:equipro/core/model/success_model.dart';
 import 'package:equipro/ui/screens/drawer.dart';
+import 'package:equipro/ui/screens/owner/earnings/earnings_view_model.dart';
 import 'package:equipro/ui/widget/bank_tiles.dart';
 import 'package:equipro/ui/widget/booking_request.dart';
 import 'package:equipro/ui/widget/dash_painter.dart';
 import 'package:equipro/ui/widget/equip_tiles.dart';
 import 'package:equipro/ui/widget/general_button.dart';
+import 'package:equipro/ui/widget/loader_widget.dart';
 import 'package:equipro/ui/widget/transaction_tile.dart';
 import 'package:equipro/utils/helpers.dart';
 import 'package:equipro/utils/locator.dart';
@@ -27,8 +31,7 @@ class EarningPage extends StatefulWidget {
   LoginState createState() => LoginState();
 }
 
-class LoginState extends State<EarningPage>
-    with TickerProviderStateMixin {
+class LoginState extends State<EarningPage> with TickerProviderStateMixin {
   final NavigationService _navigationService = locator<NavigationService>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   int? selectedQuantity;
@@ -60,11 +63,39 @@ class LoginState extends State<EarningPage>
     super.dispose();
   }
 
+  TransactionModel? wallet;
+  getWalletBalance(EarningsViewModel model) async {
+    var result = await model.getWalletBalance();
+    if (result is SuccessModel) {
+      setState(() {
+        print(result.data);
+        wallet = TransactionModel.fromJson(result.data);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<LoginViewModel>.reactive(
-        viewModelBuilder: () => LoginViewModel(),
+    return ViewModelBuilder<EarningsViewModel>.reactive(
+        onModelReady: (v) {
+          getWalletBalance(v);
+        },
+        viewModelBuilder: () => EarningsViewModel(),
         builder: (context, model, child) {
+          if (wallet == null) {
+            return Scaffold(
+              backgroundColor: AppColors.grey,
+              body:
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      LoaderWidget(),
+                      LoaderWidget(),
+                      LoaderWidget()
+                    ],
+                  )
+             );
+          }
           return Scaffold(
             key: _scaffoldKey,
             body: SingleChildScrollView(
@@ -114,40 +145,35 @@ class LoginState extends State<EarningPage>
                                   SizedBox(
                                     height: 30,
                                   ),
-
-                                      Text(
-                                        "Earnings",
-                                        style: TextStyle(
-                                            color: AppColors.black,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 25),
-                                      ),
-
-
+                                  Text(
+                                    "Earnings",
+                                    style: TextStyle(
+                                        color: AppColors.black,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 25),
+                                  ),
                                   SizedBox(
                                     height: 30,
                                   ),
-                                  Row(
-
-                                      children: [
-                                        Text(
-                                          "Your balance :",
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              color: AppColors.black,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        const SizedBox(
-                                          width: 10,
-                                        ),
-                                        Text(
-                                          " N5000",
-                                          style: TextStyle(
-                                            color: AppColors.primaryColor,
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ]),
+                                  Row(children: [
+                                    Text(
+                                      "Your balance :",
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          color: AppColors.black,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(
+                                      wallet!.balanceAmount.toString(),
+                                      style: TextStyle(
+                                          color: AppColors.primaryColor,
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ]),
                                   SizedBox(
                                     height: 20,
                                   ),
@@ -155,12 +181,14 @@ class LoginState extends State<EarningPage>
                                     height: 40,
                                     width: 150,
                                     child: GeneralButton(
-                                      borderRadius: const BorderRadius.all(Radius.circular(5)),
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(5)),
                                       splashColor: Colors.white,
                                       buttonTextColor: AppColors.primaryColor,
                                       borderColor: AppColors.primaryColor,
-                                      onPressed: (){
-_navigationService.navigateTo(WithdrawRoute);
+                                      onPressed: () {
+                                        _navigationService
+                                            .navigateTo(WithdrawRoute);
                                       },
                                       buttonText: "Withdraw",
                                     ),
@@ -168,48 +196,51 @@ _navigationService.navigateTo(WithdrawRoute);
                                   SizedBox(
                                     height: 20,
                                   ),
-                                  Divider(thickness: 1,),
-                                  SizedBox(
-                                    height: 20,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        "Payment Methods:",
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 15),
-                                      ),
-IconButton(onPressed: (){
-
-}, icon: Icon(
-  Icons.add,size: 40,color: AppColors.primaryColor,
-))
-
-                                    ],
-                                  ),
-
-                                  SizedBox(
-                                    height: 20,
-                                  ),
-                                  Text(
-                                    "Preferred Method",
-                                    style: TextStyle(
-                                        color: Colors.grey, fontSize: 15),
-                                  ),
-                                  SizedBox(
-                                    height: 30,
-                                  ),
-                                  BankTile(),
-                                  SizedBox(
-                                    height: 30,
-                                  ),
-                                  CustomPaint(painter: LineDashedPainter()),
-                                  SizedBox(
-                                    height: 20,
-                                  ),
+                                  // Divider(
+                                  //   thickness: 1,
+                                  // ),
+                                  // SizedBox(
+                                  //   height: 20,
+                                  // ),
+                                  // Row(
+                                  //   mainAxisAlignment:
+                                  //       MainAxisAlignment.spaceBetween,
+                                  //   children: [
+                                  //     Text(
+                                  //       "Payment Methods:",
+                                  //       style: TextStyle(
+                                  //           color: Colors.black,
+                                  //           fontWeight: FontWeight.bold,
+                                  //           fontSize: 15),
+                                  //     ),
+                                  //     IconButton(
+                                  //         onPressed: () {},
+                                  //         icon: Icon(
+                                  //           Icons.add,
+                                  //           size: 40,
+                                  //           color: AppColors.primaryColor,
+                                  //         ))
+                                  //   ],
+                                  // ),
+                                  // SizedBox(
+                                  //   height: 20,
+                                  // ),
+                                  // Text(
+                                  //   "Preferred Method",
+                                  //   style: TextStyle(
+                                  //       color: Colors.grey, fontSize: 15),
+                                  // ),
+                                  // SizedBox(
+                                  //   height: 30,
+                                  // ),
+                                  // BankTile(),
+                                  // SizedBox(
+                                  //   height: 30,
+                                  // ),
+                                  // CustomPaint(painter: LineDashedPainter()),
+                                  // SizedBox(
+                                  //   height: 20,
+                                  // ),
                                   Text(
                                     "Transaction History",
                                     style: TextStyle(
@@ -219,10 +250,26 @@ IconButton(onPressed: (){
                                   SizedBox(
                                     height: 30,
                                   ),
-                                  TransactionTile(),
-                                  TransactionTile(),
+                                  wallet!.transactionHistory!.isNotEmpty
+                                      ? Container(
+                                          height:
+                                              Responsive.height(context) / 2,
+                                          child: ListView.builder(
+                                              itemCount: wallet!
+                                                  .transactionHistory!.length,
+                                              itemBuilder: (context, i) {
+                                                return TransactionTile(
+                                                  model: wallet!
+                                                      .transactionHistory![i],
+                                                );
+                                              }),
+                                        )
+                                      : Container(
+                                          child: Text(
+                                            "Not available",
+                                          ),
+                                        ),
                                 ]))))),
-            drawer: CollapsingNavigationDrawer(),
           );
         });
   }

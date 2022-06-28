@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:equipro/core/model/ActiveRentalsModel.dart';
+import 'package:equipro/core/services/auth_service.dart';
 import 'package:equipro/ui/widget/general_button.dart';
 import 'package:equipro/utils/locator.dart';
 import 'package:equipro/utils/router/navigation_service.dart';
@@ -13,6 +14,7 @@ class RentalTiles extends StatelessWidget {
   final ActiveRentalsModel feed;
   RentalTiles({required this.feed});
   final NavigationService _navigationService = locator<NavigationService>();
+  final Authentication authentication = locator<Authentication>();
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -21,7 +23,11 @@ class RentalTiles extends StatelessWidget {
           //   context,
           //   MaterialPageRoute(builder: (context) => EquipDetails()),
           // );
-          _navigationService.navigateTo(RentalDetailsRoute,arguments: feed);
+          authentication.currentUser.userType == "hirers"?
+          _navigationService.navigateTo(RentalDetailsRoute,arguments: feed):
+          _navigationService.navigateTo(OwnerRentalDetailsRoute,arguments: feed);
+
+
         },
         child: Container(
           margin: EdgeInsets.only(bottom: 20),
@@ -49,7 +55,7 @@ class RentalTiles extends StatelessWidget {
                       child: Hero(
                           tag: "profile",
                           child: CachedNetworkImage(
-                            imageUrl: feed.equipments!.equipImagesId!,
+                            imageUrl: feed.equipments!.equipImagesId!= null?feed.equipments!.equipImagesId!:"",
                             placeholder: (context, url) =>
                                 CircularProgressIndicator(),
                             errorWidget: (context, url, error) => ClipRRect(
@@ -68,7 +74,7 @@ class RentalTiles extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    feed.equipments!.equipName!,
+                    feed.equipments!.equipName!= null?   feed.equipments!.equipName!:"",
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                   ),
                   SizedBox(

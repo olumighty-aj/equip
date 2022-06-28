@@ -100,7 +100,7 @@ class EquipTiles extends StatelessWidget {
                       Container(
                           width: 150,
                           child: Text(
-                            model.owners!.address!,
+                            model.address!,
                             style: TextStyle(
                                 fontWeight: FontWeight.w500, fontSize: 12),
                           )),

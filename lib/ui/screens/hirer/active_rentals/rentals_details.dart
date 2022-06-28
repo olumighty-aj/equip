@@ -1,5 +1,5 @@
 import 'package:equipro/core/model/ActiveRentalsModel.dart';
-import 'package:equipro/ui/screens/profile/profile_view_model.dart';
+import 'package:equipro/ui/screens/hirer/active_rentals/rentals_view_model.dart';
 import 'package:equipro/ui/widget/general_button.dart';
 import 'package:equipro/utils/locator.dart';
 import 'package:equipro/utils/router/navigation_service.dart';
@@ -49,8 +49,8 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<ProfileViewModel>.reactive(
-        viewModelBuilder: () => ProfileViewModel(),
+    return ViewModelBuilder<RentalsViewModel>.reactive(
+        viewModelBuilder: () => RentalsViewModel(),
         builder: (context, model, child) {
           return Scaffold(
             key: _scaffoldKey,
@@ -106,15 +106,14 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          widget.feed.equipments!
-                                              .equipName!,
+                                          widget.feed.equipments!.equipName!,
                                           style: TextStyle(
                                               color: AppColors.primaryColor,
                                               fontWeight: FontWeight.bold,
                                               fontSize: 25),
                                         ),
                                         Container(
-                                          width: 90,
+                                          width: 100,
                                           height: 30,
                                           child: GeneralButton(
                                             onPressed: () {},
@@ -286,7 +285,7 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                       ),
                                       Expanded(
                                         child: Text(
-                                          "No 15, Yaba Surulere Lagos",
+                                          widget.feed.deliveryLocation!,
                                           style: TextStyle(
                                               color: Colors.black,
                                               fontWeight: FontWeight.w500,
@@ -396,11 +395,20 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                   SizedBox(
                                     height: 50,
                                   ),
+                                  GeneralButton(
+                                      onPressed: () {
+                                        model.updateBooking(
+                                            widget.feed.equipOrderId.toString(),
+                                            "picked_from_owner");
+                                      },
+                                      buttonText: "Picked From Owner"),
+
                                   widget.feed.requestStatus! == "returned"
                                       ? GeneralButton(
                                           onPressed: () {
-                                            _navigationService
-                                                .navigateTo(RatingRoute,arguments: widget.feed.id);
+                                            _navigationService.navigateTo(
+                                                RatingRoute,
+                                                arguments: widget.feed.id);
                                           },
                                           buttonText: "Give Feedback")
                                       : Container()

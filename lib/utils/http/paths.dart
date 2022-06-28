@@ -1,6 +1,4 @@
-
 class Paths {
-
   //  API ENDPOINTS
   static const String signUp = 'signup';
   static const String login = 'auth';
@@ -17,11 +15,13 @@ class Paths {
   static const String active_owner_rentals = 'owners/rentals?active_status=';
   static const String rate = 'reviews';
   static const String rate_owner = 'owners/reviews';
-  static const String updateBookings = 'owners/equip_approval/';
+  static const String equipApproval = 'owners/equip_approval/';
+  static const String updateBookings = 'delivery_status';
   static const String ownersEarnings = 'owners/earnings';
   static const String ownersProfile = 'owners/profile';
   static const String profile = 'profile';
-
-
+  static const String reviews = 'reviews?hirers_id=';
+  static const String pickDate = 'owners/pickup_date/';
+  static const String  earnings = 'owners/earnings';
 
 }

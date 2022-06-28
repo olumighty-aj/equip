@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:equipro/core/model/ActiveRentalsModel.dart';
 import 'package:equipro/core/model/EquipmentModel.dart';
+import 'package:equipro/core/model/ReviewsModel.dart';
 import 'package:equipro/core/model/error_model.dart';
 import 'package:equipro/core/model/success_model.dart';
 import 'package:equipro/utils/helpers.dart';
@@ -27,9 +28,9 @@ class Activities {
     String availTo,
     String quantity,
     String description,
-      String latitude,
-      String longitude,
-      String address,
+    String latitude,
+    String longitude,
+    String address,
   ) async {
     var header = {
       'X-APP-KEY': '37T8O89O445568u89WELrVl',
@@ -72,7 +73,7 @@ class Activities {
       final streamedResponse = await imageUploadRequest.send();
       final response = await htp.Response.fromStream(streamedResponse);
       final Map<String, dynamic> result = json.decode(response.body);
-      if (result["status"]  == false) {
+      if (result["status"] == false) {
         print(response.body);
         print(response.statusCode);
         return null;
@@ -90,17 +91,19 @@ class Activities {
   }
 
   updateEquip(
-      List images,
-      String equipName,
-      String costHire,
-      String costHireInterval,
-      String availFrom,
-      String availTo,
-      String quantity,
-      String description,
-      String id, String latitude,
-      String longitude,
-      String address,) async {
+    List images,
+    String equipName,
+    String costHire,
+    String costHireInterval,
+    String availFrom,
+    String availTo,
+    String quantity,
+    String description,
+    String id,
+    String latitude,
+    String longitude,
+    String address,
+  ) async {
     var header = {
       'X-APP-KEY': '37T8O89O445568u89WELrVl',
       'Content-Type': 'application/json; charset=UTF-8',
@@ -160,7 +163,7 @@ class Activities {
 
   getMyEquipment({int page = 1}) async {
     try {
-      var url = Paths.ownerEquipment + "?start=$page&len=5";
+      var url = Paths.ownerEquipment + "?start=0&len=10&paging=$page";
       final result = await http.get(
         url,
       );
@@ -256,8 +259,9 @@ class Activities {
   getEquipments({int page = 1, String? lat, String? lng}) async {
     try {
       //var url = Paths.equipments + "?lat=$lat&lng=$lng";
-      var url = Paths.equipments + "?start=$page&len=5";
-    //  var url = Paths.equipments + "?start=0&len=5&paging=$page&lat=$lat&lng=$lng";
+      // var url = Paths.equipments + "?start=$page&len=5";
+      var url =
+          Paths.equipments + "?start=0&len=5&paging=$page&lat=$lat&lng=$lng";
       final result = await http.get(
         url,
       );
@@ -310,8 +314,6 @@ class Activities {
     }
   }
 
-
-
   book(Map<dynamic, dynamic> payload) async {
     try {
       final result = await http.post(Paths.book, payload);
@@ -331,11 +333,35 @@ class Activities {
     }
   }
 
+  equipApproval(String id, String status) async {
+    try {
+      final result = await http
+          .post(Paths.equipApproval + id, {"request_status": status});
+      if (result is ErrorModel) {
+        return ErrorModel(result.error);
+      }
+
+      return SuccessModel(result.data);
+    } catch (e) {
+      return ErrorModel(e.toString() ==
+              "SocketException: Failed host lookup: '$baseUrlError' (OS Error: nodename nor servname provided, or not known, errno = 8)"
+          ? "Your internet is not stable kindly reconnect and try again"
+          : e.toString() ==
+                  "TimeoutException after 0:00:40.000000: Future not completed"
+              ? "Your internet is not stable kindly reconnect and try again"
+              : e.toString());
+    }
+  }
+
   updateBooking(String id, String status) async {
     try {
-      final result = await http.post(Paths.updateBookings + id, {
-        "request_status":status
-      });
+      final result = await http
+          .post(Paths.updateBookings, {
+
+            "delivery_status": id,
+        "equipments_id": status,
+
+          });
       if (result is ErrorModel) {
         return ErrorModel(result.error);
       }
@@ -351,13 +377,32 @@ class Activities {
           : e.toString());
     }
   }
+
   rate(String id, String comment, double rating) async {
     try {
-      final result = await http.post(Paths.rate,  {
-        "equipments_id":id,
-        "comment":comment,
-        "rating":rating
-      });
+      final result = await http.post(Paths.rate,
+          {"equipments_id": id, "comment": comment, "rating": rating});
+      if (result is ErrorModel) {
+        return ErrorModel(result.error);
+      }
+
+      return SuccessModel(result.data);
+    } catch (e) {
+      return ErrorModel(e.toString() ==
+              "SocketException: Failed host lookup: '$baseUrlError' (OS Error: nodename nor servname provided, or not known, errno = 8)"
+          ? "Your internet is not stable kindly reconnect and try again"
+          : e.toString() ==
+                  "TimeoutException after 0:00:40.000000: Future not completed"
+              ? "Your internet is not stable kindly reconnect and try again"
+              : e.toString());
+    }
+  }
+
+
+  sendDate(String date,String id, ) async {
+    try {
+      final result = await http.post(Paths.pickDate +id,
+          {"pick_date": date});
       if (result is ErrorModel) {
         return ErrorModel(result.error);
       }
@@ -376,9 +421,7 @@ class Activities {
 
   withdraw(String amount) async {
     try {
-      final result = await http.post(Paths.ownersEarnings,  {
-        "amount":amount
-      });
+      final result = await http.post(Paths.ownersEarnings, {"amount": amount});
       if (result is ErrorModel) {
         return ErrorModel(result.error);
       }
@@ -386,14 +429,15 @@ class Activities {
       return SuccessModel(result.data);
     } catch (e) {
       return ErrorModel(e.toString() ==
-          "SocketException: Failed host lookup: '$baseUrlError' (OS Error: nodename nor servname provided, or not known, errno = 8)"
+              "SocketException: Failed host lookup: '$baseUrlError' (OS Error: nodename nor servname provided, or not known, errno = 8)"
           ? "Your internet is not stable kindly reconnect and try again"
           : e.toString() ==
-          "TimeoutException after 0:00:40.000000: Future not completed"
-          ? "Your internet is not stable kindly reconnect and try again"
-          : e.toString());
+                  "TimeoutException after 0:00:40.000000: Future not completed"
+              ? "Your internet is not stable kindly reconnect and try again"
+              : e.toString());
     }
   }
+
   getEarnings(String amount) async {
     try {
       final result = await http.get(Paths.ownersEarnings);
@@ -404,22 +448,19 @@ class Activities {
       return SuccessModel(result.data);
     } catch (e) {
       return ErrorModel(e.toString() ==
-          "SocketException: Failed host lookup: '$baseUrlError' (OS Error: nodename nor servname provided, or not known, errno = 8)"
+              "SocketException: Failed host lookup: '$baseUrlError' (OS Error: nodename nor servname provided, or not known, errno = 8)"
           ? "Your internet is not stable kindly reconnect and try again"
           : e.toString() ==
-          "TimeoutException after 0:00:40.000000: Future not completed"
-          ? "Your internet is not stable kindly reconnect and try again"
-          : e.toString());
+                  "TimeoutException after 0:00:40.000000: Future not completed"
+              ? "Your internet is not stable kindly reconnect and try again"
+              : e.toString());
     }
   }
 
   rateOwner(String id, String comment, double rating) async {
     try {
-      final result = await http.post(Paths.rate_owner, {
-        "equipments_id":id,
-        "comment":comment,
-        "rating":rating
-      });
+      final result = await http.post(Paths.rate_owner,
+          {"equipments_id": id, "comment": comment, "rating": rating});
       if (result is ErrorModel) {
         return ErrorModel(result.error);
       }
@@ -427,20 +468,18 @@ class Activities {
       return SuccessModel(result.data);
     } catch (e) {
       return ErrorModel(e.toString() ==
-          "SocketException: Failed host lookup: '$baseUrlError' (OS Error: nodename nor servname provided, or not known, errno = 8)"
+              "SocketException: Failed host lookup: '$baseUrlError' (OS Error: nodename nor servname provided, or not known, errno = 8)"
           ? "Your internet is not stable kindly reconnect and try again"
           : e.toString() ==
-          "TimeoutException after 0:00:40.000000: Future not completed"
-          ? "Your internet is not stable kindly reconnect and try again"
-          : e.toString());
+                  "TimeoutException after 0:00:40.000000: Future not completed"
+              ? "Your internet is not stable kindly reconnect and try again"
+              : e.toString());
     }
   }
 
   activeRentals(String type) async {
     try {
-      final result = await http.get(
-        Paths.active_rentals + type
-      );
+      final result = await http.get(Paths.active_rentals + type);
       if (result is ErrorModel) {
         print("ERROR");
         print(result.error);
@@ -458,21 +497,18 @@ class Activities {
     } catch (e) {
       print(e.toString());
       return ErrorModel(e.toString() ==
-          "SocketException: Failed host lookup: '$baseUrlError' (OS Error: nodename nor servname provided, or not known, errno = 8)"
+              "SocketException: Failed host lookup: '$baseUrlError' (OS Error: nodename nor servname provided, or not known, errno = 8)"
           ? "Your internet is not stable kindly reconnect and try again"
           : e.toString() ==
-          "TimeoutException after 0:00:40.000000: Future not completed"
-          ? "Your internet is not stable kindly reconnect and try again"
-          : e.toString());
+                  "TimeoutException after 0:00:40.000000: Future not completed"
+              ? "Your internet is not stable kindly reconnect and try again"
+              : e.toString());
     }
   }
 
-
   activeOwnerRentals(String type) async {
     try {
-      final result = await http.get(
-          Paths.active_owner_rentals + type
-      );
+      final result = await http.get(Paths.active_owner_rentals + type);
       if (result is ErrorModel) {
         print("ERROR");
         print(result.error);
@@ -490,12 +526,12 @@ class Activities {
     } catch (e) {
       print(e.toString());
       return ErrorModel(e.toString() ==
-          "SocketException: Failed host lookup: '$baseUrlError' (OS Error: nodename nor servname provided, or not known, errno = 8)"
+              "SocketException: Failed host lookup: '$baseUrlError' (OS Error: nodename nor servname provided, or not known, errno = 8)"
           ? "Your internet is not stable kindly reconnect and try again"
           : e.toString() ==
-          "TimeoutException after 0:00:40.000000: Future not completed"
-          ? "Your internet is not stable kindly reconnect and try again"
-          : e.toString());
+                  "TimeoutException after 0:00:40.000000: Future not completed"
+              ? "Your internet is not stable kindly reconnect and try again"
+              : e.toString());
     }
   }
 }

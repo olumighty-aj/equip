@@ -29,6 +29,7 @@ const String HirerProfileRoute  = "HirerProfile";
 const String EditEquipmentRoute  = "EditEquipment";
 const String EarningPageRoute  = "EarningPage";
 const String WithdrawRoute  = "Withdraw";
+const String OwnerRentalDetailsRoute  = "OwnerRentalDetails";
 
 
 

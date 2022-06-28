@@ -600,8 +600,7 @@ class LoginState extends State<EditProfile> with TickerProviderStateMixin {
                                                 ),
                                               ),
                                             ),
-                                          ],
-                                        ),
+
                                   SizedBox(
                                     height: 20,
                                   ),  Text(
@@ -658,6 +657,8 @@ class LoginState extends State<EditProfile> with TickerProviderStateMixin {
                                             color: Colors.black),
                                         cursorColor: Colors.black,
                                       )),
+                                          ],
+                                  ),
                                   SizedBox(
                                     height: 20,
                                   ),

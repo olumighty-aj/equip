@@ -1,5 +1,6 @@
 import 'package:equipro/core/model/ActiveRentalsModel.dart';
 import 'package:equipro/core/model/EquipmentModel.dart';
+import 'package:equipro/core/model/EquipmentModel.dart' as eq;
 import 'package:equipro/ui/screens/chat/chat.dart';
 import 'package:equipro/ui/screens/chat/chats_widget/chat_details.dart';
 import 'package:equipro/ui/screens/hirer/active_rentals/active_rentals.dart';
@@ -11,6 +12,7 @@ import 'package:equipro/ui/screens/hirer/home/home_view.dart';
 import 'package:equipro/ui/screens/login/verify_forgot_otp.dart';
 import 'package:equipro/ui/screens/notification/notification.dart';
 import 'package:equipro/ui/screens/owner/active_rentals/owner_active_rentals.dart';
+import 'package:equipro/ui/screens/owner/active_rentals/rentals_details.dart';
 import 'package:equipro/ui/screens/owner/earnings/earning_page.dart';
 import 'package:equipro/ui/screens/owner/earnings/withdraw.dart';
 import 'package:equipro/ui/screens/owner/home_owner/booking_details.dart';
@@ -142,6 +144,13 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         routeName: settings.name!,
         viewToShow: RentalDetails(feed: feed),
       );
+    case OwnerRentalDetailsRoute:
+      ActiveRentalsModel feed = settings.arguments as ActiveRentalsModel;
+
+      return _getPageRoute(
+        routeName: settings.name!,
+        viewToShow: OwnerRentalDetails(feed: feed),
+      );
 
     case RatingRoute:
       String id = settings.arguments as String;
@@ -196,9 +205,10 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       );
 
     case HirerProfileRoute:
+      eq.Hirers model = settings.arguments as eq.Hirers;
       return _getPageRoute(
         routeName: settings.name!,
-        viewToShow: HirerProfile(),
+        viewToShow: HirerProfile(feed: model,),
       );
 
     case EditEquipmentRoute:
