@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:equipro/core/model/ChatListModel.dart';
 import 'package:equipro/core/model/EquipmentModel.dart';
 import 'package:equipro/ui/screens/hirer/book/details_view_model.dart';
 import 'package:equipro/ui/widget/dash_painter.dart';
@@ -536,8 +537,35 @@ class LoginState extends State<EquipDetails> with TickerProviderStateMixin {
                                               Responsive.width(context) / 2.3,
                                           child: GeneralButton(
                                               onPressed: () {
+
                                                 _navigationService.navigateTo(
-                                                    chatDetailsPageRoute);
+                                                    chatDetailsPageRoute, arguments: ChatListModel(
+                                                    id:widget.model.ownersId,
+                                                    userId            :"",
+                                                    chatWithId         :"",
+                                                    messageCount       :"",
+                                                    lastMessage        :"",
+                                                    dateCreated        :"",
+                                                    dateModified       :"",
+                                                    chatWith:  ChatWith(
+                                                      id:widget.model.ownersId,
+                                                      fullname :widget.model.owners!.fullname!,
+                                                      email        :"",
+                                                      phoneNumber  :"",
+                                                      gender       :"",
+                                                      address    :"",
+                                                      addressOpt   :"",
+                                                      localState   :"",
+                                                      country      :"",
+                                                      latitude     :"",
+                                                      longitude    :"",
+                                                      hirersPath   :widget.model.owners!.hirersPath!= null?widget.model.owners!.hirersPath!:"",
+                                                      status       :"",
+                                                      dateModified :"",
+                                                      dateCreated  :"",
+                                                    )
+
+                                                ));
                                               },
                                               buttonText: "Chat Owner",
                                               buttonTextColor: AppColors.black,

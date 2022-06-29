@@ -1,5 +1,6 @@
 import 'package:badges/badges.dart';
 import 'package:equipro/core/model/BookModel.dart';
+import 'package:equipro/core/model/ChatListModel.dart';
 import 'package:equipro/core/model/EquipmentModel.dart';
 import 'package:equipro/core/model/success_model.dart';
 import 'package:equipro/ui/screens/drawer.dart';
@@ -269,7 +270,33 @@ class LoginState extends State<PlaceBooking> with TickerProviderStateMixin {
                                       child: GeneralButton(
                                           onPressed: () {
                                             _navigationService.navigateTo(
-                                                chatDetailsPageRoute);
+                                                chatDetailsPageRoute, arguments: ChatListModel(
+                                                id:widget.model.ownersId,
+                                                userId            :"",
+                                                chatWithId         :"",
+                                                messageCount       :"",
+                                                lastMessage        :"",
+                                                dateCreated        :"",
+                                                dateModified       :"",
+                                                chatWith:  ChatWith(
+                                                  id:widget.model.ownersId,
+                                                  fullname :widget.model.owners!.fullname!,
+                                                  email        :"",
+                                                  phoneNumber  :"",
+                                                  gender       :"",
+                                                  address    :"",
+                                                  addressOpt   :"",
+                                                  localState   :"",
+                                                  country      :"",
+                                                  latitude     :"",
+                                                  longitude    :"",
+                                                  hirersPath   :widget.model.owners!.hirersPath!= null?widget.model.owners!.hirersPath!:"",
+                                                  status       :"",
+                                                  dateModified :"",
+                                                  dateCreated  :"",
+                                                )
+
+                                            ));
                                           },
                                           buttonText: "Chat Owner",
                                           buttonTextColor: AppColors.black,

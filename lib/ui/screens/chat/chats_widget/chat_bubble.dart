@@ -19,98 +19,98 @@ class ChatBubble extends StatelessWidget {
     return
       InkWell(
         onTap: (){
-          showModalBottomSheet(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(40), topRight: Radius.circular(40))),
-              context: context,
-              isDismissible:true,
-              enableDrag: false,
-              builder: (context) => Padding(
-                padding:
-                EdgeInsets.symmetric(vertical: 20,horizontal: 20),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Row(
-                      children: [
-                        SvgPicture.asset(
-                          "assets/images/redo.svg",
-                          width: 20.0,
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          "Reply",
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 20,),
-                    Row(
-                      children: [
-                        SvgPicture.asset(
-                          "assets/images/forward.svg",
-                          width: 20.0,
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          "Forward",
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 20,),
-                    Row(
-                      children: [
-                        SvgPicture.asset(
-                          "assets/images/document_copy.svg",
-                          width: 20.0,
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          "Copy message",
-                        ),
-                      ],
-                    ),
-
-                    SizedBox(height: 20,),
-                    Row(
-                      children: [
-                        SvgPicture.asset(
-                          "assets/images/report.svg",
-                          width: 20.0,
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          "Report Message",
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 20,),
-                    Row(
-                      children: [
-                        SvgPicture.asset(
-                          "assets/images/fancy_delete.svg",
-                          width: 20.0,
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          "Delete",
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 20,),
-                  ],
-                ),
-              ));
+          // showModalBottomSheet(
+          //     shape: RoundedRectangleBorder(
+          //         borderRadius: BorderRadius.only(
+          //             topLeft: Radius.circular(40), topRight: Radius.circular(40))),
+          //     context: context,
+          //     isDismissible:true,
+          //     enableDrag: false,
+          //     builder: (context) => Padding(
+          //       padding:
+          //       EdgeInsets.symmetric(vertical: 20,horizontal: 20),
+          //       child: Column(
+          //         mainAxisSize: MainAxisSize.min,
+          //         children: [
+          //           Row(
+          //             children: [
+          //               SvgPicture.asset(
+          //                 "assets/images/redo.svg",
+          //                 width: 20.0,
+          //               ),
+          //               SizedBox(
+          //                 width: 10,
+          //               ),
+          //               Text(
+          //                 "Reply",
+          //               ),
+          //             ],
+          //           ),
+          //           SizedBox(height: 20,),
+          //           Row(
+          //             children: [
+          //               SvgPicture.asset(
+          //                 "assets/images/forward.svg",
+          //                 width: 20.0,
+          //               ),
+          //               SizedBox(
+          //                 width: 10,
+          //               ),
+          //               Text(
+          //                 "Forward",
+          //               ),
+          //             ],
+          //           ),
+          //           SizedBox(height: 20,),
+          //           Row(
+          //             children: [
+          //               SvgPicture.asset(
+          //                 "assets/images/document_copy.svg",
+          //                 width: 20.0,
+          //               ),
+          //               SizedBox(
+          //                 width: 10,
+          //               ),
+          //               Text(
+          //                 "Copy message",
+          //               ),
+          //             ],
+          //           ),
+          //
+          //           SizedBox(height: 20,),
+          //           Row(
+          //             children: [
+          //               SvgPicture.asset(
+          //                 "assets/images/report.svg",
+          //                 width: 20.0,
+          //               ),
+          //               SizedBox(
+          //                 width: 10,
+          //               ),
+          //               Text(
+          //                 "Report Message",
+          //               ),
+          //             ],
+          //           ),
+          //           SizedBox(height: 20,),
+          //           Row(
+          //             children: [
+          //               SvgPicture.asset(
+          //                 "assets/images/fancy_delete.svg",
+          //                 width: 20.0,
+          //               ),
+          //               SizedBox(
+          //                 width: 10,
+          //               ),
+          //               Text(
+          //                 "Delete",
+          //               ),
+          //             ],
+          //           ),
+          //           SizedBox(height: 20,),
+          //         ],
+          //       ),
+          //     ));
         },
         child:
 

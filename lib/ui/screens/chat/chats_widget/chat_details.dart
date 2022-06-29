@@ -25,14 +25,7 @@ class ChatDetailsPage extends StatefulWidget {
 }
 
 class _ChatDetailsPageState extends State<ChatDetailsPage> {
-  @override
-  void initState() {
-    fetchChats();
-    //Initializing the TextEditingController and ScrollController
-    scrollController = ScrollController();
-    initPusher();
-    super.initState();
-  }
+
 
   final Authentication _authentication = locator<Authentication>();
   TextEditingController textController = TextEditingController();
@@ -64,17 +57,29 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
   void onEvent(PusherEvent event) {
     log("onEvent: $event");
     var body = json.decode(event.data);
-    setState(() => chatResponse.add(ChatMessages(
-          id: "",
-          senderId: body['sender_id'],
-          receiverId: body['receiver_id'],
-          type: body['type'],
-          message: body['message'],
-          status: body['status'],
-          inboxId: body['inbox_id'],
-          dateCreated: body['created_at'],
-          dateModified: body['created_at'],
-        )));
+    setState(() {
+      chatResponse.add(ChatMessages(
+        id: "",
+        senderId: body['sender_id'],
+        receiverId: body['receiver_id'],
+        type: body['type'],
+        message: body['message'],
+        status: body['status'],
+        inboxId: body['inbox_id'],
+        dateCreated: DateTime.now().toString(),
+        dateModified: DateTime.now().toString(),
+      )
+
+
+      );
+      scrollController.animateTo(
+        scrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 600),
+        curve: Curves.ease,
+      );
+    }
+
+      );
   }
 
   void onSubscriptionSucceeded(String channelName, dynamic data) {
@@ -101,7 +106,6 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
 
   void initPusher() async {
     // Remove keyboard
-    FocusScope.of(context).requestFocus(FocusNode());
 
     try {
       await pusher.init(
@@ -166,10 +170,20 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
   //       data: _data.text));
   // }
   @override
+  void initState() {
+    fetchChats();
+    //Initializing the TextEditingController and ScrollController
+    scrollController = ScrollController();
+    initPusher();
+    super.initState();
+  }
+  @override
   Widget build(BuildContext context) {
     final deviceHeight = MediaQuery.of(context).size.height;
     final deviceWidth = MediaQuery.of(context).size.width;
-    final messageList = ListView.builder(
+    final messageList =
+    Padding(padding: EdgeInsets.only(bottom: 100),child:
+    ListView.builder(
       controller: scrollController,
       scrollDirection: Axis.vertical,
       itemCount: chatResponse.length,
@@ -179,7 +193,7 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
           authentication: _authentication,
         );
       },
-    );
+    ));
 
     final inputBox = Positioned(
       bottom: 20,
@@ -221,19 +235,19 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
                           };
 
                           sendSocket(data);
-                          setState(() {
-                            chatResponse.add(ChatMessages(
-                              id: "",
-                              senderId: _authentication.currentUser.id,
-                              receiverId: widget.feed.chatWith!.id!,
-                              message: textController.text,
-                              type: "sent",
-                              inboxId: "1",
-                              status: "0",
-                              dateModified: DateTime.now().toString(),
-                              dateCreated: DateTime.now().toString(),
-                            ));
-                          });
+                          // setState(() {
+                          //   chatResponse.add(ChatMessages(
+                          //     id: "",
+                          //     senderId: _authentication.currentUser.id,
+                          //     receiverId: widget.feed.chatWith!.id!,
+                          //     message: textController.text,
+                          //     type: "sent",
+                          //     inboxId: "1",
+                          //     status: "0",
+                          //     dateModified: DateTime.now().toString(),
+                          //     dateCreated: DateTime.now().toString(),
+                          //   ));
+                          // });
                           textController.text = '';
                           //Scrolldown the list to show the latest message
                           scrollController.animateTo(
