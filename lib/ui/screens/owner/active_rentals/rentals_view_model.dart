@@ -68,6 +68,7 @@ _navigationService.pop();
     }
   }
 
+
   updateBooking(String id, String status) async {
     setBusy(true);
     var result = await _activities.updateBooking(id, status);

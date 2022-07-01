@@ -3,7 +3,7 @@ import 'package:equipro/ui/screens/hirer/active_rentals/rentals_view_model.dart'
 import 'package:equipro/ui/widget/general_button.dart';
 import 'package:equipro/utils/locator.dart';
 import 'package:equipro/utils/router/navigation_service.dart';
-import 'package:equipro/utils/router/route_names.dart';
+import 'package:equipro/utils/screensize.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:intl/intl.dart';
@@ -297,121 +297,147 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                   SizedBox(
                                     height: 40,
                                   ),
-                                  // Text(
-                                  //   "Equipment Delivery Status",
-                                  //   style: TextStyle(
-                                  //       color: Colors.grey,
-                                  //       fontWeight: FontWeight.w500,
-                                  //       fontSize: 18),
-                                  // ),
-                                  // Divider(
-                                  //   thickness: 2,
-                                  // ),
-                                  // SizedBox(
-                                  //   height: 30,
-                                  // ),
-                                  // Column(
-                                  //   children: [
-                                  //     Row(
-                                  //       mainAxisAlignment:
-                                  //           MainAxisAlignment.spaceBetween,
-                                  //       children: [
-                                  //         Row(children: [
-                                  //           Column(
-                                  //             children: [
-                                  //               CircleAvatar(
-                                  //                 radius: 4,
-                                  //                 backgroundColor:
-                                  //                     AppColors.primaryColor,
-                                  //               ),
-                                  //               Container(
-                                  //                 height: 20,
-                                  //                 width: 2,
-                                  //                 color: AppColors.primaryColor,
-                                  //               )
-                                  //             ],
-                                  //           ),
-                                  //           SizedBox(
-                                  //             width: 15,
-                                  //           ),
-                                  //           Text(
-                                  //             "Pending",
-                                  //             style: TextStyle(
-                                  //                 color: Colors.black,
-                                  //                 fontWeight: FontWeight.w500,
-                                  //                 fontSize: 18),
-                                  //           ),
-                                  //         ]),
-                                  //         Text(
-                                  //           "28 Aug, 2022",
-                                  //           style: TextStyle(
-                                  //               color: Colors.grey,
-                                  //               fontWeight: FontWeight.w500,
-                                  //               fontSize: 18),
-                                  //         ),
-                                  //       ],
-                                  //     ),
-                                  //     Row(
-                                  //       mainAxisAlignment:
-                                  //           MainAxisAlignment.spaceBetween,
-                                  //       children: [
-                                  //         Row(children: [
-                                  //           Column(
-                                  //             children: [
-                                  //               CircleAvatar(
-                                  //                 radius: 4,
-                                  //                 backgroundColor:
-                                  //                     AppColors.primaryColor,
-                                  //               ),
-                                  //               Container(
-                                  //                 height: 20,
-                                  //                 width: 2,
-                                  //                 color: AppColors.primaryColor,
-                                  //               )
-                                  //             ],
-                                  //           ),
-                                  //           SizedBox(
-                                  //             width: 15,
-                                  //           ),
-                                  //           Text(
-                                  //             "Picked up from owner",
-                                  //             style: TextStyle(
-                                  //                 color: Colors.black,
-                                  //                 fontWeight: FontWeight.w500,
-                                  //                 fontSize: 18),
-                                  //           ),
-                                  //         ]),
-                                  //         Text(
-                                  //           "01 Sept, 2022",
-                                  //           style: TextStyle(
-                                  //               color: Colors.grey,
-                                  //               fontWeight: FontWeight.w500,
-                                  //               fontSize: 18),
-                                  //         ),
-                                  //       ],
-                                  //     ),
-                                  //   ],
-                                  // ),
+                                  Text(
+                                    "Equipment Delivery Status",
+                                    style: TextStyle(
+                                        color: Colors.grey,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 18),
+                                  ),
+                                  widget.feed.equipDeliveryStatus != null
+                                      ? Container(
+                                          height:
+                                              Responsive.height(context) / 2.8,
+                                          child: ListView.builder(
+                                              itemCount: widget
+                                                  .feed
+                                                  .equipDeliveryStatus!
+                                                  .deliveryStatusLists!
+                                                  .length,
+                                              itemBuilder: (context, i) {
+                                                return Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Row(children: [
+                                                      Column(
+                                                        children: [
+                                                          CircleAvatar(
+                                                            radius: 4,
+                                                            backgroundColor:
+                                                                AppColors
+                                                                    .primaryColor,
+                                                          ),
+                                                          Container(
+                                                            height: 40,
+                                                            width: 2,
+                                                            color: AppColors
+                                                                .primaryColor,
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      SizedBox(
+                                                        width: 15,
+                                                      ),
+                                                      Text(
+                                                        widget
+                                                                    .feed
+                                                                    .equipDeliveryStatus!
+                                                                    .deliveryStatusLists![
+                                                                        i]
+                                                                    .deliveryStatus! ==
+                                                                "pending"
+                                                            ? "Pending"
+                                                            : widget
+                                                                        .feed
+                                                                        .equipDeliveryStatus!
+                                                                        .deliveryStatusLists![
+                                                                            i]
+                                                                        .deliveryStatus! ==
+                                                                    "picked_from_owner"
+                                                                ? "Equipment Picked Up"
+                                                                : widget
+                                                                            .feed
+                                                                            .equipDeliveryStatus!
+                                                                            .deliveryStatusLists![
+                                                                                i]
+                                                                            .deliveryStatus! ==
+                                                                        "delivered_hirer"
+                                                                    ? "Owner confirmed Pick-Up"
+                                                                    : widget.feed.equipDeliveryStatus!.deliveryStatusLists![i].deliveryStatus! ==
+                                                                            "picked_from_hirer"
+                                                                        ? "Equipment Returned"
+                                                                        : "Confirmed Returned",
+                                                        //   "Pending",
+                                                        style: TextStyle(
+                                                            color: Colors.black,
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            fontSize: 15),
+                                                      ),
+                                                    ]),
+                                                    Text(
+                                                      DateFormat(
+                                                        "dd MMM, yyyy, hh:mm aa",
+                                                      ).format(DateTime.parse(widget
+                                                          .feed
+                                                          .equipDeliveryStatus!
+                                                          .deliveryStatusLists![
+                                                              i]
+                                                          .dateCreated!
+                                                          .toString())),
+                                                      style: TextStyle(
+                                                          color: Colors.grey,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          fontSize: 12),
+                                                    ),
+                                                  ],
+                                                );
+                                              }),
+                                        )
+                                      : Container(
+                                          child: Text(
+                                            "Process pending",
+                                          ),
+                                        ),
                                   SizedBox(
                                     height: 50,
                                   ),
-                                  GeneralButton(
-                                      onPressed: () {
-                                        model.updateBooking(
-                                            widget.feed.equipOrderId.toString(),
-                                            "picked_from_owner");
-                                      },
-                                      buttonText: "Picked From Owner"),
-
-                                  widget.feed.requestStatus! == "returned"
+                                  widget.feed.equipDeliveryStatus!
+                                              .deliveryStatus ==
+                                          "pending"
                                       ? GeneralButton(
                                           onPressed: () {
-                                            _navigationService.navigateTo(
-                                                RatingRoute,
-                                                arguments: widget.feed.id);
+                                            model.updateBooking(
+                                                widget.feed.equipOrderId
+                                                    .toString(),
+                                                "picked_from_owner");
                                           },
-                                          buttonText: "Give Feedback")
-                                      : Container()
+                                          buttonText:
+                                              "Equipment Picked From Owner")
+                                      : widget.feed.requestStatus! ==
+                                              "delivered_hirer"
+                                          ? GeneralButton(
+                                              onPressed: () {
+                                                model.updateBooking(
+                                                    widget.feed.equipOrderId
+                                                        .toString(),
+                                                    "picked_from_hirer");
+                                              },
+                                              buttonText: "Equipment Returned")
+                                          : Container(),
+
+                                  // widget.feed.requestStatus! == "returned"
+                                  //     ? GeneralButton(
+                                  //         onPressed: () {
+                                  //           _navigationService.navigateTo(
+                                  //               RatingRoute,
+                                  //               arguments: widget.feed.id);
+                                  //         },
+                                  //         buttonText: "Give Feedback")
+                                  //     : Container()
                                 ]))))),
           );
         });

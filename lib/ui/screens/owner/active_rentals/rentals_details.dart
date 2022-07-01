@@ -60,8 +60,8 @@ class LoginState extends State<OwnerRentalDetails>
                       DatePicker.showDatePicker(context,
                           minTime: DateTime.now(),
                           showTitleActions: true, onChanged: (date) {
-                            Navigator.pop(context);
-                            Navigator.pop(context);
+                        Navigator.pop(context);
+                        Navigator.pop(context);
                         setState(() {
                           selectedDate =
                               DateFormat('y-MM-dd').format(date).toString();
@@ -69,7 +69,7 @@ class LoginState extends State<OwnerRentalDetails>
                         print('change $date in time zone ' +
                             date.timeZoneOffset.inHours.toString());
 
-                        displayDialog( context, model);
+                        displayDialog(context, model);
                       }, onConfirm: (date) {
                         setState(() {});
                       }, currentTime: DateTime.now());
@@ -110,11 +110,12 @@ class LoginState extends State<OwnerRentalDetails>
                   child: GeneralButton(
                     buttonText: 'Confirm',
                     onPressed: () async {
-                      var result = await model.sendDate(selectedDate!, widget.feed.id.toString());
-                      if(result is SuccessModel){
+                      var result = await model.sendDate(
+                          selectedDate!, widget.feed.id.toString());
+                      if (result is SuccessModel) {
                         Navigator.pop(context);
                       }
-                     // _navigationService.pushAndRemoveUntil(homeRoute);
+                      // _navigationService.pushAndRemoveUntil(homeRoute);
                     },
                   ),
                 ),
@@ -218,21 +219,21 @@ class LoginState extends State<OwnerRentalDetails>
                                             onPressed: () {},
                                             buttonText:
                                                 toBeginningOfSentenceCase(widget
-                                                    .feed.equipOrder!.orderStatus!)!,
+                                                    .feed.requestStatus!)!,
                                             buttonTextColor: AppColors.white,
                                             splashColor: widget
-                                                        .feed.equipOrder!.orderStatus! ==
+                                                        .feed.requestStatus! ==
                                                     "pending"
                                                 ? Colors.blue
-                                                : widget.feed.equipOrder!.orderStatus! ==
+                                                : widget.feed.requestStatus! ==
                                                         "rejected"
                                                     ? AppColors.red
                                                     : widget.feed
-                                                .equipOrder!.orderStatus! ==
+                                                                .requestStatus! ==
                                                             "returned"
                                                         ? AppColors.green
                                                         : widget.feed
-                                                .equipOrder!.orderStatus! ==
+                                                                    .requestStatus! ==
                                                                 "received"
                                                             ? AppColors.blue
                                                             : AppColors
@@ -394,25 +395,147 @@ class LoginState extends State<OwnerRentalDetails>
                                     ],
                                   ),
                                   SizedBox(
-                                    height: 50,
+                                    height: 40,
                                   ),
-                                  widget.feed.requestStatus! == "accepted"
-                                      ?    GeneralButton(
-                                      onPressed: () {
-                                        model.updateBooking(
-                                            widget.feed.equipOrderId.toString(),
-                                            "delivered_hirer");
-                                      },
-                                      buttonText: "Delivered to Hirer")
-                                      : widget.feed.requestStatus! == "returned"
+                                  Text(
+                                    "Equipment Delivery Status",
+                                    style: TextStyle(
+                                        color: Colors.grey,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 18),
+                                  ),
+                                  widget.feed.equipDeliveryStatus != null
+                                      ? Container(
+                                          height:
+                                              Responsive.height(context) / 2.8,
+                                          child: ListView.builder(
+                                              itemCount: widget
+                                                  .feed
+                                                  .equipDeliveryStatus!
+                                                  .deliveryStatusLists!
+                                                  .length,
+                                              itemBuilder: (context, i) {
+                                                return Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Row(children: [
+                                                      Column(
+                                                        children: [
+                                                          CircleAvatar(
+                                                            radius: 4,
+                                                            backgroundColor:
+                                                                AppColors
+                                                                    .primaryColor,
+                                                          ),
+                                                          Container(
+                                                            height: 40,
+                                                            width: 2,
+                                                            color: AppColors
+                                                                .primaryColor,
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      SizedBox(
+                                                        width: 15,
+                                                      ),
+                                                      Text(
+                                                        widget
+                                                                    .feed
+                                                                    .equipDeliveryStatus!
+                                                                    .deliveryStatusLists![
+                                                                        i]
+                                                                    .deliveryStatus! ==
+                                                                "pending"
+                                                            ? "Pending"
+                                                            : widget
+                                                                        .feed
+                                                                        .equipDeliveryStatus!
+                                                                        .deliveryStatusLists![
+                                                                            i]
+                                                                        .deliveryStatus! ==
+                                                                    "picked_from_owner"
+                                                                ? "Equipment Picked Up"
+                                                                : widget
+                                                                            .feed
+                                                                            .equipDeliveryStatus!
+                                                                            .deliveryStatusLists![
+                                                                                i]
+                                                                            .deliveryStatus! ==
+                                                                        "delivered_hirer"
+                                                                    ? "Owner confirmed Pick-Up"
+                                                                    : widget.feed.equipDeliveryStatus!.deliveryStatusLists![i].deliveryStatus! ==
+                                                                            "picked_from_hirer"
+                                                                        ? "Equipment Returned"
+                                                                        : "Confirmed Returned",
+                                                        //   "Pending",
+                                                        style: TextStyle(
+                                                            color: Colors.black,
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            fontSize: 15),
+                                                      ),
+                                                    ]),
+                                                    Text(
+                                                      DateFormat(
+                                                        "dd MMM, yyyy, hh:mm aa",
+                                                      ).format(DateTime.parse(widget
+                                                          .feed
+                                                          .equipDeliveryStatus!
+                                                          .deliveryStatusLists![
+                                                              i]
+                                                          .dateCreated!
+                                                          .toString())),
+                                                      style: TextStyle(
+                                                          color: Colors.grey,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          fontSize: 12),
+                                                    ),
+                                                  ],
+                                                );
+                                              }),
+                                        )
+                                      : Container(
+                                          child: Text(
+                                            "Not available",
+                                          ),
+                                        ),
+                                  widget.feed.equipDeliveryStatus!
+                                              .deliveryStatus ==
+                                          "pending"
+                                      ? GeneralButton(
+                                          onPressed: () {
+                                            model.updateBooking(
+                                                widget.feed.equipOrderId
+                                                    .toString(),
+                                                "delivered_hirer");
+                                          },
+                                          buttonText:
+                                              "Confirm equipment Picked Up")
+                                      : widget.feed.equipDeliveryStatus!
+                                                  .deliveryStatus ==
+                                              "picked_from_hirer"
                                           ? GeneralButton(
                                               onPressed: () {
-                                                _navigationService.navigateTo(
-                                                    RatingRoute,
-                                                    arguments: widget.feed.id);
+                                                model.updateBooking(
+                                                    widget.feed.equipOrderId
+                                                        .toString(),
+                                                    "returned");
                                               },
-                                              buttonText: "Give Feedback")
-                                          : Container()
+                                              buttonText:
+                                                  "Confirm equipment is returned ")
+                                          : Container(),
+                                  widget.feed.requestStatus! == "returned"
+                                      ? GeneralButton(
+                                          onPressed: () {
+                                            _navigationService.navigateTo(
+                                                RatingRoute,
+                                                arguments: widget.feed.id);
+                                          },
+                                          buttonText: "Give Feedback")
+                                      : Container()
                                 ]))))),
           );
         });

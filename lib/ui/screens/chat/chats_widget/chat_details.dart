@@ -130,7 +130,7 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
   }
 
   fetchChats() async {
-    var result = await _activities.fetchChat(widget.feed.id.toString());
+    var result = await _activities.fetchChat(widget.feed.chatWith!.id.toString());
     if (result is ErrorModel) {
       showErrorToast(result.error);
       return ErrorModel(result.error);
@@ -390,9 +390,11 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
                   thickness: 4,
                 ),
                 // appBar,
-
+                chatResponse.isNotEmpty?
                 Flexible(
                   child: messageList,
+                ):Container(
+                  child: Text("Loading....",style: TextStyle(color: Colors.red),),
                 ),
               ],
             ),

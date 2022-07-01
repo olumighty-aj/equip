@@ -1,19 +1,20 @@
-/// ID : "24"
-/// equip_order_id : "26"
-/// hirers_id : "9"
-/// equipments_id : "2"
-/// quantity : "3"
-/// rental_from : "2022-05-07 00:00:00"
-/// rental_to : "2022-05-08 00:00:00"
-/// delivery_location : "No 10, Kwara road, Ibadan"
-/// request_status : "returned"
-/// date_modified : "2022-06-02 12:24:16"
-/// date_created : "2022-05-08 15:45:58"
-/// equip_order : {"ID":"26","hirers_id":"9","owners_id":"1","order_number":"1000000014","quantity":"3","discount":null,"total_amount":"2142.86","delivery_charge":"0","order_status":"rejected","order_type":"normal","pickup_date":"2022-05-10 00:00:00","payment_status":"0","date_modified":"2022-05-26 20:04:10","date_created":"2022-05-08 15:21:23"}
-/// equipments : {"ID":"2","user_id":"holynationdevelopment@gmail.com","owners_id":"11","equip_name":"Bulldozer","equip_images_id":"/var/www/holynation/gig/equipro/writable/uploads/equipments/1651718951_6a63c19020a5fa15229e.png","cost_of_hire":"5000","cost_of_hire_interval":"7","avail_from":"2022-05-05 00:00:00","avail_to":"2022-12-25 00:00:00","quantity":"12","description":"This is a bulldozer useful for farming and item carriage","status":"1","date_modified":"2022-05-26 14:39:24","date_created":"2022-05-05 02:49:11"}
+/// ID : "4"
+/// equip_order_id : "4"
+/// hirers_id : "8"
+/// equipments_id : "3"
+/// quantity : "2"
+/// rental_from : "2022-06-30 20:43:58"
+/// rental_to : "2022-07-02 00:00:00"
+/// delivery_location : "CFWC+WF9, Victoria Arobieke St, Lekki Phase I 106104, Lagos, Nigeria"
+/// request_status : "accepted"
+/// date_modified : "2022-06-30 19:43:58"
+/// date_created : "2022-06-30 19:10:57"
+/// equip_order : {"ID":"4","hirers_id":"8","owners_id":"1","order_number":"1000000012","quantity":"2","discount":null,"total_amount":"40000","delivery_charge":"0","order_status":"accepted","order_type":"normal","pickup_date":"2022-06-30 19:43:58","latitude":"6.44733","longitude":"3.47116","payment_status":"0","date_modified":"2022-06-30 19:43:58","date_created":"2022-06-30 19:10:57"}
+/// equipments : {"ID":"3","user_id":"mayomidedaniel@gmail.com","owners_id":"16","equip_name":"John Deer ","cost_of_hire":"10000","cost_of_hire_interval":"1","avail_from":"2022-06-26 00:00:00","avail_to":"2022-08-31 00:00:00","quantity":"10","description":"So cool and high HP tractor","latitude":"6.44781","longitude":"3.47235","address":"Victoria Arobieke St, Lekki Phase I 106104, Lagos, Nigeria","status":"1","date_modified":"2022-06-26 08:40:39","date_created":"2022-06-26 08:40:39","equip_images":[{"ID":"3","equipments_id":"3","equip_images_path":"https://staging.equipro.io/uploads/equip_images/image_picker4816018539018138906.jpg","status":"1","date_modified":"2022-06-26 09:40:39","date_created":"2022-06-26 09:40:39"}]}
 /// extend_equip_request : {"ID":"9","hirers_id":"9","equip_request_id":"24","equip_order_id":"185","prev_equip_order":"26","rental_from":"2022-05-08 00:00:00","rental_to":"2022-05-09 00:00:00","request_status":"rejected","date_modified":"2022-05-27 17:59:44","date_created":"2022-05-24 15:52:09"}
-/// hirers : {"ID":"9","fullname":"Holynation developer","email":"holynation667@gmail.com","phone_number":"+2348109994486","gender":"","address":null,"address_opt":null,"local_state":null,"country":null,"hirers_path":null,"status":"1","date_modified":"2022-05-09 16:51:27","date_created":"2022-05-06 12:45:43"}
-/// equip_payment : []
+/// equip_delivery_status : {"delivery_status":"picked_from_owner","delivery_status_lists":[{"ID":"1","delivery_status":"pending","date_modified":"2022-06-30 19:38:41","date_created":"2022-06-30 19:38:41"},{"ID":"2","delivery_status":"pending","date_modified":"2022-06-30 19:43:58","date_created":"2022-06-30 19:43:58"},{"ID":"3","delivery_status":"picked_from_owner","date_modified":"2022-06-30 20:02:24","date_created":"2022-06-30 20:02:24"}]}
+/// hirers : {"ID":"8","fullname":"Oluwaseun Alatise","email":"holynationdevelopment@gmail.com","phone_number":"+2348109994485","gender":"male","address":"No 26, Gbemisola street, Allen Avenue, Ikeja","address_opt":null,"local_state":"Oyo","country":"Nigeria","latitude":null,"longitude":null,"hirers_path":null,"status":"1","date_modified":"2022-05-10 16:49:36","date_created":"2022-05-05 00:02:24"}
+/// equip_payment : null
 
 class ActiveRentalsModel {
   ActiveRentalsModel({
@@ -29,10 +30,11 @@ class ActiveRentalsModel {
       String? dateModified, 
       String? dateCreated, 
       EquipOrder? equipOrder, 
-      Equipments? equipments,
-    //ExtendEquipRequest? extendEquipRequest,
+      Equipments? equipments, 
+      ExtendEquipRequest? extendEquipRequest, 
+      EquipDeliveryStatus? equipDeliveryStatus, 
       Hirers? hirers, 
-      List<dynamic>? equipPayment,}){
+      dynamic equipPayment,}){
     _id = id;
     _equipOrderId = equipOrderId;
     _hirersId = hirersId;
@@ -46,7 +48,8 @@ class ActiveRentalsModel {
     _dateCreated = dateCreated;
     _equipOrder = equipOrder;
     _equipments = equipments;
-   // _extendEquipRequest = extendEquipRequest;
+    _extendEquipRequest = extendEquipRequest;
+    _equipDeliveryStatus = equipDeliveryStatus;
     _hirers = hirers;
     _equipPayment = equipPayment;
 }
@@ -65,14 +68,10 @@ class ActiveRentalsModel {
     _dateCreated = json['date_created'];
     _equipOrder = json['equip_order'] != null ? EquipOrder.fromJson(json['equip_order']) : null;
     _equipments = json['equipments'] != null ? Equipments.fromJson(json['equipments']) : null;
-  //  _extendEquipRequest = json['extend_equip_request'] != null ? ExtendEquipRequest.fromJson(json['extend_equip_request']) : null;
+    _extendEquipRequest = json['extend_equip_request'] != null ? ExtendEquipRequest.fromJson(json['extend_equip_request']) : null;
+    _equipDeliveryStatus = json['equip_delivery_status'] != null ? EquipDeliveryStatus.fromJson(json['equip_delivery_status']) : null;
     _hirers = json['hirers'] != null ? Hirers.fromJson(json['hirers']) : null;
-    if (json['equip_payment'] != null) {
-      _equipPayment = [];
-      json['equip_payment'].forEach((v) {
-       // _equipPayment?.add(Dynamic.fromJson(v));
-      });
-    }
+    _equipPayment = json['equip_payment'];
   }
   String? _id;
   String? _equipOrderId;
@@ -87,9 +86,10 @@ class ActiveRentalsModel {
   String? _dateCreated;
   EquipOrder? _equipOrder;
   Equipments? _equipments;
- // ExtendEquipRequest? _extendEquipRequest;
+  ExtendEquipRequest? _extendEquipRequest;
+  EquipDeliveryStatus? _equipDeliveryStatus;
   Hirers? _hirers;
-  List<dynamic>? _equipPayment;
+  dynamic _equipPayment;
 ActiveRentalsModel copyWith({  String? id,
   String? equipOrderId,
   String? hirersId,
@@ -103,9 +103,10 @@ ActiveRentalsModel copyWith({  String? id,
   String? dateCreated,
   EquipOrder? equipOrder,
   Equipments? equipments,
-  //ExtendEquipRequest? extendEquipRequest,
+  ExtendEquipRequest? extendEquipRequest,
+  EquipDeliveryStatus? equipDeliveryStatus,
   Hirers? hirers,
-  List<dynamic>? equipPayment,
+  dynamic equipPayment,
 }) => ActiveRentalsModel(  id: id ?? _id,
   equipOrderId: equipOrderId ?? _equipOrderId,
   hirersId: hirersId ?? _hirersId,
@@ -119,7 +120,8 @@ ActiveRentalsModel copyWith({  String? id,
   dateCreated: dateCreated ?? _dateCreated,
   equipOrder: equipOrder ?? _equipOrder,
   equipments: equipments ?? _equipments,
- // extendEquipRequest: extendEquipRequest ?? _extendEquipRequest,
+  extendEquipRequest: extendEquipRequest ?? _extendEquipRequest,
+  equipDeliveryStatus: equipDeliveryStatus ?? _equipDeliveryStatus,
   hirers: hirers ?? _hirers,
   equipPayment: equipPayment ?? _equipPayment,
 );
@@ -136,9 +138,10 @@ ActiveRentalsModel copyWith({  String? id,
   String? get dateCreated => _dateCreated;
   EquipOrder? get equipOrder => _equipOrder;
   Equipments? get equipments => _equipments;
- // ExtendEquipRequest? get extendEquipRequest => _extendEquipRequest;
+  ExtendEquipRequest? get extendEquipRequest => _extendEquipRequest;
+  EquipDeliveryStatus? get equipDeliveryStatus => _equipDeliveryStatus;
   Hirers? get hirers => _hirers;
-  List<dynamic>? get equipPayment => _equipPayment;
+  dynamic get equipPayment => _equipPayment;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -159,33 +162,36 @@ ActiveRentalsModel copyWith({  String? id,
     if (_equipments != null) {
       map['equipments'] = _equipments?.toJson();
     }
-    // if (_extendEquipRequest != null) {
-    //   map['extend_equip_request'] = _extendEquipRequest?.toJson();
-    // }
+    if (_extendEquipRequest != null) {
+      map['extend_equip_request'] = _extendEquipRequest?.toJson();
+    }
+    if (_equipDeliveryStatus != null) {
+      map['equip_delivery_status'] = _equipDeliveryStatus?.toJson();
+    }
     if (_hirers != null) {
       map['hirers'] = _hirers?.toJson();
     }
-    if (_equipPayment != null) {
-      map['equip_payment'] = _equipPayment?.map((v) => v.toJson()).toList();
-    }
+    map['equip_payment'] = _equipPayment;
     return map;
   }
 
 }
 
-/// ID : "9"
-/// fullname : "Holynation developer"
-/// email : "holynation667@gmail.com"
-/// phone_number : "+2348109994486"
-/// gender : ""
-/// address : null
+/// ID : "8"
+/// fullname : "Oluwaseun Alatise"
+/// email : "holynationdevelopment@gmail.com"
+/// phone_number : "+2348109994485"
+/// gender : "male"
+/// address : "No 26, Gbemisola street, Allen Avenue, Ikeja"
 /// address_opt : null
-/// local_state : null
-/// country : null
+/// local_state : "Oyo"
+/// country : "Nigeria"
+/// latitude : null
+/// longitude : null
 /// hirers_path : null
 /// status : "1"
-/// date_modified : "2022-05-09 16:51:27"
-/// date_created : "2022-05-06 12:45:43"
+/// date_modified : "2022-05-10 16:49:36"
+/// date_created : "2022-05-05 00:02:24"
 
 class Hirers {
   Hirers({
@@ -194,10 +200,12 @@ class Hirers {
       String? email, 
       String? phoneNumber, 
       String? gender, 
-      dynamic address, 
+      String? address, 
       dynamic addressOpt, 
-      dynamic localState, 
-      dynamic country, 
+      String? localState, 
+      String? country, 
+      dynamic latitude, 
+      dynamic longitude, 
       dynamic hirersPath, 
       String? status, 
       String? dateModified, 
@@ -211,6 +219,8 @@ class Hirers {
     _addressOpt = addressOpt;
     _localState = localState;
     _country = country;
+    _latitude = latitude;
+    _longitude = longitude;
     _hirersPath = hirersPath;
     _status = status;
     _dateModified = dateModified;
@@ -227,6 +237,8 @@ class Hirers {
     _addressOpt = json['address_opt'];
     _localState = json['local_state'];
     _country = json['country'];
+    _latitude = json['latitude'];
+    _longitude = json['longitude'];
     _hirersPath = json['hirers_path'];
     _status = json['status'];
     _dateModified = json['date_modified'];
@@ -237,10 +249,12 @@ class Hirers {
   String? _email;
   String? _phoneNumber;
   String? _gender;
-  dynamic _address;
+  String? _address;
   dynamic _addressOpt;
-  dynamic _localState;
-  dynamic _country;
+  String? _localState;
+  String? _country;
+  dynamic _latitude;
+  dynamic _longitude;
   dynamic _hirersPath;
   String? _status;
   String? _dateModified;
@@ -250,10 +264,12 @@ Hirers copyWith({  String? id,
   String? email,
   String? phoneNumber,
   String? gender,
-  dynamic address,
+  String? address,
   dynamic addressOpt,
-  dynamic localState,
-  dynamic country,
+  String? localState,
+  String? country,
+  dynamic latitude,
+  dynamic longitude,
   dynamic hirersPath,
   String? status,
   String? dateModified,
@@ -267,6 +283,8 @@ Hirers copyWith({  String? id,
   addressOpt: addressOpt ?? _addressOpt,
   localState: localState ?? _localState,
   country: country ?? _country,
+  latitude: latitude ?? _latitude,
+  longitude: longitude ?? _longitude,
   hirersPath: hirersPath ?? _hirersPath,
   status: status ?? _status,
   dateModified: dateModified ?? _dateModified,
@@ -277,10 +295,12 @@ Hirers copyWith({  String? id,
   String? get email => _email;
   String? get phoneNumber => _phoneNumber;
   String? get gender => _gender;
-  dynamic get address => _address;
+  String? get address => _address;
   dynamic get addressOpt => _addressOpt;
-  dynamic get localState => _localState;
-  dynamic get country => _country;
+  String? get localState => _localState;
+  String? get country => _country;
+  dynamic get latitude => _latitude;
+  dynamic get longitude => _longitude;
   dynamic get hirersPath => _hirersPath;
   String? get status => _status;
   String? get dateModified => _dateModified;
@@ -297,8 +317,103 @@ Hirers copyWith({  String? id,
     map['address_opt'] = _addressOpt;
     map['local_state'] = _localState;
     map['country'] = _country;
+    map['latitude'] = _latitude;
+    map['longitude'] = _longitude;
     map['hirers_path'] = _hirersPath;
     map['status'] = _status;
+    map['date_modified'] = _dateModified;
+    map['date_created'] = _dateCreated;
+    return map;
+  }
+
+}
+
+/// delivery_status : "picked_from_owner"
+/// delivery_status_lists : [{"ID":"1","delivery_status":"pending","date_modified":"2022-06-30 19:38:41","date_created":"2022-06-30 19:38:41"},{"ID":"2","delivery_status":"pending","date_modified":"2022-06-30 19:43:58","date_created":"2022-06-30 19:43:58"},{"ID":"3","delivery_status":"picked_from_owner","date_modified":"2022-06-30 20:02:24","date_created":"2022-06-30 20:02:24"}]
+
+class EquipDeliveryStatus {
+  EquipDeliveryStatus({
+      String? deliveryStatus, 
+      List<DeliveryStatusLists>? deliveryStatusLists,}){
+    _deliveryStatus = deliveryStatus;
+    _deliveryStatusLists = deliveryStatusLists;
+}
+
+  EquipDeliveryStatus.fromJson(dynamic json) {
+    _deliveryStatus = json['delivery_status'];
+    if (json['delivery_status_lists'] != null) {
+      _deliveryStatusLists = [];
+      json['delivery_status_lists'].forEach((v) {
+        _deliveryStatusLists?.add(DeliveryStatusLists.fromJson(v));
+      });
+    }
+  }
+  String? _deliveryStatus;
+  List<DeliveryStatusLists>? _deliveryStatusLists;
+EquipDeliveryStatus copyWith({  String? deliveryStatus,
+  List<DeliveryStatusLists>? deliveryStatusLists,
+}) => EquipDeliveryStatus(  deliveryStatus: deliveryStatus ?? _deliveryStatus,
+  deliveryStatusLists: deliveryStatusLists ?? _deliveryStatusLists,
+);
+  String? get deliveryStatus => _deliveryStatus;
+  List<DeliveryStatusLists>? get deliveryStatusLists => _deliveryStatusLists;
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['delivery_status'] = _deliveryStatus;
+    if (_deliveryStatusLists != null) {
+      map['delivery_status_lists'] = _deliveryStatusLists?.map((v) => v.toJson()).toList();
+    }
+    return map;
+  }
+
+}
+
+/// ID : "1"
+/// delivery_status : "pending"
+/// date_modified : "2022-06-30 19:38:41"
+/// date_created : "2022-06-30 19:38:41"
+
+class DeliveryStatusLists {
+  DeliveryStatusLists({
+      String? id, 
+      String? deliveryStatus, 
+      String? dateModified, 
+      String? dateCreated,}){
+    _id = id;
+    _deliveryStatus = deliveryStatus;
+    _dateModified = dateModified;
+    _dateCreated = dateCreated;
+}
+
+  DeliveryStatusLists.fromJson(dynamic json) {
+    _id = json['ID'];
+    _deliveryStatus = json['delivery_status'];
+    _dateModified = json['date_modified'];
+    _dateCreated = json['date_created'];
+  }
+  String? _id;
+  String? _deliveryStatus;
+  String? _dateModified;
+  String? _dateCreated;
+DeliveryStatusLists copyWith({  String? id,
+  String? deliveryStatus,
+  String? dateModified,
+  String? dateCreated,
+}) => DeliveryStatusLists(  id: id ?? _id,
+  deliveryStatus: deliveryStatus ?? _deliveryStatus,
+  dateModified: dateModified ?? _dateModified,
+  dateCreated: dateCreated ?? _dateCreated,
+);
+  String? get id => _id;
+  String? get deliveryStatus => _deliveryStatus;
+  String? get dateModified => _dateModified;
+  String? get dateCreated => _dateCreated;
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['ID'] = _id;
+    map['delivery_status'] = _deliveryStatus;
     map['date_modified'] = _dateModified;
     map['date_created'] = _dateCreated;
     return map;
@@ -412,20 +527,23 @@ ExtendEquipRequest copyWith({  String? id,
 
 }
 
-/// ID : "2"
-/// user_id : "holynationdevelopment@gmail.com"
-/// owners_id : "11"
-/// equip_name : "Bulldozer"
-/// equip_images_id : "/var/www/holynation/gig/equipro/writable/uploads/equipments/1651718951_6a63c19020a5fa15229e.png"
-/// cost_of_hire : "5000"
-/// cost_of_hire_interval : "7"
-/// avail_from : "2022-05-05 00:00:00"
-/// avail_to : "2022-12-25 00:00:00"
-/// quantity : "12"
-/// description : "This is a bulldozer useful for farming and item carriage"
+/// ID : "3"
+/// user_id : "mayomidedaniel@gmail.com"
+/// owners_id : "16"
+/// equip_name : "John Deer "
+/// cost_of_hire : "10000"
+/// cost_of_hire_interval : "1"
+/// avail_from : "2022-06-26 00:00:00"
+/// avail_to : "2022-08-31 00:00:00"
+/// quantity : "10"
+/// description : "So cool and high HP tractor"
+/// latitude : "6.44781"
+/// longitude : "3.47235"
+/// address : "Victoria Arobieke St, Lekki Phase I 106104, Lagos, Nigeria"
 /// status : "1"
-/// date_modified : "2022-05-26 14:39:24"
-/// date_created : "2022-05-05 02:49:11"
+/// date_modified : "2022-06-26 08:40:39"
+/// date_created : "2022-06-26 08:40:39"
+/// equip_images : [{"ID":"3","equipments_id":"3","equip_images_path":"https://staging.equipro.io/uploads/equip_images/image_picker4816018539018138906.jpg","status":"1","date_modified":"2022-06-26 09:40:39","date_created":"2022-06-26 09:40:39"}]
 
 class Equipments {
   Equipments({
@@ -433,30 +551,36 @@ class Equipments {
       String? userId, 
       String? ownersId, 
       String? equipName, 
-      String? equipImagesId, 
       String? costOfHire, 
       String? costOfHireInterval, 
       String? availFrom, 
       String? availTo, 
       String? quantity, 
       String? description, 
+      String? latitude, 
+      String? longitude, 
+      String? address, 
       String? status, 
       String? dateModified, 
-      String? dateCreated,}){
+      String? dateCreated, 
+      List<EquipImages>? equipImages,}){
     _id = id;
     _userId = userId;
     _ownersId = ownersId;
     _equipName = equipName;
-    _equipImagesId = equipImagesId;
     _costOfHire = costOfHire;
     _costOfHireInterval = costOfHireInterval;
     _availFrom = availFrom;
     _availTo = availTo;
     _quantity = quantity;
     _description = description;
+    _latitude = latitude;
+    _longitude = longitude;
+    _address = address;
     _status = status;
     _dateModified = dateModified;
     _dateCreated = dateCreated;
+    _equipImages = equipImages;
 }
 
   Equipments.fromJson(dynamic json) {
@@ -464,74 +588,94 @@ class Equipments {
     _userId = json['user_id'];
     _ownersId = json['owners_id'];
     _equipName = json['equip_name'];
-    _equipImagesId = json['equip_images_id'];
     _costOfHire = json['cost_of_hire'];
     _costOfHireInterval = json['cost_of_hire_interval'];
     _availFrom = json['avail_from'];
     _availTo = json['avail_to'];
     _quantity = json['quantity'];
     _description = json['description'];
+    _latitude = json['latitude'];
+    _longitude = json['longitude'];
+    _address = json['address'];
     _status = json['status'];
     _dateModified = json['date_modified'];
     _dateCreated = json['date_created'];
+    if (json['equip_images'] != null) {
+      _equipImages = [];
+      json['equip_images'].forEach((v) {
+        _equipImages?.add(EquipImages.fromJson(v));
+      });
+    }
   }
   String? _id;
   String? _userId;
   String? _ownersId;
   String? _equipName;
-  String? _equipImagesId;
   String? _costOfHire;
   String? _costOfHireInterval;
   String? _availFrom;
   String? _availTo;
   String? _quantity;
   String? _description;
+  String? _latitude;
+  String? _longitude;
+  String? _address;
   String? _status;
   String? _dateModified;
   String? _dateCreated;
+  List<EquipImages>? _equipImages;
 Equipments copyWith({  String? id,
   String? userId,
   String? ownersId,
   String? equipName,
-  String? equipImagesId,
   String? costOfHire,
   String? costOfHireInterval,
   String? availFrom,
   String? availTo,
   String? quantity,
   String? description,
+  String? latitude,
+  String? longitude,
+  String? address,
   String? status,
   String? dateModified,
   String? dateCreated,
+  List<EquipImages>? equipImages,
 }) => Equipments(  id: id ?? _id,
   userId: userId ?? _userId,
   ownersId: ownersId ?? _ownersId,
   equipName: equipName ?? _equipName,
-  equipImagesId: equipImagesId ?? _equipImagesId,
   costOfHire: costOfHire ?? _costOfHire,
   costOfHireInterval: costOfHireInterval ?? _costOfHireInterval,
   availFrom: availFrom ?? _availFrom,
   availTo: availTo ?? _availTo,
   quantity: quantity ?? _quantity,
   description: description ?? _description,
+  latitude: latitude ?? _latitude,
+  longitude: longitude ?? _longitude,
+  address: address ?? _address,
   status: status ?? _status,
   dateModified: dateModified ?? _dateModified,
   dateCreated: dateCreated ?? _dateCreated,
+  equipImages: equipImages ?? _equipImages,
 );
   String? get id => _id;
   String? get userId => _userId;
   String? get ownersId => _ownersId;
   String? get equipName => _equipName;
-  String? get equipImagesId => _equipImagesId;
   String? get costOfHire => _costOfHire;
   String? get costOfHireInterval => _costOfHireInterval;
   String? get availFrom => _availFrom;
   String? get availTo => _availTo;
   String? get quantity => _quantity;
   String? get description => _description;
+  String? get latitude => _latitude;
+  String? get longitude => _longitude;
+  String? get address => _address;
   String? get status => _status;
   String? get dateModified => _dateModified;
   String? get dateCreated => _dateCreated;
+  List<EquipImages>? get equipImages => _equipImages;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -539,13 +683,88 @@ Equipments copyWith({  String? id,
     map['user_id'] = _userId;
     map['owners_id'] = _ownersId;
     map['equip_name'] = _equipName;
-    map['equip_images_id'] = _equipImagesId;
     map['cost_of_hire'] = _costOfHire;
     map['cost_of_hire_interval'] = _costOfHireInterval;
     map['avail_from'] = _availFrom;
     map['avail_to'] = _availTo;
     map['quantity'] = _quantity;
     map['description'] = _description;
+    map['latitude'] = _latitude;
+    map['longitude'] = _longitude;
+    map['address'] = _address;
+    map['status'] = _status;
+    map['date_modified'] = _dateModified;
+    map['date_created'] = _dateCreated;
+    if (_equipImages != null) {
+      map['equip_images'] = _equipImages?.map((v) => v.toJson()).toList();
+    }
+    return map;
+  }
+
+}
+
+/// ID : "3"
+/// equipments_id : "3"
+/// equip_images_path : "https://staging.equipro.io/uploads/equip_images/image_picker4816018539018138906.jpg"
+/// status : "1"
+/// date_modified : "2022-06-26 09:40:39"
+/// date_created : "2022-06-26 09:40:39"
+
+class EquipImages {
+  EquipImages({
+      String? id, 
+      String? equipmentsId, 
+      String? equipImagesPath, 
+      String? status, 
+      String? dateModified, 
+      String? dateCreated,}){
+    _id = id;
+    _equipmentsId = equipmentsId;
+    _equipImagesPath = equipImagesPath;
+    _status = status;
+    _dateModified = dateModified;
+    _dateCreated = dateCreated;
+}
+
+  EquipImages.fromJson(dynamic json) {
+    _id = json['ID'];
+    _equipmentsId = json['equipments_id'];
+    _equipImagesPath = json['equip_images_path'];
+    _status = json['status'];
+    _dateModified = json['date_modified'];
+    _dateCreated = json['date_created'];
+  }
+  String? _id;
+  String? _equipmentsId;
+  String? _equipImagesPath;
+  String? _status;
+  String? _dateModified;
+  String? _dateCreated;
+EquipImages copyWith({  String? id,
+  String? equipmentsId,
+  String? equipImagesPath,
+  String? status,
+  String? dateModified,
+  String? dateCreated,
+}) => EquipImages(  id: id ?? _id,
+  equipmentsId: equipmentsId ?? _equipmentsId,
+  equipImagesPath: equipImagesPath ?? _equipImagesPath,
+  status: status ?? _status,
+  dateModified: dateModified ?? _dateModified,
+  dateCreated: dateCreated ?? _dateCreated,
+);
+  String? get id => _id;
+  String? get equipmentsId => _equipmentsId;
+  String? get equipImagesPath => _equipImagesPath;
+  String? get status => _status;
+  String? get dateModified => _dateModified;
+  String? get dateCreated => _dateCreated;
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['ID'] = _id;
+    map['equipments_id'] = _equipmentsId;
+    map['equip_images_path'] = _equipImagesPath;
     map['status'] = _status;
     map['date_modified'] = _dateModified;
     map['date_created'] = _dateCreated;
@@ -554,20 +773,22 @@ Equipments copyWith({  String? id,
 
 }
 
-/// ID : "26"
-/// hirers_id : "9"
+/// ID : "4"
+/// hirers_id : "8"
 /// owners_id : "1"
-/// order_number : "1000000014"
-/// quantity : "3"
+/// order_number : "1000000012"
+/// quantity : "2"
 /// discount : null
-/// total_amount : "2142.86"
+/// total_amount : "40000"
 /// delivery_charge : "0"
-/// order_status : "rejected"
+/// order_status : "accepted"
 /// order_type : "normal"
-/// pickup_date : "2022-05-10 00:00:00"
+/// pickup_date : "2022-06-30 19:43:58"
+/// latitude : "6.44733"
+/// longitude : "3.47116"
 /// payment_status : "0"
-/// date_modified : "2022-05-26 20:04:10"
-/// date_created : "2022-05-08 15:21:23"
+/// date_modified : "2022-06-30 19:43:58"
+/// date_created : "2022-06-30 19:10:57"
 
 class EquipOrder {
   EquipOrder({
@@ -582,6 +803,8 @@ class EquipOrder {
       String? orderStatus, 
       String? orderType, 
       String? pickupDate, 
+      String? latitude, 
+      String? longitude, 
       String? paymentStatus, 
       String? dateModified, 
       String? dateCreated,}){
@@ -596,6 +819,8 @@ class EquipOrder {
     _orderStatus = orderStatus;
     _orderType = orderType;
     _pickupDate = pickupDate;
+    _latitude = latitude;
+    _longitude = longitude;
     _paymentStatus = paymentStatus;
     _dateModified = dateModified;
     _dateCreated = dateCreated;
@@ -613,6 +838,8 @@ class EquipOrder {
     _orderStatus = json['order_status'];
     _orderType = json['order_type'];
     _pickupDate = json['pickup_date'];
+    _latitude = json['latitude'];
+    _longitude = json['longitude'];
     _paymentStatus = json['payment_status'];
     _dateModified = json['date_modified'];
     _dateCreated = json['date_created'];
@@ -628,6 +855,8 @@ class EquipOrder {
   String? _orderStatus;
   String? _orderType;
   String? _pickupDate;
+  String? _latitude;
+  String? _longitude;
   String? _paymentStatus;
   String? _dateModified;
   String? _dateCreated;
@@ -642,6 +871,8 @@ EquipOrder copyWith({  String? id,
   String? orderStatus,
   String? orderType,
   String? pickupDate,
+  String? latitude,
+  String? longitude,
   String? paymentStatus,
   String? dateModified,
   String? dateCreated,
@@ -656,6 +887,8 @@ EquipOrder copyWith({  String? id,
   orderStatus: orderStatus ?? _orderStatus,
   orderType: orderType ?? _orderType,
   pickupDate: pickupDate ?? _pickupDate,
+  latitude: latitude ?? _latitude,
+  longitude: longitude ?? _longitude,
   paymentStatus: paymentStatus ?? _paymentStatus,
   dateModified: dateModified ?? _dateModified,
   dateCreated: dateCreated ?? _dateCreated,
@@ -671,6 +904,8 @@ EquipOrder copyWith({  String? id,
   String? get orderStatus => _orderStatus;
   String? get orderType => _orderType;
   String? get pickupDate => _pickupDate;
+  String? get latitude => _latitude;
+  String? get longitude => _longitude;
   String? get paymentStatus => _paymentStatus;
   String? get dateModified => _dateModified;
   String? get dateCreated => _dateCreated;
@@ -688,6 +923,8 @@ EquipOrder copyWith({  String? id,
     map['order_status'] = _orderStatus;
     map['order_type'] = _orderType;
     map['pickup_date'] = _pickupDate;
+    map['latitude'] = _latitude;
+    map['longitude'] = _longitude;
     map['payment_status'] = _paymentStatus;
     map['date_modified'] = _dateModified;
     map['date_created'] = _dateCreated;

@@ -55,7 +55,7 @@ class RentalTiles extends StatelessWidget {
                       child: Hero(
                           tag: "profile",
                           child: CachedNetworkImage(
-                            imageUrl: feed.equipments!.equipImagesId!= null?feed.equipments!.equipImagesId!:"",
+                            imageUrl: feed.equipments!.id!= null?feed.equipments!.id!:"",
                             placeholder: (context, url) =>
                                 CircularProgressIndicator(),
                             errorWidget: (context, url, error) => ClipRRect(

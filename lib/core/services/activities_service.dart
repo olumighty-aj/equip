@@ -359,9 +359,8 @@ class Activities {
     try {
       final result = await http
           .post(Paths.updateBookings, {
-
-            "delivery_status": id,
-        "equipments_id": status,
+            "delivery_status":status,
+        "equip_order_id":id,
 
           });
       if (result is ErrorModel) {
@@ -569,7 +568,7 @@ class Activities {
   fetchChat(String inboxId) async {
     try {
       final result = await http.get(
-          Paths.chatDetails + inboxId);
+          Paths.chatDetails + "${_authentication.currentUser.id}&user_2=$inboxId");
       if (result is ErrorModel) {
         print("ERROR");
         var data = result.error;

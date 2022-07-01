@@ -177,7 +177,7 @@ class LoginState extends State<Rentals> with SingleTickerProviderStateMixin {
                                       fontSize: 15),
                                 ),
                                 Container(
-                                    height: Responsive.height(context) / 2.7,
+                                    height: Responsive.height(context) / 2.2,
                                     child: TabBarView(
                                       controller: _controller,
                                       children: [
