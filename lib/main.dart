@@ -4,6 +4,7 @@ import 'package:equipro/utils/colors.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:equipro/ui/screens/splashscreen.dart';
 import 'package:equipro/utils/progressBarManager/dialog_manager.dart';
@@ -18,6 +19,10 @@ late BuildContext contextB;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   setupLocator();
+  Stripe.publishableKey =
+    'pk_test_51HHcsiHPcurTn6FW3CoclYWrGghqgQbd3KU8jbLUG3sR5KcxVMBcK78sSRPShOgkn9ufl4Y1EPVoNep564JtIEQl00No2YCtOq';
+  Stripe.merchantIdentifier = 'any string works';
+  await Stripe.instance.applySettings();
   runApp(const MyApp());
   await Firebase.initializeApp();
 }

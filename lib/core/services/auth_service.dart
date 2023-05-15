@@ -117,7 +117,9 @@ user.userType == "hirers"?
     try {
       final result = await http.post(Paths.signUp, payload);
       if (result is ErrorModel) {
+        print(result.error);
         return ErrorModel(result.error);
+
       }
 
       return SuccessModel(result.data);

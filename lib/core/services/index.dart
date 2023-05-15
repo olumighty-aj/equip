@@ -2,7 +2,7 @@
 import 'package:equipro/utils/http/http_service.dart';
 
 
-const baseUrl = 'https://staging.equipro.io/api/';
-const baseUrlFlat = 'https://staging.equipro.io/';
+const baseUrl = 'https://equippro.io/api/';
+const baseUrlFlat = 'https://equippro.io/';
 HttpService http = HttpService(baseUrl);
-final baseUrlError = 'staging.equipro.io';
+final baseUrlError = 'equippro.io';

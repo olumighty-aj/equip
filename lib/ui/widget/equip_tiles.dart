@@ -118,12 +118,14 @@ class EquipTiles extends StatelessWidget {
                       child: SizedBox(
                           height: 34,
                           width: 70,
-                          child: RaisedButton(
-                            shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(7)),
-                            ),
-                            color: AppColors.primaryColor,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColors.primaryColor,
+                              shape: RoundedRectangleBorder(
+                                borderRadius:
+                                BorderRadius.all(Radius.circular(7)),
+                              ),),
+
                             onPressed: () {
                               _navigationService.navigateTo(EquipDetailsRoute,
                                   arguments: model);

@@ -23,12 +23,14 @@ class GeneralButton extends StatelessWidget {
     return SizedBox(
         height: 50,
         width: deviceWidth,
-        child: RaisedButton(
-          shape: RoundedRectangleBorder(
-            borderRadius: borderRadius,
-            side: BorderSide(color: borderColor),
-          ),
-          color: splashColor,
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+              backgroundColor: splashColor,
+              shape: RoundedRectangleBorder(
+                borderRadius: borderRadius,
+                side: BorderSide(color: borderColor),
+              )),
+
           onPressed: () {
             onPressed();
           },

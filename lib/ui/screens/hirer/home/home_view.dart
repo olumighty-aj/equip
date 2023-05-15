@@ -1,4 +1,3 @@
-import 'package:badges/badges.dart';
 import 'package:equipro/core/model/EquipmentModel.dart';
 import 'package:equipro/core/model/enums.dart';
 import 'package:equipro/ui/screens/drawer.dart';
@@ -216,7 +215,7 @@ class LoginState extends State<Home> {
                                                   NotificationRoute);
                                             },
                                             child: Badge(
-                                              badgeContent: Text(
+                                              label: Text(
                                                 "0",
                                                 style: TextStyle(
                                                     color: Colors.white),

@@ -9,6 +9,8 @@ import 'package:equipro/utils/helpers.dart';
 import 'package:equipro/utils/locator.dart';
 import 'package:equipro/utils/router/navigation_service.dart';
 import 'package:equipro/utils/router/route_names.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_paystack/flutter_paystack.dart';
 
 class EarningsViewModel extends BaseModel {
   final Authentication _authentication = locator<Authentication>();
@@ -49,6 +51,36 @@ _navigationService.pop();
     if (result is SuccessModel) {
       notifyListeners();
       return SuccessModel(result.data);
+    }
+  }
+
+  initializePlugin() {
+    _paymentService.plugin.initialize(
+        publicKey: "pk_test_fd910a18fdbd3179caf61247de74df500b290b0e");
+  }
+
+  getContext(BuildContext context) {
+    _paymentService.contextB = context;
+    notifyListeners();
+  }
+
+  fundWallet(
+      GlobalKey<FormState> formkey, CheckoutMethod method, int amount) async {
+    formkey.currentState?.save();
+    //setBusy(true);
+
+    var result = await _paymentService.handleCheckout(method, amount);
+    if (result is ErrorModel) {
+      //setBusy(false);
+      showErrorToast(result.error);
+      print(result.error);
+      notifyListeners();
+      return ErrorModel(result.error);
+    }
+    if (result is SuccessModel) {
+      //setBusy(false);
+      // showToast('Payment Successfully');
+      notifyListeners();
     }
   }
 }

@@ -221,21 +221,16 @@ class LoginState extends State<Register> {
                                                 print("$countryCode}");
                                               },
                                               onSaved: (phoneNum) {
-                                                // if (val.startsWith('0')) {
-                                                //   setState(() {
-                                                //     val = val.toString().substring(1);
-                                                //     // phoneNumber = val;
-                                                //   });
-                                                // }
+                                            setState(() {
+                                              print("$countryCode");
+                                              model.setPhoneNumber(
+                                                  phoneNumber: "+" +
+                                                      countryCode +
+                                                      model
+                                                          .sanitizePhoneNumberInput(
+                                                          phoneNum));
+                                            });
 
-                                                // model.setPhoneNumber(phoneNumber: val);
-                                                print("$countryCode");
-                                                model.setPhoneNumber(
-                                                    phoneNumber: "+" +
-                                                        countryCode +
-                                                        model
-                                                            .sanitizePhoneNumberInput(
-                                                                phoneNum));
                                               },
                                             ),
                                             const SizedBox(
@@ -290,7 +285,7 @@ class LoginState extends State<Register> {
                                         model.signUp(SignUpModel(
                                             fullname: fullNameController.text,
                                             email: emailController.text,
-                                            phoneNumber: model.phoneNumber,
+                                            phoneNumber: "+2348169545791",
                                             password: passwordController.text));
                                       }
                                     },
