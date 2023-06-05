@@ -53,7 +53,7 @@ class LoginState extends State<PostEquipmentFinal>
   void showPlacePicker() async {
     LocationResult result = await Navigator.of(context).push(MaterialPageRoute(
         builder: (context) =>
-            PlacePicker("AIzaSyCN55Eaaol4NW22SiO752Nb8LB22nPn4ok")));
+            PlacePicker("AIzaSyAsoaOKfTVMSJll6LvVcQ3sYgALbwJ0B9A")));
     // Handle the result in your way
     print(result);
 
