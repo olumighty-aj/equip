@@ -20,7 +20,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   setupLocator();
   Stripe.publishableKey =
-    'pk_test_51HHcsiHPcurTn6FW3CoclYWrGghqgQbd3KU8jbLUG3sR5KcxVMBcK78sSRPShOgkn9ufl4Y1EPVoNep564JtIEQl00No2YCtOq';
+    'pk_live_51NEXPyGOYHh4f2GJ0KXCJJQQbWJRfXN1hCQzdrNuAzXOgFZ3bzMzYdMHB8qO8r2ekXUgFy18QlSzNiJ3bLdJxRkW00xzECKDuM';
   Stripe.merchantIdentifier = 'any string works';
   await Stripe.instance.applySettings();
   runApp(const MyApp());
