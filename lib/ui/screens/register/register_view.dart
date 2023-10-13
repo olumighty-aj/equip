@@ -1,4 +1,5 @@
 import 'package:country_pickers/country.dart';
+import 'package:country_pickers/country_pickers.dart';
 import 'package:equipro/core/model/SignUpModel.dart';
 import 'package:equipro/ui/screens/register/register_view_model.dart';
 import 'package:equipro/ui/widget/phonenoTextInput.dart';
@@ -31,12 +32,44 @@ class LoginState extends State<Register> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late bool passwordVisible;
   String countryCode = "234";
+  TextEditingController controller = TextEditingController();
+  int maxLength = 10;
+  String initialSelection = '+234';
 
+  Widget _buildDropdownItem(Country country) => Container(
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          children: <Widget>[
+            CountryPickerUtils.getDefaultFlagImage(country),
+            SizedBox(
+              width: 8.0,
+            ),
+            Text("${country.isoCode} (+${country.phoneCode})"),
+          ],
+        ),
+      );
+  Widget _buildSelectedItem(Country country) => Container(
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            CountryPickerUtils.getDefaultFlagImage(country),
+            SizedBox(
+              width: 8.0,
+            ),
+            Text("+(${country.phoneCode})"),
+          ],
+        ),
+      );
   late bool active = false;
 
   @override
   void initState() {
     super.initState();
+    controller.addListener(() {
+      setState(() {
+        maxLength = controller.text.startsWith('0') ? 11 : 10;
+      });
+    });
     passwordVisible = true;
   }
 
@@ -47,7 +80,7 @@ class LoginState extends State<Register> {
         builder: (context, model, child) {
           return Scaffold(
               body: SingleChildScrollView(
-              child:Column(
+                  child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -210,29 +243,157 @@ class LoginState extends State<Register> {
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 14),
                                             ),
-                                            PhoneNoTextInput(
-                                              onCountryChange:
-                                                  (Country country) {
-                                                setState(() {
-                                                  countryCode =
-                                                      country.phoneCode;
-                                                });
+                                            Container(
+                                                decoration: BoxDecoration(
+                                                  color: Colors.transparent,
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                ),
+                                                child: TextFormField(
+                                                  controller: controller,
+                                                  keyboardType:
+                                                      TextInputType.phone,
+                                                  autovalidateMode:
+                                                      AutovalidateMode
+                                                          .onUserInteraction,
+                                                  textAlignVertical:
+                                                      TextAlignVertical.center,
+                                                  onChanged: (v) {
+                                                    print(v);
+                                                    model.setPhoneNumber(
+                                                        phoneNumber: "+" +
+                                                            countryCode +
+                                                            model
+                                                                .sanitizePhoneNumberInput(
+                                                                    v));
+                                                  },
+                                                  maxLength: maxLength,
+                                                  style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      fontSize: widthSizer(
+                                                          16.0, context)),
+                                                  decoration: InputDecoration(
+                                                    contentPadding:
+                                                        EdgeInsets.symmetric(
+                                                            vertical:
+                                                                heightSizer(
+                                                                    1, context),
+                                                            horizontal:
+                                                                widthSizer(14,
+                                                                    context)),
 
-                                                print("$countryCode}");
-                                              },
-                                              onSaved: (phoneNum) {
-                                            setState(() {
-                                              print("$countryCode");
-                                              model.setPhoneNumber(
-                                                  phoneNumber: "+" +
-                                                      countryCode +
-                                                      model
-                                                          .sanitizePhoneNumberInput(
-                                                          phoneNum));
-                                            });
-
-                                              },
-                                            ),
+                                                    filled: true,
+                                                    isDense: true,
+                                                    //contentPadding: EdgeInsets.zero,
+                                                    fillColor: Colors.white,
+                                                    hintText: '8100000000',
+                                                    errorMaxLines: 2,
+                                                    counterText: "",
+                                                    hintStyle: TextStyle(
+                                                        height: 1.5,
+                                                        color: AppColors.grey,
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                        fontSize: widthSizer(
+                                                            20, context)),
+                                                    prefixIcon: Padding(
+                                                        padding: EdgeInsets.only(
+                                                            top: heightSizer(
+                                                                3, context),
+                                                            bottom: heightSizer(
+                                                                3, context),
+                                                            left: widthSizer(
+                                                                5, context),
+                                                            right: widthSizer(
+                                                                5, context)),
+                                                        child: Row(
+                                                          mainAxisSize:
+                                                              MainAxisSize.min,
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceEvenly,
+                                                          children: [
+                                                            Container(
+                                                              //width: widthSizer(120, context),
+                                                              //height: heightSizer(16, context),
+                                                              child:
+                                                                  CountryPickerDropdown(
+                                                                      initialValue:
+                                                                          'NG',
+                                                                      itemBuilder:
+                                                                          _buildDropdownItem,
+                                                                      selectedItemBuilder:
+                                                                          _buildSelectedItem,
+                                                                      priorityList: [
+                                                                        CountryPickerUtils.getCountryByIsoCode(
+                                                                            'NG'),
+                                                                      ],
+                                                                      sortComparator: (Country a, Country b) => a
+                                                                          .isoCode
+                                                                          .compareTo(b
+                                                                              .isoCode),
+                                                                      onValuePicked:
+                                                                          (f) {
+                                                                        setState(
+                                                                            () {
+                                                                          countryCode =
+                                                                              f.phoneCode;
+                                                                        });
+                                                                        model.setPhoneNumber(
+                                                                            phoneNumber: "+" +
+                                                                                countryCode +
+                                                                                model.sanitizePhoneNumberInput(controller.text));
+                                                                      }),
+                                                            ),
+                                                          ],
+                                                        )),
+                                                    //  filled: true,
+                                                  ),
+                                                  validator: (val) {
+                                                    if (val!.length == 0) {
+                                                      return 'Phone number' +
+                                                          " is required";
+                                                    } else if (val.length ==
+                                                            10 &&
+                                                        controller.text
+                                                            .startsWith('0')) {
+                                                      return 'Enter a valid phone number';
+                                                    } else if (val.length !=
+                                                            11 &&
+                                                        controller.text
+                                                            .startsWith('0')) {
+                                                      return 'Enter a valid phone number';
+                                                    } else if (val.length <
+                                                        10) {
+                                                      return 'Enter a valid phone number';
+                                                    } else {
+                                                      return null;
+                                                    }
+                                                  },
+                                                )),
+                                            // PhoneNoTextInput(
+                                            //   onCountryChange:
+                                            //       (Country country) {
+                                            //     setState(() {
+                                            //       countryCode =
+                                            //           country.phoneCode;
+                                            //     });
+                                            //
+                                            //     print("$countryCode}");
+                                            //   },
+                                            //   onSaved: (phoneNum) {
+                                            //   print(phoneNum);
+                                            //   model.setPhoneNumber(
+                                            //       phoneNumber: "+" +
+                                            //           countryCode +
+                                            //           model
+                                            //               .sanitizePhoneNumberInput(
+                                            //               phoneNum));
+                                            //
+                                            //   },
+                                            // ),
                                             const SizedBox(
                                               height: 30,
                                             ),
@@ -285,7 +446,7 @@ class LoginState extends State<Register> {
                                         model.signUp(SignUpModel(
                                             fullname: fullNameController.text,
                                             email: emailController.text,
-                                            phoneNumber: "+2348169545791",
+                                            phoneNumber: model.phoneNumber,
                                             password: passwordController.text));
                                       }
                                     },

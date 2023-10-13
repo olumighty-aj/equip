@@ -66,7 +66,7 @@ class RegisterViewModel extends BaseModel {
   //   }
   // }
   String? phoneNumber;
-  Future setPhoneNumber({
+   setPhoneNumber({
     required String? phoneNumber,
   }) async {
     print("Called!!!");
