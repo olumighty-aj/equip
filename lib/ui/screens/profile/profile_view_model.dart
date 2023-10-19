@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:equipro/core/model/ReviewsModel.dart';
 import 'package:equipro/core/model/error_model.dart';
 import 'package:equipro/core/services/auth_service.dart';
@@ -32,7 +34,7 @@ class ProfileViewModel extends BaseModel {
     );
     if (result == null) {
       setBusy(false);
-      showErrorToast(result.error);
+
       notifyListeners();
       return result;
     }

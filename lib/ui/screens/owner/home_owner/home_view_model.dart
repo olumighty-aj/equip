@@ -1,4 +1,5 @@
 import 'package:equipro/core/model/EquipmentModel.dart';
+import 'package:equipro/core/model/NotificationModel.dart';
 import 'package:equipro/core/model/ReviewsModel.dart';
 import 'package:equipro/core/model/enums.dart';
 import 'package:equipro/core/model/error_model.dart';
@@ -10,6 +11,7 @@ import 'package:equipro/utils/helpers.dart';
 import 'package:equipro/utils/locator.dart';
 import 'package:equipro/utils/router/navigation_service.dart';
 import 'package:equipro/utils/router/route_names.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class HomeOwnerViewModel extends BaseModel {
@@ -59,7 +61,6 @@ class HomeOwnerViewModel extends BaseModel {
        address,);
     if (result == null) {
       setBusy(false);
-      showErrorToast(result.error);
       notifyListeners();
       return result;
     }
@@ -89,7 +90,6 @@ class HomeOwnerViewModel extends BaseModel {
        address,);
     if (result == null) {
       setBusy(false);
-      showErrorToast(result.error);
       notifyListeners();
       return result;
     }
@@ -247,6 +247,20 @@ class HomeOwnerViewModel extends BaseModel {
       //return ErrorModel(result.error);
     }
     // print(result);
+    return result;
+  }
+  Future<List<NotificationModel>> getNotification() async {
+    //setBusy(true);
+    var result = await _activities.getNotification();
+    if (result is ErrorModel) {
+      if (kDebugMode) {
+        print(result.error);
+      }
+      notifyListeners();
+      throw Exception('Failed to load internet');
+      //return ErrorModel(result.error);
+    }
+    //print(result);
     return result;
   }
 }

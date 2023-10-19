@@ -63,15 +63,15 @@ class Authentication {
   switchRole(String role) async {
     try {
       var url = Paths.switchOwner;
-      final result = await http
-          .post(url, {"hirers_id": currentUser.id,"toggle":role});
+      final result =
+          await http.post(url, {"hirers_id": currentUser.id, "toggle": role});
       if (result is ErrorModel) {
         print("ERROR");
         print(result.error);
         return ErrorModel(result.error);
       }
       final AuthModel auth =
-      AuthModel.fromJson(result.data['payload']['token']);
+          AuthModel.fromJson(result.data['payload']['token']);
       _token = auth;
       Details user = Details.fromJson(result.data['payload']["details"]);
       showToast(result.data['message']);
@@ -87,14 +87,15 @@ class Authentication {
     } catch (e) {
       print(e.toString());
       return ErrorModel(e.toString() ==
-          "SocketException: Failed host lookup: '$baseUrlError' (OS Error: nodename nor servname provided, or not known, errno = 8)"
+              "SocketException: Failed host lookup: '$baseUrlError' (OS Error: nodename nor servname provided, or not known, errno = 8)"
           ? "Your internet is not stable kindly reconnect and try again"
           : e.toString() ==
-          "TimeoutException after 0:00:40.000000: Future not completed"
-          ? "Your internet is not stable kindly reconnect and try again"
-          : e.toString());
+                  "TimeoutException after 0:00:40.000000: Future not completed"
+              ? "Your internet is not stable kindly reconnect and try again"
+              : e.toString());
     }
   }
+
   //
   alreadyLoggedIn() async {
     SharedPreferences prefs;
@@ -107,9 +108,10 @@ class Authentication {
     final AuthModel auth = AuthModel.fromJson(t!);
     //   print("TOKEN AGBA::::::::: ${auth.token}");
     _token = auth;
-   // "is_owner": true,
-user.userType == "hirers"?
-    _navigationService.navigateReplacementTo(homeRoute): _navigationService.navigateReplacementTo(HomeOwnerRoute);
+    // "is_owner": true,
+    user.userType == "hirers"
+        ? _navigationService.navigateReplacementTo(homeRoute)
+        : _navigationService.navigateReplacementTo(HomeOwnerRoute);
     return SuccessModel(user);
   }
 
@@ -119,7 +121,6 @@ user.userType == "hirers"?
       if (result is ErrorModel) {
         print(result.error);
         return ErrorModel(result.error);
-
       }
 
       return SuccessModel(result.data);
@@ -207,7 +208,6 @@ user.userType == "hirers"?
     }
   }
 
-
   //
   verifyForgotPassword(Map<dynamic, dynamic> payload) async {
     try {
@@ -230,11 +230,9 @@ user.userType == "hirers"?
     }
   }
 
-  updateAddress(
-    String address, String lat ,String lng
-  ) async {
+  updateAddress(String address, String lat, String lng) async {
     var header = {
-      'X-APP-KEY': '37T8O89O445568u89WELrVl',
+      'X-APP-KEY': 'IFUKpFVCunCU0fK0tQQqTsX',
       'Content-Type': 'application/json; charset=UTF-8',
       "Authorization": "Bearer ${token.token}"
     };
@@ -282,11 +280,11 @@ user.userType == "hirers"?
     String gender,
     String lat,
     String lng,
-      String kyc_name,
-      String kyc_document_path,
+    String kyc_name,
+    String kyc_document_path,
   ) async {
     var header = {
-      'X-APP-KEY': '37T8O89O445568u89WELrVl',
+      'X-APP-KEY': 'IFUKpFVCunCU0fK0tQQqTsX',
       'Content-Type': 'application/json; charset=UTF-8',
       "Authorization": "Bearer ${token.token}"
     };
@@ -294,12 +292,13 @@ user.userType == "hirers"?
     dynamic catalogueFile;
     dynamic meansOfId;
     final imageUploadRequest;
-    if(currentUser.userType! =="hirers"){
-      imageUploadRequest = htp.MultipartRequest('POST', Uri.parse(baseUrl +   Paths.profile));
+    if (currentUser.userType! == "hirers") {
+      imageUploadRequest =
+          htp.MultipartRequest('POST', Uri.parse(baseUrl + Paths.profile));
       imageUploadRequest.headers.addAll(header);
-    }else{
-       imageUploadRequest =
-      htp.MultipartRequest('POST', Uri.parse(baseUrl +  Paths.ownersProfile));
+    } else {
+      imageUploadRequest = htp.MultipartRequest(
+          'POST', Uri.parse(baseUrl + Paths.ownersProfile));
       imageUploadRequest.headers.addAll(header);
     }
 
@@ -314,32 +313,32 @@ user.userType == "hirers"?
     }
 
     if (kyc_document_path != "") {
-      meansOfId =
-      await htp.MultipartFile.fromPath('kyc_document_path', kyc_document_path);
+      meansOfId = await htp.MultipartFile.fromPath(
+          'kyc_document_path[]', kyc_document_path);
       //print(catalogueFile);
       imageUploadRequest.files.add(meansOfId);
     }
 
-if(kyc_name == ""){
-  imageUploadRequest.fields['address'] = address;
-  imageUploadRequest.fields['gender'] = gender;
-  imageUploadRequest.fields['latitude'] = lat;
-  imageUploadRequest.fields['longitude'] = lng;
-}else{
-  imageUploadRequest.fields['address'] = address;
-  imageUploadRequest.fields['kyc_name'] = kyc_name;
-  imageUploadRequest.fields['gender'] = gender;
-  imageUploadRequest.fields['latitude'] = lat;
-  imageUploadRequest.fields['longitude'] = lng;
-}
-
+    if (kyc_name == "") {
+      imageUploadRequest.fields['address'] = address;
+      imageUploadRequest.fields['gender'] = gender;
+      imageUploadRequest.fields['latitude'] = lat;
+      imageUploadRequest.fields['longitude'] = lng;
+    } else {
+      imageUploadRequest.fields['address'] = address;
+      imageUploadRequest.fields['kyc_name'] = kyc_name;
+      imageUploadRequest.fields['gender'] = gender;
+      imageUploadRequest.fields['latitude'] = lat;
+      imageUploadRequest.fields['longitude'] = lng;
+    }
 
     try {
       print(imageUploadRequest.files);
       print(imageUploadRequest.fields);
       final streamedResponse = await imageUploadRequest.send();
       final response = await htp.Response.fromStream(streamedResponse);
-      if (response.statusCode != 200) {
+      if (jsonDecode(response.body)["status"] != true) {
+        showErrorToast(json.decode(response.body)['message']);
         print(response.body);
         print(response.statusCode);
         return null;
@@ -361,7 +360,6 @@ if(kyc_name == ""){
       return null;
     }
   }
-
 
   getReviews() async {
     try {
@@ -386,12 +384,12 @@ if(kyc_name == ""){
     } catch (e) {
       print(e.toString());
       return ErrorModel(e.toString() ==
-          "SocketException: Failed host lookup: '$baseUrlError' (OS Error: nodename nor servname provided, or not known, errno = 8)"
+              "SocketException: Failed host lookup: '$baseUrlError' (OS Error: nodename nor servname provided, or not known, errno = 8)"
           ? "Your internet is not stable kindly reconnect and try again"
           : e.toString() ==
-          "TimeoutException after 0:00:40.000000: Future not completed"
-          ? "Your internet is not stable kindly reconnect and try again"
-          : e.toString());
+                  "TimeoutException after 0:00:40.000000: Future not completed"
+              ? "Your internet is not stable kindly reconnect and try again"
+              : e.toString());
     }
   }
 
@@ -418,12 +416,12 @@ if(kyc_name == ""){
     } catch (e) {
       print(e.toString());
       return ErrorModel(e.toString() ==
-          "SocketException: Failed host lookup: '$baseUrlError' (OS Error: nodename nor servname provided, or not known, errno = 8)"
+              "SocketException: Failed host lookup: '$baseUrlError' (OS Error: nodename nor servname provided, or not known, errno = 8)"
           ? "Your internet is not stable kindly reconnect and try again"
           : e.toString() ==
-          "TimeoutException after 0:00:40.000000: Future not completed"
-          ? "Your internet is not stable kindly reconnect and try again"
-          : e.toString());
+                  "TimeoutException after 0:00:40.000000: Future not completed"
+              ? "Your internet is not stable kindly reconnect and try again"
+              : e.toString());
     }
   }
 }

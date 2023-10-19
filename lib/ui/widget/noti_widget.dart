@@ -1,23 +1,22 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:equipro/core/model/NotificationModel.dart';
 import 'package:equipro/utils/colors.dart';
 import 'package:equipro/utils/screensize.dart';
 import 'package:flutter/material.dart';
 
 class NotiItem extends StatelessWidget {
-  final Function onPressed;
+  final NotificationModel feed;
 
   NotiItem({
-    required this.onPressed,
+    required this.feed,
   });
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-        onTap: () {
-          onPressed();
-        },
+        onTap: () {},
         child: Container(
-          //  padding: EdgeInsets.all(10),
+            //  padding: EdgeInsets.all(10),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
               color: AppColors.white,
@@ -30,44 +29,47 @@ class NotiItem extends StatelessWidget {
                 ),
               ],
             ),
-          //  color: AppColors.white,
+            //  color: AppColors.white,
             height: 80,
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    width:10,
+                    width: 10,
                     // width: Responsive.width(context)/1.5,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(topLeft: Radius.circular(10),bottomLeft: Radius.circular(10)),
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(10),
+                          bottomLeft: Radius.circular(10)),
                       color: AppColors.primaryColor,
                     ),
                     alignment: Alignment.center,
                   ),
                   Expanded(
-                      child:  Container(
-                         padding: EdgeInsets.all(10),
-                          child:Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                        Text(
-                          "There are three aspects of design that you should know about. Layout.",
-                          //  _authentication.currentUser.firstName! + " " + _authentication.currentUser.lastName!,
-                          style: const TextStyle(
-                            fontSize: 13,
-                          ),
-                        ),
-                            SizedBox(height: 5,),
-                            Text(
-                              "04:24pm",
-                              //  _authentication.currentUser.firstName! + " " + _authentication.currentUser.lastName!,
-                              style: const TextStyle(
-                                color: Colors.grey,
-                                fontSize: 15,
+                    child: Container(
+                        padding: EdgeInsets.all(10),
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                feed.message!,
+                                style: const TextStyle(
+                                  fontSize: 13,
+                                ),
                               ),
-                            ),
-                      ])),)
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Text(
+                                feed.dateCreated!,
+                                style: const TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 15,
+                                ),
+                              ),
+                            ])),
+                  )
                 ])));
   }
 }

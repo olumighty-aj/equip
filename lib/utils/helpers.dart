@@ -1,7 +1,10 @@
+import 'package:equipro/utils/router/navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:equipro/utils/colors.dart';
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 customYMargin(double value) {
   return SizedBox(height: value);
@@ -12,28 +15,23 @@ customXMargin(double value) {
 }
 
 showToast(String message) {
-  Fluttertoast.showToast(
-      msg: message,
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.SNACKBAR,
-      webPosition: "center",
-      timeInSecForIosWeb: 5,
+  return showTopSnackBar(
+   NavigationService.navigationKey_.currentContext!,
+    CustomSnackBar.success(
       backgroundColor: AppColors.green,
-      textColor: Colors.white,
-      fontSize: 16.0);
+      message: message,
+    ),
+  );
 }
 
 showErrorToast(String message) {
-  Fluttertoast.showToast(
-      msg: message,
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.SNACKBAR,
-      webPosition: "center",
-      webBgColor: "#e74c3c",
-      timeInSecForIosWeb: 5,
-      // backgroundColor: AppColors.red,
-      textColor: Colors.white,
-      fontSize: 16.0);
+  return showTopSnackBar(
+  NavigationService.navigationKey_.currentContext!,
+    CustomSnackBar.info(
+      backgroundColor: AppColors.red,
+      message: message,
+    ),
+  );
 }
 
 String capitalize(val) {

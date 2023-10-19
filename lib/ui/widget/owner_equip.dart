@@ -11,11 +11,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class OwnerEquipTiles extends StatelessWidget {
   final EquipmentModel model;
-  OwnerEquipTiles(
-      {
-      required this.model,
-      }
-      );
+  OwnerEquipTiles({
+    required this.model,
+  });
   final NavigationService _navigationService = locator<NavigationService>();
   @override
   Widget build(BuildContext context) {
@@ -25,12 +23,13 @@ class OwnerEquipTiles extends StatelessWidget {
           //   context,
           //   MaterialPageRoute(builder: (context) => EquipDetails()),
           // );
-          _navigationService.navigateTo(EquipOwnerDetailsRoute,arguments: model);
+          _navigationService.navigateTo(EquipOwnerDetailsRoute,
+              arguments: model);
         },
         child: Container(
           margin: EdgeInsets.only(bottom: 20),
           padding: EdgeInsets.all(10),
-          height: 150,
+          height: 180,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
             color: AppColors.white,
@@ -44,7 +43,7 @@ class OwnerEquipTiles extends StatelessWidget {
             ],
           ),
           child: Row(
-          //  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //  mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
                   height: 90,
@@ -54,7 +53,9 @@ class OwnerEquipTiles extends StatelessWidget {
                       child: Hero(
                           tag: model.id!,
                           child: CachedNetworkImage(
-                            imageUrl: model.equipImages!.first.equipImagesPath!,
+                            imageUrl: model.equipImages!.isNotEmpty
+                                ? model.equipImages!.first.equipImagesPath!
+                                : "",
                             placeholder: (context, url) =>
                                 CircularProgressIndicator(),
                             errorWidget: (context, url, error) => ClipRRect(
@@ -65,7 +66,9 @@ class OwnerEquipTiles extends StatelessWidget {
                               ),
                             ),
                           )))),
-              SizedBox(width: 30,),
+              SizedBox(
+                width: 30,
+              ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -80,12 +83,12 @@ class OwnerEquipTiles extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                       model.costOfHire!,
+                        model.costOfHire!,
                         style: TextStyle(
                             fontWeight: FontWeight.w500, fontSize: 14),
                       ),
                       Text(
-                        " per ${model.costOfHireInterval == "1"? "Day":model.costOfHireInterval == "7"?"Week":"Month"}",
+                        " per ${model.costOfHireInterval == "1" ? "Day" : model.costOfHireInterval == "7" ? "Week" : "Month"}",
                         style: TextStyle(
                             fontWeight: FontWeight.w500, fontSize: 14),
                       ),
@@ -103,10 +106,9 @@ class OwnerEquipTiles extends StatelessWidget {
                       SizedBox(
                         width: 10,
                       ),
-                      Container(
-                          width: 150,
-                          child:
-                          Text(
+                        Container(
+                          width: 200,
+                          child: Text(
                             model.address!,
                             style: TextStyle(
                                 fontWeight: FontWeight.w500, fontSize: 12),
@@ -115,7 +117,7 @@ class OwnerEquipTiles extends StatelessWidget {
                   ),
                 ],
               ),
-      Text("")
+              Text("")
             ],
           ),
         ));

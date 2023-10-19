@@ -26,5 +26,8 @@ class Paths {
   static const String  chatList = 'get_user_inbox';
   static const String  chatDetails = 'get_chat_details?user_1=';
   static const String  sendChat = 'send_chat';
+  static const String  getNotification = 'notification';
+
+
 
 }

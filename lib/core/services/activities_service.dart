@@ -3,10 +3,12 @@ import 'package:equipro/core/model/ActiveRentalsModel.dart';
 import 'package:equipro/core/model/ChatListModel.dart';
 import 'package:equipro/core/model/ChatMessages.dart';
 import 'package:equipro/core/model/EquipmentModel.dart';
+import 'package:equipro/core/model/NotificationModel.dart';
 import 'package:equipro/core/model/ReviewsModel.dart';
 import 'package:equipro/core/model/error_model.dart';
 import 'package:equipro/core/model/success_model.dart';
 import 'package:equipro/utils/helpers.dart';
+import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as htp;
 import 'package:equipro/core/services/auth_service.dart';
@@ -35,7 +37,7 @@ class Activities {
     String address,
   ) async {
     var header = {
-      'X-APP-KEY': '37T8O89O445568u89WELrVl',
+      'X-APP-KEY': 'IFUKpFVCunCU0fK0tQQqTsX',
       'Content-Type': 'application/json; charset=UTF-8',
       "Authorization": "Bearer ${_authentication.token.token}"
     };
@@ -52,7 +54,7 @@ class Activities {
       count++;
       print(multipleFile.path);
       catalogueFile = await htp.MultipartFile.fromPath(
-          'equip_image_path', multipleFile.path);
+          'equip_image_path[]', multipleFile.path);
       //print(catalogueFile);
       imageUploadRequest.files.add(catalogueFile);
     }
@@ -76,6 +78,7 @@ class Activities {
       final response = await htp.Response.fromStream(streamedResponse);
       final Map<String, dynamic> result = json.decode(response.body);
       if (result["status"] == false) {
+        showErrorToast(result["message"]);
         print(response.body);
         print(response.statusCode);
         return null;
@@ -107,7 +110,7 @@ class Activities {
     String address,
   ) async {
     var header = {
-      'X-APP-KEY': '37T8O89O445568u89WELrVl',
+      'X-APP-KEY': 'IFUKpFVCunCU0fK0tQQqTsX',
       'Content-Type': 'application/json; charset=UTF-8',
       "Authorization": "Bearer ${_authentication.token.token}"
     };
@@ -124,7 +127,7 @@ class Activities {
       count++;
       print(multipleFile.path);
       catalogueFile = await htp.MultipartFile.fromPath(
-          'equip_image_path', multipleFile.path);
+          'equip_image_path[]', multipleFile.path);
       //print(catalogueFile);
       imageUploadRequest.files.add(catalogueFile);
     }
@@ -146,13 +149,14 @@ class Activities {
       print(imageUploadRequest.files);
       final streamedResponse = await imageUploadRequest.send();
       final response = await htp.Response.fromStream(streamedResponse);
-      if (response.statusCode != 200) {
+      final Map<String, dynamic> result = json.decode(response.body);
+      if (result["status"] == false) {
+        showErrorToast(result["message"]);
         print(response.body);
         print(response.statusCode);
         return null;
       }
       print(response.statusCode);
-      final Map<String, dynamic> result = json.decode(response.body);
       print(result);
 
       return result;
@@ -600,6 +604,35 @@ class Activities {
     } catch (e) {
       print(e.toString());
       return ErrorModel(e.toString() =="SocketException: Failed host lookup: '$baseUrlError' (OS Error: nodename nor servname provided, or not known, errno = 8)"?"Your internet is not stable kindly reconnect and try again":e.toString() == "TimeoutException after 0:00:40.000000: Future not completed"?"Your internet is not stable kindly reconnect and try again":e.toString());
+    }
+  }
+
+
+  getNotification() async {
+    try {
+      final result = await http.get(Paths.getNotification);
+      if (result is ErrorModel) {
+        if (kDebugMode) {
+          print("ERROR");
+        }
+        var data = result.error;
+        if (kDebugMode) {
+          print(result.error);
+        }
+        List<NotificationModel> packageList = List<NotificationModel>.from(
+            data.map((item) => NotificationModel.fromJson(item)));
+        return ErrorModel(packageList);
+      }
+      var data = result.data["payload"]['content'];
+      List<NotificationModel> packageList = List<NotificationModel>.from(
+          data.map((item) => NotificationModel.fromJson(item)));
+      // print(packageList);
+      return packageList;
+    } catch (e) {
+      if (kDebugMode) {
+        print(e.toString());
+      }
+      return ErrorModel('$e');
     }
   }
 }
