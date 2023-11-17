@@ -31,7 +31,7 @@ class EarningPage extends StatefulWidget {
 }
 
 class LoginState extends State<EarningPage> with TickerProviderStateMixin {
-  final NavigationService _navigationService = locator<NavigationService>();
+  final NavService _navigationService = locator<NavService>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   int? selectedQuantity;
   String? pickupTime = DateTime.now().toString();
@@ -83,17 +83,11 @@ class LoginState extends State<EarningPage> with TickerProviderStateMixin {
         builder: (context, model, child) {
           if (wallet == null) {
             return Scaffold(
-              backgroundColor: AppColors.grey,
-              body:
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      LoaderWidget(),
-                      LoaderWidget(),
-                      LoaderWidget()
-                    ],
-                  )
-             );
+                backgroundColor: AppColors.grey,
+                body: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [LoaderWidget(), LoaderWidget(), LoaderWidget()],
+                ));
           }
           return Scaffold(
             key: _scaffoldKey,

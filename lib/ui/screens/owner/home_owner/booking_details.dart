@@ -23,7 +23,7 @@ class BookingDetails extends StatefulWidget {
 }
 
 class LoginState extends State<BookingDetails> with TickerProviderStateMixin {
-  final NavigationService _navigationService = locator<NavigationService>();
+  final NavService _navigationService = locator<NavService>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   TextEditingController emailController = TextEditingController();
@@ -107,8 +107,9 @@ class LoginState extends State<BookingDetails> with TickerProviderStateMixin {
                                   ),
                                   InkWell(
                                       onTap: () {
-                                        _navigationService
-                                            .navigateTo(HirerProfileRoute, arguments: widget.feed.hirers);
+                                        _navigationService.navigateTo(
+                                            HirerProfileRoute,
+                                            arguments: widget.feed.hirers);
                                       },
                                       child: Row(
                                         children: [
@@ -173,35 +174,44 @@ class LoginState extends State<BookingDetails> with TickerProviderStateMixin {
                                         ),
                                         InkWell(
                                             onTap: () {
-
                                               _navigationService.navigateTo(
-                                                  chatDetailsPageRoute, arguments: ChatListModel(
-                                                  id:widget.feed.id,
-                                                  userId            :"",
-                                                  chatWithId         :"",
-                                                  messageCount       :"",
-                                                  lastMessage        :"",
-                                                  dateCreated        :"",
-                                                  dateModified       :"",
-                                                chatWith:  ChatWith(
-                                                    id:widget.feed.hirers!.id!,
-                                                    fullname :widget.feed.hirers!.fullname!,
-                                                    email        :"",
-                                                    phoneNumber  :"",
-                                                    gender       :"",
-                                                    address    :"",
-                                                    addressOpt   :"",
-                                                    localState   :"",
-                                                    country      :"",
-                                                    latitude     :"",
-                                                    longitude    :"",
-                                                    hirersPath   :widget.feed.hirers!.hirersPath!= null?widget.feed.hirers!.hirersPath!:"",
-                                                    status       :"",
-                                                    dateModified :"",
-                                                    dateCreated  :"",
-                                                  )
-
-                                              ));
+                                                  chatDetailsPageRoute,
+                                                  arguments: ChatListModel(
+                                                      id: widget.feed.id,
+                                                      userId: "",
+                                                      chatWithId: "",
+                                                      messageCount: "",
+                                                      lastMessage: "",
+                                                      dateCreated: "",
+                                                      dateModified: "",
+                                                      chatWith: ChatWith(
+                                                        id: widget
+                                                            .feed.hirers!.id!,
+                                                        fullname: widget.feed
+                                                            .hirers!.fullname!,
+                                                        email: "",
+                                                        phoneNumber: "",
+                                                        gender: "",
+                                                        address: "",
+                                                        addressOpt: "",
+                                                        localState: "",
+                                                        country: "",
+                                                        latitude: "",
+                                                        longitude: "",
+                                                        hirersPath: widget
+                                                                    .feed
+                                                                    .hirers!
+                                                                    .hirersPath !=
+                                                                null
+                                                            ? widget
+                                                                .feed
+                                                                .hirers!
+                                                                .hirersPath!
+                                                            : "",
+                                                        status: "",
+                                                        dateModified: "",
+                                                        dateCreated: "",
+                                                      )));
                                             },
                                             child: Row(
                                               children: [

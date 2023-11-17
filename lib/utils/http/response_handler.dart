@@ -9,24 +9,24 @@ import 'package:equipro/core/model/error_model.dart';
 import 'package:equipro/core/model/success_model.dart';
 
 handleResponse(http.Response response) {
-  final NavigationService navigationService = locator<NavigationService>();
+  final NavService navigationService = locator<NavService>();
   try {
-    print('ResponseCode:: ${response.statusCode},   ResponseBody:: ${response.body}');
+    print(
+        'ResponseCode:: ${response.statusCode},   ResponseBody:: ${response.body}');
 
     final int code = response.statusCode;
     final dynamic body = json.decode(response.body);
-   // if(code == 200 || code == 201) {
-      if(body["status"] == true) {
+    // if(code == 200 || code == 201) {
+    if (body["status"] == true) {
       return SuccessModel(body);
+    } else if (body["status"] == false) {
+      TinyDb.remove("profile");
+      showErrorToast("Session Expired");
+      navigationService.pushAndRemoveUntil(loginRoute);
+    } else {
+      return ErrorModel(body['message']);
     }
-   else if (code == 403) {
-  TinyDb.remove("profile");
-  showErrorToast("Session Expired");
-  navigationService.pushAndRemoveUntil(loginRoute);
-  } else {
-        return ErrorModel(body['message']);
-      }
-  } catch(ex) {
+  } catch (ex) {
     print(ex.toString());
     return ErrorModel('Request failed');
   }

@@ -21,7 +21,7 @@ class StripePage extends StatefulWidget {
 class _HomeScreenState extends State<StripePage> {
   Map<String, dynamic>? paymentIntentData;
   TextEditingController payController = TextEditingController();
-  final NavigationService _navigationService = locator<NavigationService>();
+  final NavService _navigationService = locator<NavService>();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool loading = false;
@@ -29,9 +29,7 @@ class _HomeScreenState extends State<StripePage> {
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<HomeViewModel>.reactive(
-        onModelReady: (v) async {
-
-        },
+        onModelReady: (v) async {},
         viewModelBuilder: () => HomeViewModel(),
         builder: (context, model, child) {
           return Scaffold(
@@ -57,9 +55,7 @@ class _HomeScreenState extends State<StripePage> {
                               ),
                             ),
                             Text(
-
-                                "Add Funds",
-
+                              "Add Funds",
                               style: TextStyle(
                                   fontSize: 20, fontWeight: FontWeight.bold),
                             ),
@@ -71,13 +67,13 @@ class _HomeScreenState extends State<StripePage> {
                         ),
                         Form(
                             key: _formKey,
-                            autovalidateMode: AutovalidateMode
-                                .onUserInteraction,
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
                             child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                  "Amount",
+                                    "Amount",
                                     style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold),
@@ -94,14 +90,14 @@ class _HomeScreenState extends State<StripePage> {
                                       hintStyle: TextStyle(
                                         color: Colors.black45,
                                       ),
-                                      labelStyle: TextStyle(
-                                          color: AppColors.lowGrey),
+                                      labelStyle:
+                                          TextStyle(color: AppColors.lowGrey),
                                       focusColor: AppColors.lowGrey,
                                       border: new OutlineInputBorder(
                                           borderRadius:
-                                          new BorderRadius.circular(5.0),
-                                          borderSide:
-                                          BorderSide(color: AppColors.grey)),
+                                              new BorderRadius.circular(5.0),
+                                          borderSide: BorderSide(
+                                              color: AppColors.grey)),
                                     ),
                                     onChanged: (v) {
                                       setState(() {});
@@ -114,25 +110,24 @@ class _HomeScreenState extends State<StripePage> {
                         SizedBox(
                           height: 40,
                         ),
-                        loading ?
-                        Center(
-                            child:
-                            CircularProgressIndicator(
-                              color: AppColors.primaryColor,)) :
-                        GeneralButton(
-                          onPressed: () async {
-                            if (_formKey.currentState!.validate()) {
-                              _formKey.currentState!.save();
-                              await makePayment();
-                            }
-                          },
-                          buttonText:
-                            "Pay",
-
-                        ),
+                        loading
+                            ? Center(
+                                child: CircularProgressIndicator(
+                                color: AppColors.primaryColor,
+                              ))
+                            : GeneralButton(
+                                onPressed: () async {
+                                  if (_formKey.currentState!.validate()) {
+                                    _formKey.currentState!.save();
+                                    await makePayment();
+                                  }
+                                },
+                                buttonText: "Pay",
+                              ),
                       ])));
         });
   }
+
   final billingDetails = BillingDetails(
     email: 'mayomidedaniel@gmail.com',
     phone: '+2348169545791',
@@ -155,16 +150,17 @@ class _HomeScreenState extends State<StripePage> {
       await Stripe.instance
           .initPaymentSheet(
               paymentSheetParameters: SetupPaymentSheetParameters(
-                  paymentIntentClientSecret: paymentIntentData!['client_secret'],
+                  paymentIntentClientSecret:
+                      paymentIntentData!['client_secret'],
                   // applePay: false,
                   // googlePay: false,
                   // testEnv: true,
                   style: ThemeMode.dark,
-                 billingDetails:billingDetails,
-                 // BillingDetails(
-                 //   email: "mayomidedaniel@gmail.com",
-                 //       phone: "0811111111"
-                 // ),
+                  billingDetails: billingDetails,
+                  // BillingDetails(
+                  //   email: "mayomidedaniel@gmail.com",
+                  //       phone: "0811111111"
+                  // ),
                   // Customer keys
 //           customerEphemeralKeySecret: data['ephemeralKey'],
 //           customerId: data['customer'],
@@ -188,13 +184,19 @@ class _HomeScreenState extends State<StripePage> {
     try {
       await Stripe.instance.presentPaymentSheet().then((newValue) {
         print('payment intent' + paymentIntentData!['id'].toString());
-        print('payment intent' + paymentIntentData!['client_secret'].toString());
+        print(
+            'payment intent' + paymentIntentData!['client_secret'].toString());
         print('payment intent' + paymentIntentData!['amount'].toString());
         print('payment intent' + paymentIntentData.toString());
         //orderPlaceApi(paymentIntentData!['id'].toString());
-      //  model.sendPay(paymentIntentData!['id'].toString());
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text("Top up successful",style: TextStyle(color: Colors.black),),backgroundColor: AppColors.backgroundColor,));
+        //  model.sendPay(paymentIntentData!['id'].toString());
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(
+            "Top up successful",
+            style: TextStyle(color: Colors.black),
+          ),
+          backgroundColor: AppColors.backgroundColor,
+        ));
         //Navigator.pop(context);
         _navigationService.navigateReplacementTo(homeRoute);
         paymentIntentData = null;
@@ -230,9 +232,9 @@ class _HomeScreenState extends State<StripePage> {
           body: body,
           headers: {
             'Authorization':
-            //'Bearer sk_test_51HHcsiHPcurTn6FWu5mUguRfzFHQZnuzJVsoKATWbukdrUkTWX3kweZx5etJcuT2uaUXDcHI6nUSQg8gbtIqNElB006OsipEVH',
-            'Bearer sk_test_51L0jt8G94I07zh2uaEV1jI5rWguvw4xtmQ1RfaLpWKfc0P8IsvAb4QpNqtb08R2Bv2KEq3XbbIsfX9Vco9h0jYF400jxx3EZTA',
-           // 'Bearer sk_test_51KUCzbGXwaK1yW2oABr1bTyBbzHmbx3kTamKx9t8lE0lHsn2UMzuONZArqgdug6uClg78LVg2SpBEnmesjKDZJIq00d7qIviHS',
+                //'Bearer sk_test_51HHcsiHPcurTn6FWu5mUguRfzFHQZnuzJVsoKATWbukdrUkTWX3kweZx5etJcuT2uaUXDcHI6nUSQg8gbtIqNElB006OsipEVH',
+                'Bearer sk_test_51L0jt8G94I07zh2uaEV1jI5rWguvw4xtmQ1RfaLpWKfc0P8IsvAb4QpNqtb08R2Bv2KEq3XbbIsfX9Vco9h0jYF400jxx3EZTA',
+            // 'Bearer sk_test_51KUCzbGXwaK1yW2oABr1bTyBbzHmbx3kTamKx9t8lE0lHsn2UMzuONZArqgdug6uClg78LVg2SpBEnmesjKDZJIq00d7qIviHS',
             'Content-Type': 'application/x-www-form-urlencoded'
           });
       print('Create Intent reponse ===> ${response.body.toString()}');

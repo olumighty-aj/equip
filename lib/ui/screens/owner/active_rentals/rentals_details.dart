@@ -23,7 +23,7 @@ class OwnerRentalDetails extends StatefulWidget {
 
 class LoginState extends State<OwnerRentalDetails>
     with TickerProviderStateMixin {
-  final NavigationService _navigationService = locator<NavigationService>();
+  final NavService _navigationService = locator<NavService>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   String? selectedDate;
@@ -406,102 +406,102 @@ class LoginState extends State<OwnerRentalDetails>
                                   ),
                                   widget.feed.equipDeliveryStatus != null
                                       ? Container(
-                                    height:
-                                    Responsive.height(context) / 2.8,
-                                    child: ListView.builder(
-                                        itemCount: widget
-                                            .feed
-                                            .equipDeliveryStatus!
-                                            .deliveryStatusLists!
-                                            .length,
-                                        itemBuilder: (context, i) {
-                                          return Row(
-                                            mainAxisAlignment:
-                                            MainAxisAlignment
-                                                .spaceBetween,
-                                            children: [
-                                              Row(children: [
-                                                Column(
+                                          height:
+                                              Responsive.height(context) / 2.8,
+                                          child: ListView.builder(
+                                              itemCount: widget
+                                                  .feed
+                                                  .equipDeliveryStatus!
+                                                  .deliveryStatusLists!
+                                                  .length,
+                                              itemBuilder: (context, i) {
+                                                return Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
                                                   children: [
-                                                    CircleAvatar(
-                                                      radius: 4,
-                                                      backgroundColor:
-                                                      AppColors
-                                                          .primaryColor,
-                                                    ),
-                                                    Container(
-                                                      height: 40,
-                                                      width: 2,
-                                                      color: AppColors
-                                                          .primaryColor,
+                                                    Row(children: [
+                                                      Column(
+                                                        children: [
+                                                          CircleAvatar(
+                                                            radius: 4,
+                                                            backgroundColor:
+                                                                AppColors
+                                                                    .primaryColor,
+                                                          ),
+                                                          Container(
+                                                            height: 40,
+                                                            width: 2,
+                                                            color: AppColors
+                                                                .primaryColor,
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      SizedBox(
+                                                        width: 15,
+                                                      ),
+                                                      Text(
+                                                        widget
+                                                                    .feed
+                                                                    .equipDeliveryStatus!
+                                                                    .deliveryStatusLists![
+                                                                        i]
+                                                                    .deliveryStatus! ==
+                                                                "pending"
+                                                            ? "Pending"
+                                                            : widget
+                                                                        .feed
+                                                                        .equipDeliveryStatus!
+                                                                        .deliveryStatusLists![
+                                                                            i]
+                                                                        .deliveryStatus! ==
+                                                                    "picked_from_owner"
+                                                                ? "Equipment Picked Up"
+                                                                : widget
+                                                                            .feed
+                                                                            .equipDeliveryStatus!
+                                                                            .deliveryStatusLists![
+                                                                                i]
+                                                                            .deliveryStatus! ==
+                                                                        "delivered_hirer"
+                                                                    ? "Owner confirmed Pick-Up"
+                                                                    : widget.feed.equipDeliveryStatus!.deliveryStatusLists![i].deliveryStatus! ==
+                                                                            "picked_from_hirer"
+                                                                        ? "Equipment Returned"
+                                                                        : "Confirmed Returned",
+                                                        //   "Pending",
+                                                        style: TextStyle(
+                                                            color: Colors.black,
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            fontSize: 15),
+                                                      ),
+                                                    ]),
+                                                    Text(
+                                                      DateFormat(
+                                                        "dd MMM, yyyy, hh:mm aa",
+                                                      ).format(DateTime.parse(widget
+                                                          .feed
+                                                          .equipDeliveryStatus!
+                                                          .deliveryStatusLists![
+                                                              i]
+                                                          .dateCreated!
+                                                          .toString())),
+                                                      style: TextStyle(
+                                                          color: Colors.grey,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          fontSize: 12),
                                                     ),
                                                   ],
-                                                ),
-                                                SizedBox(
-                                                  width: 15,
-                                                ),
-                                                Text(
-                                                  widget
-                                                      .feed
-                                                      .equipDeliveryStatus!
-                                                      .deliveryStatusLists![
-                                                  i]
-                                                      .deliveryStatus! ==
-                                                      "pending"
-                                                      ? "Pending"
-                                                      : widget
-                                                      .feed
-                                                      .equipDeliveryStatus!
-                                                      .deliveryStatusLists![
-                                                  i]
-                                                      .deliveryStatus! ==
-                                                      "picked_from_owner"
-                                                      ? "Equipment Picked Up"
-                                                      : widget
-                                                      .feed
-                                                      .equipDeliveryStatus!
-                                                      .deliveryStatusLists![
-                                                  i]
-                                                      .deliveryStatus! ==
-                                                      "delivered_hirer"
-                                                      ? "Owner confirmed Pick-Up"
-                                                      : widget.feed.equipDeliveryStatus!.deliveryStatusLists![i].deliveryStatus! ==
-                                                      "picked_from_hirer"
-                                                      ? "Equipment Returned"
-                                                      : "Confirmed Returned",
-                                                  //   "Pending",
-                                                  style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontWeight:
-                                                      FontWeight.w500,
-                                                      fontSize: 15),
-                                                ),
-                                              ]),
-                                              Text(
-                                                DateFormat(
-                                                  "dd MMM, yyyy, hh:mm aa",
-                                                ).format(DateTime.parse(widget
-                                                    .feed
-                                                    .equipDeliveryStatus!
-                                                    .deliveryStatusLists![
-                                                i]
-                                                    .dateCreated!
-                                                    .toString())),
-                                                style: TextStyle(
-                                                    color: Colors.grey,
-                                                    fontWeight:
-                                                    FontWeight.w500,
-                                                    fontSize: 12),
-                                              ),
-                                            ],
-                                          );
-                                        }),
-                                  )
+                                                );
+                                              }),
+                                        )
                                       : Container(
-                                    child: Text(
-                                      "Not available",
-                                    ),
-                                  ),
+                                          child: Text(
+                                            "Not available",
+                                          ),
+                                        ),
                                   widget.feed.equipDeliveryStatus!
                                               .deliveryStatus ==
                                           "pending"

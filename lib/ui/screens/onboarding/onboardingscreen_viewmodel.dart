@@ -2,9 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:equipro/core/model/onboarding_screen_model.dart';
 import 'package:equipro/utils/base_model.dart';
 import 'package:equipro/utils/colors.dart';
-import 'package:equipro/utils/locator.dart';
+// import 'package:equipro/utils/locator.dart';
 import 'package:equipro/utils/router/navigation_service.dart';
 import 'package:equipro/utils/router/route_names.dart';
+import 'package:stacked/stacked.dart';
+import 'package:stacked_services/stacked_services.dart';
+
+import '../../../app/app_setup.locator.dart';
+import '../../../app/app_setup.router.dart';
 
 List<OnboardingScreenModel> getScreens() {
   List<OnboardingScreenModel> screens = [];
@@ -37,11 +42,11 @@ List<OnboardingScreenModel> getScreens() {
   return screens;
 }
 
-class OnboardingScreenViewModel extends BaseModel {
+class OnboardingScreenViewModel extends BaseViewModel {
   //final AuthenticationService _authenticationService = locator<AuthenticationService>();
 
   // final DialogService _dialogService = locator<DialogService>();
-  final NavigationService _navigationService = locator<NavigationService>();
+  final _navigationService = locator<NavigationService>();
 
   EdgeInsetsGeometry padding = EdgeInsets.only(left: 30);
   EdgeInsetsGeometry margin =
@@ -50,7 +55,7 @@ class OnboardingScreenViewModel extends BaseModel {
       EdgeInsets.symmetric(horizontal: 30, vertical: 30);
 
   void navigateToWelcome() {
-    _navigationService.navigateTo(loginRoute);
+    _navigationService.navigateTo(Routes.login);
   }
 
   Widget pageIndicator(bool isCurrentPage) {

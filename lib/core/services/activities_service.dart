@@ -1,27 +1,38 @@
 import 'dart:convert';
+import 'dart:ffi';
+import 'package:dio/dio.dart';
+import 'package:equipro/app/app_setup.logger.dart';
+import 'package:equipro/core/api/dio_service.dart';
 import 'package:equipro/core/model/ActiveRentalsModel.dart';
 import 'package:equipro/core/model/ChatListModel.dart';
 import 'package:equipro/core/model/ChatMessages.dart';
 import 'package:equipro/core/model/EquipmentModel.dart';
 import 'package:equipro/core/model/NotificationModel.dart';
 import 'package:equipro/core/model/ReviewsModel.dart';
+import 'package:equipro/core/model/base_model.dart';
 import 'package:equipro/core/model/error_model.dart';
 import 'package:equipro/core/model/success_model.dart';
 import 'package:equipro/utils/helpers.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as htp;
 import 'package:equipro/core/services/auth_service.dart';
 import 'package:equipro/core/services/index.dart';
 import 'package:equipro/utils/http/paths.dart';
-import 'package:equipro/utils/locator.dart';
 import 'package:equipro/utils/router/navigation_service.dart';
 
+import '../../app/app_setup.locator.dart';
+
 class Activities {
-  final NavigationService _navigationService = locator<NavigationService>();
+  final _log = getLogger("Activities");
+  final NavService _navigationService = locator<NavService>();
   final Authentication _authentication = locator<Authentication>();
+  final _api = locator<ApiService>();
   int? _count;
   int get count => _count!;
+
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   postEquip(
     List images,
@@ -78,7 +89,7 @@ class Activities {
       final response = await htp.Response.fromStream(streamedResponse);
       final Map<String, dynamic> result = json.decode(response.body);
       if (result["status"] == false) {
-        showErrorToast(result["message"]);
+        // showErrorToast(result["message"]);
         print(response.body);
         print(response.statusCode);
         return null;
@@ -151,7 +162,7 @@ class Activities {
       final response = await htp.Response.fromStream(streamedResponse);
       final Map<String, dynamic> result = json.decode(response.body);
       if (result["status"] == false) {
-        showErrorToast(result["message"]);
+        // showErrorToast(result["message"]);
         print(response.body);
         print(response.statusCode);
         return null;
@@ -196,6 +207,21 @@ class Activities {
                   "TimeoutException after 0:00:40.000000: Future not completed"
               ? "Your internet is not stable kindly reconnect and try again"
               : e.toString());
+    }
+  }
+
+  Future<BaseDataModel?> getPagedEquipments({int page = 1}) async {
+    var path = Paths.ownerEquipment + "?start=0&len=10&paging=$page";
+    try {
+      var res = await _api.getRequest(null, path);
+      if (res.statusCode == 200) {
+        _log.i(res.data);
+        return BaseDataModel.fromJson(res.data);
+      }
+    } on DioException catch (e) {
+      _log.e(e.message);
+      _log.e(e.response);
+      return BaseDataModel.fromJson(e.response?.data);
     }
   }
 
@@ -297,6 +323,22 @@ class Activities {
     }
   }
 
+  Future<BaseDataModel?> newDeleteEquip(id) async {
+    try {
+      Response res = await _api.postRequest({}, Paths.deleteEquipment + id);
+      if (res.statusCode == 200) {
+        return BaseDataModel.fromJson(res.data);
+      }
+    } on DioException catch (e) {
+      _log.e(e.message);
+      _log.e(e.response.toString());
+      return BaseDataModel.fromJson(e.response?.data);
+    }
+    // catch(e){
+    //
+    // }
+  }
+
   deleteEquip(String id) async {
     try {
       var url = Paths.deleteEquipment + id;
@@ -306,7 +348,7 @@ class Activities {
         print(result.error);
         return ErrorModel(result.error);
       }
-      showToast(result.data['message']);
+      // showToast(result.data['message']);
       return SuccessModel(result.data);
     } catch (e) {
       print(e.toString());
@@ -341,8 +383,8 @@ class Activities {
 
   equipApproval(String id, String status) async {
     try {
-      final result = await http
-          .post(Paths.equipApproval + id, {"request_status": status});
+      final result =
+          await http.post(Paths.equipApproval + id, {"request_status": status});
       if (result is ErrorModel) {
         return ErrorModel(result.error);
       }
@@ -361,12 +403,10 @@ class Activities {
 
   updateBooking(String id, String status) async {
     try {
-      final result = await http
-          .post(Paths.updateBookings, {
-            "delivery_status":status,
-        "equip_order_id":id,
-
-          });
+      final result = await http.post(Paths.updateBookings, {
+        "delivery_status": status,
+        "equip_order_id": id,
+      });
       if (result is ErrorModel) {
         return ErrorModel(result.error);
       }
@@ -374,12 +414,12 @@ class Activities {
       return SuccessModel(result.data);
     } catch (e) {
       return ErrorModel(e.toString() ==
-          "SocketException: Failed host lookup: '$baseUrlError' (OS Error: nodename nor servname provided, or not known, errno = 8)"
+              "SocketException: Failed host lookup: '$baseUrlError' (OS Error: nodename nor servname provided, or not known, errno = 8)"
           ? "Your internet is not stable kindly reconnect and try again"
           : e.toString() ==
-          "TimeoutException after 0:00:40.000000: Future not completed"
-          ? "Your internet is not stable kindly reconnect and try again"
-          : e.toString());
+                  "TimeoutException after 0:00:40.000000: Future not completed"
+              ? "Your internet is not stable kindly reconnect and try again"
+              : e.toString());
     }
   }
 
@@ -403,11 +443,12 @@ class Activities {
     }
   }
 
-
-  sendDate(String date,String id, ) async {
+  sendDate(
+    String date,
+    String id,
+  ) async {
     try {
-      final result = await http.post(Paths.pickDate +id,
-          {"pick_date": date});
+      final result = await http.post(Paths.pickDate + id, {"pick_date": date});
       if (result is ErrorModel) {
         return ErrorModel(result.error);
       }
@@ -415,12 +456,12 @@ class Activities {
       return SuccessModel(result.data);
     } catch (e) {
       return ErrorModel(e.toString() ==
-          "SocketException: Failed host lookup: '$baseUrlError' (OS Error: nodename nor servname provided, or not known, errno = 8)"
+              "SocketException: Failed host lookup: '$baseUrlError' (OS Error: nodename nor servname provided, or not known, errno = 8)"
           ? "Your internet is not stable kindly reconnect and try again"
           : e.toString() ==
-          "TimeoutException after 0:00:40.000000: Future not completed"
-          ? "Your internet is not stable kindly reconnect and try again"
-          : e.toString());
+                  "TimeoutException after 0:00:40.000000: Future not completed"
+              ? "Your internet is not stable kindly reconnect and try again"
+              : e.toString());
     }
   }
 
@@ -511,12 +552,25 @@ class Activities {
     }
   }
 
+  Future<BaseDataModel?> getChatList() async {
+    try {
+      var res = await _api.getRequest(null, Paths.chatList);
+      if (res.statusCode == 200) {
+        return BaseDataModel.fromJson(res.data);
+      }
+    } on DioException catch (e) {
+      _log.e(e.message);
+      _log.e(e.response);
+      return BaseDataModel.fromJson(e.response?.data);
+    }
+  }
+
   chatList() async {
     try {
       final result = await http.get(Paths.chatList);
       if (result is ErrorModel) {
         print("ERROR");
-        print(result.error);
+        // print("Result from service: ${result.error}");
         var data = result.error;
         List<ChatListModel> packageList = List<ChatListModel>.from(
             data.map((item) => ChatListModel.fromJson(item)));
@@ -531,12 +585,12 @@ class Activities {
     } catch (e) {
       print(e.toString());
       return ErrorModel(e.toString() ==
-          "SocketException: Failed host lookup: '$baseUrlError' (OS Error: nodename nor servname provided, or not known, errno = 8)"
+              "SocketException: Failed host lookup: '$baseUrlError' (OS Error: nodename nor servname provided, or not known, errno = 8)"
           ? "Your internet is not stable kindly reconnect and try again"
           : e.toString() ==
-          "TimeoutException after 0:00:40.000000: Future not completed"
-          ? "Your internet is not stable kindly reconnect and try again"
-          : e.toString());
+                  "TimeoutException after 0:00:40.000000: Future not completed"
+              ? "Your internet is not stable kindly reconnect and try again"
+              : e.toString());
     }
   }
 
@@ -569,27 +623,52 @@ class Activities {
     }
   }
 
-  fetchChat(String inboxId) async {
+  fetchChatDetails(String inboxId) async {
     try {
-      final result = await http.get(
-          Paths.chatDetails + "${_authentication.currentUser.id}&user_2=$inboxId");
-      if (result is ErrorModel) {
-        print("ERROR");
-        var data = result.error;
+      htp.Response result = await http.getRequest(Paths.chatDetails +
+          "${_authentication.currentUser.id}&user_2=$inboxId");
+      print("Result from service: ${result.body}");
+      Map<String, dynamic> data = jsonDecode(result.body);
+      print(data.toString());
+      if (data["status"] == false) {
+        print("Data: $data");
         // print(result.error);
-        List<ChatMessages> packageList = List<ChatMessages>.from(
-            data.map((item) => ChatMessages.fromJson(item)));
-        return ErrorModel(packageList);
+        // List<ChatMessages> packageList = ChatMessages;
+        return data;
       }
-      var data = result.data["payload"];
-      List<ChatMessages> packageList = List<ChatMessages>.from(
-          data.map((item) => ChatMessages.fromJson(item)));
-      // print(packageList);
-      return packageList;
+      if (data["status"] == true) {
+        List<ChatMessages> chats = [];
+        for (var i in data["payload"]) {
+          ChatMessages chat = ChatMessages.fromJson(i);
+          print(chat.toJson());
+          chats.add(chat);
+        }
+        return chats;
+      }
+      // var data = result.data["payload"];
+      // List<ChatMessages> packageList = List<ChatMessages>.from(
+      //     data.map((item) => ChatMessages.fromJson(item)));
+      // // print(packageList);
+      // return packageList;
     } catch (e) {
       print(e.toString());
-      return ErrorModel(e.toString() =="SocketException: Failed host lookup: '$baseUrlError' (OS Error: nodename nor servname provided, or not known, errno = 8)"?"Your internet is not stable kindly reconnect and try again":e.toString() == "TimeoutException after 0:00:40.000000: Future not completed"?"Your internet is not stable kindly reconnect and try again":e.toString());
+      return ErrorModel(e.toString() ==
+              "SocketException: Failed host lookup: '$baseUrlError' (OS Error: nodename nor servname provided, or not known, errno = 8)"
+          ? "Your internet is not stable kindly reconnect and try again"
+          : e.toString() ==
+                  "TimeoutException after 0:00:40.000000: Future not completed"
+              ? "Your internet is not stable kindly reconnect and try again"
+              : e.toString());
     }
+  }
+
+  Future<dynamic> fetchChats(String inboxId) async {
+    try {
+      htp.Response result = await http.get(Paths.chatDetails +
+          "${_authentication.currentUser.id}&user_2=$inboxId");
+      print("Result from service: ${result.body}");
+      if (result is ErrorModel) {}
+    } catch (e) {}
   }
 
   sendChat(Map<dynamic, dynamic> payload) async {
@@ -603,10 +682,15 @@ class Activities {
       return SuccessModel(result.data);
     } catch (e) {
       print(e.toString());
-      return ErrorModel(e.toString() =="SocketException: Failed host lookup: '$baseUrlError' (OS Error: nodename nor servname provided, or not known, errno = 8)"?"Your internet is not stable kindly reconnect and try again":e.toString() == "TimeoutException after 0:00:40.000000: Future not completed"?"Your internet is not stable kindly reconnect and try again":e.toString());
+      return ErrorModel(e.toString() ==
+              "SocketException: Failed host lookup: '$baseUrlError' (OS Error: nodename nor servname provided, or not known, errno = 8)"
+          ? "Your internet is not stable kindly reconnect and try again"
+          : e.toString() ==
+                  "TimeoutException after 0:00:40.000000: Future not completed"
+              ? "Your internet is not stable kindly reconnect and try again"
+              : e.toString());
     }
   }
-
 
   getNotification() async {
     try {

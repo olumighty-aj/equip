@@ -1,19 +1,28 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:equipro/core/model/ChatListModel.dart';
 import 'package:equipro/core/model/EquipmentModel.dart';
+import 'package:equipro/ui/screens/chat/chats_widget/chat_details.dart';
 import 'package:equipro/ui/screens/hirer/book/details_view_model.dart';
+import 'package:equipro/ui/screens/hirer/book/place_booking.dart';
+import 'package:equipro/ui/widget/base_button.dart';
 import 'package:equipro/ui/widget/dash_painter.dart';
+import 'package:equipro/ui/widget/equip_tiles.dart';
 import 'package:equipro/utils/screensize.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 import 'package:stacked/stacked.dart';
 import 'package:equipro/ui/widget/general_button.dart';
 import 'package:equipro/utils/colors.dart';
-import 'package:equipro/utils/locator.dart';
+// import 'package:equipro/utils/locator.dart';
 import 'package:equipro/utils/router/navigation_service.dart';
 import 'package:equipro/utils/router/route_names.dart';
+import 'package:stacked_services/stacked_services.dart';
+
+import '../../../../app/app_setup.locator.dart';
+import '../../../../utils/text_styles.dart';
 
 class EquipDetails extends StatefulWidget {
   final EquipmentModel model;
@@ -24,7 +33,7 @@ class EquipDetails extends StatefulWidget {
 }
 
 class LoginState extends State<EquipDetails> with TickerProviderStateMixin {
-  final NavigationService _navigationService = locator<NavigationService>();
+  // final _navigationService = locator<NavigationService>();
 
   String? selected = "1";
   late bool active = false;
@@ -114,8 +123,8 @@ class LoginState extends State<EquipDetails> with TickerProviderStateMixin {
                           ),
                           child: InkWell(
                               onTap: () {
-                                _navigationService.pop();
-                                //  Navigator.pop(context);
+                                // _navigationService.back();
+                                Navigator.pop(context);
                               },
                               child: const Icon(
                                 Icons.arrow_back_ios,
@@ -141,86 +150,90 @@ class LoginState extends State<EquipDetails> with TickerProviderStateMixin {
                                   height: Responsive.height(context) / 4,
                                 ),
                                 widget.model.equipImages != null
-                                    ? Container(
-                                        height: 100,
-                                        child: Center(
-                                            child: ListView.builder(
-                                                shrinkWrap: true,
-                                                itemCount: widget
-                                                    .model.equipImages!.length,
-                                                scrollDirection:
-                                                    Axis.horizontal,
-                                                itemBuilder:
-                                                    (BuildContext context,
-                                                        int index) {
-                                                  return Padding(
-                                                    padding: EdgeInsets.all(5),
-                                                    child: InkWell(
-                                                        onTap: () {
-                                                          setState(() {
-                                                            selected = widget
-                                                                .model
-                                                                .equipImages![
-                                                                    index]
-                                                                .id!
-                                                                .toString();
-                                                          });
-                                                        },
-                                                        child: Container(
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          10),
-                                                              color: widget
-                                                                          .model
-                                                                          .equipImages![
-                                                                              index]
-                                                                          .id!
-                                                                          .toString() !=
-                                                                      selected
-                                                                  ? AppColors
-                                                                      .primaryColor
-                                                                  : AppColors
-                                                                      .white,
-                                                            ),
-                                                            height: 70,
-                                                            width: 70,
-                                                            child: Container(
-                                                                height: 60,
-                                                                width: 60,
-                                                                padding:
-                                                                    EdgeInsets
-                                                                        .all(3),
-                                                                child:
-                                                                    ClipRRect(
-                                                                        borderRadius:
-                                                                            BorderRadius.circular(
-                                                                                10.0),
-                                                                        child:
-                                                                            CachedNetworkImage(
-                                                                          imageUrl: widget
-                                                                              .model
-                                                                              .equipImages![index]
-                                                                              .equipImagesPath!,
-                                                                          fit: BoxFit
-                                                                              .fill,
-                                                                          placeholder: (context, url) =>
-                                                                              CircularProgressIndicator(),
-                                                                          errorWidget: (context, url, error) =>
-                                                                              ClipRRect(
-                                                                            borderRadius:
-                                                                                BorderRadius.circular(8.0),
-                                                                            child:
-                                                                                Image.asset(
-                                                                              "assets/images/logo.png",
-                                                                              scale: 2,
-                                                                            ),
-                                                                          ),
-                                                                        ))))),
-                                                  );
-                                                })))
+                                    ? Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: List.generate(
+                                            widget.model.equipImages!.length,
+                                            (index) => Padding(
+                                                  padding: EdgeInsets.all(5),
+                                                  child: GestureDetector(
+                                                      onTap: () {
+                                                        setState(() {
+                                                          selected = widget
+                                                              .model
+                                                              .equipImages![
+                                                                  index]
+                                                              .id!
+                                                              .toString();
+                                                        });
+                                                      },
+                                                      child: Container(
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        10),
+                                                            border: Border.all(
+                                                                color: AppColors
+                                                                    .primaryColor,
+                                                                width: 2),
+                                                            color: widget
+                                                                        .model
+                                                                        .equipImages![
+                                                                            index]
+                                                                        .id!
+                                                                        .toString() !=
+                                                                    selected
+                                                                ? AppColors
+                                                                    .primaryColor
+                                                                : AppColors
+                                                                    .white,
+                                                          ),
+                                                          height: 70,
+                                                          width: 70,
+                                                          child: Container(
+                                                              height: 60,
+                                                              width: 60,
+                                                              padding:
+                                                                  EdgeInsets
+                                                                      .all(3),
+                                                              child: ClipRRect(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              10.0),
+                                                                  child:
+                                                                      CachedNetworkImage(
+                                                                    imageUrl: widget
+                                                                        .model
+                                                                        .equipImages![
+                                                                            index]
+                                                                        .equipImagesPath!,
+                                                                    fit: BoxFit
+                                                                        .fill,
+                                                                    placeholder:
+                                                                        (context,
+                                                                                url) =>
+                                                                            CircularProgressIndicator(),
+                                                                    errorWidget: (context,
+                                                                            url,
+                                                                            error) =>
+                                                                        ClipRRect(
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              8.0),
+                                                                      child: Image
+                                                                          .asset(
+                                                                        "assets/images/logo.png",
+                                                                        scale:
+                                                                            2,
+                                                                      ),
+                                                                    ),
+                                                                  ))))),
+                                                )),
+                                      )
                                     : Container(
                                         child: Text(
                                           "",
@@ -412,7 +425,7 @@ class LoginState extends State<EquipDetails> with TickerProviderStateMixin {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    "${widget.model.costOfHire} per ${widget.model.costOfHireInterval == "1" ? "Day" : widget.model.costOfHireInterval == "7" ? "Week" : "Month"}",
+                                    "${getCurrency(widget.model.owners!.country)}${widget.model.costOfHire} per ${widget.model.costOfHireInterval == "1" ? "Day" : widget.model.costOfHireInterval == "7" ? "Week" : "Month"}",
                                     style: TextStyle(
                                         fontSize: 15,
                                         color: AppColors.green,
@@ -433,43 +446,40 @@ class LoginState extends State<EquipDetails> with TickerProviderStateMixin {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  const Text(
-                                    'Description:',
-                                    style: TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  const Text(
+                                  Text('Description:',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall
+                                          ?.copyWith(
+                                              fontWeight: FontWeight.w700)),
+                                  Text(
                                     'View rental agreement',
-                                    style: TextStyle(
-                                        fontSize: 12,
-                                        color: AppColors.primaryColor,
-                                        fontWeight: FontWeight.bold,
-                                        decoration: TextDecoration.underline),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodySmall
+                                        ?.copyWith(
+                                            color: AppColors.primaryColor,
+                                            decoration:
+                                                TextDecoration.underline),
                                   ),
                                 ],
                               ),
-                              SizedBox(
-                                height: 20,
-                              ),
+                              Gap(20),
                               Text(
                                 widget.model.description!,
-                                style: TextStyle(fontSize: 14),
+                                style: Theme.of(context).textTheme.bodyMedium,
                               ),
-                              SizedBox(
-                                height: 20,
-                              ),
+                              Gap(20),
                               Text(
-                                "Availability: ${DateFormat(
-                                  "dd MMM, yyyy",
-                                ).format(DateTime.parse(widget.model.availFrom!)).toString()} - ${DateFormat(
-                                  "dd MMM, yyyy",
-                                ).format(DateTime.parse(widget.model.availTo!)).toString()}",
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 12),
-                              ),
+                                  "Availability: ${DateFormat(
+                                    "dd MMM, yyyy",
+                                  ).format(DateTime.parse(widget.model.availFrom!)).toString()} - ${DateFormat(
+                                    "dd MMM, yyyy",
+                                  ).format(DateTime.parse(widget.model.availTo!)).toString()}",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodySmall
+                                      ?.copyWith(fontWeight: FontWeight.w600)),
                               SizedBox(
                                 height: 30,
                               ),
@@ -532,57 +542,74 @@ class LoginState extends State<EquipDetails> with TickerProviderStateMixin {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Container(
-                                          width:
-                                              Responsive.width(context) / 2.3,
-                                          child: GeneralButton(
-                                              onPressed: () {
-
-                                                _navigationService.navigateTo(
-                                                    chatDetailsPageRoute, arguments: ChatListModel(
-                                                    id:widget.model.ownersId,
-                                                    userId            :"",
-                                                    chatWithId         :"",
-                                                    messageCount       :"",
-                                                    lastMessage        :"",
-                                                    dateCreated        :"",
-                                                    dateModified       :"",
-                                                    chatWith:  ChatWith(
-                                                      id:widget.model.ownersId,
-                                                      fullname :widget.model.owners!.fullname!,
-                                                      email        :"",
-                                                      phoneNumber  :"",
-                                                      gender       :"",
-                                                      address    :"",
-                                                      addressOpt   :"",
-                                                      localState   :"",
-                                                      country      :"",
-                                                      latitude     :"",
-                                                      longitude    :"",
-                                                      hirersPath   :widget.model.owners!.hirersPath!= null?widget.model.owners!.hirersPath!:"",
-                                                      status       :"",
-                                                      dateModified :"",
-                                                      dateCreated  :"",
-                                                    )
-
-                                                ));
-                                              },
-                                              buttonText: "Chat Owner",
-                                              buttonTextColor: AppColors.black,
-                                              splashColor: Color.fromRGBO(
-                                                  255, 235, 173, 0.85))),
-                                      Container(
-                                          width:
-                                              Responsive.width(context) / 2.3,
-                                          child: GeneralButton(
-                                            onPressed: () {
-                                              _navigationService.navigateTo(
-                                                  PlaceBookingRoute,
-                                                  arguments: widget.model);
-                                            },
-                                            buttonText: "Book Now",
-                                            splashColor: AppColors.primaryColor,
-                                          )),
+                                      Expanded(
+                                        child: BaseButton(
+                                          label: "Chat Owner",
+                                          bgColor: AppColors.primaryColor
+                                              .withOpacity(0.3),
+                                          labelStyle: buttonText.copyWith(
+                                              color: AppColors.primaryColor),
+                                          onPressed: () => Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      ChatDetailsPage(
+                                                          feed: ChatListModel(
+                                                              id: widget.model
+                                                                  .ownersId,
+                                                              userId: "",
+                                                              chatWithId: "",
+                                                              messageCount: "",
+                                                              lastMessage: "",
+                                                              dateCreated: "",
+                                                              dateModified: "",
+                                                              chatWith:
+                                                                  ChatWith(
+                                                                id: widget.model
+                                                                    .ownersId,
+                                                                fullname: widget
+                                                                    .model
+                                                                    .owners!
+                                                                    .fullname!,
+                                                                email: "",
+                                                                phoneNumber: "",
+                                                                gender: "",
+                                                                address: "",
+                                                                addressOpt: "",
+                                                                localState: "",
+                                                                country: "",
+                                                                latitude: "",
+                                                                longitude: "",
+                                                                hirersPath: widget
+                                                                            .model
+                                                                            .owners!
+                                                                            .hirersPath !=
+                                                                        null
+                                                                    ? widget
+                                                                        .model
+                                                                        .owners!
+                                                                        .hirersPath!
+                                                                    : "",
+                                                                status: "",
+                                                                dateModified:
+                                                                    "",
+                                                                dateCreated: "",
+                                                              ))))),
+                                        ),
+                                      ),
+                                      Gap(10),
+                                      Expanded(
+                                        child: BaseButton(
+                                          label: "Book Now",
+                                          onPressed: () => Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      PlaceBooking(
+                                                          model:
+                                                              widget.model))),
+                                        ),
+                                      )
                                     ],
                                   ))
                             ],

@@ -2,10 +2,12 @@ import 'dart:io';
 
 import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dotted_border/dotted_border.dart';
 import 'package:equipro/core/services/auth_service.dart';
 import 'package:equipro/core/services/index.dart';
 import 'package:equipro/ui/screens/drawer.dart';
 import 'package:equipro/ui/screens/profile/profile_view_model.dart';
+import 'package:equipro/ui/widget/base_button.dart';
 import 'package:equipro/ui/widget/equip_tiles.dart';
 import 'package:equipro/ui/widget/general_button.dart';
 import 'package:equipro/utils/helpers.dart';
@@ -31,20 +33,7 @@ class EditProfile extends StatefulWidget {
 }
 
 class LoginState extends State<EditProfile> with TickerProviderStateMixin {
-  final NavigationService _navigationService = locator<NavigationService>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  final Authentication _authentication = locator<Authentication>();
-  int? selectedQuantity;
-  String? pickupTime = DateTime.now().toString();
-  String? selectedGender;
-  String? selectedMOI;
-  String? pickLat;
-  String? pickLng;
-  TextEditingController nameController = TextEditingController();
-  TextEditingController uploadController = TextEditingController();
-  TextEditingController addressController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
-  TextEditingController phoneController = TextEditingController();
 
   AnimationController? _navController;
   Animation<Offset>? _navAnimation;
@@ -72,84 +61,22 @@ class LoginState extends State<EditProfile> with TickerProviderStateMixin {
 
   var quantityList = new List<int>.generate(4, (i) => i + 1);
 
-  File? image;
   File? banner;
   final DateTime timestamp = DateTime.now();
-  final imagePicker = ImagePicker();
-  handleChooseFromCamera() async {
-    File file = File(await imagePicker
-        .pickImage(
-          source: ImageSource.camera,
-        )
-        .then((pickedFile) => pickedFile!.path));
-    // Navigator.pop(context);
-    setState(() {
-      //  fileName = file.path.split('/').last;
-      this.image = file;
-      // _startUploading();
-    });
-  }
-
-  handleChooseFromGallery() async {
-    File file = File(await imagePicker
-        .pickImage(
-          source: ImageSource.gallery,
-        )
-        .then((pickedFile) => pickedFile!.path));
-    // Navigator.pop(context);
-    setState(() {
-      //  fileName = file.path.split('/').last;
-      this.image = file;
-      // _startUploading();
-    });
-  }
-
-  handleChooseFromGalleryId() async {
-    File file = File(await imagePicker
-        .pickImage(
-          source: ImageSource.gallery,
-        )
-        .then((pickedFile) => pickedFile!.path));
-    // Navigator.pop(context);
-    setState(() {
-      //  fileName = file.path.split('/').last;
-      uploadController.text = file.path;
-      // _startUploading();
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<ProfileViewModel>.reactive(
-        onModelReady: (v) {
-          nameController.text = _authentication.currentUser.fullname!;
-          addressController.text = _authentication.currentUser.address != null
-              ? _authentication.currentUser.address!
-              : "";
-          emailController.text = _authentication.currentUser.email != null
-              ? _authentication.currentUser.email!
-              : "";
-          phoneController.text = _authentication.currentUser.phoneNumber != null
-              ? _authentication.currentUser.phoneNumber!
-              : "";
-          pickLat = _authentication.currentUser.latitude != null
-              ? _authentication.currentUser.latitude!
-              : "";
-
-          pickLng = _authentication.currentUser.longitude != null
-              ? _authentication.currentUser.longitude!
-              : "";
-          selectedGender = _authentication.currentUser.gender != ""
-              ? _authentication.currentUser.gender == "male"
-                  ? "Male"
-                  : "Female"
-              : null;
-        },
+        onViewModelReady: (v) => v.init(),
         viewModelBuilder: () => ProfileViewModel(),
         builder: (context, model, child) {
           return Scaffold(
             key: _scaffoldKey,
+            appBar: AppBar(
+              leading: CustomBackButton(),
+            ),
             body: SingleChildScrollView(
+                physics: BouncingScrollPhysics(),
                 child: Padding(
                     padding: EdgeInsets.all(20),
                     child: AnimationLimiter(
@@ -168,34 +95,15 @@ class LoginState extends State<EditProfile> with TickerProviderStateMixin {
                                           child: widget),
                                     ),
                                 children: [
-                                  const SizedBox(
-                                    height: 40,
-                                  ),
-                                  Row(
-                                    children: [
-                                      Container(
-                                          //  margin: EdgeInsets.all(20),
-                                          padding: EdgeInsets.only(left: 8),
-                                          height: 40,
-                                          width: 40,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
-                                            color: AppColors.white,
-                                          ),
-                                          child: InkWell(
-                                              onTap: () {
-                                                Navigator.pop(context);
-                                              },
-                                              child: const Icon(
-                                                Icons.arrow_back_ios,
-                                                color: AppColors.primaryColor,
-                                              )))
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 20,
-                                  ),
+                                  // const SizedBox(
+                                  //   height: 40,
+                                  // ),
+                                  // Row(
+                                  //   children: [CustomBackButton()],
+                                  // ),
+                                  // SizedBox(
+                                  //   height: 20,
+                                  // ),
                                   Row(
                                     children: [
                                       Text(
@@ -211,90 +119,180 @@ class LoginState extends State<EditProfile> with TickerProviderStateMixin {
                                     height: 20,
                                   ),
                                   Center(
-                                      child: Stack(
-                                    children: [
-                                      Container(
-                                        width: 150.0,
-                                        height: 150.0,
-                                        child: Image.asset(
-                                            "assets/images/dot_circle.png"),
-                                      ),
-                                      PopupMenuButton<int>(
-                                        offset: Offset(100, 100),
-                                        iconSize: 120,
-                                        icon: image != null
-                                            ? Padding(
-                                                padding: EdgeInsets.only(
-                                                    left: 15, top: 13),
-                                                child: CircleAvatar(
-                                                    radius: 70,
-                                                    backgroundImage:
-                                                        FileImage(image!)))
-                                            : Padding(
-                                                padding: EdgeInsets.only(
-                                                    left: 15, top: 13),
-                                                child: CachedNetworkImage(
-                                                  imageUrl: _authentication
-                                                              .currentUser
-                                                              .hirersPath !=
-                                                          null
-                                                      ? _authentication
-                                                          .currentUser
-                                                          .hirersPath!
-                                                      : baseUrl,
-                                                  imageBuilder: (context,
-                                                          imageProvider) =>
-                                                      Container(
-                                                    width: 140.0,
-                                                    height: 140.0,
-                                                    decoration: BoxDecoration(
-                                                      shape: BoxShape.circle,
-                                                      image: DecorationImage(
-                                                          image: imageProvider,
-                                                          fit: BoxFit.contain),
-                                                    ),
+                                      child: DottedBorder(
+                                    color: Colors.grey,
+                                    padding: EdgeInsets.all(10),
+                                    dashPattern: [2, 3, 4],
+                                    borderType: BorderType.Circle,
+                                    child: Stack(
+                                      clipBehavior: Clip.none,
+                                      children: [
+                                        model.image != null
+                                            ? CircleAvatar(
+                                                radius: 70,
+                                                backgroundImage:
+                                                    FileImage(model.image!))
+                                            : CachedNetworkImage(
+                                                imageUrl:
+                                                    model.hirersPath != null
+                                                        ? model.hirersPath!
+                                                        : baseUrl,
+                                                imageBuilder:
+                                                    (context, imageProvider) =>
+                                                        Container(
+                                                  width: 140.0,
+                                                  height: 140.0,
+                                                  decoration: BoxDecoration(
+                                                    shape: BoxShape.circle,
+                                                    image: DecorationImage(
+                                                        image: imageProvider,
+                                                        fit: BoxFit.contain),
                                                   ),
-                                                  placeholder: (context, url) =>
-                                                      CircularProgressIndicator(),
-                                                  errorWidget:
-                                                      (context, url, error) =>
-                                                          CircleAvatar(
-                                                    radius: 70,
-                                                    backgroundColor:
-                                                        AppColors.grey,
-                                                    child: Image.asset(
-                                                      "assets/images/icon.png",
-                                                      scale: 2,
-                                                    ),
+                                                ),
+                                                placeholder: (context, url) =>
+                                                    CircularProgressIndicator(),
+                                                errorWidget:
+                                                    (context, url, error) =>
+                                                        CircleAvatar(
+                                                  radius: 70,
+                                                  backgroundColor:
+                                                      AppColors.grey,
+                                                  child: Image.asset(
+                                                    "assets/images/icon.png",
+                                                    scale: 2,
                                                   ),
-                                                )),
-                                        onSelected: (int selectedValue) async {
-                                          switch (selectedValue) {
-                                            case 0:
-                                              handleChooseFromCamera();
-                                              break;
-                                            case 1:
-                                              handleChooseFromGallery();
-                                              break;
-                                            default:
-                                          }
-                                        },
-                                        itemBuilder: (context) => [
-                                          PopupMenuItem(
-                                            value: 0,
-                                            child: Text(
-                                              "Camera",
+                                                ),
+                                              ),
+                                        Positioned(
+                                          bottom: 10,
+                                          right: -20,
+                                          child: PopupMenuButton(
+                                            offset: Offset(100, 30),
+                                            onSelected:
+                                                (int selectedValue) async {
+                                              switch (selectedValue) {
+                                                case 0:
+                                                  model
+                                                      .handleChooseFromCamera();
+                                                  break;
+                                                case 1:
+                                                  model
+                                                      .handleChooseFromGallery();
+                                                  break;
+                                                default:
+                                              }
+                                            },
+                                            itemBuilder: (context) => [
+                                              PopupMenuItem(
+                                                value: 0,
+                                                child: Text(
+                                                  "Camera",
+                                                ),
+                                              ),
+                                              PopupMenuItem(
+                                                  value: 1,
+                                                  child: Text(
+                                                    "Gallery",
+                                                  )),
+                                            ],
+                                            child: CircleAvatar(
+                                              backgroundColor:
+                                                  AppColors.primaryColor,
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Icon(
+                                                  Icons.camera_alt_outlined,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
                                             ),
                                           ),
-                                          PopupMenuItem(
-                                              value: 1,
-                                              child: Text(
-                                                "Gallery",
-                                              )),
-                                        ],
-                                      ),
-                                    ],
+                                        )
+                                      ],
+                                    ),
                                   )),
+                                  // Center(
+                                  //     child: Stack(
+                                  //   children: [
+                                  //     Container(
+                                  //       width: 150.0,
+                                  //       height: 150.0,
+                                  //       child: Image.asset(
+                                  //           "assets/images/dot_circle.png"),
+                                  //     ),
+                                  //     PopupMenuButton<int>(
+                                  //       offset: Offset(100, 100),
+                                  //       iconSize: 120,
+                                  //       icon: model.image != null
+                                  //           ? Padding(
+                                  //               padding: EdgeInsets.only(
+                                  //                   left: 15, top: 13),
+                                  //               child: CircleAvatar(
+                                  //                   radius: 70,
+                                  //                   backgroundImage: FileImage(
+                                  //                       model.image!)))
+                                  //           : Padding(
+                                  //               padding: EdgeInsets.only(
+                                  //                   left: 15, top: 13),
+                                  //               child: CachedNetworkImage(
+                                  //                 imageUrl:
+                                  //                     model.hirersPath != null
+                                  //                         ? model.hirersPath!
+                                  //                         : baseUrl,
+                                  //                 imageBuilder: (context,
+                                  //                         imageProvider) =>
+                                  //                     Container(
+                                  //                   width: 140.0,
+                                  //                   height: 140.0,
+                                  //                   decoration: BoxDecoration(
+                                  //                     shape: BoxShape.circle,
+                                  //                     image: DecorationImage(
+                                  //                         image: imageProvider,
+                                  //                         fit: BoxFit.contain),
+                                  //                   ),
+                                  //                 ),
+                                  //                 placeholder: (context, url) =>
+                                  //                     CircularProgressIndicator(),
+                                  //                 errorWidget:
+                                  //                     (context, url, error) =>
+                                  //                         CircleAvatar(
+                                  //                   radius: 70,
+                                  //                   backgroundColor:
+                                  //                       AppColors.grey,
+                                  //                   child: Image.asset(
+                                  //                     "assets/images/icon.png",
+                                  //                     scale: 2,
+                                  //                   ),
+                                  //                 ),
+                                  //               )),
+                                  //       onSelected: (int selectedValue) async {
+                                  //         switch (selectedValue) {
+                                  //           case 0:
+                                  //             model.handleChooseFromCamera();
+                                  //             break;
+                                  //           case 1:
+                                  //             model.handleChooseFromGallery();
+                                  //             break;
+                                  //           default:
+                                  //         }
+                                  //       },
+                                  //       itemBuilder: (context) => [
+                                  //         PopupMenuItem(
+                                  //           value: 0,
+                                  //           child: Text(
+                                  //             "Camera",
+                                  //           ),
+                                  //         ),
+                                  //         PopupMenuItem(
+                                  //             value: 1,
+                                  //             child: Text(
+                                  //               "Gallery",
+                                  //             )),
+                                  //       ],
+                                  //     ),
+                                  //   ],
+                                  // )),
                                   SizedBox(
                                     height: 20,
                                   ),
@@ -309,7 +307,7 @@ class LoginState extends State<EditProfile> with TickerProviderStateMixin {
                                   ),
                                   TextFormField(
                                     enabled: false,
-                                    controller: nameController,
+                                    controller: model.nameController,
                                     decoration: InputDecoration(
                                       hintText: '',
                                       hintStyle: const TextStyle(
@@ -357,7 +355,7 @@ class LoginState extends State<EditProfile> with TickerProviderStateMixin {
                                   ),
                                   TextFormField(
                                     enabled: false,
-                                    controller: emailController,
+                                    controller: model.emailController,
                                     decoration: InputDecoration(
                                       hintText: '',
                                       hintStyle: const TextStyle(
@@ -405,7 +403,7 @@ class LoginState extends State<EditProfile> with TickerProviderStateMixin {
                                   ),
                                   TextFormField(
                                     enabled: false,
-                                    controller: phoneController,
+                                    controller: model.phoneController,
                                     decoration: InputDecoration(
                                       hintText: '',
                                       hintStyle: const TextStyle(
@@ -464,12 +462,9 @@ class LoginState extends State<EditProfile> with TickerProviderStateMixin {
                                         decoration: InputDecoration.collapsed(
                                             hintText: 'Select Gender'),
                                         isExpanded: true,
-                                        value: selectedGender,
-                                        onChanged: (newValue) {
-                                          setState(() {
-                                            selectedGender = newValue;
-                                          });
-                                        },
+                                        value: model.selectedGender,
+                                        onChanged: (val) =>
+                                            model.onChangedGender(val),
                                         items: <String>[
                                           'Male',
                                           'Female',
@@ -495,13 +490,11 @@ class LoginState extends State<EditProfile> with TickerProviderStateMixin {
                                   SizedBox(
                                     height: 10,
                                   ),
-                                  InkWell(
-                                      onTap: () {
-                                        showPlacePicker();
-                                      },
+                                  GestureDetector(
+                                      onTap: () => model.showPlacePicker(),
                                       child: TextFormField(
                                         enabled: false,
-                                        controller: addressController,
+                                        controller: model.addressController,
                                         decoration: InputDecoration(
                                           hintText: '',
                                           hintStyle: const TextStyle(
@@ -543,10 +536,11 @@ class LoginState extends State<EditProfile> with TickerProviderStateMixin {
                                   SizedBox(
                                     height: 20,
                                   ),
-                                  _authentication.currentUser.kycUpdated!
+                                  model.kycUpdated
                                       ? Container()
                                       : Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
                                             Text(
                                               "Means Of Identification",
@@ -575,12 +569,9 @@ class LoginState extends State<EditProfile> with TickerProviderStateMixin {
                                                           hintText:
                                                               'Select One'),
                                                   isExpanded: true,
-                                                  value: selectedMOI,
-                                                  onChanged: (newValue) {
-                                                    setState(() {
-                                                      selectedMOI = newValue;
-                                                    });
-                                                  },
+                                                  value: model.selectedMOI,
+                                                  onChanged: (val) =>
+                                                      model.onChangedMOI(val),
                                                   items: <String>[
                                                     'International Passport',
                                                     'Voters Card',
@@ -599,65 +590,76 @@ class LoginState extends State<EditProfile> with TickerProviderStateMixin {
                                                 ),
                                               ),
                                             ),
-
-                                  SizedBox(
-                                    height: 20,
-                                  ),  Text(
-                                    "Upload the image",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.grey),
-                                  ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  InkWell(
-                                      onTap: () {
-                                        handleChooseFromGalleryId();
-                                      },
-                                      child: TextFormField(
-                                        enabled: false,
-                                        controller: uploadController,
-                                        decoration: InputDecoration(
-                                          hintText: 'Upload ID',
-                                          hintStyle: const TextStyle(
-                                            color: Colors.grey,
-                                          ),
-                                          focusedBorder:
-                                              const OutlineInputBorder(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(4)),
-                                            borderSide: BorderSide(
-                                                width: 1, color: Colors.grey),
-                                          ),
-                                          disabledBorder:
-                                              const OutlineInputBorder(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(4)),
-                                            borderSide: BorderSide(
-                                                width: 1, color: Colors.grey),
-                                          ),
-                                          enabledBorder:
-                                              const OutlineInputBorder(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(4)),
-                                            borderSide: BorderSide(
-                                                width: 1, color: Colors.grey),
-                                          ),
-                                          border: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(5.0),
-                                            borderSide: const BorderSide(),
-                                          ),
-                                        ),
-                                        keyboardType:
-                                            TextInputType.emailAddress,
-                                        style: const TextStyle(
-                                            color: Colors.black),
-                                        cursorColor: Colors.black,
-                                      )),
+                                            SizedBox(
+                                              height: 20,
+                                            ),
+                                            Text(
+                                              "Upload the image",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.grey),
+                                            ),
+                                            SizedBox(
+                                              height: 10,
+                                            ),
+                                            GestureDetector(
+                                                onTap: () => model
+                                                    .handleChooseFromGalleryId(),
+                                                child: TextFormField(
+                                                  enabled: false,
+                                                  controller:
+                                                      model.uploadController,
+                                                  decoration: InputDecoration(
+                                                    hintText: 'Upload ID',
+                                                    hintStyle: const TextStyle(
+                                                      color: Colors.grey,
+                                                    ),
+                                                    focusedBorder:
+                                                        const OutlineInputBorder(
+                                                      borderRadius:
+                                                          BorderRadius.all(
+                                                              Radius.circular(
+                                                                  4)),
+                                                      borderSide: BorderSide(
+                                                          width: 1,
+                                                          color: Colors.grey),
+                                                    ),
+                                                    disabledBorder:
+                                                        const OutlineInputBorder(
+                                                      borderRadius:
+                                                          BorderRadius.all(
+                                                              Radius.circular(
+                                                                  4)),
+                                                      borderSide: BorderSide(
+                                                          width: 1,
+                                                          color: Colors.grey),
+                                                    ),
+                                                    enabledBorder:
+                                                        const OutlineInputBorder(
+                                                      borderRadius:
+                                                          BorderRadius.all(
+                                                              Radius.circular(
+                                                                  4)),
+                                                      borderSide: BorderSide(
+                                                          width: 1,
+                                                          color: Colors.grey),
+                                                    ),
+                                                    border: OutlineInputBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5.0),
+                                                      borderSide:
+                                                          const BorderSide(),
+                                                    ),
+                                                  ),
+                                                  keyboardType: TextInputType
+                                                      .emailAddress,
+                                                  style: const TextStyle(
+                                                      color: Colors.black),
+                                                  cursorColor: Colors.black,
+                                                )),
                                           ],
-                                  ),
+                                        ),
                                   SizedBox(
                                     height: 20,
                                   ),
@@ -665,52 +667,45 @@ class LoginState extends State<EditProfile> with TickerProviderStateMixin {
                                       child: SlideTransition(
                                           position: _navAnimation!,
                                           //  textDirection: TextDirection.rtl,
-                                          child: Container(
-                                              width: 300,
-                                              child: GeneralButton(
-                                                  onPressed: () {
-                                                    model.editProfile(
-                                                        image != null
-                                                            ? image!.path
-                                                            : "",
-                                                        addressController.text,
-                                                        selectedGender == "Male"? "male":"female",
-                                                        pickLat.toString(),
-                                                        pickLng.toString(),
-                                                        selectedMOI ==
-                                                                "International Passport"
-                                                            ? "international_passport"
-                                                            : selectedMOI ==
-                                                                    "Voters Card"
-                                                                ? "voters_card"
-                                                                : selectedMOI ==
-                                                                        "National ID"
-                                                                    ? "national_id_card"
-                                                                    : selectedMOI ==
-                                                                            "Driver License"
-                                                                        ? "driver_license"
-                                                                        : "",
-                                                        uploadController.text);
-                                                  },
-                                                  buttonText: "Save"))))
+                                          child: BaseButton(
+                                              isBusy: model.busy("Edit"),
+                                              onPressed: () =>
+                                                  model.newEditProfile(context),
+                                              label: "Save")))
                                 ]))))),
             drawer: CollapsingNavigationDrawer(),
           );
         });
   }
+}
 
-  void showPlacePicker() async {
-    LocationResult result = await Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) =>
-            PlacePicker("AIzaSyAsoaOKfTVMSJll6LvVcQ3sYgALbwJ0B9A")));
-    // Handle the result in your way
-    print(result);
+class CustomBackButton extends StatelessWidget {
+  final Function()? onTap;
+  const CustomBackButton({
+    Key? key,
+    this.onTap,
+  }) : super(key: key);
 
-    setState(() {
-      print(result);
-      addressController.text = result.formattedAddress!;
-      pickLat = result.latLng!.latitude.toString();
-      pickLng = result.latLng!.longitude.toString();
-    });
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap ?? () => Navigator.pop(context),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Container(
+          height: 45,
+          width: 45,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            color: AppColors.white,
+          ),
+          child: const Icon(
+            Icons.arrow_back_ios,
+            color: AppColors.primaryColor,
+            size: 20,
+          ),
+        ),
+      ),
+    );
   }
 }

@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:equipro/ui/screens/drawer.dart';
 import 'package:equipro/ui/screens/owner/home_owner/home_view_model.dart';
+import 'package:equipro/ui/screens/owner/home_owner/post_equipment_final.dart';
 import 'package:equipro/ui/widget/general_button.dart';
 import 'package:equipro/utils/helpers.dart';
 import 'package:equipro/utils/locator.dart';
@@ -16,6 +17,8 @@ import 'package:stacked/stacked.dart';
 import 'package:equipro/ui/screens/login/login_view_model.dart';
 import 'package:equipro/utils/colors.dart';
 
+import '../../../widget/base_button.dart';
+
 class PostEquipment extends StatefulWidget {
   const PostEquipment({Key? key}) : super(key: key);
 
@@ -24,7 +27,7 @@ class PostEquipment extends StatefulWidget {
 }
 
 class LoginState extends State<PostEquipment> with TickerProviderStateMixin {
-  final NavigationService _navigationService = locator<NavigationService>();
+  final NavService _navigationService = locator<NavService>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   File? image;
   File? video;
@@ -75,7 +78,6 @@ class LoginState extends State<PostEquipment> with TickerProviderStateMixin {
       // });
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -375,31 +377,41 @@ class LoginState extends State<PostEquipment> with TickerProviderStateMixin {
                                       child: SlideTransition(
                                           position: _navAnimation!,
                                           //  textDirection: TextDirection.rtl,
-                                          child: Container(
-                                              width: 300,
-                                              child: GeneralButton(
-                                                  onPressed: () {
-                                                    if (
-                                                    nameController.text
-                                                        .isNotEmpty &&
-                                                        listImages.isNotEmpty) {
-                                                      _navigationService
-                                                          .navigateTo(
-                                                          PostEquipmentFinalRoute,
-                                                          arguments: {
-                                                            "equipName": nameController
-                                                                .text,
-                                                            "images": listImages,
-                                                            "description":
-                                                            descriptionController
-                                                                .text,
-                                                          });
-                                                    }else{
-                                                      showErrorToast("Name and images are compulsory");
-                                                    }
-                                                  },
-                                                  buttonText:
-                                                      "Save & Proceed")))),
+                                          child: BaseButton(
+                                              onPressed: () {
+                                                if (nameController
+                                                        .text.isNotEmpty &&
+                                                    listImages.isNotEmpty) {
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              PostEquipmentFinal(
+                                                                equipName:
+                                                                    nameController
+                                                                        .text,
+                                                                images:
+                                                                    listImages,
+                                                                description:
+                                                                    descriptionController
+                                                                        .text,
+                                                              )));
+                                                  // _navigationService.navigateTo(
+                                                  //     PostEquipmentFinalRoute,
+                                                  //     arguments: {
+                                                  //       "equipName":
+                                                  //           nameController.text,
+                                                  //       "images": listImages,
+                                                  //       "description":
+                                                  //           descriptionController
+                                                  //               .text,
+                                                  //     });
+                                                } else {
+                                                  showErrorToast(
+                                                      "Name and images are compulsory");
+                                                }
+                                              },
+                                              label: "Save & Proceed"))),
                                   SizedBox(
                                     height: 20,
                                   ),

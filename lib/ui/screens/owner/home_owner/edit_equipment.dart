@@ -4,6 +4,7 @@ import 'package:equipro/core/model/EquipmentModel.dart';
 import 'package:equipro/core/services/index.dart';
 import 'package:equipro/ui/screens/drawer.dart';
 import 'package:equipro/ui/screens/owner/home_owner/home_view_model.dart';
+import 'package:equipro/ui/widget/base_button.dart';
 import 'package:equipro/ui/widget/general_button.dart';
 import 'package:equipro/utils/helpers.dart';
 import 'package:equipro/utils/locator.dart';
@@ -32,7 +33,7 @@ class EditEquipment extends StatefulWidget {
 }
 
 class LoginState extends State<EditEquipment> with TickerProviderStateMixin {
-  final NavigationService _navigationService = locator<NavigationService>();
+  final NavService _navigationService = locator<NavService>();
   TextEditingController costController = TextEditingController();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   File? image;
@@ -83,8 +84,8 @@ class LoginState extends State<EditEquipment> with TickerProviderStateMixin {
       File file =
           new File('$tempPath' + (rng.nextInt(1000)).toString() + '.png');
 // call http.get method and pass imageUrl into it to get response.
-      http.Response response = await http
-          .get(Uri.parse(multipleFile.equipImagesPath!));
+      http.Response response =
+          await http.get(Uri.parse(multipleFile.equipImagesPath!));
 // write bodyBytes received in response to file.
       await file.writeAsBytes(response.bodyBytes);
 // now return the file which is created with random name in
@@ -310,6 +311,9 @@ class LoginState extends State<EditEquipment> with TickerProviderStateMixin {
                                       ? Container(
                                           height: 200,
                                           child: ListView.builder(
+                                              shrinkWrap: true,
+                                              physics:
+                                                  NeverScrollableScrollPhysics(),
                                               itemCount: listImages.length,
                                               scrollDirection: Axis.vertical,
                                               itemBuilder:
@@ -377,7 +381,7 @@ class LoginState extends State<EditEquipment> with TickerProviderStateMixin {
                                                     ));
                                               }))
                                       : Container(),
-                                  InkWell(
+                                  GestureDetector(
                                       onTap: () {
                                         handleChooseCatalogueGallery();
                                       },
@@ -779,28 +783,24 @@ class LoginState extends State<EditEquipment> with TickerProviderStateMixin {
                                       child: SlideTransition(
                                           position: _navAnimation!,
                                           //  textDirection: TextDirection.rtl,
-                                          child: Container(
-                                              width: 300,
-                                              child: GeneralButton(
-                                                  onPressed: () {
-                                                    if (nameController.text.isNotEmpty &&
-                                                        listImages.isNotEmpty &&
-                                                        costController
-                                                            .text.isNotEmpty &&
-                                                        selectedDate != null &&
-                                                        selectedDateTo !=
-                                                            null &&
-                                                        selectedPer != null &&
-                                                        selectedQuantity !=
-                                                            null) {
-                                                      _startUploading(model);
-                                                    } else {
-                                                      showErrorToast(
-                                                          "Name and images are compulsory");
-                                                    }
-                                                  },
-                                                  buttonText:
-                                                      "Save & Proceed")))),
+                                          child: BaseButton(
+                                              onPressed: () {
+                                                if (nameController.text.isNotEmpty &&
+                                                    listImages.isNotEmpty &&
+                                                    costController
+                                                        .text.isNotEmpty &&
+                                                    selectedDate != null &&
+                                                    selectedDateTo != null &&
+                                                    selectedPer != null &&
+                                                    selectedQuantity != null) {
+                                                  _startUploading(model);
+                                                } else {
+                                                  showErrorToast(
+                                                      "Name and images are compulsory",
+                                                      context: context);
+                                                }
+                                              },
+                                              label: "Save & Proceed"))),
                                   SizedBox(
                                     height: 30,
                                   ),

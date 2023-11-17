@@ -10,7 +10,7 @@ import 'package:equipro/ui/screens/hirer/active_rentals/rentals_details.dart';
 import 'package:equipro/ui/screens/hirer/book/equip_details.dart';
 import 'package:equipro/ui/screens/hirer/book/place_booking.dart';
 import 'package:equipro/ui/screens/hirer/home/home_view.dart';
-import 'package:equipro/ui/screens/login/verify_forgot_otp.dart';
+// import 'package:equipro/ui/screens/login/verify_forgot_otp.dart';
 import 'package:equipro/ui/screens/notification/notification.dart';
 import 'package:equipro/ui/screens/owner/active_rentals/owner_active_rentals.dart';
 import 'package:equipro/ui/screens/owner/active_rentals/rentals_details.dart';
@@ -28,7 +28,7 @@ import 'package:equipro/ui/screens/profile/edit_profile.dart';
 import 'package:equipro/ui/screens/profile/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:equipro/ui/screens/login/login_view.dart';
-import 'package:equipro/ui/screens/login/forgot_password.dart';
+import 'package:equipro/ui/screens/login/forgt_password/forgot_password.dart';
 import 'package:equipro/ui/screens/onboarding/onboardingscreen_view.dart';
 import 'package:equipro/ui/screens/register/register_view.dart';
 import 'package:equipro/ui/screens/register/verification_view.dart';
@@ -55,20 +55,20 @@ Route<dynamic> generateRoute(RouteSettings settings) {
           phoneNumber: phoneNumber,
         ),
       );
-
-    case forgotPasswordRoute:
-      return _getPageRoute(
-        routeName: settings.name!,
-        viewToShow: const ForgotPasswordPage(),
-      );
-    case VerifyForgotPasswordPageRoute:
-      var email = settings.arguments as String;
-      return _getPageRoute(
-        routeName: settings.name!,
-        viewToShow: VerifyForgotPasswordPage(
-          email: email,
-        ),
-      );
+    //
+    // case forgotPasswordRoute:
+    //   return _getPageRoute(
+    //     routeName: settings.name!,
+    //     viewToShow: const ForgotPasswordPage(),
+    //   );
+    // case VerifyForgotPasswordPageRoute:
+    //   var email = settings.arguments as String;
+    //   return _getPageRoute(
+    //     routeName: settings.name!,
+    //     // viewToShow: VerifyForgotPasswordPage(
+    //     //   email: email,
+    //     // ),
+    //   );
 
     case OnBoardingScreenRoute:
       return _getPageRoute(
@@ -206,14 +206,18 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       EquipRequest model = settings.arguments as EquipRequest;
       return _getPageRoute(
         routeName: settings.name!,
-        viewToShow: BookingDetails(feed: model,),
+        viewToShow: BookingDetails(
+          feed: model,
+        ),
       );
 
     case HirerProfileRoute:
       eq.Hirers model = settings.arguments as eq.Hirers;
       return _getPageRoute(
         routeName: settings.name!,
-        viewToShow: HirerProfile(feed: model,),
+        viewToShow: HirerProfile(
+          feed: model,
+        ),
       );
 
     case EditEquipmentRoute:

@@ -12,10 +12,8 @@ import 'package:equipro/utils/router/route_names.dart';
 
 class OwnerRentalsViewModel extends BaseModel {
   final Authentication _authentication = locator<Authentication>();
-  final NavigationService _navigationService = locator<NavigationService>();
+  final NavService _navigationService = locator<NavService>();
   final Activities _activities = locator<Activities>();
-
-
 
   Future<List<ActiveRentalsModel>> activeRentals(String type) async {
     //setBusy(true);
@@ -31,10 +29,9 @@ class OwnerRentalsViewModel extends BaseModel {
     return result;
   }
 
-
   rate(String id, String comment, double rating) async {
     setBusy(true);
-    var result = await _activities.rate( id,  comment,  rating);
+    var result = await _activities.rate(id, comment, rating);
 
     if (result is ErrorModel) {
       setBusy(false);
@@ -44,15 +41,18 @@ class OwnerRentalsViewModel extends BaseModel {
     }
     if (result is SuccessModel) {
       setBusy(false);
-_navigationService.pop();
+      _navigationService.pop();
       notifyListeners();
       return SuccessModel(result.data);
     }
   }
 
-  sendDate(String date, String id, ) async {
+  sendDate(
+    String date,
+    String id,
+  ) async {
     setBusy(true);
-    var result = await _activities.sendDate( date,  id);
+    var result = await _activities.sendDate(date, id);
 
     if (result is ErrorModel) {
       setBusy(false);
@@ -67,7 +67,6 @@ _navigationService.pop();
       return SuccessModel(result.data);
     }
   }
-
 
   updateBooking(String id, String status) async {
     setBusy(true);

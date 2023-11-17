@@ -9,18 +9,16 @@ import 'package:equipro/utils/colors.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class BookingRequest extends StatelessWidget {
- final EquipRequest feed;
-  BookingRequest(
-      {
-      required this.feed,
-      }
-      );
-  final NavigationService _navigationService = locator<NavigationService>();
+  final EquipRequest feed;
+  BookingRequest({
+    required this.feed,
+  });
+  final NavService _navigationService = locator<NavService>();
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
         onTap: () {
-          _navigationService.navigateTo(BookingDetailsRoute,arguments: feed);
+          _navigationService.navigateTo(BookingDetailsRoute, arguments: feed);
         },
         child: Container(
           margin: EdgeInsets.only(bottom: 20),
@@ -41,7 +39,6 @@ class BookingRequest extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -50,23 +47,22 @@ class BookingRequest extends StatelessWidget {
                     children: [
                       CircleAvatar(
                         radius: 20,
-                        child:  CachedNetworkImage(
-                          imageUrl: feed.hirers!.hirersPath!= null?feed.hirers!.hirersPath!:"",
-                          imageBuilder:
-                              (context, imageProvider) =>
-                              Container(
-                                width: 120.0,
-                                height: 120.0,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  image: DecorationImage(
-                                      image: imageProvider,
-                                      fit: BoxFit.contain),
-                                ),
-                              ),
+                        child: CachedNetworkImage(
+                          imageUrl: feed.hirers!.hirersPath != null
+                              ? feed.hirers!.hirersPath!
+                              : "",
+                          imageBuilder: (context, imageProvider) => Container(
+                            width: 120.0,
+                            height: 120.0,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                  image: imageProvider, fit: BoxFit.contain),
+                            ),
+                          ),
                           placeholder: (context, url) =>
                               CircularProgressIndicator(),
-                          errorWidget: (context, url, error) =>        CircleAvatar(
+                          errorWidget: (context, url, error) => CircleAvatar(
                             radius: 40,
                             backgroundColor: AppColors.grey,
                             child: Image.asset(
@@ -76,14 +72,16 @@ class BookingRequest extends StatelessWidget {
                           ),
                         ),
                       ),
-                      SizedBox(width: 10,),
+                      SizedBox(
+                        width: 10,
+                      ),
                       Text(
                         feed.hirers!.fullname!,
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 18),
                       ),
                     ],
                   ),
-
                   SizedBox(
                     height: 10,
                   ),
@@ -97,7 +95,9 @@ class BookingRequest extends StatelessWidget {
                       Text(
                         feed.quantity!,
                         style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 14,),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                        ),
                       ),
                     ],
                   ),
@@ -112,22 +112,24 @@ class BookingRequest extends StatelessWidget {
                             fontWeight: FontWeight.w500, fontSize: 14),
                       ),
                       Text(
-                        DateTime.parse(feed.rentalTo!).difference(DateTime.parse(feed.rentalFrom!)).inDays.toString() + " day(s)",
+                        DateTime.parse(feed.rentalTo!)
+                                .difference(DateTime.parse(feed.rentalFrom!))
+                                .inDays
+                                .toString() +
+                            " day(s)",
                         style: TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 14,),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                        ),
                       ),
                     ],
                   ),
                 ],
               ),
-   InkWell(
-     onTap: (){
-
-     },
-     child: Icon(
-       Icons.arrow_forward_ios
-     ),
-   )
+              InkWell(
+                onTap: () {},
+                child: Icon(Icons.arrow_forward_ios),
+              )
             ],
           ),
         ));

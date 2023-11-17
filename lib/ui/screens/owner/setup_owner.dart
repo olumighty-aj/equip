@@ -30,7 +30,7 @@ class LoginState extends State<SetupOwner> with SingleTickerProviderStateMixin {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   TextEditingController phoneController = TextEditingController();
   TextEditingController addressController = TextEditingController();
-  final NavigationService _navigationService = locator<NavigationService>();
+  final NavService _navigationService = locator<NavService>();
   late final TabController _controller;
   double? pickLat;
   double? pickLng;
@@ -49,6 +49,7 @@ class LoginState extends State<SetupOwner> with SingleTickerProviderStateMixin {
       pickLng = result.latLng!.longitude;
     });
   }
+
   @override
   void initState() {
     super.initState();
@@ -62,303 +63,349 @@ class LoginState extends State<SetupOwner> with SingleTickerProviderStateMixin {
         builder: (context, model, child) {
           return Scaffold(
               key: _scaffoldKey,
-              body:SingleChildScrollView(
-                child: Padding(
-                  padding: EdgeInsets.all(20),
-                  child: AnimationLimiter(
-                      child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: AnimationConfiguration.toStaggeredList(
-                              duration: const Duration(milliseconds: 200),
-                              childAnimationBuilder: (widget) => SlideAnimation(
-                                    horizontalOffset:
-                                        -MediaQuery.of(context).size.width / 4,
-                                    child: FadeInAnimation(
-                                        curve: Curves.fastOutSlowIn,
-                                        child: widget),
-                                  ),
-                              children: [
-                                const SizedBox(
-                                  height: 60,
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+              body: SingleChildScrollView(
+                  child: Padding(
+                      padding: EdgeInsets.all(20),
+                      child: AnimationLimiter(
+                          child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: AnimationConfiguration.toStaggeredList(
+                                  duration: const Duration(milliseconds: 200),
+                                  childAnimationBuilder: (widget) =>
+                                      SlideAnimation(
+                                        horizontalOffset:
+                                            -MediaQuery.of(context).size.width /
+                                                4,
+                                        child: FadeInAnimation(
+                                            curve: Curves.fastOutSlowIn,
+                                            child: widget),
+                                      ),
                                   children: [
-                                    Container(
-                                        height: 40,
-                                        width: 40,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(12),
-                                          color: AppColors.white,
-                                        ),
-                                        child: InkWell(
-                                            onTap: () {
-                                              Navigator.pop(context);
-                                            },
-                                            child: const Icon(
-                                              Icons.arrow_back_ios,
-                                              color: AppColors.primaryColor,
-                                            ))),
-                                    const Text(
-                                      '',
-                                      style: TextStyle(
-                                          fontSize: 20,
-                                          color: AppColors.black,
-                                          fontWeight: FontWeight.bold),
+                                    const SizedBox(
+                                      height: 60,
                                     ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 30,
-                                ),
-                                Text(
-                                  "Setup An Equipment Owner’s Account",
-                                  style: TextStyle(
-                                      fontSize: 25,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                SizedBox(
-                                  height: 30,
-                                ),
-                                DefaultTabController(
-                                    length: 2,
-                                    child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          TabBar(
-                                            controller: _controller,
-                                            unselectedLabelColor: Colors.grey,
-                                            indicatorWeight: 3,
-                                            labelStyle: TextStyle(fontSize: 12),
-                                            labelColor: AppColors.primaryColor,
-                                            indicatorColor:
-                                                AppColors.primaryColor,
-                                            tabs: [
-                                              Tab(
-                                                text: "Contact",
-                                              ),
-                                              Tab(
-                                                text: "Payment",
-                                              ),
-                                            ],
-                                          ),
-                                        ])),
-                                SizedBox(
-                                  height: 30,
-                                ),
-                                Container(
-                                    height: Responsive.height(context) / 1.7,
-                                    child: TabBarView(
-                                      controller: _controller,
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
-                                        ListView(
-                                          children: [
-                                            Text(
-                                              "Address",
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.grey),
+                                        Container(
+                                            height: 40,
+                                            width: 40,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                              color: AppColors.white,
                                             ),
-                                            SizedBox(
-                                              height: 10,
-                                            ),
-                                  InkWell(onTap: (){
-                                    showPlacePicker();
-                                  },
-                                    child:
-                                            TextFormField(
-                                              enabled: false,
-                                              controller: addressController,
-                                              decoration: InputDecoration(
-                                                hintText: '',
-                                                hintStyle: const TextStyle(
-                                                  color: Colors.grey,
-                                                ),
-                                                focusedBorder:
-                                                    const OutlineInputBorder(
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(4)),
-                                                  borderSide: BorderSide(
-                                                      width: 1,
-                                                      color: Colors.grey),
-                                                ),
-                                                disabledBorder:
-                                                    const OutlineInputBorder(
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(4)),
-                                                  borderSide: BorderSide(
-                                                      width: 1,
-                                                      color: Colors.grey),
-                                                ),
-                                                enabledBorder:
-                                                    const OutlineInputBorder(
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(4)),
-                                                  borderSide: BorderSide(
-                                                      width: 1,
-                                                      color: Colors.grey),
-                                                ),
-                                                border: OutlineInputBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          5.0),
-                                                  borderSide:
-                                                      const BorderSide(),
-                                                ),
-                                              ),
-                                              keyboardType: TextInputType.name,
-                                              style: const TextStyle(
-                                                  color: Colors.black),
-                                              cursorColor: Colors.black,
-                                            )  ),
-                                            SizedBox(
-                                              height: 50,
-                                            ),
-                                            GeneralButton(
-                                                onPressed: () async{
-                                                  if (addressController.text.isNotEmpty) {
-                                                    var result = await model
-                                                        .updateAddress(
-                                                        addressController.text,
-                                                      pickLat.toString(),pickLng.toString()
-                                                    );
-                                                    if (result != null) {
-                                                      _controller.animateTo(1);
-                                                    }
-                                                  }else{
-                                                    showErrorToast("Address is compulsory");
-                                                  }
+                                            child: InkWell(
+                                                onTap: () {
+                                                  Navigator.pop(context);
                                                 },
-                                                buttonText: "Save & Proceed")
-                                          ],
-                                        ),
-                                        ListView(
-                                          children: [
-                                            Text(
-                                              "Setup your preferred payment method",
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 15),
-                                            ),
-                                            SizedBox(
-                                              height: 10,
-                                            ),
-                                            Text(
-                                              "How to do want your money deposited",
-                                              style: TextStyle(
-                                                  fontSize: 12,
-                                                  color: Colors.grey,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                            SizedBox(
-                                              height: 30,
-                                            ),
-                                            Container(
-                                              padding: EdgeInsets.all(10),
-                                              width: Responsive.width(context),
-                                              height: 160,
-                                              decoration: BoxDecoration(
-                                                border: Border.all(
-                                                    color: AppColors.grey),
-                                                borderRadius:
-                                                    BorderRadius.circular(5.0),
-                                              ),
-                                              child: Column(
-                                                children: [
-                                                  Text(
-                                                    "Direct to Local Bank (USD)",
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 15),
-                                                  ),
-                                                  SizedBox(
-                                                    height: 20,
-                                                  ),
-                                                  Text(
-                                                    "Deposit directly to your local bank  in  USD",
-                                                    style: TextStyle(
-                                                        color: Colors.grey),
-                                                  ),
-                                                  SizedBox(
-                                                    height: 30,
-                                                  ),
-                                                  Container(
-                                                      width: 200,
-                                                      height: 30,
-                                                      child: GeneralButton(
-                                                          onPressed: () {
-                                                            _navigationService.navigateTo(HomeOwnerRoute);
-                                                          },
-                                                          buttonText: "SETUP",
-                                                          borderRadius:
-                                                              const BorderRadius
-                                                                  .all(
-                                                            Radius.circular(5),
-                                                          ))),
-                                                ],
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              height: 30,
-                                            ),
-                                            Container(
-                                              padding: EdgeInsets.all(10),
-                                              width: Responsive.width(context),
-                                              height: 160,
-                                              decoration: BoxDecoration(
-                                                border: Border.all(
-                                                    color: AppColors.grey),
-                                                borderRadius:
-                                                    BorderRadius.circular(5.0),
-                                              ),
-                                              child: Column(
-                                                children: [
-                                                  Text(
-                                                    "Paypal",
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 15),
-                                                  ),
-                                                  SizedBox(
-                                                    height: 20,
-                                                  ),
-                                                  Text(
-                                                    "Link your paypal account to deposit to be made directly",
-                                                    style: TextStyle(
-                                                        color: Colors.grey),
-                                                  ),
-                                                  SizedBox(
-                                                    height: 30,
-                                                  ),
-                                                  Container(
-                                                      width: 200,
-                                                      height: 30,
-                                                      child: GeneralButton(
-                                                          onPressed: () {
-                                                            _navigationService.pushAndRemoveUntil(HomeOwnerRoute);
-                                                          },
-                                                          buttonText: "SETUP",
-                                                          borderRadius:
-                                                              const BorderRadius
-                                                                  .all(
-                                                            Radius.circular(5),
-                                                          ))),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
+                                                child: const Icon(
+                                                  Icons.arrow_back_ios,
+                                                  color: AppColors.primaryColor,
+                                                ))),
+                                        const Text(
+                                          '',
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              color: AppColors.black,
+                                              fontWeight: FontWeight.bold),
                                         ),
                                       ],
-                                    ))
-                              ]))))));
+                                    ),
+                                    SizedBox(
+                                      height: 30,
+                                    ),
+                                    Text(
+                                      "Setup An Equipment Owner’s Account",
+                                      style: TextStyle(
+                                          fontSize: 25,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    SizedBox(
+                                      height: 30,
+                                    ),
+                                    DefaultTabController(
+                                        length: 2,
+                                        child: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              TabBar(
+                                                controller: _controller,
+                                                unselectedLabelColor:
+                                                    Colors.grey,
+                                                indicatorWeight: 3,
+                                                labelStyle:
+                                                    TextStyle(fontSize: 12),
+                                                labelColor:
+                                                    AppColors.primaryColor,
+                                                indicatorColor:
+                                                    AppColors.primaryColor,
+                                                tabs: [
+                                                  Tab(
+                                                    text: "Contact",
+                                                  ),
+                                                  Tab(
+                                                    text: "Payment",
+                                                  ),
+                                                ],
+                                              ),
+                                            ])),
+                                    SizedBox(
+                                      height: 30,
+                                    ),
+                                    Container(
+                                        height:
+                                            Responsive.height(context) / 1.7,
+                                        child: TabBarView(
+                                          controller: _controller,
+                                          children: [
+                                            ListView(
+                                              children: [
+                                                Text(
+                                                  "Address",
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: Colors.grey),
+                                                ),
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                InkWell(
+                                                    onTap: () {
+                                                      showPlacePicker();
+                                                    },
+                                                    child: TextFormField(
+                                                      enabled: false,
+                                                      controller:
+                                                          addressController,
+                                                      decoration:
+                                                          InputDecoration(
+                                                        hintText: '',
+                                                        hintStyle:
+                                                            const TextStyle(
+                                                          color: Colors.grey,
+                                                        ),
+                                                        focusedBorder:
+                                                            const OutlineInputBorder(
+                                                          borderRadius:
+                                                              BorderRadius.all(
+                                                                  Radius
+                                                                      .circular(
+                                                                          4)),
+                                                          borderSide:
+                                                              BorderSide(
+                                                                  width: 1,
+                                                                  color: Colors
+                                                                      .grey),
+                                                        ),
+                                                        disabledBorder:
+                                                            const OutlineInputBorder(
+                                                          borderRadius:
+                                                              BorderRadius.all(
+                                                                  Radius
+                                                                      .circular(
+                                                                          4)),
+                                                          borderSide:
+                                                              BorderSide(
+                                                                  width: 1,
+                                                                  color: Colors
+                                                                      .grey),
+                                                        ),
+                                                        enabledBorder:
+                                                            const OutlineInputBorder(
+                                                          borderRadius:
+                                                              BorderRadius.all(
+                                                                  Radius
+                                                                      .circular(
+                                                                          4)),
+                                                          borderSide:
+                                                              BorderSide(
+                                                                  width: 1,
+                                                                  color: Colors
+                                                                      .grey),
+                                                        ),
+                                                        border:
+                                                            OutlineInputBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      5.0),
+                                                          borderSide:
+                                                              const BorderSide(),
+                                                        ),
+                                                      ),
+                                                      keyboardType:
+                                                          TextInputType.name,
+                                                      style: const TextStyle(
+                                                          color: Colors.black),
+                                                      cursorColor: Colors.black,
+                                                    )),
+                                                SizedBox(
+                                                  height: 50,
+                                                ),
+                                                GeneralButton(
+                                                    onPressed: () async {
+                                                      if (addressController
+                                                          .text.isNotEmpty) {
+                                                        var result = await model
+                                                            .updateAddress(
+                                                                addressController
+                                                                    .text,
+                                                                pickLat
+                                                                    .toString(),
+                                                                pickLng
+                                                                    .toString());
+                                                        if (result != null) {
+                                                          _controller
+                                                              .animateTo(1);
+                                                        }
+                                                      } else {
+                                                        showErrorToast(
+                                                            "Address is compulsory");
+                                                      }
+                                                    },
+                                                    buttonText:
+                                                        "Save & Proceed")
+                                              ],
+                                            ),
+                                            ListView(
+                                              children: [
+                                                Text(
+                                                  "Setup your preferred payment method",
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 15),
+                                                ),
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Text(
+                                                  "How to do want your money deposited",
+                                                  style: TextStyle(
+                                                      fontSize: 12,
+                                                      color: Colors.grey,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                                SizedBox(
+                                                  height: 30,
+                                                ),
+                                                Container(
+                                                  padding: EdgeInsets.all(10),
+                                                  width:
+                                                      Responsive.width(context),
+                                                  height: 160,
+                                                  decoration: BoxDecoration(
+                                                    border: Border.all(
+                                                        color: AppColors.grey),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            5.0),
+                                                  ),
+                                                  child: Column(
+                                                    children: [
+                                                      Text(
+                                                        "Direct to Local Bank (USD)",
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize: 15),
+                                                      ),
+                                                      SizedBox(
+                                                        height: 20,
+                                                      ),
+                                                      Text(
+                                                        "Deposit directly to your local bank  in  USD",
+                                                        style: TextStyle(
+                                                            color: Colors.grey),
+                                                      ),
+                                                      SizedBox(
+                                                        height: 30,
+                                                      ),
+                                                      Container(
+                                                          width: 200,
+                                                          height: 30,
+                                                          child: GeneralButton(
+                                                              onPressed: () {
+                                                                _navigationService
+                                                                    .navigateTo(
+                                                                        HomeOwnerRoute);
+                                                              },
+                                                              buttonText:
+                                                                  "SETUP",
+                                                              borderRadius:
+                                                                  const BorderRadius
+                                                                      .all(
+                                                                Radius.circular(
+                                                                    5),
+                                                              ))),
+                                                    ],
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  height: 30,
+                                                ),
+                                                Container(
+                                                  padding: EdgeInsets.all(10),
+                                                  width:
+                                                      Responsive.width(context),
+                                                  height: 160,
+                                                  decoration: BoxDecoration(
+                                                    border: Border.all(
+                                                        color: AppColors.grey),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            5.0),
+                                                  ),
+                                                  child: Column(
+                                                    children: [
+                                                      Text(
+                                                        "Paypal",
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize: 15),
+                                                      ),
+                                                      SizedBox(
+                                                        height: 20,
+                                                      ),
+                                                      Text(
+                                                        "Link your paypal account to deposit to be made directly",
+                                                        style: TextStyle(
+                                                            color: Colors.grey),
+                                                      ),
+                                                      SizedBox(
+                                                        height: 30,
+                                                      ),
+                                                      Container(
+                                                          width: 200,
+                                                          height: 30,
+                                                          child: GeneralButton(
+                                                              onPressed: () {
+                                                                _navigationService
+                                                                    .pushAndRemoveUntil(
+                                                                        HomeOwnerRoute);
+                                                              },
+                                                              buttonText:
+                                                                  "SETUP",
+                                                              borderRadius:
+                                                                  const BorderRadius
+                                                                      .all(
+                                                                Radius.circular(
+                                                                    5),
+                                                              ))),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ))
+                                  ]))))));
         });
   }
 }

@@ -1,37 +1,154 @@
 import 'dart:convert';
+import 'package:dio/dio.dart';
+import 'package:equipro/app/app_setup.logger.dart';
+import 'dart:io';
 
 import 'package:equipro/core/model/ReviewsModel.dart';
 import 'package:equipro/core/model/error_model.dart';
 import 'package:equipro/core/services/auth_service.dart';
-import 'package:equipro/utils/base_model.dart';
 import 'package:equipro/utils/helpers.dart';
-import 'package:equipro/utils/locator.dart';
-import 'package:equipro/utils/router/navigation_service.dart';
-import 'package:equipro/utils/router/route_names.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:place_picker/entities/location_result.dart';
+import 'package:stacked/stacked.dart';
+import 'package:stacked_services/stacked_services.dart';
 
-class ProfileViewModel extends BaseModel {
+import '../../../app/app_setup.locator.dart';
+import '../../../app/app_setup.router.dart';
+
+class ProfileViewModel extends BaseViewModel {
+  final _log = getLogger("ProfileViewModel");
   final Authentication _authentication = locator<Authentication>();
-  final NavigationService _navigationService = locator<NavigationService>();
+  final _navigationService = locator<NavigationService>();
+  final imagePicker = ImagePicker();
 
-  editProfile(
-    String displayPicture,
-    String address,
-    String gender,
-    String lat,
-    String lng,
-    String kyc_name,
-    String kyc_document_path,
-  ) async {
+  int? selectedQuantity;
+  String? pickupTime = DateTime.now().toString();
+  String? selectedGender;
+  String? selectedMOI;
+  String? pickLat;
+  String? pickLng;
+  File? image;
+
+  TextEditingController nameController = TextEditingController();
+  TextEditingController uploadController = TextEditingController();
+  TextEditingController addressController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
+
+  String? get hirersPath => _authentication.currentUser.hirersPath;
+
+  bool get kycUpdated => _authentication.currentUser.kycUpdated!;
+
+  void init() {
+    print("Gender:${selectedGender = _authentication.currentUser.gender}");
+    nameController.text = _authentication.currentUser.fullname!;
+    addressController.text = _authentication.currentUser.address != null
+        ? _authentication.currentUser.address!
+        : "";
+    emailController.text = _authentication.currentUser.email != null
+        ? _authentication.currentUser.email!
+        : "";
+    selectedGender = _authentication.currentUser.gender != null
+        ? selectedGender = _authentication.currentUser.gender
+        : "";
+    phoneController.text = _authentication.currentUser.phoneNumber != null
+        ? _authentication.currentUser.phoneNumber!
+        : "";
+    pickLat = _authentication.currentUser.latitude != null
+        ? _authentication.currentUser.latitude!
+        : "";
+
+    pickLng = _authentication.currentUser.longitude != null
+        ? _authentication.currentUser.longitude!
+        : "";
+    selectedGender = _authentication.currentUser.gender != ""
+        ? _authentication.currentUser.gender == "male"
+            ? "Male"
+            : "Female"
+        : null;
+  }
+
+  void showPlacePicker() async {
+    LocationResult result = await _navigationService.navigateTo(
+        Routes.placePicker,
+        arguments: PlacePickerArguments(
+            apiKey: "AIzaSyAsoaOKfTVMSJll6LvVcQ3sYgALbwJ0B9A"));
+
+    print(result);
+    addressController.text = result.formattedAddress!;
+    pickLat = result.latLng!.latitude.toString();
+    pickLng = result.latLng!.longitude.toString();
+    notifyListeners();
+  }
+
+  void onChangedGender(val) {
+    selectedGender = val;
+    notifyListeners();
+  }
+
+  void onChangedMOI(val) {
+    selectedMOI = val;
+    notifyListeners();
+  }
+
+  void handleChooseFromGalleryId() async {
+    File file = File(await imagePicker
+        .pickImage(
+          source: ImageSource.gallery,
+        )
+        .then((pickedFile) => pickedFile!.path));
+    uploadController.text = file.path;
+    // image = file;
+    notifyListeners();
+  }
+
+  handleChooseFromCamera() async {
+    File file = File(await imagePicker
+        .pickImage(
+          source: ImageSource.camera,
+        )
+        .then((pickedFile) => pickedFile!.path));
+    image = file;
+    notifyListeners();
+  }
+
+  handleChooseFromGallery() async {
+    File file = File(await imagePicker
+        .pickImage(
+      source: ImageSource.gallery,
+    )
+        .then((pickedFile) {
+      print("Picked File: ${pickedFile?.path}");
+      return pickedFile!.path;
+    }));
+    image = file;
+    print("Image path: ${image?.path}");
+    notifyListeners();
+  }
+
+  void editProfile() async {
     setBusy(true);
-    var result = await _authentication.editProfile(
-      displayPicture,
-      address,
-      gender,
-      lat,
-      lng,
-      kyc_name,
-      kyc_document_path,
-    );
+    // print("Image: ${image?.path}");
+    var result = await runBusyFuture(
+        _authentication.editProfile(
+          displayPicture: image?.path ?? "",
+          address: addressController.text,
+          gender: selectedGender!,
+          lat: pickLat.toString(),
+          lng: pickLng.toString(),
+          kyc_name: selectedMOI == "International Passport"
+              ? "international_passport"
+              : selectedMOI == "Voters Card"
+                  ? "voters_card"
+                  : selectedMOI == "National ID"
+                      ? "national_id_card"
+                      : selectedMOI == "Driver License"
+                          ? "driver_license"
+                          : "",
+          kyc_document_path: uploadController.text,
+        ),
+        busyObject: "Edit");
     if (result == null) {
       setBusy(false);
 
@@ -40,10 +157,63 @@ class ProfileViewModel extends BaseModel {
     }
     setBusy(false);
     _authentication.currentUser.userType == "hirers"
-        ? _navigationService.pushAndRemoveUntil(homeRoute)
-        : _navigationService.pushAndRemoveUntil(HomeOwnerRoute);
+        ? _navigationService.clearStackAndShow(Routes.home)
+        : _navigationService.clearStackAndShow(Routes.homeOwner);
     notifyListeners();
     return result;
+  }
+
+  void newEditProfile(context) async {
+    _log.i("KYC APPROVED: ${_authentication.currentUser.kycApproved}");
+    FormData data;
+    if (_authentication.currentUser.kycApproved == false) {
+      data = FormData.fromMap({
+        "address": addressController.text,
+        "gender": selectedGender,
+        "hirers_path":
+            image != null ? await MultipartFile.fromFile(image!.path) : null,
+        "kyc_name": selectedMOI == "International Passport"
+            ? "international_passport"
+            : selectedMOI == "Voters Card"
+                ? "voters_card"
+                : selectedMOI == "National ID"
+                    ? "national_id_card"
+                    : selectedMOI == "Driver License"
+                        ? "driver_license"
+                        : null,
+        "kyc_document_path[]": uploadController.text.isNotEmpty
+            ? await MultipartFile.fromFile(uploadController.text)
+            : null,
+        "latitude": pickLat,
+        "longitude": pickLng,
+      });
+    } else {
+      data = FormData.fromMap({
+        "address": addressController.text,
+        "gender": selectedGender,
+        "hirers_path":
+            image != null ? await MultipartFile.fromFile(image!.path) : null,
+        "latitude": pickLat,
+        "longitude": pickLng,
+      });
+    }
+    var res = await runBusyFuture(_authentication.editNewProfile(data),
+        busyObject: "Edit");
+    if (res != null) {
+      if (res.status == true) {
+        _log.i(res.payload);
+        showToast(res.message ?? "Success", context: context);
+        _navigationService.clearStackAndShow(
+            _authentication.currentUser.userType == "hirers"
+                ? Routes.home
+                : Routes.homeOwner);
+      } else {
+        showErrorToast(res.message ?? "", context: context);
+      }
+    } else {
+      showErrorToast("Profile Update failed! Please try again",
+          context: context);
+    }
   }
 
   Future<List<ReviewsModel>> getReviews() async {

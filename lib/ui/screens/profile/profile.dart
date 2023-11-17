@@ -17,11 +17,14 @@ import 'package:equipro/utils/screensize.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:stacked/stacked.dart';
 import 'package:equipro/ui/screens/login/login_view_model.dart';
 import 'package:equipro/utils/colors.dart';
+
+import '../../widget/base_button.dart';
 
 class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);
@@ -31,7 +34,7 @@ class Profile extends StatefulWidget {
 }
 
 class LoginState extends State<Profile> with TickerProviderStateMixin {
-  final NavigationService _navigationService = locator<NavigationService>();
+  final NavService _navigationService = locator<NavService>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final Authentication _authentication = locator<Authentication>();
   TextEditingController emailController = TextEditingController();
@@ -65,7 +68,11 @@ class LoginState extends State<Profile> with TickerProviderStateMixin {
         viewModelBuilder: () => ProfileViewModel(),
         builder: (context, model, child) {
           return Scaffold(
+            backgroundColor: Color(0xFFF5F5F5),
             key: _scaffoldKey,
+            appBar: AppBar(
+              leading: CustomBackButton(),
+            ),
             body: SingleChildScrollView(
                 child: Padding(
                     padding: EdgeInsets.all(20),
@@ -85,34 +92,34 @@ class LoginState extends State<Profile> with TickerProviderStateMixin {
                                           child: widget),
                                     ),
                                 children: [
-                                  const SizedBox(
-                                    height: 40,
-                                  ),
-                                  Row(
-                                    children: [
-                                      Container(
-                                          //  margin: EdgeInsets.all(20),
-                                          padding: EdgeInsets.only(left: 8),
-                                          height: 40,
-                                          width: 40,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
-                                            color: AppColors.white,
-                                          ),
-                                          child: InkWell(
-                                              onTap: () {
-                                                Navigator.pop(context);
-                                              },
-                                              child: const Icon(
-                                                Icons.arrow_back_ios,
-                                                color: AppColors.primaryColor,
-                                              )))
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 30,
-                                  ),
+                                  // const SizedBox(
+                                  //   height: 40,
+                                  // ),
+                                  // Row(
+                                  //   children: [
+                                  //     Container(
+                                  //         //  margin: EdgeInsets.all(20),
+                                  //         padding: EdgeInsets.only(left: 8),
+                                  //         height: 40,
+                                  //         width: 40,
+                                  //         decoration: BoxDecoration(
+                                  //           borderRadius:
+                                  //               BorderRadius.circular(12),
+                                  //           color: AppColors.white,
+                                  //         ),
+                                  //         child: InkWell(
+                                  //             onTap: () {
+                                  //               Navigator.pop(context);
+                                  //             },
+                                  //             child: const Icon(
+                                  //               Icons.arrow_back_ios,
+                                  //               color: AppColors.primaryColor,
+                                  //             )))
+                                  //   ],
+                                  // ),
+                                  // SizedBox(
+                                  //   height: 30,
+                                  // ),
                                   Row(children: [
                                     Text(
                                       "Profile",
@@ -194,10 +201,11 @@ class LoginState extends State<Profile> with TickerProviderStateMixin {
                                     height: 15,
                                   ),
                                   InkWell(
-                                      onTap: () {
-                                        _navigationService
-                                            .navigateTo(EditProfileRoute);
-                                      },
+                                      onTap: () => Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  EditProfile())),
                                       child: Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
@@ -228,145 +236,206 @@ class LoginState extends State<Profile> with TickerProviderStateMixin {
                                   SizedBox(
                                     height: 30,
                                   ),
-                                  FittedBox(
-                                      child: Container(
-                                          padding: EdgeInsets.all(20),
-                                          height: 300,
-                                          width: Responsive.width(context),
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(20),
-                                            color: AppColors.white,
-                                          ),
-                                          alignment: Alignment.center,
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              SizedBox(
-                                                height: 30,
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    padding: EdgeInsets.all(20),
+                                    child: Column(
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text("Phone Number"),
+                                            Expanded(
+                                              child: Text(
+                                                _authentication.currentUser
+                                                            .phoneNumber !=
+                                                        null
+                                                    ? _authentication
+                                                        .currentUser
+                                                        .phoneNumber!
+                                                    : "Not updated",
+                                                textAlign: TextAlign.end,
                                               ),
-                                              Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Container(
-                                                      height: 70,
-                                                      child: Text(
-                                                        "Phone Number",
-                                                        style: TextStyle(
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontSize: 18),
-                                                      )),
-                                                  Container(
-                                                      height: 100,
-                                                      child: Text(
-                                                        "Address",
-                                                        style: TextStyle(
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontSize: 18),
-                                                      )),
-                                                  Container(
-                                                      height: 80,
-                                                      child: Text(
-                                                        "Means of ID",
-                                                        style: TextStyle(
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontSize: 18),
-                                                      )),
-                                                ],
+                                            )
+                                          ],
+                                        ),
+                                        Gap(30),
+                                        Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text("Address"),
+                                            Gap(10),
+                                            Expanded(
+                                              child: Text(
+                                                _authentication.currentUser
+                                                            .address !=
+                                                        null
+                                                    ? _authentication
+                                                        .currentUser.address!
+                                                    : "Not updated ",
+                                                textAlign: TextAlign.end,
                                               ),
-                                              Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.end,
-                                                children: [
-                                                  Container(
-                                                    height: 70,
-                                                    width: 200,
-                                                    child: Text(
-                                                      _authentication
-                                                                  .currentUser
-                                                                  .phoneNumber !=
-                                                              null
-                                                          ? _authentication
-                                                              .currentUser
-                                                              .phoneNumber!
-                                                          : "Not updated",
-                                                      style: TextStyle(
-                                                          color: Colors.grey,
-                                                          fontSize: 15,
-                                                          fontWeight:
-                                                              FontWeight.w500),
-                                                    ),
-                                                  ),
-                                                  Container(
-                                                    height: 100,
-                                                    width: 200,
-                                                    child: Text(
-                                                        _authentication
-                                                                    .currentUser
-                                                                    .address !=
-                                                                null
-                                                            ? _authentication
-                                                                .currentUser
-                                                                .address!
-                                                            : "Not updated ",
-                                                        style: TextStyle(
-                                                            color: Colors.grey,
-                                                            fontSize: 15,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w500)),
-                                                  ),
-                                                  // Container(
-                                                  //     height: 80,
-                                                  //     width: 200,
-                                                  //     child: Column(
-                                                  //       mainAxisAlignment:
-                                                  //           MainAxisAlignment.start,
-                                                  //       crossAxisAlignment:
-                                                  //           CrossAxisAlignment
-                                                  //               .start,
-                                                  //       children: [
-                                                  // Text(
-                                                  //     "National Identification Card",
-                                                  //     style: TextStyle(
-                                                  //         color:
-                                                  //             Colors.grey,
-                                                  //         fontSize: 15,
-                                                  //         fontWeight:
-                                                  //             FontWeight
-                                                  //                 .w500)),
-                                                  // SizedBox(
-                                                  //   height: 10,
-                                                  // ),
-                                                  Container(
-                                                    width: 110,
-                                                    height: 30,
-                                                    child: GeneralButton(
-                                                      onPressed: () {},
-                                                      splashColor:
-                                                          Color(0xCC4EA14D)
-                                                              .withOpacity(0.3),
-                                                      buttonText:
-                                                          _authentication
-                                                                  .currentUser
-                                                                  .kycApproved!
-                                                              ? "Verified"
-                                                              : "Not Verified",
-                                                      buttonTextColor:
-                                                          Color(0xff247322),
-                                                    ),
-                                                  )
-                                                  //   ],
-                                                  // ))
-                                                ],
+                                            ),
+                                          ],
+                                        ),
+                                        Gap(30),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Expanded(
+                                                child: Text("Means of ID")),
+                                            Expanded(
+                                              child: BaseButton(
+                                                onPressed: () {},
+                                                label: _authentication
+                                                        .currentUser
+                                                        .kycApproved!
+                                                    ? "Verified"
+                                                    : "Not Verified",
+                                                bgColor: Color(0xff247322),
+                                                labelStyle: Theme.of(context)
+                                                    .textTheme
+                                                    .bodySmall
+                                                    ?.copyWith(
+                                                        color: Colors.white),
                                               ),
-                                            ],
-                                          ))),
+                                            )
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  // Container(
+                                  //     padding: EdgeInsets.all(20),
+                                  //     // height: 300,
+                                  //     width: Responsive.width(context),
+                                  //     decoration: BoxDecoration(
+                                  //       borderRadius: BorderRadius.circular(20),
+                                  //       color: AppColors.white,
+                                  //     ),
+                                  //     alignment: Alignment.center,
+                                  //     child: Row(
+                                  //       mainAxisAlignment:
+                                  //           MainAxisAlignment.spaceBetween,
+                                  //       children: [
+                                  //         SizedBox(
+                                  //           height: 30,
+                                  //         ),
+                                  //         Column(
+                                  //           crossAxisAlignment:
+                                  //               CrossAxisAlignment.start,
+                                  //           children: [
+                                  //             Text(
+                                  //               "Phone Number",
+                                  //               style: TextStyle(
+                                  //                   fontWeight: FontWeight.bold,
+                                  //                   fontSize: 18),
+                                  //             ),
+                                  //             Text(
+                                  //               "Address",
+                                  //               style: TextStyle(
+                                  //                   fontWeight: FontWeight.bold,
+                                  //                   fontSize: 18),
+                                  //             ),
+                                  //             Text(
+                                  //               "Means of ID",
+                                  //               style: TextStyle(
+                                  //                   fontWeight: FontWeight.bold,
+                                  //                   fontSize: 18),
+                                  //             ),
+                                  //           ],
+                                  //         ),
+                                  //         Column(
+                                  //           crossAxisAlignment:
+                                  //               CrossAxisAlignment.end,
+                                  //           children: [
+                                  //             Container(
+                                  //               height: 70,
+                                  //               width: 200,
+                                  //               child: Text(
+                                  //                 _authentication.currentUser
+                                  //                             .phoneNumber !=
+                                  //                         null
+                                  //                     ? _authentication
+                                  //                         .currentUser
+                                  //                         .phoneNumber!
+                                  //                     : "Not updated",
+                                  //                 style: TextStyle(
+                                  //                     color: Colors.grey,
+                                  //                     fontSize: 15,
+                                  //                     fontWeight:
+                                  //                         FontWeight.w500),
+                                  //               ),
+                                  //             ),
+                                  //             Container(
+                                  //               height: 100,
+                                  //               width: 200,
+                                  //               child: Text(
+                                  //                   _authentication.currentUser
+                                  //                               .address !=
+                                  //                           null
+                                  //                       ? _authentication
+                                  //                           .currentUser
+                                  //                           .address!
+                                  //                       : "Not updated ",
+                                  //                   style: TextStyle(
+                                  //                       color: Colors.grey,
+                                  //                       fontSize: 15,
+                                  //                       fontWeight:
+                                  //                           FontWeight.w500)),
+                                  //             ),
+                                  //             // Container(
+                                  //             //     height: 80,
+                                  //             //     width: 200,
+                                  //             //     child: Column(
+                                  //             //       mainAxisAlignment:
+                                  //             //           MainAxisAlignment.start,
+                                  //             //       crossAxisAlignment:
+                                  //             //           CrossAxisAlignment
+                                  //             //               .start,
+                                  //             //       children: [
+                                  //             // Text(
+                                  //             //     "National Identification Card",
+                                  //             //     style: TextStyle(
+                                  //             //         color:
+                                  //             //             Colors.grey,
+                                  //             //         fontSize: 15,
+                                  //             //         fontWeight:
+                                  //             //             FontWeight
+                                  //             //                 .w500)),
+                                  //             // SizedBox(
+                                  //             //   height: 10,
+                                  //             // ),
+                                  //             Container(
+                                  //               width: 110,
+                                  //               height: 30,
+                                  //               child: GeneralButton(
+                                  //                 onPressed: () {},
+                                  //                 splashColor: Color(0xCC4EA14D)
+                                  //                     .withOpacity(0.3),
+                                  //                 buttonText: _authentication
+                                  //                         .currentUser
+                                  //                         .kycApproved!
+                                  //                     ? "Verified"
+                                  //                     : "Not Verified",
+                                  //                 buttonTextColor:
+                                  //                     Color(0xff247322),
+                                  //               ),
+                                  //             )
+                                  //             //   ],
+                                  //             // ))
+                                  //           ],
+                                  //         ),
+                                  //       ],
+                                  //     )),
                                   SizedBox(
                                     height: 10,
                                   ),

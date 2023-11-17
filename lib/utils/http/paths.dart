@@ -1,5 +1,6 @@
 class Paths {
   //  API ENDPOINTS
+  static const baseUrl = 'https://admin.equippro.io/api/';
   static const String signUp = 'signup';
   static const String login = 'auth';
   static const String forgotPassword = 'reset_password';
@@ -22,12 +23,9 @@ class Paths {
   static const String profile = 'profile';
   static const String reviews = 'reviews?hirers_id=';
   static const String pickDate = 'owners/pickup_date/';
-  static const String  earnings = 'owners/earnings';
-  static const String  chatList = 'get_user_inbox';
-  static const String  chatDetails = 'get_chat_details?user_1=';
-  static const String  sendChat = 'send_chat';
-  static const String  getNotification = 'notification';
-
-
-
+  static const String earnings = 'owners/earnings';
+  static const String chatList = 'get_user_inbox';
+  static const String chatDetails = 'get_chat_details?user_1=';
+  static const String sendChat = 'send_chat';
+  static const String getNotification = 'notification';
 }

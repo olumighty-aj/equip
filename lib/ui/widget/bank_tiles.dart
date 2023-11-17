@@ -14,7 +14,7 @@ class BankTile extends StatelessWidget {
       // required this.onPressed,
       // }
       );
-  final NavigationService _navigationService = locator<NavigationService>();
+  final NavService _navigationService = locator<NavService>();
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -61,19 +61,18 @@ class BankTile extends StatelessWidget {
                   SizedBox(
                     height: 20,
                   ),
-
-                      Text(
-                        "GTBank",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w500, fontSize: 14,color: AppColors.primaryColor),
-                      ),
-
+                  Text(
+                    "GTBank",
+                    style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 14,
+                        color: AppColors.primaryColor),
+                  ),
                 ],
               ),
               PopupMenuButton<int>(
                 offset: Offset(10, 10),
-                child: SvgPicture.asset(
-                    "assets/images/more.svg"),
+                child: SvgPicture.asset("assets/images/more.svg"),
                 onSelected: (int selectedValue) async {
                   switch (selectedValue) {
                     case 0:
@@ -83,7 +82,6 @@ class BankTile extends StatelessWidget {
                   }
                 },
                 itemBuilder: (context) => [
-
                   PopupMenuItem(
                       value: 0,
                       child: Text(

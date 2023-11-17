@@ -24,7 +24,7 @@ class Withdraw extends StatefulWidget {
 }
 
 class LoginState extends State<Withdraw> with TickerProviderStateMixin {
-  final NavigationService _navigationService = locator<NavigationService>();
+  final NavService _navigationService = locator<NavService>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   File? image;
   File? video;
@@ -149,7 +149,6 @@ class LoginState extends State<Withdraw> with TickerProviderStateMixin {
                                             color: AppColors.black,
                                             fontWeight: FontWeight.bold),
                                       ),
-
                                       Text(
                                         "N5000",
                                         style: TextStyle(
@@ -157,10 +156,8 @@ class LoginState extends State<Withdraw> with TickerProviderStateMixin {
                                             color: AppColors.primaryColor,
                                             fontWeight: FontWeight.bold),
                                       ),
-
                                     ],
                                   ),
-
                                   SizedBox(
                                     height: 30,
                                   ),
@@ -211,7 +208,6 @@ class LoginState extends State<Withdraw> with TickerProviderStateMixin {
                                     style: const TextStyle(color: Colors.black),
                                     cursorColor: Colors.black,
                                   ),
-
                                   Text(
                                     "Min withdrawal N1,000",
                                     style: TextStyle(
@@ -219,7 +215,9 @@ class LoginState extends State<Withdraw> with TickerProviderStateMixin {
                                         color: Colors.grey,
                                         fontWeight: FontWeight.w500),
                                   ),
-                                SizedBox(height: 80,),
+                                  SizedBox(
+                                    height: 80,
+                                  ),
                                   Center(
                                       child: SlideTransition(
                                           position: _navAnimation!,
@@ -228,16 +226,17 @@ class LoginState extends State<Withdraw> with TickerProviderStateMixin {
                                               width: 300,
                                               child: GeneralButton(
                                                   onPressed: () {
-                                                    if(amountController.text.isNotEmpty) {
+                                                    if (amountController
+                                                        .text.isNotEmpty) {
                                                       model.withdraw(
                                                           amountController
                                                               .text);
-                                                    }else{
-                                                      showErrorToast("Amount must not be be empty");
+                                                    } else {
+                                                      showErrorToast(
+                                                          "Amount must not be be empty");
                                                     }
                                                   },
-                                                  buttonText:
-                                                      "Withdraw")))),
+                                                  buttonText: "Withdraw")))),
                                   SizedBox(
                                     height: 20,
                                   ),

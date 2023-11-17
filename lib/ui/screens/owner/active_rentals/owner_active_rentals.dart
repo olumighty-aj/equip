@@ -18,9 +18,10 @@ class OwnerRentals extends StatefulWidget {
   LoginState createState() => LoginState();
 }
 
-class LoginState extends State<OwnerRentals> with SingleTickerProviderStateMixin {
+class LoginState extends State<OwnerRentals>
+    with SingleTickerProviderStateMixin {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  final NavigationService _navigationService = locator<NavigationService>();
+  final NavService _navigationService = locator<NavService>();
   late final TabController _controller;
 
   @override
@@ -278,11 +279,11 @@ class LoginState extends State<OwnerRentals> with SingleTickerProviderStateMixin
                                                               .map((feed) => InkWell(
                                                                   onTap: () {},
                                                                   child: Padding(
-                                                                      padding:
-                                                                          EdgeInsets.all(
-                                                                              5),
-                                                                      child:
-                                                                      RentalTiles(feed: feed,))))
+                                                                      padding: EdgeInsets.all(5),
+                                                                      child: RentalTiles(
+                                                                        feed:
+                                                                            feed,
+                                                                      ))))
                                                               .toList());
                                                     } else if (snapshot
                                                         .hasError) {
@@ -325,8 +326,8 @@ class LoginState extends State<OwnerRentals> with SingleTickerProviderStateMixin
                                                             style: TextStyle(
                                                                 fontSize: 15,
                                                                 fontWeight:
-                                                                FontWeight
-                                                                    .bold,
+                                                                    FontWeight
+                                                                        .bold,
                                                                 color: AppColors
                                                                     .black),
                                                             textAlign: TextAlign
@@ -438,11 +439,11 @@ class LoginState extends State<OwnerRentals> with SingleTickerProviderStateMixin
                                                               .map((feed) => InkWell(
                                                                   onTap: () {},
                                                                   child: Padding(
-                                                                      padding:
-                                                                          EdgeInsets.all(
-                                                                              5),
-                                                                      child:
-                                                                          RentalTiles(feed: feed,))))
+                                                                      padding: EdgeInsets.all(5),
+                                                                      child: RentalTiles(
+                                                                        feed:
+                                                                            feed,
+                                                                      ))))
                                                               .toList());
                                                     } else if (snapshot
                                                         .hasError) {
@@ -598,11 +599,11 @@ class LoginState extends State<OwnerRentals> with SingleTickerProviderStateMixin
                                                               .map((feed) => InkWell(
                                                                   onTap: () {},
                                                                   child: Padding(
-                                                                      padding:
-                                                                          EdgeInsets.all(
-                                                                              5),
-                                                                      child:
-                                                                      RentalTiles(feed: feed,))))
+                                                                      padding: EdgeInsets.all(5),
+                                                                      child: RentalTiles(
+                                                                        feed:
+                                                                            feed,
+                                                                      ))))
                                                               .toList());
                                                     } else if (snapshot
                                                         .hasError) {
@@ -758,11 +759,11 @@ class LoginState extends State<OwnerRentals> with SingleTickerProviderStateMixin
                                                               .map((feed) => InkWell(
                                                                   onTap: () {},
                                                                   child: Padding(
-                                                                      padding:
-                                                                          EdgeInsets.all(
-                                                                              5),
-                                                                      child:
-                                                                      RentalTiles(feed: feed,))))
+                                                                      padding: EdgeInsets.all(5),
+                                                                      child: RentalTiles(
+                                                                        feed:
+                                                                            feed,
+                                                                      ))))
                                                               .toList());
                                                     } else if (snapshot
                                                         .hasError) {

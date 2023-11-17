@@ -1,6 +1,8 @@
+import 'package:equipro/app/app_setup.router.dart';
 import 'package:equipro/core/model/EquipmentModel.dart';
 import 'package:equipro/core/model/NotificationModel.dart';
 import 'package:equipro/core/model/ReviewsModel.dart';
+import 'package:equipro/core/model/base_model.dart';
 import 'package:equipro/core/model/enums.dart';
 import 'package:equipro/core/model/error_model.dart';
 import 'package:equipro/core/model/success_model.dart';
@@ -8,17 +10,23 @@ import 'package:equipro/core/services/activities_service.dart';
 import 'package:equipro/core/services/auth_service.dart';
 import 'package:equipro/utils/base_model.dart';
 import 'package:equipro/utils/helpers.dart';
-import 'package:equipro/utils/locator.dart';
 import 'package:equipro/utils/router/navigation_service.dart';
 import 'package:equipro/utils/router/route_names.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:stacked/stacked.dart';
+import 'package:stacked_services/stacked_services.dart';
 
-class HomeOwnerViewModel extends BaseModel {
+import '../../../../app/app_setup.locator.dart';
+
+class HomeOwnerViewModel extends BaseViewModel {
   final Activities _activities = locator<Activities>();
   final Authentication _authentication = locator<Authentication>();
-  final NavigationService _navigationService = locator<NavigationService>();
+  final _navigationService = locator<NavigationService>();
   ScrollController? controller;
+
+  List<EquipmentModel>? _equipments = [];
+  List<EquipmentModel>? get equipments => _equipments;
 
   LoadingState _loadingState = LoadingState.idle;
   LoadingState get loadingState => _loadingState;
@@ -44,21 +52,32 @@ class HomeOwnerViewModel extends BaseModel {
   List<EquipmentModel> get packageList => _packageList;
 
   postEquip(
-      List images,
-      String equipName,
-      String costHire,
-      String costHireInterval,
-      String availFrom,
-      String availTo,
-      String quantity,
-      String description,    String latitude,
-      String longitude,
-      String address,) async {
+    List images,
+    String equipName,
+    String costHire,
+    String costHireInterval,
+    String availFrom,
+    String availTo,
+    String quantity,
+    String description,
+    String latitude,
+    String longitude,
+    String address,
+  ) async {
     setBusy(true);
-    var result = await _activities.postEquip(images, equipName, costHire,
-        costHireInterval, availFrom, availTo, quantity, description,     latitude,
-       longitude,
-       address,);
+    var result = await _activities.postEquip(
+      images,
+      equipName,
+      costHire,
+      costHireInterval,
+      availFrom,
+      availTo,
+      quantity,
+      description,
+      latitude,
+      longitude,
+      address,
+    );
     if (result == null) {
       setBusy(false);
       notifyListeners();
@@ -66,28 +85,40 @@ class HomeOwnerViewModel extends BaseModel {
     }
     setBusy(false);
 
-    _navigationService.pushAndRemoveUntil(HomeOwnerRoute);
+    _navigationService.pushNamedAndRemoveUntil(HomeOwnerRoute);
     notifyListeners();
     return result;
   }
 
   updateEquip(
-      List images,
-      String equipName,
-      String costHire,
-      String costHireInterval,
-      String availFrom,
-      String availTo,
-      String quantity,
-      String description,
-      String id, String latitude,
-      String longitude,
-      String address,) async {
+    List images,
+    String equipName,
+    String costHire,
+    String costHireInterval,
+    String availFrom,
+    String availTo,
+    String quantity,
+    String description,
+    String id,
+    String latitude,
+    String longitude,
+    String address,
+  ) async {
     setBusy(true);
-    var result = await _activities.updateEquip(images, equipName, costHire,
-        costHireInterval, availFrom, availTo, quantity, description, id,  latitude,
-       longitude,
-       address,);
+    var result = await _activities.updateEquip(
+      images,
+      equipName,
+      costHire,
+      costHireInterval,
+      availFrom,
+      availTo,
+      quantity,
+      description,
+      id,
+      latitude,
+      longitude,
+      address,
+    );
     if (result == null) {
       setBusy(false);
       notifyListeners();
@@ -95,7 +126,7 @@ class HomeOwnerViewModel extends BaseModel {
     }
     setBusy(false);
 
-    _navigationService.pushAndRemoveUntil(HomeOwnerRoute);
+    _navigationService.pushNamedAndRemoveUntil(HomeOwnerRoute);
     notifyListeners();
     return result;
   }
@@ -118,6 +149,25 @@ class HomeOwnerViewModel extends BaseModel {
       setFetchState(LoadingState.done);
       return result;
     }
+  }
+
+  Future<void> getEquipments(context) async {
+    BaseDataModel? data = await runBusyFuture(_activities.getPagedEquipments());
+    if (data != null) {
+      if (data.status == true) {
+        for (var i in data.payload["content"]) {
+          EquipmentModel model = EquipmentModel.fromJson(i);
+          _equipments?.add(model);
+          notifyListeners();
+        }
+      } else {
+        showErrorToast(data.message ?? "", context: context);
+      }
+    }
+  }
+
+  void init(context) async {
+    await getEquipments(context);
   }
 
   getMyEquipmentMore() async {
@@ -148,37 +198,77 @@ class HomeOwnerViewModel extends BaseModel {
     }
   }
 
-  deleteEquip(String id) async {
+  getPageEquipmentMore() async {
+    //setBusy(true);
+    if (controller!.position.extentAfter < 100 &&
+        loadingState != LoadingState.loading) {
+      if (packageList.length >= orderCount) {
+        // showToast('all order History fetched');
+      } else {
+        setLoadingState(LoadingState.loading);
+        var res = await _activities.getPagedEquipments(page: nextPage);
+        if (res!.status = false) {
+          // showToast('Login failed');
+          print(res.message);
+          setLoadingState(LoadingState.error);
+          throw Exception('Failed to load internet');
+          //return ErrorModel(result.error);
+        }
+        // print(result);
+        else {
+          for (var i in res.payload["content"]) {
+            EquipmentModel model = EquipmentModel.fromJson(i);
+            _equipments?.add(model);
+            notifyListeners();
+          }
+          _nextPage = _nextPage + 1;
+          notifyListeners();
+          setLoadingState(LoadingState.done);
+        }
+      }
+    }
+  }
+
+  deleteEquip(String id, context) async {
     // print('dhdhd');
     setBusy(true);
     var result = await _activities.deleteEquip(id);
 
     if (result is ErrorModel) {
       setBusy(false);
-      showErrorToast(result.error);
-      notifyListeners();
+      showErrorToast(result.error, context: context);
       return ErrorModel(result.error);
     }
     if (result is SuccessModel) {
       setBusy(false);
-      _navigationService.navigateTo(HomeOwnerRoute);
-      notifyListeners();
+      _navigationService.clearStackAndShow(Routes.homeOwner);
+      // notifyListeners();
       return SuccessModel(result.data);
     }
   }
 
-  switchHirer() async {
+  void newDeleteEquip(String id, context) async {
+    BaseDataModel? res = await _activities.newDeleteEquip(id);
+    if (res != null && res.status == true) {
+      showToast(res.message ?? "", context: context);
+      _navigationService.clearStackAndShow(Routes.homeOwner);
+    } else {
+      showErrorToast(res?.message ?? "", context: context);
+    }
+  }
+
+  switchHirer(context) async {
     setBusy(true);
     var result = await _authentication.switchRole("hirers");
     if (result is ErrorModel) {
       setBusy(false);
-      showErrorToast(result.error);
+      showErrorToast(result.error, context: context);
       notifyListeners();
       return ErrorModel(result.error);
     }
     if (result is SuccessModel) {
       setBusy(false);
-      _navigationService.pushAndRemoveUntil(homeRoute);
+      _navigationService.pushNamedAndRemoveUntil(Routes.home);
       notifyListeners();
       return SuccessModel(result.data);
     }
@@ -211,19 +301,18 @@ class HomeOwnerViewModel extends BaseModel {
     if (result is SuccessModel) {
       setBusy(false);
       if (status == "rejected") {
-        _navigationService.pop();
+        _navigationService.back();
       } else {
-        _navigationService.navigateReplacementTo(RentalsRoute);
+        _navigationService.replaceWith(RentalsRoute);
       }
       notifyListeners();
       return SuccessModel(result.data);
     }
   }
 
-  updateAddress(
-      String address, String lat ,String lng) async {
+  updateAddress(String address, String lat, String lng) async {
     setBusy(true);
-    var result = await _authentication.updateAddress(address,lat,lng);
+    var result = await _authentication.updateAddress(address, lat, lng);
     if (result == null) {
       setBusy(false);
       showErrorToast(result.error);
@@ -231,7 +320,7 @@ class HomeOwnerViewModel extends BaseModel {
       return result;
     }
     setBusy(false);
-   // _navigationService.pushAndRemoveUntil(HomeOwnerRoute);
+    // _navigationService.pushAndRemoveUntil(HomeOwnerRoute);
     notifyListeners();
     return result;
   }
@@ -249,6 +338,7 @@ class HomeOwnerViewModel extends BaseModel {
     // print(result);
     return result;
   }
+
   Future<List<NotificationModel>> getNotification() async {
     //setBusy(true);
     var result = await _activities.getNotification();

@@ -13,6 +13,7 @@ import 'package:equipro/utils/helpers.dart';
 import 'package:equipro/utils/locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:gap/gap.dart';
 import 'package:pusher_channels_flutter/pusher_channels_flutter.dart';
 
 class ChatDetailsPage extends StatefulWidget {
@@ -25,8 +26,6 @@ class ChatDetailsPage extends StatefulWidget {
 }
 
 class _ChatDetailsPageState extends State<ChatDetailsPage> {
-
-
   final Authentication _authentication = locator<Authentication>();
   TextEditingController textController = TextEditingController();
   PusherChannelsFlutter pusher = PusherChannelsFlutter.getInstance();
@@ -68,18 +67,13 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
         inboxId: body['inbox_id'],
         dateCreated: DateTime.now().toString(),
         dateModified: DateTime.now().toString(),
-      )
-
-
-      );
+      ));
       scrollController.animateTo(
         scrollController.position.maxScrollExtent,
         duration: const Duration(milliseconds: 600),
         curve: Curves.ease,
       );
-    }
-
-      );
+    });
   }
 
   void onSubscriptionSucceeded(String channelName, dynamic data) {
@@ -105,41 +99,53 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
   }
 
   void initPusher() async {
+    print("Initiated Pusher bro");
     // Remove keyboard
 
     try {
       await pusher.init(
         apiKey: "947662fc15ce8c1d3977",
         cluster: "us2",
-        onConnectionStateChange: onConnectionStateChange,
-        onError: onError,
-        onSubscriptionSucceeded: onSubscriptionSucceeded,
-        onEvent: onEvent,
-        onSubscriptionError: onSubscriptionError,
-        onDecryptionFailure: onDecryptionFailure,
-        onMemberAdded: onMemberAdded,
-        onMemberRemoved: onMemberRemoved,
+        // onConnectionStateChange: onConnectionStateChange,
+        // onError: onError,
+        // onSubscriptionSucceeded: onSubscriptionSucceeded,
+        // onEvent: onEvent,
+        // onSubscriptionError: onSubscriptionError,
+        // onDecryptionFailure: onDecryptionFailure,
+        // onMemberAdded: onMemberAdded,
+        // onMemberRemoved: onMemberRemoved,
         // authEndpoint: "<Your Authendpoint Url>",
         // onAuthorizer: onAuthorizer
       );
-      await pusher.subscribe(channelName: "chat_${widget.feed.id}");
       await pusher.connect();
+      await pusher.subscribe(
+        channelName: "chat_${widget.feed.id}",
+        onEvent: onEvent,
+      );
     } catch (e) {
       log("ERROR: $e");
     }
   }
 
   fetchChats() async {
-    var result = await _activities.fetchChat(widget.feed.chatWith!.id.toString());
-    if (result is ErrorModel) {
-      showErrorToast(result.error);
-      return ErrorModel(result.error);
+    var result =
+        await _activities.fetchChatDetails(widget.feed.chatWith!.id.toString());
+    print("resulttt: ${result.toString()}");
+    if (result is Map<String, dynamic>) {
+      print("Result: ${result["message"]}");
+      showErrorToast(result["message"], context: context);
+      // return ErrorModel(result.error);
+    } else {
+      setState(() {
+        chatResponse = result as List<ChatMessages>;
+        chatResponse = chatResponse.reversed.toList();
+      });
     }
 
-    setState(() {
-      chatResponse = result;
-      // print(chatResponse);
-    });
+    // setState(() {
+    //   chatResponse = result;
+    //   // print(chatResponse);
+    // });
 
     Timer(const Duration(seconds: 1), () {
       scrollController.animateTo(
@@ -153,6 +159,19 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
   sendSocket(Map<String, dynamic> data) {
     _activities.sendChat(data);
     // channel.trigger("sendData", data);
+  }
+
+  bool containsSensitiveInformation(String message) {
+    // Regular expressions to match phone numbers and emails
+    final RegExp naijphoneRegExp = RegExp(r'\+?(234)?[789]\d{9}');
+    final RegExp ukphoneRegExp = RegExp(r'^\+(44\s?|0)\d{10,14}');
+    final RegExp emailRegExp =
+        RegExp(r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b');
+
+    // Check if the message contains a phone number or email
+    return naijphoneRegExp.hasMatch(message) ||
+        ukphoneRegExp.hasMatch(message) ||
+        emailRegExp.hasMatch(message);
   }
 
   // void onTriggerEventPressed() async {
@@ -173,27 +192,28 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
   void initState() {
     fetchChats();
     //Initializing the TextEditingController and ScrollController
-    scrollController = ScrollController();
+    // scrollController = ScrollController();
     initPusher();
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     final deviceHeight = MediaQuery.of(context).size.height;
     final deviceWidth = MediaQuery.of(context).size.width;
-    final messageList =
-    Padding(padding: EdgeInsets.only(bottom: 100),child:
-    ListView.builder(
-      controller: scrollController,
-      scrollDirection: Axis.vertical,
-      itemCount: chatResponse.length,
-      itemBuilder: (BuildContext context, int index) {
-        return ChatBubble(
-          message: chatResponse[index],
-          authentication: _authentication,
-        );
-      },
-    ));
+    final messageList = Padding(
+        padding: EdgeInsets.only(bottom: 100),
+        child: ListView.builder(
+          controller: scrollController,
+          scrollDirection: Axis.vertical,
+          itemCount: chatResponse.length,
+          itemBuilder: (BuildContext context, int index) {
+            return ChatBubble(
+              message: chatResponse[index],
+              authentication: _authentication,
+            );
+          },
+        ));
 
     final inputBox = Positioned(
       bottom: 20,
@@ -216,7 +236,7 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
                       onTap: () {},
                       child: SvgPicture.asset(
                         "assets/images/attach.svg",
-                        width: 30,
+                        height: 25,
                       ),
                     ),
                     SizedBox(
@@ -224,7 +244,14 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
                     ),
                     InkWell(
                       onTap: () {
-                        if (textController.text.isNotEmpty) {
+                        if (textController.text.isNotEmpty &&
+                            containsSensitiveInformation(textController.text)) {
+                          showErrorToast(
+                              "You can't share phone number or email address",
+                              context: context);
+                        } else if (textController.text.isNotEmpty &&
+                            !containsSensitiveInformation(
+                                textController.text)) {
                           //Send the message as JSON data to send_message event
                           var data;
 
@@ -235,19 +262,19 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
                           };
 
                           sendSocket(data);
-                          // setState(() {
-                          //   chatResponse.add(ChatMessages(
-                          //     id: "",
-                          //     senderId: _authentication.currentUser.id,
-                          //     receiverId: widget.feed.chatWith!.id!,
-                          //     message: textController.text,
-                          //     type: "sent",
-                          //     inboxId: "1",
-                          //     status: "0",
-                          //     dateModified: DateTime.now().toString(),
-                          //     dateCreated: DateTime.now().toString(),
-                          //   ));
-                          // });
+                          setState(() {
+                            chatResponse.add(ChatMessages(
+                              id: "",
+                              senderId: _authentication.currentUser.id,
+                              receiverId: widget.feed.chatWith!.id!,
+                              message: textController.text,
+                              type: "sent",
+                              inboxId: "1",
+                              status: "0",
+                              dateModified: DateTime.now().toString(),
+                              dateCreated: DateTime.now().toString(),
+                            ));
+                          });
                           textController.text = '';
                           //Scrolldown the list to show the latest message
                           scrollController.animateTo(
@@ -259,7 +286,7 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
                       },
                       child: SvgPicture.asset(
                         "assets/images/send.svg",
-                        width: 30,
+                        height: 25,
                       ),
                     ),
                   ],
@@ -296,6 +323,7 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
     );
 
     return Scaffold(
+      backgroundColor: Color(0xFFF5F5F5),
       body: Stack(
         children: <Widget>[
           Container(
@@ -338,44 +366,55 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(""),
-                      Row(
-                    //  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        CachedNetworkImage(
-                          imageUrl:  widget.feed.chatWith!.hirersPath != null
-                              ?  widget.feed.chatWith!.hirersPath!
-                              : "",
-                          imageBuilder: (context, imageProvider) => Container(
-                            width: 35.0,
-                            height: 35.0,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              image: DecorationImage(
-                                  image: imageProvider, fit: BoxFit.contain),
-                            ),
-                          ),
-                          placeholder: (context, url) => CircularProgressIndicator(),
-                          errorWidget: (context, url, error) => CircleAvatar(
-                            radius: 17,
-                            backgroundColor: AppColors.grey,
-                            child: Image.asset(
-                              "assets/images/icon.png",
-                              scale: 2,
-                            ),
-                          ),
-                        ),
-                        Container(
-                          width: 10,
-                        ),
-
-                        Text(
-                          widget.feed.chatWith!.fullname!,
-                          style: TextStyle(
-                              fontSize: 20,
-                              color: AppColors.black,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        ]),
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox(),
+                              // CachedNetworkImage(
+                              //   imageUrl:
+                              //       widget.feed.chatWith!.hirersPath != null
+                              //           ? widget.feed.chatWith!.hirersPath!
+                              //           : "",
+                              //   imageBuilder: (context, imageProvider) =>
+                              //       Container(
+                              //     width: 35.0,
+                              //     height: 35.0,
+                              //     decoration: BoxDecoration(
+                              //       shape: BoxShape.circle,
+                              //       image: DecorationImage(
+                              //           image: imageProvider,
+                              //           fit: BoxFit.contain),
+                              //     ),
+                              //   ),
+                              //   placeholder: (context, url) =>
+                              //       CircularProgressIndicator(),
+                              //   errorWidget: (context, url, error) =>
+                              //       CircleAvatar(
+                              //     radius: 17,
+                              //     backgroundColor: AppColors.grey,
+                              //     child: Image.asset(
+                              //       "assets/images/icon.png",
+                              //       scale: 2,
+                              //     ),
+                              //   ),
+                              // ),
+                              // Container(
+                              //   width: 10,
+                              // ),
+                              Column(
+                                children: [
+                                  Text(
+                                    widget.feed.chatWith!.fullname!,
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        color: AppColors.black,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  Gap(5),
+                                  // Text("Online")
+                                ],
+                              ),
+                            ]),
                         SvgPicture.asset("assets/images/more.svg"),
                         // SvgPicture.asset(
                         //   "assets/images/sort.svg",
@@ -390,12 +429,16 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
                   thickness: 4,
                 ),
                 // appBar,
-                chatResponse.isNotEmpty?
-                Flexible(
-                  child: messageList,
-                ):Container(
-                  child: Text("Loading....",style: TextStyle(color: Colors.red),),
-                ),
+                chatResponse.isNotEmpty
+                    ? Flexible(
+                        child: messageList,
+                      )
+                    : Center(
+                        child: Text(
+                          "There is no available chat between the users",
+                          style: TextStyle(color: Colors.grey.shade400),
+                        ),
+                      ),
               ],
             ),
           ),

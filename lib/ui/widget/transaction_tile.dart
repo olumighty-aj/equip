@@ -10,13 +10,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 
 class TransactionTile extends StatelessWidget {
-   final TransactionHistory model;
-  TransactionTile(
-      {
-      required this.model,
-      }
-      );
-  final NavigationService _navigationService = locator<NavigationService>();
+  final TransactionHistory model;
+  TransactionTile({
+    required this.model,
+  });
+  final NavService _navigationService = locator<NavService>();
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -40,8 +38,7 @@ class TransactionTile extends StatelessWidget {
                   Text(
                     DateFormat(
                       "dd MMM, yyyy, hh:mm aa",
-                    ).format(DateTime.parse(
-              model.dateCreated.toString())),
+                    ).format(DateTime.parse(model.dateCreated.toString())),
                     style: TextStyle(fontSize: 15, color: Colors.grey),
                   ),
                   SizedBox(
@@ -66,17 +63,17 @@ class TransactionTile extends StatelessWidget {
                   SizedBox(
                     height: 20,
                   ),
-
-                      Text(
-                          model.status!,
-                        style: TextStyle(
-                            fontWeight: FontWeight.w500, fontSize: 14,color: AppColors.primaryColor),
-                      ),
-
+                  Text(
+                    model.status!,
+                    style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 14,
+                        color: AppColors.primaryColor),
+                  ),
                 ],
               ),
               Text(
-                  model.amount!,
+                model.amount!,
                 style: TextStyle(fontSize: 15, color: Colors.grey),
               ),
             ],

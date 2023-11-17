@@ -14,9 +14,9 @@ customXMargin(double value) {
   return SizedBox(width: value);
 }
 
-showToast(String message) {
+showToast(String message, {context}) {
   return showTopSnackBar(
-   NavigationService.navigationKey_.currentContext!,
+    context,
     CustomSnackBar.success(
       backgroundColor: AppColors.green,
       message: message,
@@ -24,9 +24,9 @@ showToast(String message) {
   );
 }
 
-showErrorToast(String message) {
+showErrorToast(String message, {context}) {
   return showTopSnackBar(
-  NavigationService.navigationKey_.currentContext!,
+    context,
     CustomSnackBar.info(
       backgroundColor: AppColors.red,
       message: message,
@@ -75,43 +75,45 @@ class Validators {
   String? isPassword(value) {
     if (value.isEmpty) {
       return 'Empty field';
-    }else if (validateStructure(value)){
+    } else if (validateStructure(value)) {
       return null;
-    }else{
+    } else {
       return 'Password should contain At least one upper case letter.\nPassword should contain At least one numeric value.\nPassword should contain At least one special case characters';
     }
-
   }
 
   String? isEmail(value) {
     if (value.isEmpty) {
       return 'Empty field';
-    }else if (validateEmail(value)){
+    } else if (validateEmail(value)) {
       return null;
-    }else{
+    } else {
       return 'Invalid email';
     }
-
   }
-  bool validateStructure(String value){
-    String  pattern = r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
-    RegExp regExp =  RegExp(pattern);
+
+  bool validateStructure(String value) {
+    String pattern =
+        r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
+    RegExp regExp = RegExp(pattern);
     return regExp.hasMatch(value);
   }
-   bool validateEmail (String value) {
+
+  bool validateEmail(String value) {
     return RegExp(
-        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
         .hasMatch(value);
   }
-
 }
 
-widthSizer(double value, BuildContext context, {figmaWidth: 414}) {// 414 is the default design screen width on figma
+widthSizer(double value, BuildContext context, {figmaWidth: 414}) {
+  // 414 is the default design screen width on figma
   return MediaQuery.of(context).size.width *
       (value / figmaWidth); // width size on figma
 }
 
-heightSizer(double value, BuildContext context, {figmaHeight: 896}) { // 896 is the default design screen height on figma
+heightSizer(double value, BuildContext context, {figmaHeight: 896}) {
+  // 896 is the default design screen height on figma
   return MediaQuery.of(context).size.height *
       (value / figmaHeight); // height size on figma
 }

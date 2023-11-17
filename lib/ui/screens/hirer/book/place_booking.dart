@@ -3,12 +3,14 @@ import 'package:equipro/core/model/BookModel.dart';
 import 'package:equipro/core/model/ChatListModel.dart';
 import 'package:equipro/core/model/EquipmentModel.dart';
 import 'package:equipro/core/model/success_model.dart';
+import 'package:equipro/ui/screens/chat/chats_widget/chat_details.dart';
 import 'package:equipro/ui/screens/drawer.dart';
 import 'package:equipro/ui/screens/hirer/book/details_view_model.dart';
+import 'package:equipro/ui/widget/base_button.dart';
 import 'package:equipro/ui/widget/equip_tiles.dart';
 import 'package:equipro/ui/widget/general_button.dart';
 import 'package:equipro/utils/helpers.dart';
-import 'package:equipro/utils/locator.dart';
+// import 'package:equipro/utils/locator.dart';
 import 'package:equipro/utils/router/navigation_service.dart';
 import 'package:equipro/utils/router/route_names.dart';
 import 'package:equipro/utils/screensize.dart';
@@ -21,17 +23,23 @@ import 'package:place_picker/place_picker.dart';
 import 'package:stacked/stacked.dart';
 import 'package:equipro/ui/screens/login/login_view_model.dart';
 import 'package:equipro/utils/colors.dart';
+import 'package:stacked_services/stacked_services.dart';
+
+import '../../../../app/app_setup.locator.dart';
+import '../../../../app/app_setup.router.dart';
+import '../../../../utils/text_styles.dart';
 
 class PlaceBooking extends StatefulWidget {
   final EquipmentModel model;
   const PlaceBooking({Key? key, required this.model}) : super(key: key);
 
   @override
-  LoginState createState() => LoginState();
+  PlaceBookingState createState() => PlaceBookingState();
 }
 
-class LoginState extends State<PlaceBooking> with TickerProviderStateMixin {
-  final NavigationService _navigationService = locator<NavigationService>();
+class PlaceBookingState extends State<PlaceBooking>
+    with TickerProviderStateMixin {
+  final _navigationService = locator<NavigationService>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   int? selectedQuantity;
   String? pickupTime = DateTime.now().toString();
@@ -91,6 +99,7 @@ class LoginState extends State<PlaceBooking> with TickerProviderStateMixin {
           borderRadius: new BorderRadius.circular(15),
         ),
         content: Container(
+            padding: EdgeInsets.all(12),
             width: Responsive.width(context) / 1.2,
             height: 245,
             child: Column(
@@ -99,15 +108,11 @@ class LoginState extends State<PlaceBooking> with TickerProviderStateMixin {
                   height: 10,
                 ),
                 Text(
-                  "Booking Request",
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-                Text(
-                  "Sent",
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  "Booking Request Sent",
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyLarge
+                      ?.copyWith(fontWeight: FontWeight.w600),
                 ),
                 SizedBox(
                   height: 20,
@@ -119,39 +124,14 @@ class LoginState extends State<PlaceBooking> with TickerProviderStateMixin {
                       textAlign: TextAlign.center,
                     )),
                 SizedBox(
-                  height: 20,
+                  height: 30,
                 ),
-                Container(
-                  width: 200,
-                  child: GeneralButton(
-                    buttonText: 'Okay',
-                    onPressed: () {
-                      Navigator.pop(context);
-                      _navigationService.pushAndRemoveUntil(homeRoute);
-                    },
-                  ),
-                  // InkWell(
-                  //   onTap: (){
-                  //     Navigator.pop(context);
-                  //     _navigationService.pushAndRemoveUntil(homeRoute);
-                  //   },
-                  //   child:
-                  // Container(
-                  //   height:70,
-                  //  // width: Responsive.width(context)/1.5,
-                  //   decoration: BoxDecoration(
-                  //     borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10),bottomRight: Radius.circular(10)),
-                  //     color: AppColors.primaryColor,
-                  //   ),
-                  //   alignment: Alignment.center,
-                  //   child: Text(
-                  //     "Okay",
-                  //     style: TextStyle(
-                  //         color: Colors.white,
-                  //         fontWeight: FontWeight.bold,
-                  //         fontSize: 20),
-                  //   ),
-                  // ))
+                BaseButton(
+                  label: 'Okay',
+                  onPressed: () {
+                    // Navigator.pop(context);
+                    _navigationService.clearStackAndShow(Routes.home);
+                  },
                 ),
               ],
             )),
@@ -162,7 +142,7 @@ class LoginState extends State<PlaceBooking> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<DetailsViewModel>.reactive(
-        onModelReady: (v) {
+        onViewModelReady: (v) {
           quantityList = List<int>.generate(
               int.parse(widget.model.quantity!), (i) => i + 1);
         },
@@ -175,7 +155,6 @@ class LoginState extends State<PlaceBooking> with TickerProviderStateMixin {
                     padding: EdgeInsets.all(20),
                     child: AnimationLimiter(
                         child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: AnimationConfiguration.toStaggeredList(
                                 duration: const Duration(milliseconds: 200),
@@ -192,38 +171,38 @@ class LoginState extends State<PlaceBooking> with TickerProviderStateMixin {
                                   const SizedBox(
                                     height: 40,
                                   ),
-                                  Row(
-                                    children: [
-                                      Container(
-                                          //  margin: EdgeInsets.all(20),
-                                          padding: EdgeInsets.only(left: 8),
-                                          height: 40,
-                                          width: 40,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
-                                            color: AppColors.white,
-                                          ),
-                                          child: InkWell(
-                                              onTap: () {
-                                                Navigator.pop(context);
-                                              },
-                                              child: const Icon(
-                                                Icons.arrow_back_ios,
-                                                color: AppColors.primaryColor,
-                                              )))
-                                    ],
+                                  GestureDetector(
+                                    onTap: () => Navigator.pop(context),
+                                    child: Container(
+                                      width: 40,
+                                      height: 40,
+                                      decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                          border: Border.all(
+                                              color: Colors.grey.shade400,
+                                              width: 2)),
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: 8, horizontal: 10),
+                                      child: const Icon(
+                                        Icons.arrow_back_ios,
+                                        size: 15,
+                                        color: AppColors.primaryColor,
+                                      ),
+                                    ),
                                   ),
                                   SizedBox(
                                     height: 30,
                                   ),
-                                  Text(
-                                    widget.model.equipName!,
-                                    style: TextStyle(
-                                        color: AppColors.primaryColor,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 25),
-                                  ),
+                                  Text(widget.model.equipName!,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge
+                                          ?.copyWith(
+                                              color: AppColors.primaryColor,
+                                              fontSize: 25,
+                                              fontWeight: FontWeight.w800)),
                                   SizedBox(
                                     height: 30,
                                   ),
@@ -232,7 +211,7 @@ class LoginState extends State<PlaceBooking> with TickerProviderStateMixin {
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          "${widget.model.costOfHire} per ${widget.model.costOfHireInterval == "1" ? "Day" : widget.model.costOfHireInterval == "7" ? "Week" : "Month"}",
+                                          "${getCurrency(widget.model.owners!.country)}${widget.model.costOfHire} per ${widget.model.costOfHireInterval == "1" ? "Day" : widget.model.costOfHireInterval == "7" ? "Week" : "Month"}",
                                           style: TextStyle(
                                               fontSize: 15,
                                               color: AppColors.green,
@@ -265,43 +244,62 @@ class LoginState extends State<PlaceBooking> with TickerProviderStateMixin {
                                   SizedBox(
                                     height: 30,
                                   ),
-                                  Container(
-                                      width: Responsive.width(context) / 2.3,
-                                      child: GeneralButton(
-                                          onPressed: () {
-                                            _navigationService.navigateTo(
-                                                chatDetailsPageRoute, arguments: ChatListModel(
-                                                id:widget.model.ownersId,
-                                                userId            :"",
-                                                chatWithId         :"",
-                                                messageCount       :"",
-                                                lastMessage        :"",
-                                                dateCreated        :"",
-                                                dateModified       :"",
-                                                chatWith:  ChatWith(
-                                                  id:widget.model.ownersId,
-                                                  fullname :widget.model.owners!.fullname!,
-                                                  email        :"",
-                                                  phoneNumber  :"",
-                                                  gender       :"",
-                                                  address    :"",
-                                                  addressOpt   :"",
-                                                  localState   :"",
-                                                  country      :"",
-                                                  latitude     :"",
-                                                  longitude    :"",
-                                                  hirersPath   :widget.model.owners!.hirersPath!= null?widget.model.owners!.hirersPath!:"",
-                                                  status       :"",
-                                                  dateModified :"",
-                                                  dateCreated  :"",
-                                                )
-
-                                            ));
-                                          },
-                                          buttonText: "Chat Owner",
-                                          buttonTextColor: AppColors.black,
-                                          splashColor: Color.fromRGBO(
-                                              255, 235, 173, 0.85))),
+                                  SizedBox(
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.5,
+                                    child: BaseButton(
+                                      label: "Chat Owner",
+                                      labelStyle: buttonText.copyWith(
+                                          color: AppColors.primaryColor,
+                                          fontWeight: FontWeight.w500),
+                                      bgColor: AppColors.primaryColor
+                                          .withOpacity(0.2),
+                                      onPressed: () => Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  ChatDetailsPage(
+                                                      feed: ChatListModel(
+                                                          id: widget
+                                                              .model.ownersId,
+                                                          userId: "",
+                                                          chatWithId: "",
+                                                          messageCount: "",
+                                                          lastMessage: "",
+                                                          dateCreated: "",
+                                                          dateModified: "",
+                                                          chatWith: ChatWith(
+                                                            id: widget
+                                                                .model.ownersId,
+                                                            fullname: widget
+                                                                .model
+                                                                .owners!
+                                                                .fullname!,
+                                                            email: "",
+                                                            phoneNumber: "",
+                                                            gender: "",
+                                                            address: "",
+                                                            addressOpt: "",
+                                                            localState: "",
+                                                            country: "",
+                                                            latitude: "",
+                                                            longitude: "",
+                                                            hirersPath: widget
+                                                                        .model
+                                                                        .owners!
+                                                                        .hirersPath !=
+                                                                    null
+                                                                ? widget
+                                                                    .model
+                                                                    .owners!
+                                                                    .hirersPath!
+                                                                : "",
+                                                            status: "",
+                                                            dateModified: "",
+                                                            dateCreated: "",
+                                                          ))))),
+                                    ),
+                                  ),
                                   SizedBox(
                                     height: 30,
                                   ),
@@ -510,46 +508,51 @@ class LoginState extends State<PlaceBooking> with TickerProviderStateMixin {
                                   SizedBox(
                                     height: 30,
                                   ),
-                                  InkWell(onTap: (){
-                                    showPlacePicker();
-                                  },
-                                    child:
-                                  TextFormField(
-                                    enabled: false,
-                                    controller: deliveryController,
-                                    decoration: InputDecoration(
-                                      hintText: 'Enter delivery location',
-                                      hintStyle: const TextStyle(
-                                        color: Colors.grey,
-                                      ),
-                                      focusedBorder: const OutlineInputBorder(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(4)),
-                                        borderSide: BorderSide(
-                                            width: 1, color: Colors.grey),
-                                      ),
-                                      disabledBorder: const OutlineInputBorder(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(4)),
-                                        borderSide: BorderSide(
-                                            width: 1, color: Colors.grey),
-                                      ),
-                                      enabledBorder: const OutlineInputBorder(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(4)),
-                                        borderSide: BorderSide(
-                                            width: 1, color: Colors.grey),
-                                      ),
-                                      border: OutlineInputBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(5.0),
-                                        borderSide: const BorderSide(),
-                                      ),
-                                    ),
-                                    keyboardType: TextInputType.emailAddress,
-                                    style: const TextStyle(color: Colors.black),
-                                    cursorColor: Colors.black,
-                                  )  ),
+                                  InkWell(
+                                      onTap: () {
+                                        showPlacePicker();
+                                      },
+                                      child: TextFormField(
+                                        enabled: false,
+                                        controller: deliveryController,
+                                        decoration: InputDecoration(
+                                          hintText: 'Enter delivery location',
+                                          hintStyle: const TextStyle(
+                                            color: Colors.grey,
+                                          ),
+                                          focusedBorder:
+                                              const OutlineInputBorder(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(4)),
+                                            borderSide: BorderSide(
+                                                width: 1, color: Colors.grey),
+                                          ),
+                                          disabledBorder:
+                                              const OutlineInputBorder(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(4)),
+                                            borderSide: BorderSide(
+                                                width: 1, color: Colors.grey),
+                                          ),
+                                          enabledBorder:
+                                              const OutlineInputBorder(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(4)),
+                                            borderSide: BorderSide(
+                                                width: 1, color: Colors.grey),
+                                          ),
+                                          border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(5.0),
+                                            borderSide: const BorderSide(),
+                                          ),
+                                        ),
+                                        keyboardType:
+                                            TextInputType.emailAddress,
+                                        style: const TextStyle(
+                                            color: Colors.black),
+                                        cursorColor: Colors.black,
+                                      )),
                                   SizedBox(
                                     height: 30,
                                   ),
@@ -557,26 +560,35 @@ class LoginState extends State<PlaceBooking> with TickerProviderStateMixin {
                                       child: SlideTransition(
                                           position: _navAnimation!,
                                           //  textDirection: TextDirection.rtl,
-                                          child: Container(
-                                              width: 300,
-                                              child: GeneralButton(
-                                                  onPressed: () async {
-var result = await model.book(BookModel(
-  equipmentsId: widget.model.id.toString(),
-  quantity: selectedQuantity.toString(),
-  rentalFrom: selectedDate,
-  rentalTo: selectedDateTo,
-  latitude:pickLat.toString(),
-  longitude:pickLng.toString() ,
-  deliveryLocation: deliveryController.text
-));
+                                          child: BaseButton(
+                                              isBusy: model.busy("Book"),
+                                              onPressed: () async {
+                                                var result = await model.book(
+                                                    BookModel(
+                                                        equipmentsId: widget
+                                                            .model.id
+                                                            .toString(),
+                                                        quantity:
+                                                            selectedQuantity
+                                                                .toString(),
+                                                        rentalFrom:
+                                                            selectedDate,
+                                                        rentalTo:
+                                                            selectedDateTo,
+                                                        latitude:
+                                                            pickLat.toString(),
+                                                        longitude:
+                                                            pickLng.toString(),
+                                                        deliveryLocation:
+                                                            deliveryController
+                                                                .text),
+                                                    context);
 
-if(result is SuccessModel){
-                                              displayDialog(context);
-                                              }
-
-                                                  },
-                                                  buttonText: "Book Now"))))
+                                                if (result is SuccessModel) {
+                                                  displayDialog(context);
+                                                }
+                                              },
+                                              label: "Book Now")))
                                 ]))))),
             drawer: CollapsingNavigationDrawer(),
           );

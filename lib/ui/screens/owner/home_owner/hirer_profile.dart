@@ -26,7 +26,7 @@ class HirerProfile extends StatefulWidget {
 }
 
 class LoginState extends State<HirerProfile> with TickerProviderStateMixin {
-  final NavigationService _navigationService = locator<NavigationService>();
+  final NavService _navigationService = locator<NavService>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   TextEditingController emailController = TextEditingController();
@@ -120,7 +120,10 @@ class LoginState extends State<HirerProfile> with TickerProviderStateMixin {
                                           padding: EdgeInsets.only(
                                               left: 15, top: 13),
                                           child: CachedNetworkImage(
-                                            imageUrl: widget.feed.hirersPath != null?widget.feed.hirersPath!:"",
+                                            imageUrl:
+                                                widget.feed.hirersPath != null
+                                                    ? widget.feed.hirersPath!
+                                                    : "",
                                             imageBuilder:
                                                 (context, imageProvider) =>
                                                     Container(
@@ -269,7 +272,8 @@ class LoginState extends State<HirerProfile> with TickerProviderStateMixin {
                                   Container(
                                     height: Responsive.height(context) / 3,
                                     child: FutureBuilder<List<ReviewsModel>>(
-                                        future: model.getHirerReviews(widget.feed.id.toString()),
+                                        future: model.getHirerReviews(
+                                            widget.feed.id.toString()),
                                         builder: (context, snapshot) {
                                           if (!snapshot.hasData) {
                                             return Container(
@@ -279,134 +283,124 @@ class LoginState extends State<HirerProfile> with TickerProviderStateMixin {
                                                 child: Center(
                                                   child: Shimmer.fromColors(
                                                       direction:
-                                                      ShimmerDirection.ltr,
+                                                          ShimmerDirection.ltr,
                                                       period:
-                                                      Duration(seconds: 2),
+                                                          Duration(seconds: 2),
                                                       child: ListView(
                                                         scrollDirection:
-                                                        Axis.vertical,
+                                                            Axis.vertical,
                                                         // shrinkWrap: true,
                                                         children: [0, 1, 2, 3]
                                                             .map((_) => Padding(
-                                                          padding:
-                                                          const EdgeInsets
-                                                              .all(
-                                                              8.0),
-                                                          child: Row(
-                                                            crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                            children: [
-                                                              Padding(
-                                                                padding: const EdgeInsets
-                                                                    .symmetric(
-                                                                    horizontal:
-                                                                    8.0),
-                                                              ),
-                                                              Expanded(
-                                                                child:
-                                                                Column(
-                                                                  crossAxisAlignment:
-                                                                  CrossAxisAlignment.start,
-                                                                  children: [
-                                                                    Container(
-                                                                      width:
-                                                                      double.infinity,
-                                                                      height:
-                                                                      8.0,
-                                                                      color:
-                                                                      Colors.white,
-                                                                    ),
-                                                                    Padding(
-                                                                      padding:
-                                                                      const EdgeInsets.symmetric(vertical: 2.0),
-                                                                    ),
-                                                                    Container(
-                                                                      width:
-                                                                      double.infinity,
-                                                                      height:
-                                                                      8.0,
-                                                                      color:
-                                                                      Colors.white,
-                                                                    ),
-                                                                    Padding(
-                                                                      padding:
-                                                                      const EdgeInsets.symmetric(vertical: 2.0),
-                                                                    ),
-                                                                    Container(
-                                                                      width:
-                                                                      40.0,
-                                                                      height:
-                                                                      8.0,
-                                                                      color:
-                                                                      Colors.white,
-                                                                    ),
-                                                                  ],
-                                                                ),
-                                                              )
-                                                            ],
-                                                          ),
-                                                        ))
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                              .all(
+                                                                          8.0),
+                                                                  child: Row(
+                                                                    crossAxisAlignment:
+                                                                        CrossAxisAlignment
+                                                                            .start,
+                                                                    children: [
+                                                                      Padding(
+                                                                        padding:
+                                                                            const EdgeInsets.symmetric(horizontal: 8.0),
+                                                                      ),
+                                                                      Expanded(
+                                                                        child:
+                                                                            Column(
+                                                                          crossAxisAlignment:
+                                                                              CrossAxisAlignment.start,
+                                                                          children: [
+                                                                            Container(
+                                                                              width: double.infinity,
+                                                                              height: 8.0,
+                                                                              color: Colors.white,
+                                                                            ),
+                                                                            Padding(
+                                                                              padding: const EdgeInsets.symmetric(vertical: 2.0),
+                                                                            ),
+                                                                            Container(
+                                                                              width: double.infinity,
+                                                                              height: 8.0,
+                                                                              color: Colors.white,
+                                                                            ),
+                                                                            Padding(
+                                                                              padding: const EdgeInsets.symmetric(vertical: 2.0),
+                                                                            ),
+                                                                            Container(
+                                                                              width: 40.0,
+                                                                              height: 8.0,
+                                                                              color: Colors.white,
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                      )
+                                                                    ],
+                                                                  ),
+                                                                ))
                                                             .toList(),
                                                       ),
                                                       baseColor: AppColors.grey,
                                                       highlightColor:
-                                                      Colors.white),
+                                                          Colors.white),
                                                 ));
-                                          } else if (snapshot.data!.isNotEmpty) {
+                                          } else if (snapshot
+                                              .data!.isNotEmpty) {
                                             return ListView(
                                                 scrollDirection: Axis.vertical,
                                                 // shrinkWrap: true,
                                                 children: snapshot.data!
-                                                    .map((feed) =>Padding(
-                                                    padding:
-                                                    EdgeInsets.all(5),
-                                                    child:  ReviewItem(
-                                                      feed: feed,
-
-                                                    )))
+                                                    .map((feed) => Padding(
+                                                        padding:
+                                                            EdgeInsets.all(5),
+                                                        child: ReviewItem(
+                                                          feed: feed,
+                                                        )))
                                                     .toList());
                                           } else if (snapshot.hasError) {
                                             return Center(
                                                 child: Column(
-                                                  children: <Widget>[
-                                                    SizedBox(
-                                                      height: 100,
-                                                    ),
-                                                    Text(
-                                                      'Network error',
-                                                      style: TextStyle(
-                                                        fontWeight: FontWeight.bold,
-                                                        fontSize: 20,
-                                                      ),
-                                                    ),
-                                                    SizedBox(
-                                                      height: 10,
-                                                    ),
-                                                    Text('Network error'),
-                                                    SizedBox(
-                                                      height: 100,
-                                                    ),
-                                                  ],
-                                                ));
+                                              children: <Widget>[
+                                                SizedBox(
+                                                  height: 100,
+                                                ),
+                                                Text(
+                                                  'Network error',
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 20,
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Text('Network error'),
+                                                SizedBox(
+                                                  height: 100,
+                                                ),
+                                              ],
+                                            ));
                                           } else {
                                             return Center(
                                                 child: Column(
-                                                  children: [
-SizedBox(height: 20,),
-                                                    Text(
-                                                      "No reviews yet.",
-                                                      style: TextStyle(
-                                                          fontSize: 15,
-                                                          fontWeight: FontWeight.bold,
-                                                          color: AppColors.black),
-                                                      textAlign: TextAlign.center,
-                                                    ),
-                                                    SizedBox(
-                                                      height: 30,
-                                                    ),
-                                                  ],
-                                                ));
+                                              children: [
+                                                SizedBox(
+                                                  height: 20,
+                                                ),
+                                                Text(
+                                                  "No reviews yet.",
+                                                  style: TextStyle(
+                                                      fontSize: 15,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: AppColors.black),
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                                SizedBox(
+                                                  height: 30,
+                                                ),
+                                              ],
+                                            ));
                                           }
                                         }),
                                   ),

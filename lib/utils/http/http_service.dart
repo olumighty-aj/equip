@@ -13,10 +13,42 @@ class HttpService {
   Future<dynamic> get(String path) async {
     final String url = baseUrl + path;
     print('Request::URL: $url');
-    final response =
-        await http.get(Uri.parse(url), headers: await getHeaders(),).timeout(const Duration(seconds: 40),);
+    final response = await http
+        .get(
+          Uri.parse(url),
+          headers: await getHeaders(),
+        )
+        .timeout(
+          const Duration(seconds: 40),
+        );
 
     return handleResponse(response);
+  }
+
+  Future<dynamic> getRequest(String path) async {
+    final String url = baseUrl + path;
+    print('Request::URL: $url');
+    return await http
+        .get(
+          Uri.parse(url),
+          headers: await getHeaders(),
+        )
+        .timeout(
+          const Duration(seconds: 40),
+        );
+  }
+
+  Future<dynamic> postRequest(String path) async {
+    final String url = baseUrl + path;
+    print('Request::URL: $url');
+    return await http
+        .post(
+          Uri.parse(url),
+          headers: await getHeaders(),
+        )
+        .timeout(
+          const Duration(seconds: 40),
+        );
   }
 
   Future<dynamic> post(String path, Map<dynamic, dynamic> body) async {
@@ -72,7 +104,7 @@ class HttpService {
   getHeaders() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     Object? accessToken = prefs.get('token');
-  // print('token $accessToken');
+    // print('token $accessToken');
     return <String, String>{
       'X-APP-KEY': 'IFUKpFVCunCU0fK0tQQqTsX',
       'Content-Type': 'application/json; charset=UTF-8',

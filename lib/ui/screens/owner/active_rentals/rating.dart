@@ -20,7 +20,7 @@ class Rating extends StatefulWidget {
 }
 
 class LoginState extends State<Rating> with TickerProviderStateMixin {
-  final NavigationService _navigationService = locator<NavigationService>();
+  final NavService _navigationService = locator<NavService>();
   final Authentication _authentication = locator<Authentication>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   double? rate = 1;
@@ -197,8 +197,7 @@ class LoginState extends State<Rating> with TickerProviderStateMixin {
                                   ),
                                   GeneralButton(
                                       onPressed: () {
-                                        _authentication.currentUser
-                                                    .userType ==
+                                        _authentication.currentUser.userType ==
                                                 "hirers"
                                             ? model.rate(widget.id,
                                                 commentController.text, rate!)

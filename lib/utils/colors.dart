@@ -1,4 +1,7 @@
+import 'package:equipro/utils/theme_manager.dart';
 import 'package:flutter/material.dart';
+
+import '../core/enums/theme_modes.dart';
 
 class AppColors {
   static const Color primaryColor = Color(0xFFE0A800);
@@ -37,4 +40,14 @@ class AppColors {
 
   //themeGreen
   static const Color themeGreen = Color(0xFF7DBD64);
+
+  ThemeModes _currentMode = ThemeModes.Light; // Default
+  bool _isInLightMode = true;
+  ThemeData _theme = ThemeData();
+
+  AppColors(ThemeNotifier themeNotifier) {
+    _currentMode = themeNotifier.themeMode;
+    _isInLightMode = themeNotifier.isInLightMode;
+    this._theme = themeNotifier.getTheme();
+  }
 }

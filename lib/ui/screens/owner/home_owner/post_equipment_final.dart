@@ -1,6 +1,7 @@
 import 'package:badges/badges.dart';
 import 'package:equipro/ui/screens/drawer.dart';
 import 'package:equipro/ui/screens/owner/home_owner/home_view_model.dart';
+import 'package:equipro/ui/widget/base_button.dart';
 import 'package:equipro/ui/widget/equip_tiles.dart';
 import 'package:equipro/ui/widget/general_button.dart';
 import 'package:equipro/utils/helpers.dart';
@@ -36,7 +37,7 @@ class PostEquipmentFinal extends StatefulWidget {
 
 class LoginState extends State<PostEquipmentFinal>
     with TickerProviderStateMixin {
-  final NavigationService _navigationService = locator<NavigationService>();
+  final NavService _navigationService = locator<NavService>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   String? selectedQuantity;
   String? selectedDate;
@@ -67,18 +68,17 @@ class LoginState extends State<PostEquipmentFinal>
 
   void _startUploading(HomeOwnerViewModel model) async {
     var response = await model.postEquip(
-      widget.images,
-      widget.equipName,
-      costController.text,
-      selectedPerNumber!,
-      selectedDate!,
-      selectedDateTo!,
-      selectedQuantity!,
-      widget.description,
-      pickLat.toString(),
-      pickLng.toString(),
-        deliveryController.text
-    );
+        widget.images,
+        widget.equipName,
+        costController.text,
+        selectedPerNumber!,
+        selectedDate!,
+        selectedDateTo!,
+        selectedQuantity!,
+        widget.description,
+        pickLat.toString(),
+        pickLng.toString(),
+        deliveryController.text);
     print(response);
     if (response == null) {
       print('error');
@@ -542,11 +542,11 @@ class LoginState extends State<PostEquipmentFinal>
                                   SizedBox(
                                     height: 20,
                                   ),
-                                  InkWell(onTap: (){
-                                    showPlacePicker();
-                                  },
-                                      child:
-                                      TextFormField(
+                                  InkWell(
+                                      onTap: () {
+                                        showPlacePicker();
+                                      },
+                                      child: TextFormField(
                                         enabled: false,
                                         controller: deliveryController,
                                         decoration: InputDecoration(
@@ -554,19 +554,22 @@ class LoginState extends State<PostEquipmentFinal>
                                           hintStyle: const TextStyle(
                                             color: Colors.grey,
                                           ),
-                                          focusedBorder: const OutlineInputBorder(
+                                          focusedBorder:
+                                              const OutlineInputBorder(
                                             borderRadius: BorderRadius.all(
                                                 Radius.circular(4)),
                                             borderSide: BorderSide(
                                                 width: 1, color: Colors.grey),
                                           ),
-                                          disabledBorder: const OutlineInputBorder(
+                                          disabledBorder:
+                                              const OutlineInputBorder(
                                             borderRadius: BorderRadius.all(
                                                 Radius.circular(4)),
                                             borderSide: BorderSide(
                                                 width: 1, color: Colors.grey),
                                           ),
-                                          enabledBorder: const OutlineInputBorder(
+                                          enabledBorder:
+                                              const OutlineInputBorder(
                                             borderRadius: BorderRadius.all(
                                                 Radius.circular(4)),
                                             borderSide: BorderSide(
@@ -574,14 +577,16 @@ class LoginState extends State<PostEquipmentFinal>
                                           ),
                                           border: OutlineInputBorder(
                                             borderRadius:
-                                            BorderRadius.circular(5.0),
+                                                BorderRadius.circular(5.0),
                                             borderSide: const BorderSide(),
                                           ),
                                         ),
-                                        keyboardType: TextInputType.emailAddress,
-                                        style: const TextStyle(color: Colors.black),
+                                        keyboardType:
+                                            TextInputType.emailAddress,
+                                        style: const TextStyle(
+                                            color: Colors.black),
                                         cursorColor: Colors.black,
-                                      )  ),
+                                      )),
                                   SizedBox(
                                     height: 30,
                                   ),
@@ -589,25 +594,21 @@ class LoginState extends State<PostEquipmentFinal>
                                       child: SlideTransition(
                                           position: _navAnimation!,
                                           //  textDirection: TextDirection.rtl,
-                                          child: Container(
-                                              width: 300,
-                                              child: GeneralButton(
-                                                  onPressed: () {
-                                                    if (costController
-                                                            .text.isNotEmpty &&
-                                                        selectedDate != null &&
-                                                        selectedDateTo !=
-                                                            null &&
-                                                        selectedPer != null &&
-                                                        selectedQuantity !=
-                                                            null) {
-                                                      _startUploading(model);
-                                                    } else {
-                                                      showErrorToast(
-                                                          "All fields are compulsory");
-                                                    }
-                                                  },
-                                                  buttonText: "Post"))))
+                                          child: BaseButton(
+                                              onPressed: () {
+                                                if (costController
+                                                        .text.isNotEmpty &&
+                                                    selectedDate != null &&
+                                                    selectedDateTo != null &&
+                                                    selectedPer != null &&
+                                                    selectedQuantity != null) {
+                                                  _startUploading(model);
+                                                } else {
+                                                  showErrorToast(
+                                                      "All fields are compulsory");
+                                                }
+                                              },
+                                              label: "Post")))
                                 ]))))),
             drawer: CollapsingNavigationDrawer(),
           );

@@ -8,19 +8,21 @@ import 'package:equipro/utils/helpers.dart';
 import 'package:equipro/utils/locator.dart';
 import 'package:equipro/utils/router/navigation_service.dart';
 import 'package:equipro/utils/router/route_names.dart';
+import 'package:stacked/stacked.dart';
 
-class DetailsViewModel extends BaseModel {
+class DetailsViewModel extends BaseViewModel {
   final Authentication _authentication = locator<Authentication>();
-  final NavigationService _navigationService = locator<NavigationService>();
+  final NavService _navigationService = locator<NavService>();
   final Activities _activities = locator<Activities>();
 
-  book(BookModel bookModel) async {
+  book(BookModel bookModel, context) async {
     setBusy(true);
-    var result = await _activities.book(bookModel.toJson());
+    var result = await runBusyFuture(_activities.book(bookModel.toJson()),
+        busyObject: "Book");
 
     if (result is ErrorModel) {
       setBusy(false);
-      showErrorToast(result.error);
+      showErrorToast(result.error, context: context);
       notifyListeners();
       return ErrorModel(result.error);
     }
@@ -30,6 +32,4 @@ class DetailsViewModel extends BaseModel {
       return SuccessModel(result.data);
     }
   }
-
-
 }

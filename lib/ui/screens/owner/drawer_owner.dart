@@ -1,13 +1,21 @@
+import 'package:equipro/app/app_setup.router.dart';
 import 'package:equipro/core/services/auth_service.dart';
+import 'package:equipro/ui/screens/chat/chat.dart';
+import 'package:equipro/ui/screens/owner/earnings/earning_page.dart';
 import 'package:equipro/ui/screens/owner/home_owner/home_view_model.dart';
+import 'package:equipro/ui/screens/profile/profile.dart';
+import 'package:equipro/ui/widget/base_button.dart';
 import 'package:equipro/ui/widget/general_button.dart';
 import 'package:equipro/utils/colors.dart';
-import 'package:equipro/utils/locator.dart';
+// import 'package:equipro/utils/locator.dart';
 import 'package:equipro/utils/router/navigation_service.dart';
 import 'package:equipro/utils/router/route_names.dart';
 import 'package:equipro/utils/tiny_db.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:stacked_services/stacked_services.dart';
+
+import '../../../app/app_setup.locator.dart';
 
 class OwnerDrawer extends StatefulWidget {
   const OwnerDrawer({Key? key}) : super(key: key);
@@ -25,10 +33,9 @@ class CollapsingNavigationDrawerState extends State<OwnerDrawer>
   bool isCollapsed = false;
   late AnimationController _animationController;
   late Animation<double> widthAnimation;
-  final NavigationService _navigationService = locator<NavigationService>();
+  final _navigationService = locator<NavigationService>();
   final Authentication _authentication = locator<Authentication>();
   HomeOwnerViewModel model = HomeOwnerViewModel();
-
 
   displayDialog(BuildContext context, HomeOwnerViewModel model) {
     return showDialog(
@@ -65,32 +72,28 @@ class CollapsingNavigationDrawerState extends State<OwnerDrawer>
                         buttonText: 'No',
                         onPressed: () {
                           Navigator.pop(context);
-                         // _navigationService.pushAndRemoveUntil(homeRoute);
+                          // _navigationService.pushAndRemoveUntil(homeRoute);
                         },
                       ),
-
                     ),
-
                     Container(
                       width: 100,
                       child: GeneralButton(
                         buttonText: 'Yes',
                         onPressed: () {
                           Navigator.pop(context);
-                          model.switchHirer();
+                          model.switchHirer(context);
                         },
                       ),
-
                     ),
-
                   ],
                 )
-
               ],
             )),
       ),
     );
   }
+
   @override
   void initState() {
     super.initState();
@@ -151,7 +154,10 @@ class CollapsingNavigationDrawerState extends State<OwnerDrawer>
                           // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             CachedNetworkImage(
-                              imageUrl:  _authentication.currentUser.hirersPath!= null?  _authentication.currentUser.hirersPath!:"",
+                              imageUrl:
+                                  _authentication.currentUser.hirersPath != null
+                                      ? _authentication.currentUser.hirersPath!
+                                      : "",
                               imageBuilder: (context, imageProvider) =>
                                   Container(
                                 width: 70.0,
@@ -178,22 +184,19 @@ class CollapsingNavigationDrawerState extends State<OwnerDrawer>
                             const SizedBox(
                               width: 10,
                             ),
-
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-
                                 Text(
-                                _authentication.currentUser.fullname!,
+                                  _authentication.currentUser.fullname!,
                                   //  _authentication.currentUser.firstName! + " " + _authentication.currentUser.lastName!,
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 15,
                                   ),
                                 ),
-
                               ],
-                             ),
+                            ),
                           ]),
                     ],
                   )),
@@ -240,7 +243,8 @@ class CollapsingNavigationDrawerState extends State<OwnerDrawer>
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
                 ),
                 onTap: () {
-                  _navigationService.navigateTo(EarningPageRoute);
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => EarningPage()));
                 },
               ),
               ListTile(
@@ -251,7 +255,8 @@ class CollapsingNavigationDrawerState extends State<OwnerDrawer>
                   ),
                 ),
                 onTap: () {
-                   _navigationService.navigateTo(chatRoute);
+                  Navigator.push(
+                      context, MaterialPageRoute(builder: (context) => Chat()));
                 },
               ),
               ListTile(
@@ -261,9 +266,8 @@ class CollapsingNavigationDrawerState extends State<OwnerDrawer>
                     fontSize: 16,
                   ),
                 ),
-                onTap: () {
-                   _navigationService.navigateTo(ProfileRoute);
-                },
+                onTap: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => Profile())),
               ),
               // ListTile(
               //   title: const Text(
@@ -285,11 +289,10 @@ class CollapsingNavigationDrawerState extends State<OwnerDrawer>
                 height: 30,
               ),
 
-              GeneralButton(
-                buttonText: "Switch to Equipment Hirer",
+              BaseButton(
+                label: "Switch to Equipment Hirer",
                 onPressed: () {
-                  displayDialog( context,  model);
-
+                  displayDialog(context, model);
                 },
               ),
               SizedBox(
@@ -312,7 +315,7 @@ class CollapsingNavigationDrawerState extends State<OwnerDrawer>
                 ),
                 onTap: () {
                   TinyDb.removeAll();
-                  _navigationService.navigateTo(loginRoute);
+                  _navigationService.clearStackAndShow(Routes.login);
                 },
               ),
               const SizedBox(

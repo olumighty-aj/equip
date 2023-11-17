@@ -1,3 +1,4 @@
+import 'package:equipro/app/app_setup.router.dart';
 import 'package:equipro/core/model/LoginPayload.dart';
 import 'package:equipro/core/model/VerifyForgotPassword.dart';
 import 'package:equipro/core/model/error_model.dart';
@@ -5,70 +6,75 @@ import 'package:equipro/core/model/success_model.dart';
 import 'package:equipro/core/services/auth_service.dart';
 import 'package:equipro/utils/base_model.dart';
 import 'package:equipro/utils/helpers.dart';
-import 'package:equipro/utils/locator.dart';
-import 'package:equipro/utils/router/navigation_service.dart';
+// import 'package:equipro/utils/locator.dart';
+// import 'package:equipro/utils/router/navigation_service.dart';
 import 'package:equipro/utils/router/route_names.dart';
+import 'package:stacked/stacked.dart';
+import 'package:stacked_services/stacked_services.dart';
 
-class LoginViewModel extends BaseModel {
+import '../../../app/app_setup.locator.dart';
+
+class LoginViewModel extends BaseViewModel {
   final Authentication _authentication = locator<Authentication>();
-  final NavigationService _navigationService = locator<NavigationService>();
+  final _navigationService = locator<NavigationService>();
 
-  signIn(LoginPayload signInBody) async {
+  signIn(LoginPayload signInBody, context) async {
     // print('dhdhd');
     setBusy(true);
     var result = await _authentication.login(signInBody.toJson());
 
     if (result is ErrorModel) {
       setBusy(false);
-      showErrorToast(result.error);
+      showErrorToast(result.error, context: context);
       notifyListeners();
       return ErrorModel(result.error);
     }
     if (result is SuccessModel) {
       setBusy(false);
-      _navigationService.pushAndRemoveUntil(homeRoute);
+      _navigationService.clearStackAndShow(Routes.home);
       notifyListeners();
       return SuccessModel(result.data);
     }
   }
 
-  forgotPassword(String email) async {
+  forgotPassword(String email, context) async {
     // print('dhdhd');
     setBusy(true);
-    var result = await _authentication.forgotPassword({
-      "email":email
-    });
+    var result = await _authentication.forgotPassword({"email": email});
 
     if (result is ErrorModel) {
       setBusy(false);
-      showErrorToast(result.error);
+      showErrorToast(result.error, context: context);
       notifyListeners();
-      return ErrorModel(result.error);
+      return ErrorModel(
+        result.error,
+      );
     }
     if (result is SuccessModel) {
       setBusy(false);
-      _navigationService.navigateTo(VerifyForgotPasswordPageRoute,arguments: email);
+      _navigationService.navigateTo(VerifyForgotPasswordPageRoute,
+          arguments: email);
       notifyListeners();
       return SuccessModel(result.data);
     }
   }
 
-
-
-  verifyForgotPassword(VerifyForgotPassword verifyForgotPassword) async {
+  verifyForgotPassword(
+      VerifyForgotPassword verifyForgotPassword, context) async {
     // print('dhdhd');
     setBusy(true);
-    var result = await _authentication.verifyForgotPassword(verifyForgotPassword.toJson());
+    var result = await _authentication
+        .verifyForgotPassword(verifyForgotPassword.toJson());
 
     if (result is ErrorModel) {
       setBusy(false);
-      showErrorToast(result.error);
+      showErrorToast(result.error, context: context);
       notifyListeners();
       return ErrorModel(result.error);
     }
     if (result is SuccessModel) {
       setBusy(false);
-      _navigationService.pushAndRemoveUntil(loginRoute);
+      _navigationService.clearStackAndShow(Routes.login);
       notifyListeners();
       return SuccessModel(result.data);
     }

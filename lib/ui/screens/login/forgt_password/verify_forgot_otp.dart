@@ -1,3 +1,4 @@
+import 'package:equipro/core/model/VerifyForgotPassword.dart';
 import 'package:equipro/utils/screensize.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
@@ -5,31 +6,27 @@ import 'package:equipro/ui/screens/login/login_view_model.dart';
 import 'package:equipro/ui/widget/general_button.dart';
 import 'package:equipro/utils/colors.dart';
 import 'package:equipro/utils/helpers.dart';
-import 'package:equipro/utils/notification_helper.dart';
 
-class ForgotPasswordPage extends StatefulWidget {
-  const ForgotPasswordPage({Key? key}) : super(key: key);
+import '../../../widget/base_button.dart';
+
+class VerifyForgotPasswordPage extends StatefulWidget {
+  final String email;
+  const VerifyForgotPasswordPage({Key? key, required this.email})
+      : super(key: key);
 
   @override
-  LoginState createState() => LoginState();
+  VerifyForgotPasswordPageState createState() =>
+      VerifyForgotPasswordPageState();
 }
 
-class LoginState extends State<ForgotPasswordPage> {
-  TextEditingController emailController = TextEditingController();
+class VerifyForgotPasswordPageState extends State<VerifyForgotPasswordPage> {
+  TextEditingController otpController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late bool passwordVisible;
-  late String fcmToken;
-
-  late bool active = false;
-
-  getFCMToken() async {
-    fcmToken = await NotificationHelper.getFcmToken();
-  }
-
   @override
   void initState() {
     super.initState();
-    getFCMToken();
     passwordVisible = true;
   }
 
@@ -88,7 +85,7 @@ class LoginState extends State<ForgotPasswordPage> {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: <Widget>[
                                     const Text(
-                                      'Forgot ',
+                                      'Reset ',
                                       style: TextStyle(
                                           fontSize: 24,
                                           color: AppColors.black,
@@ -106,7 +103,7 @@ class LoginState extends State<ForgotPasswordPage> {
                                 height: 20,
                               ),
                               Text(
-                                "Type your email address to send instructions to reset your password to your inbox",
+                                "Type the otp you received on ${widget.email} and your new password",
                                 style: TextStyle(
                                     color: Colors.black, fontSize: 14),
                               ),
@@ -123,22 +120,21 @@ class LoginState extends State<ForgotPasswordPage> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            const SizedBox(
-                                              height: 50,
-                                            ),
-                                            Text(
-                                              "Email Address",
+                                            const Text(
+                                              'Please enter your OTP',
                                               style: TextStyle(
-                                                  color: Colors.grey,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 14),
+                                                  fontSize: 15,
+                                                  color: AppColors.white),
+                                            ),
+                                            const SizedBox(
+                                              height: 5,
                                             ),
                                             TextFormField(
                                               validator: Validators().isEmpty,
-                                              controller: emailController,
+                                              controller: otpController,
                                               // maxLength: 11,
                                               decoration: InputDecoration(
-                                                hintText: 'deo@gmail.com',
+                                                hintText: '',
                                                 hintStyle: const TextStyle(
                                                     color: Colors.grey),
                                                 labelStyle: const TextStyle(
@@ -148,7 +144,7 @@ class LoginState extends State<ForgotPasswordPage> {
                                                 setState(() {});
                                               },
                                               keyboardType:
-                                                  TextInputType.emailAddress,
+                                                  TextInputType.number,
                                               style: const TextStyle(
                                                   color: Colors.black),
                                               cursorColor: Colors.black,
@@ -156,32 +152,75 @@ class LoginState extends State<ForgotPasswordPage> {
                                             const SizedBox(
                                               height: 30,
                                             ),
+                                            const Text(
+                                              'Please enter your new password',
+                                              style: TextStyle(
+                                                  fontSize: 15,
+                                                  color: AppColors.white),
+                                            ),
+                                            const SizedBox(
+                                              height: 5,
+                                            ),
+                                            TextFormField(
+                                              validator: Validators().isEmpty,
+                                              controller: passwordController,
+                                              decoration: InputDecoration(
+                                                suffixIcon: IconButton(
+                                                  icon: Icon(
+                                                    // Based on passwordVisible state choose the icon
+                                                    passwordVisible
+                                                        ? Icons.visibility
+                                                        : Icons.visibility_off,
+                                                    color: Colors.black,
+                                                  ),
+                                                  onPressed: () {
+                                                    setState(() {
+                                                      passwordVisible =
+                                                          !passwordVisible;
+                                                    });
+                                                  },
+                                                ),
+                                                hintText: '******',
+                                                hintStyle: const TextStyle(
+                                                  color: Colors.grey,
+                                                ),
+                                              ),
+                                              onChanged: (v) {
+                                                setState(() {});
+                                              },
+                                              obscureText: passwordVisible,
+                                              keyboardType:
+                                                  TextInputType.visiblePassword,
+                                              style: const TextStyle(
+                                                  color: Colors.black),
+                                              cursorColor: Colors.black,
+                                            ),
                                           ]))),
                               const SizedBox(
-                                height: 30,
+                                height: 20,
                               ),
                               Container(
                                   padding: const EdgeInsets.all(20),
-                                  child: GeneralButton(
+                                  child: BaseButton(
                                     onPressed: () {
                                       if (_formKey.currentState!.validate()) {
-                                        model.forgotPassword(
-                                            emailController.text);
+                                        model.verifyForgotPassword(
+                                            VerifyForgotPassword(
+                                                password:
+                                                    passwordController.text,
+                                                otp: otpController.text,
+                                                email: widget.email),
+                                            context);
                                       }
                                     },
-                                    buttonText: 'Reset Password',
-                                    splashColor: AppColors.primaryColor,
-                                    buttonTextColor: AppColors.white,
+                                    label: 'Verify',
                                   )),
+                              const SizedBox(
+                                height: 20,
+                              ),
                               const SizedBox(
                                 height: 30,
                               ),
-                              Center(
-                                  child: Text("Log in",
-                                      style: TextStyle(
-                                          color: AppColors.primaryColor,
-                                          decoration:
-                                              TextDecoration.underline))),
                             ],
                           ))),
                     ],

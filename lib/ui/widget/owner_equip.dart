@@ -8,28 +8,32 @@ import 'package:equipro/utils/router/route_names.dart';
 import 'package:flutter/material.dart';
 import 'package:equipro/utils/colors.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:gap/gap.dart';
+
+import '../screens/hirer/book/equip_details.dart';
+import '../screens/owner/home_owner/equip_owner_details.dart';
 
 class OwnerEquipTiles extends StatelessWidget {
   final EquipmentModel model;
   OwnerEquipTiles({
     required this.model,
   });
-  final NavigationService _navigationService = locator<NavigationService>();
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
         onTap: () {
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(builder: (context) => EquipDetails()),
-          // );
-          _navigationService.navigateTo(EquipOwnerDetailsRoute,
-              arguments: model);
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => EquipOwnerDetails(
+                      model: model,
+                    )),
+          );
         },
         child: Container(
-          margin: EdgeInsets.only(bottom: 20),
-          padding: EdgeInsets.all(10),
-          height: 180,
+          margin: EdgeInsets.only(bottom: 5),
+          padding: EdgeInsets.all(12),
+          // height: 180,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
             color: AppColors.white,
@@ -43,81 +47,71 @@ class OwnerEquipTiles extends StatelessWidget {
             ],
           ),
           child: Row(
-            //  mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
                   height: 90,
                   width: 90,
-                  child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10.0),
-                      child: Hero(
-                          tag: model.id!,
-                          child: CachedNetworkImage(
-                            imageUrl: model.equipImages!.isNotEmpty
-                                ? model.equipImages!.first.equipImagesPath!
-                                : "",
-                            placeholder: (context, url) =>
-                                CircularProgressIndicator(),
-                            errorWidget: (context, url, error) => ClipRRect(
-                              borderRadius: BorderRadius.circular(8.0),
-                              child: Image.asset(
-                                "assets/images/logo.png",
-                                scale: 2,
-                              ),
-                            ),
-                          )))),
+                  child: Hero(
+                      tag: model.id!,
+                      child: CachedNetworkImage(
+                        imageUrl: model.equipImages!.isNotEmpty
+                            ? model.equipImages!.first.equipImagesPath!
+                            : "",
+                        placeholder: (context, url) => Center(
+                            child: SizedBox(
+                                height: 40,
+                                width: 40,
+                                child: CircularProgressIndicator(
+                                  color: AppColors.primaryColor,
+                                ))),
+                        errorWidget: (context, url, error) => ClipRRect(
+                          borderRadius: BorderRadius.circular(8.0),
+                          child: Image.asset(
+                            "assets/images/logo.png",
+                            scale: 2,
+                          ),
+                        ),
+                      ))),
               SizedBox(
-                width: 30,
+                width: 11,
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    model.equipName!,
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        model.costOfHire!,
-                        style: TextStyle(
-                            fontWeight: FontWeight.w500, fontSize: 14),
-                      ),
-                      Text(
-                        " per ${model.costOfHireInterval == "1" ? "Day" : model.costOfHireInterval == "7" ? "Week" : "Month"}",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w500, fontSize: 14),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Row(
-                    children: [
-                      SvgPicture.asset(
-                        "assets/images/location.svg",
-                        width: 20,
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                        Container(
-                          width: 200,
-                          child: Text(
-                            model.address!,
-                            style: TextStyle(
-                                fontWeight: FontWeight.w500, fontSize: 12),
-                          )),
-                    ],
-                  ),
-                ],
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      model.equipName!,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyLarge
+                          ?.copyWith(fontWeight: FontWeight.w600),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      children: [
+                        Text("NGN${model.costOfHire!}",
+                            style: Theme.of(context).textTheme.bodySmall),
+                        Text(
+                            " per ${model.costOfHireInterval == "1" ? "Day" : model.costOfHireInterval == "7" ? "Week" : "Month"}",
+                            style: Theme.of(context).textTheme.bodySmall),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Text(
+                      "${model.equipRequest?.length.toString() ?? " "} booking requests received",
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodySmall
+                          ?.copyWith(fontSize: 10, color: Colors.grey.shade500),
+                    ),
+                  ],
+                ),
               ),
-              Text("")
             ],
           ),
         ));

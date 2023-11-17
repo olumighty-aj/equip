@@ -2,6 +2,7 @@ import 'package:equipro/core/model/EquipmentModel.dart';
 import 'package:equipro/core/model/enums.dart';
 import 'package:equipro/ui/screens/drawer.dart';
 import 'package:equipro/ui/screens/hirer/home/home_view_model.dart';
+import 'package:equipro/ui/screens/notification/notification.dart';
 import 'package:equipro/ui/widget/equip_tiles.dart';
 import 'package:equipro/ui/widget/loader_widget.dart';
 import 'package:equipro/utils/locator.dart';
@@ -26,7 +27,7 @@ class Home extends StatefulWidget {
 
 class LoginState extends State<Home> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  final NavigationService _navigationService = locator<NavigationService>();
+  final NavService _navigationService = locator<NavService>();
   String searchWord = "";
 
   LocationData? locationData;
@@ -72,7 +73,7 @@ class LoginState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<HomeViewModel>.reactive(
-        onModelReady: (v) async {
+        onViewModelReady: (v) async {
           getUserLocation();
         },
         viewModelBuilder: () => HomeViewModel(),
@@ -83,6 +84,19 @@ class LoginState extends State<Home> {
           // }
           return Scaffold(
             key: _scaffoldKey,
+            appBar: AppBar(
+              leading: GestureDetector(
+                onTap: () => _scaffoldKey.currentState!.openDrawer(),
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: SvgPicture.asset(
+                    "assets/images/hamburger.svg",
+                    height: 50,
+                    width: 50,
+                  ),
+                ),
+              ),
+            ),
             body: SingleChildScrollView(
                 child: Padding(
                     padding: EdgeInsets.all(20),
@@ -102,34 +116,34 @@ class LoginState extends State<Home> {
                                           child: widget),
                                     ),
                                 children: [
-                                  const SizedBox(
-                                    height: 60,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      InkWell(
-                                        onTap: () {
-                                          _scaffoldKey.currentState!
-                                              .openDrawer();
-                                        },
-                                        child: SvgPicture.asset(
-                                          "assets/images/hamburger.svg",
-                                        ),
-                                      ),
-                                      const Text(
-                                        '',
-                                        style: TextStyle(
-                                            fontSize: 20,
-                                            color: AppColors.black,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 30,
-                                  ),
+                                  // const SizedBox(
+                                  //   height: 60,
+                                  // ),
+                                  // Row(
+                                  //   mainAxisAlignment:
+                                  //       MainAxisAlignment.spaceBetween,
+                                  //   children: [
+                                  //     InkWell(
+                                  //       onTap: () {
+                                  //         _scaffoldKey.currentState!
+                                  //             .openDrawer();
+                                  //       },
+                                  //       child: SvgPicture.asset(
+                                  //         "assets/images/hamburger.svg",
+                                  //       ),
+                                  //     ),
+                                  //     const Text(
+                                  //       '',
+                                  //       style: TextStyle(
+                                  //           fontSize: 20,
+                                  //           color: AppColors.black,
+                                  //           fontWeight: FontWeight.bold),
+                                  //     ),
+                                  //   ],
+                                  // ),
+                                  // SizedBox(
+                                  //   height: 30,
+                                  // ),
                                   Row(
                                     children: [
                                       Text(
@@ -210,10 +224,11 @@ class LoginState extends State<Home> {
                                           width: 10,
                                         ),
                                         InkWell(
-                                            onTap: () {
-                                              _navigationService.navigateTo(
-                                                  NotificationRoute);
-                                            },
+                                            onTap: () => Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        NotificationPage())),
                                             child: Badge(
                                               label: Text(
                                                 "0",
@@ -247,34 +262,26 @@ class LoginState extends State<Home> {
                                                   HomeViewModel(),
                                               onModelReady: (vm) {
                                                 vm.getEquipment(
-                                                    locationData !=
-                                                            null
+                                                    locationData != null
                                                         ? locationData!.latitude
                                                             .toString()
-                                                        :
-
-                                                    "6.4478",
-                                                    locationData !=
-                                                            null
+                                                        : "6.4478",
+                                                    locationData != null
                                                         ? locationData!
                                                             .longitude
                                                             .toString()
-                                                        :
-                                                    "3.4723"
-
-                                                );
+                                                        : "3.4723");
                                                 vm.controller =
                                                     new ScrollController()
                                                       ..addListener(() {
                                                         vm.getEquipmentMore(
-                                                        //  "6.4478", "3.4723"
+                                                            //  "6.4478", "3.4723"
                                                             locationData!
                                                                 .latitude
                                                                 .toString(),
                                                             locationData!
                                                                 .longitude
-                                                                .toString()
-                                                        );
+                                                                .toString());
                                                       });
                                               },
                                               builder: (context, v, child) {
@@ -333,17 +340,9 @@ class LoginState extends State<Home> {
                                                                 children: v
                                                                     .packageList
                                                                     .map((feed) =>
-                                                                        Padding(
-                                                                            padding:
-                                                                                EdgeInsets.all(10),
-                                                                            child: InkWell(
-                                                                              onTap: () {
-                                                                                // _navigationService.navigateTo(
-                                                                                //     OrderInfoRoute,
-                                                                                //     arguments: feed);
-                                                                              },
-                                                                              child: EquipTiles(model: feed),
-                                                                            )))
+                                                                        EquipTiles(
+                                                                            model:
+                                                                                feed))
                                                                     .toList()),
                                                             SizedBox(
                                                                 height: 20),
@@ -498,23 +497,12 @@ class LoginState extends State<Home> {
                                                     .data!.isNotEmpty) {
                                                   return ListView(
                                                       children: snapshot.data!
-                                                          .map((feed) =>
-                                                              Padding(
-                                                                  padding:
-                                                                      EdgeInsets
-                                                                          .all(
-                                                                              10),
-                                                                  child:
-                                                                      InkWell(
-                                                                    onTap: () {
-                                                                      // _navigationService.navigateTo(
-                                                                      //     OrderInfoRoute,
-                                                                      //     arguments: feed);
-                                                                    },
-                                                                    child: EquipTiles(
-                                                                        model:
-                                                                            feed),
-                                                                  )))
+                                                          .map((feed) => Padding(
+                                                              padding:
+                                                                  EdgeInsets
+                                                                      .all(10),
+                                                              child: EquipTiles(
+                                                                  model: feed)))
                                                           .toList());
                                                 } else if (snapshot.hasError) {
                                                   return Center(

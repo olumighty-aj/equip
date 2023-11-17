@@ -14,17 +14,15 @@ import 'package:flutter_paystack/flutter_paystack.dart';
 
 class EarningsViewModel extends BaseModel {
   final Authentication _authentication = locator<Authentication>();
-  final NavigationService _navigationService = locator<NavigationService>();
+  final NavService _navigationService = locator<NavService>();
   final Activities _activities = locator<Activities>();
   final PaymentService _paymentService = locator<PaymentService>();
 
-
-
-
-
-  withdraw(String amount,) async {
+  withdraw(
+    String amount,
+  ) async {
     setBusy(true);
-    var result = await _activities.withdraw( amount);
+    var result = await _activities.withdraw(amount);
 
     if (result is ErrorModel) {
       setBusy(false);
@@ -34,7 +32,7 @@ class EarningsViewModel extends BaseModel {
     }
     if (result is SuccessModel) {
       setBusy(false);
-_navigationService.pop();
+      _navigationService.pop();
       notifyListeners();
       return SuccessModel(result.data);
     }

@@ -1,6 +1,8 @@
+import 'package:equipro/app/app.dart';
 import 'package:equipro/ui/screens/notification/notification.dart';
 import 'package:equipro/utils/locator.dart';
 import 'package:equipro/utils/colors.dart';
+import 'package:equipro/utils/theme_manager.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter/material.dart';
@@ -12,17 +14,15 @@ import 'package:equipro/utils/progressBarManager/dialog_service.dart';
 import 'package:equipro/utils/router/navigation_service.dart';
 import 'package:equipro/utils/router/router.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:stacked_services/stacked_services.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
+import 'app/app_setup.router.dart';
+
 late BuildContext contextB;
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  setupLocator();
-  Stripe.publishableKey =
-    'pk_live_51NEXPyGOYHh4f2GJ0KXCJJQQbWJRfXN1hCQzdrNuAzXOgFZ3bzMzYdMHB8qO8r2ekXUgFy18QlSzNiJ3bLdJxRkW00xzECKDuM';
-  Stripe.merchantIdentifier = 'any string works';
-  await Stripe.instance.applySettings();
+  await App.initialize();
   runApp(const MyApp());
   await Firebase.initializeApp();
 }
@@ -35,24 +35,20 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
-
   late FirebaseMessaging messaging;
 
   late AndroidNotificationChannel channel;
 
   displayDialog(String title, String body) {
-    return
-    
-      showTopSnackBar(
-        contextB,
-        CustomSnackBar.info(
-          backgroundColor: AppColors.primaryColor,
-          message:
-          "$title\n$body",
-        ),
-      );
+    return showTopSnackBar(
+      contextB,
+      CustomSnackBar.info(
+        backgroundColor: AppColors.primaryColor,
+        message: "$title\n$body",
+      ),
+    );
   }
+
   void selectNotification(String? payload) async {
     if (payload != null) {
       debugPrint('notification payload: $payload');
@@ -67,21 +63,20 @@ class _MyAppState extends State<MyApp> {
   late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
   void registerNotification() async {
-
     FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
+        FlutterLocalNotificationsPlugin();
 // initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
     const AndroidInitializationSettings initializationSettingsAndroid =
-    AndroidInitializationSettings('app_icon');
+        AndroidInitializationSettings('app_icon');
     final IOSInitializationSettings initializationSettingsIOS =
-    IOSInitializationSettings();
+        IOSInitializationSettings();
     final MacOSInitializationSettings initializationSettingsMacOS =
-    MacOSInitializationSettings();
+        MacOSInitializationSettings();
     final InitializationSettings initializationSettings =
-    InitializationSettings(
-        android: initializationSettingsAndroid,
-        iOS: initializationSettingsIOS,
-        macOS: initializationSettingsMacOS);
+        InitializationSettings(
+            android: initializationSettingsAndroid,
+            iOS: initializationSettingsIOS,
+            macOS: initializationSettingsMacOS);
     await flutterLocalNotificationsPlugin.initialize(initializationSettings,
         onSelectNotification: selectNotification);
     // var initializationSettings = InitializationSettings();
@@ -139,25 +134,22 @@ class _MyAppState extends State<MyApp> {
     //     ChangeNotifierProvider(create: (context) => AppStateProvider()),
     // ],
     // child:
-    return
-    MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Equipro',
-      builder: (context, child) => Navigator(
-        key: locator<ProgressService>().progressNavigationKey,
-        onGenerateRoute: (settings) => MaterialPageRoute(builder: (context) {
-          return ProgressManager(child: child!);
-        }),
-      ),
-      theme: ThemeData(
-backgroundColor: AppColors.backgroundColor,
-        textTheme: GoogleFonts.mulishTextTheme(
-          Theme.of(context).textTheme,
-        ),
-      ),
-      navigatorKey: locator<NavigationService>().navigationKey,
-      home: const AnimatedSplashScreen(),
-      onGenerateRoute: generateRoute,
+      title: 'Equippro',
+      // builder: (context, child) => Navigator(
+      //   key: locator<ProgressService>().progressNavigationKey,
+      //   onGenerateRoute: (settings) => MaterialPageRoute(builder: (context) {
+      //     return ProgressManager(child: child!);
+      //   }),
+      // ),
+      navigatorKey: StackedService.navigatorKey,
+      initialRoute: Routes.onboardingScreen,
+      onGenerateRoute: (settings) {
+        print("Route: ${settings.name}");
+        return StackedRouter().onGenerateRoute(settings);
+      },
+      theme: ThemeNotifier().lightTheme,
     );
   }
 }

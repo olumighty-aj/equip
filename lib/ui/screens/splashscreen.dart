@@ -18,7 +18,7 @@ class AnimatedSplashScreen extends StatefulWidget {
 class SplashScreenState extends State<AnimatedSplashScreen>
     with SingleTickerProviderStateMixin {
   var _visible = true;
-  final NavigationService _navigationService = locator<NavigationService>();
+  final NavService _navigationService = locator<NavService>();
   late AnimationController animationController;
   late Animation<double> animation;
   final Authentication _authentication = locator<Authentication>();
@@ -35,7 +35,7 @@ class SplashScreenState extends State<AnimatedSplashScreen>
       _authentication.alreadyLoggedIn();
     } else {
       _navigationService.navigateReplacementTo(OnBoardingScreenRoute);
-     // _navigationService.navigateReplacementTo(loginRoute);
+      // _navigationService.navigateReplacementTo(loginRoute);
     }
   }
 
@@ -59,31 +59,30 @@ class SplashScreenState extends State<AnimatedSplashScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
-        body: Stack(
-            fit: StackFit.expand,
-            children: <Widget>[
-              // Container(
-              //     width: Responsive.width(context),
-              //     height: Responsive.height(context)/1.1,
-              //     child: Image.asset(
-              //       "assets/images/background.png",
-              //       // color: AppColors.white,
-              //     )),
-              Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-
-                    Container(
-                        width: animation.value * 200,
-                        child: Image.asset(
-                          "assets/images/logo.png",
-                          //color: AppColors.white,
-                        )),
-                    // Text("equipro",style: TextStyle(color: AppColors.primaryColor,fontWeight: FontWeight.bold, fontSize: 50),)
-                  ]),
-            ],
-          ),
-        );
+      backgroundColor: Colors.white,
+      body: Stack(
+        fit: StackFit.expand,
+        children: <Widget>[
+          // Container(
+          //     width: Responsive.width(context),
+          //     height: Responsive.height(context)/1.1,
+          //     child: Image.asset(
+          //       "assets/images/background.png",
+          //       // color: AppColors.white,
+          //     )),
+          Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                    width: animation.value * 200,
+                    child: Image.asset(
+                      "assets/images/logo.png",
+                      //color: AppColors.white,
+                    )),
+                // Text("equipro",style: TextStyle(color: AppColors.primaryColor,fontWeight: FontWeight.bold, fontSize: 50),)
+              ]),
+        ],
+      ),
+    );
   }
 }

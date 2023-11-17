@@ -22,7 +22,7 @@ class NotificationPage extends StatefulWidget {
 }
 
 class LoginState extends State<NotificationPage> {
-  final NavigationService _navigationService = locator<NavigationService>();
+  final NavService _navigationService = locator<NavService>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   late String fcmToken;
   Future<List<NotificationModel>>? myFuture;
@@ -36,269 +36,252 @@ class LoginState extends State<NotificationPage> {
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<HomeOwnerViewModel>.reactive(
-      onModelReady
-        : (model) {
+        onModelReady: (model) {
           myFuture = model.getNotification();
         },
         viewModelBuilder: () => HomeOwnerViewModel(),
         builder: (context, model, child) {
           return WillPopScope(
               onWillPop: () async {
-               // _navigationService.pushAndRemoveUntil();
+                // _navigationService.pushAndRemoveUntil();
                 return true;
               },
-              child:
-           Scaffold(
-              key: _scaffoldKey,
-              body: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: AnimationLimiter(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: AnimationConfiguration.toStaggeredList(
-                        duration: const Duration(milliseconds: 200),
-                        childAnimationBuilder: (widget) => SlideAnimation(
-                          horizontalOffset:
-                              -MediaQuery.of(context).size.width / 4,
-                          child: FadeInAnimation(
-                              curve: Curves.fastOutSlowIn, child: widget),
-                        ),
-                        children: [
-                          const SizedBox(
-                            height: 60,
-                          ),
-                          Container(
-                              height: 40,
-                              width: 40,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12),
-                                color: AppColors.white,
-                              ),
-                              child: InkWell(
-                                  onTap: () {
-                                    Navigator.pop(context);
-                                  },
-                                  child: const Icon(
-                                    Icons.clear,
-                                    color: AppColors.primaryColor,
-                                  ))),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              child: Scaffold(
+                  key: _scaffoldKey,
+                  body: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: AnimationLimiter(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: AnimationConfiguration.toStaggeredList(
+                            duration: const Duration(milliseconds: 200),
+                            childAnimationBuilder: (widget) => SlideAnimation(
+                              horizontalOffset:
+                                  -MediaQuery.of(context).size.width / 4,
+                              child: FadeInAnimation(
+                                  curve: Curves.fastOutSlowIn, child: widget),
+                            ),
                             children: [
-                              const Text(
-                                'Notification',
-                                style: TextStyle(
-                                    fontSize: 20,
-                                    color: AppColors.black,
-                                    fontWeight: FontWeight.bold),
+                              const SizedBox(
+                                height: 60,
                               ),
-                              Text("")
-                              // SvgPicture.asset(
-                              //   "assets/images/sort.svg",
-                              //   width: 23.0,
-                              // ),
+                              Container(
+                                  height: 40,
+                                  width: 40,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12),
+                                    color: AppColors.white,
+                                  ),
+                                  child: InkWell(
+                                      onTap: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: const Icon(
+                                        Icons.clear,
+                                        color: AppColors.primaryColor,
+                                      ))),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Text(
+                                    'Notification',
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        color: AppColors.black,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  Text("")
+                                  // SvgPicture.asset(
+                                  //   "assets/images/sort.svg",
+                                  //   width: 23.0,
+                                  // ),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              Container(
+                                height: 60.0,
+                                child: TextFormField(
+                                  textAlign: TextAlign.start,
+                                  decoration: InputDecoration(
+                                    prefixIcon: Icon(
+                                      Icons.search_outlined,
+                                      color: Colors.grey,
+                                      size: 30,
+                                    ),
+                                    contentPadding: EdgeInsets.symmetric(
+                                        vertical: 2.0, horizontal: 20.0),
+                                    hintText: "Search",
+                                    //hintText: tr.text( "Upcoming feature"),
+                                    hintStyle: TextStyle(
+                                      color: Color(0XFF818181),
+                                      fontSize: 15,
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(30.0),
+                                      ),
+                                      borderSide:
+                                          BorderSide(color: Colors.grey),
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(30.0),
+                                      ),
+                                      borderSide:
+                                          BorderSide(color: Colors.grey),
+                                    ),
+                                  ),
+                                  onChanged: (value) {
+                                    setState(() {
+                                      // searchWord = value;
+                                      // print(searchWord);
+                                    });
+                                  },
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              FutureBuilder<List<NotificationModel>>(
+                                  future: myFuture,
+                                  builder: (context, snapshot) {
+                                    if (!snapshot.hasData) {
+                                      return Container(
+                                          height:
+                                              Responsive.height(context) / 2,
+                                          padding: const EdgeInsets.only(
+                                              left: 20.0, right: 20),
+                                          child: Center(
+                                            child: Shimmer.fromColors(
+                                                direction: ShimmerDirection.ltr,
+                                                period:
+                                                    const Duration(seconds: 2),
+                                                baseColor: AppColors.grey
+                                                    .withOpacity(0.5),
+                                                highlightColor: Colors.white,
+                                                child: ListView(
+                                                  scrollDirection:
+                                                      Axis.vertical,
+                                                  // shrinkWrap: true,
+                                                  children: [0, 1, 2, 3]
+                                                      .map((_) => Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(8.0),
+                                                            child: Row(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
+                                                              children: [
+                                                                const Padding(
+                                                                  padding: EdgeInsets
+                                                                      .symmetric(
+                                                                          horizontal:
+                                                                              8.0),
+                                                                ),
+                                                                Expanded(
+                                                                  child: Column(
+                                                                    crossAxisAlignment:
+                                                                        CrossAxisAlignment
+                                                                            .start,
+                                                                    children: [
+                                                                      Container(
+                                                                        width: double
+                                                                            .infinity,
+                                                                        height:
+                                                                            8.0,
+                                                                        color: Colors
+                                                                            .white,
+                                                                      ),
+                                                                      const Padding(
+                                                                        padding:
+                                                                            EdgeInsets.symmetric(vertical: 2.0),
+                                                                      ),
+                                                                      Container(
+                                                                        width: double
+                                                                            .infinity,
+                                                                        height:
+                                                                            8.0,
+                                                                        color: Colors
+                                                                            .white,
+                                                                      ),
+                                                                      const Padding(
+                                                                        padding:
+                                                                            EdgeInsets.symmetric(vertical: 2.0),
+                                                                      ),
+                                                                      Container(
+                                                                        width:
+                                                                            40.0,
+                                                                        height:
+                                                                            8.0,
+                                                                        color: Colors
+                                                                            .white,
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                )
+                                                              ],
+                                                            ),
+                                                          ))
+                                                      .toList(),
+                                                )),
+                                          ));
+                                    } else if (snapshot.data!.isNotEmpty) {
+                                      return ListView(
+                                          shrinkWrap: true,
+                                          scrollDirection: Axis.vertical,
+                                          // shrinkWrap: true,
+                                          children: snapshot.data!
+                                              .map(
+                                                (feed) => NotiItem(feed: feed),
+                                              )
+                                              .toList());
+                                    } else if (snapshot.hasError) {
+                                      return Center(
+                                          child: Column(
+                                        children: <Widget>[
+                                          SizedBox(
+                                            height: 100,
+                                          ),
+                                          Text(
+                                            'Network error',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 20,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                          Text('Network error'),
+                                          SizedBox(
+                                            height: 100,
+                                          ),
+                                        ],
+                                      ));
+                                    } else {
+                                      return Center(
+                                        child: Text(
+                                          "No Notifications available",
+                                          style: TextStyle(
+                                              fontSize: 15,
+                                              color: AppColors.black),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      );
+                                    }
+                                  }),
                             ],
                           ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          Container(
-                            height: 60.0,
-                            child: TextFormField(
-                              textAlign: TextAlign.start,
-                              decoration: InputDecoration(
-                                prefixIcon: Icon(
-                                  Icons.search_outlined,
-                                  color: Colors.grey,
-                                  size: 30,
-                                ),
-                                contentPadding: EdgeInsets.symmetric(
-                                    vertical: 2.0, horizontal: 20.0),
-                                hintText: "Search",
-                                //hintText: tr.text( "Upcoming feature"),
-                                hintStyle: TextStyle(
-                                  color: Color(0XFF818181),
-                                  fontSize: 15,
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(30.0),
-                                  ),
-                                  borderSide: BorderSide(color: Colors.grey),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(30.0),
-                                  ),
-                                  borderSide: BorderSide(color: Colors.grey),
-                                ),
-                              ),
-                              onChanged: (value) {
-                                setState(() {
-                                  // searchWord = value;
-                                  // print(searchWord);
-                                });
-                              },
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Container(
-                             height: Responsive.height(context) / 1.4,
-                            child: FutureBuilder<List<NotificationModel>>(
-                                future: myFuture,
-                                builder: (context, snapshot) {
-                                  if (!snapshot.hasData) {
-                                    return Container(
-                                        height: Responsive.height(context) / 2,
-                                        padding: const EdgeInsets.only(
-                                            left: 20.0, right: 20),
-                                        child: Center(
-                                          child: Shimmer.fromColors(
-                                              direction: ShimmerDirection.ltr,
-                                              period: const Duration(seconds: 2),
-                                              baseColor: AppColors.grey
-                                                  .withOpacity(0.5),
-                                              highlightColor: Colors.white,
-                                              child: ListView(
-                                                scrollDirection: Axis.vertical,
-                                                // shrinkWrap: true,
-                                                children: [0, 1, 2, 3]
-                                                    .map((_) => Padding(
-                                                  padding:
-                                                  const EdgeInsets
-                                                      .all(8.0),
-                                                  child: Row(
-                                                    crossAxisAlignment:
-                                                    CrossAxisAlignment
-                                                        .start,
-                                                    children: [
-                                                      const Padding(
-                                                        padding: EdgeInsets
-                                                            .symmetric(
-                                                            horizontal:
-                                                            8.0),
-                                                      ),
-                                                      Expanded(
-                                                        child: Column(
-                                                          crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                          children: [
-                                                            Container(
-                                                              width: double
-                                                                  .infinity,
-                                                              height:
-                                                              8.0,
-                                                              color: Colors
-                                                                  .white,
-                                                            ),
-                                                            const Padding(
-                                                              padding: EdgeInsets
-                                                                  .symmetric(
-                                                                  vertical:
-                                                                  2.0),
-                                                            ),
-                                                            Container(
-                                                              width: double
-                                                                  .infinity,
-                                                              height:
-                                                              8.0,
-                                                              color: Colors
-                                                                  .white,
-                                                            ),
-                                                            const Padding(
-                                                              padding: EdgeInsets
-                                                                  .symmetric(
-                                                                  vertical:
-                                                                  2.0),
-                                                            ),
-                                                            Container(
-                                                              width:
-                                                              40.0,
-                                                              height:
-                                                              8.0,
-                                                              color: Colors
-                                                                  .white,
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      )
-                                                    ],
-                                                  ),
-                                                ))
-                                                    .toList(),
-                                              )),
-                                        ));
-                                  } else if (snapshot.data!.isNotEmpty) {
-                                    return ListView(
-                                        scrollDirection: Axis.vertical,
-                                        // shrinkWrap: true,
-                                        children: snapshot.data!
-                                            .map(
-                                              (feed) =>      NotiItem(
-
-                                                feed:feed
-                                              ),
-                                        )
-                                            .toList());
-                                  } else if (snapshot.hasError) {
-                                    return const Center(
-                                        child: Column(
-                                          children: <Widget>[
-                                            SizedBox(
-                                              height: 100,
-                                            ),
-                                            Text(
-                                              'Network error',
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 20,
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              height: 10,
-                                            ),
-                                            Text('Network error'),
-                                            SizedBox(
-                                              height: 100,
-                                            ),
-                                          ],
-                                        ));
-                                  } else {
-                                    return const Center(
-                                        child: Column(
-                                          mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              "No Notifications available",
-                                              style: TextStyle(
-                                                  fontSize: 15,
-                                                  color: AppColors.black),
-                                              textAlign: TextAlign.center,
-                                            ),
-                                            SizedBox(
-                                              height: 20,
-                                            ),
-                                          ],
-                                        ));
-                                  }
-                                }),
-                          ),
-
-                          const SizedBox(
-                            height: 10,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ))));
+                        ),
+                      ))));
         });
   }
 }

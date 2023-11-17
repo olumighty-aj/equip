@@ -1,4 +1,3 @@
-
 import 'package:equipro/ui/screens/hirer/active_rentals/rentals_view_model.dart';
 import 'package:equipro/ui/screens/profile/profile_view_model.dart';
 import 'package:equipro/ui/widget/general_button.dart';
@@ -20,7 +19,7 @@ class Rating extends StatefulWidget {
 }
 
 class LoginState extends State<Rating> with TickerProviderStateMixin {
-  final NavigationService _navigationService = locator<NavigationService>();
+  final NavService _navigationService = locator<NavService>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   double? rate = 1;
   TextEditingController commentController = TextEditingController();
@@ -132,26 +131,26 @@ class LoginState extends State<Rating> with TickerProviderStateMixin {
                                   SizedBox(
                                     height: 50,
                                   ),
-                                  Center(child:
-                                  FittedBox(
-                                    child:
-                                  SmoothStarRating(
-                                      defaultIconData:
-                                          Icons.star_outline_rounded,
-                                      allowHalfRating: true,
-                                      onRated: (v) {
-                                        rate = v;
-                                      },
-                                      starCount: 5,
-                                      rating: rate!,
-                                      size: 70,
-                                      isReadOnly: false,
-                                      filledIconData: Icons.star_rounded,
-                                      halfFilledIconData:
-                                          Icons.star_half_rounded,
-                                      color: AppColors.yellow,
-                                      borderColor: Colors.grey,
-                                      spacing: 0.5))),
+                                  Center(
+                                      child: FittedBox(
+                                          child: SmoothStarRating(
+                                              defaultIconData:
+                                                  Icons.star_outline_rounded,
+                                              allowHalfRating: true,
+                                              onRated: (v) {
+                                                rate = v;
+                                              },
+                                              starCount: 5,
+                                              rating: rate!,
+                                              size: 70,
+                                              isReadOnly: false,
+                                              filledIconData:
+                                                  Icons.star_rounded,
+                                              halfFilledIconData:
+                                                  Icons.star_half_rounded,
+                                              color: AppColors.yellow,
+                                              borderColor: Colors.grey,
+                                              spacing: 0.5))),
                                   SizedBox(
                                     height: 50,
                                   ),
@@ -183,7 +182,7 @@ class LoginState extends State<Rating> with TickerProviderStateMixin {
                                       ),
                                       border: OutlineInputBorder(
                                         borderRadius:
-                                        BorderRadius.circular(5.0),
+                                            BorderRadius.circular(5.0),
                                         borderSide: const BorderSide(),
                                       ),
                                     ),
@@ -196,8 +195,10 @@ class LoginState extends State<Rating> with TickerProviderStateMixin {
                                   ),
                                   GeneralButton(
                                       onPressed: () {
-                                       model.rate(widget.id, commentController.text, rate!);
-                                      }, buttonText: "Submit")
+                                        model.rate(widget.id,
+                                            commentController.text, rate!);
+                                      },
+                                      buttonText: "Submit")
                                 ]))))),
           );
         });

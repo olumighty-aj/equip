@@ -15,14 +15,13 @@ class ChatItem extends StatelessWidget {
   ChatItem({
     required this.model,
   });
-  final NavigationService _navigationService = locator<NavigationService>();
+  final NavService _navigationService = locator<NavService>();
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
         onTap: () {
-          _navigationService.navigateTo(chatDetailsPageRoute,
-              arguments: model);
+          _navigationService.navigateTo(chatDetailsPageRoute, arguments: model);
         },
         child: Container(
             padding: EdgeInsets.all(10),
@@ -60,7 +59,7 @@ class ChatItem extends StatelessWidget {
                   ),
                   Expanded(
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                         Row(

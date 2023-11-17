@@ -1,14 +1,22 @@
+import 'package:equipro/app/app_setup.router.dart';
 import 'package:equipro/core/services/auth_service.dart';
+import 'package:equipro/ui/screens/chat/chat.dart';
+import 'package:equipro/ui/screens/hirer/active_rentals/active_rentals.dart';
 import 'package:equipro/ui/screens/hirer/home/home_view_model.dart';
+import 'package:equipro/ui/screens/profile/profile.dart';
+import 'package:equipro/ui/widget/base_button.dart';
 import 'package:equipro/ui/widget/general_button.dart';
 import 'package:equipro/utils/colors.dart';
 import 'package:equipro/utils/helpers.dart';
-import 'package:equipro/utils/locator.dart';
+// import 'package:equipro/utils/locator.dart';
 import 'package:equipro/utils/router/navigation_service.dart';
 import 'package:equipro/utils/router/route_names.dart';
 import 'package:equipro/utils/tiny_db.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:stacked_services/stacked_services.dart';
+
+import '../../app/app_setup.locator.dart';
 
 class CollapsingNavigationDrawer extends StatefulWidget {
   const CollapsingNavigationDrawer({Key? key}) : super(key: key);
@@ -26,7 +34,7 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
   bool isCollapsed = false;
   late AnimationController _animationController;
   late Animation<double> widthAnimation;
-  final NavigationService _navigationService = locator<NavigationService>();
+  final _navigationService = locator<NavigationService>();
   final Authentication _authentication = locator<Authentication>();
 
   HomeViewModel model = HomeViewModel();
@@ -71,7 +79,6 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
                           // }else{
                           //   _navigationService.pushAndRemoveUntil(HomeOwnerRoute);
                           // }
-
                         },
                       ),
                     ),
@@ -81,7 +88,7 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
                         buttonText: 'Yes',
                         onPressed: () {
                           Navigator.pop(context);
-                          model.switchOwner();
+                          model.newSwitchRole(context);
                         },
                       ),
                     ),
@@ -153,7 +160,10 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
                           // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             CachedNetworkImage(
-                              imageUrl:  _authentication.currentUser.hirersPath!= null?  _authentication.currentUser.hirersPath!:"",
+                              imageUrl:
+                                  _authentication.currentUser.hirersPath != null
+                                      ? _authentication.currentUser.hirersPath!
+                                      : "",
                               imageBuilder: (context, imageProvider) =>
                                   Container(
                                 width: 70.0,
@@ -184,8 +194,7 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  _authentication
-                                      .currentUser.fullname!,
+                                  _authentication.currentUser.fullname!,
                                   //  _authentication.currentUser.firstName! + " " + _authentication.currentUser.lastName!,
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
@@ -226,36 +235,30 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
                 },
               ),
               ListTile(
-                title: const Text(
-                  'Active Rentals',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-                ),
-                onTap: () {
-                  _navigationService.navigateTo(RentalsRoute);
-                },
-              ),
-              ListTile(
-                title: const Text(
-                  'Chats',
-                  style: TextStyle(
-                    fontSize: 16,
+                  title: const Text(
+                    'Active Rentals',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
                   ),
-                ),
-                onTap: () {
-                  _navigationService.navigateTo(chatRoute);
-                },
-              ),
+                  onTap: () => Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => Rentals()))),
               ListTile(
-                title: const Text(
-                  'My Profile',
-                  style: TextStyle(
-                    fontSize: 16,
+                  title: const Text(
+                    'Chats',
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
                   ),
-                ),
-                onTap: () {
-                  _navigationService.navigateTo(ProfileRoute);
-                },
-              ),
+                  onTap: () => Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => Chat()))),
+              ListTile(
+                  title: const Text(
+                    'My Profile',
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                  onTap: () => Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => Profile()))),
               // ListTile(
               //   title: const Text(
               //     'Settings',
@@ -282,17 +285,20 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
               SizedBox(
                 height: 20,
               ),
-              GeneralButton(
-                buttonText: "Become An Equipment Owner",
+              BaseButton(
+                label: "Become An Equipment Owner",
                 onPressed: () {
                   print(_authentication.currentUser.address);
-                  if(_authentication.currentUser.address != null && _authentication.currentUser.kycUpdated!){
+                  if (_authentication.currentUser.address != null &&
+                      _authentication.currentUser.kycUpdated!) {
                     displayDialog(context, model);
-                  }else{
-                    _navigationService.navigateTo(ProfileRoute);
-                    showErrorToast("Update your address and means of identification");
+                  } else {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => Profile()));
+                    showErrorToast(
+                        "Update your address and means of identification to become an equipment owner",
+                        context: context);
                   }
-
                 },
               ),
               SizedBox(
@@ -305,7 +311,7 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
                 ),
                 onTap: () {
                   TinyDb.removeAll();
-                  _navigationService.navigateTo(loginRoute);
+                  // _navigationService.navigateTo(loginRoute);
                 },
               ),
               ListTile(
@@ -315,7 +321,7 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
                 ),
                 onTap: () {
                   TinyDb.removeAll();
-                  _navigationService.navigateTo(loginRoute);
+                  _navigationService.clearStackAndShow(Routes.login);
                 },
               ),
               const SizedBox(

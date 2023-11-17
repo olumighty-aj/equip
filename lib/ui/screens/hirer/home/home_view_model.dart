@@ -1,4 +1,6 @@
+import 'package:equipro/app/app_setup.router.dart';
 import 'package:equipro/core/model/EquipmentModel.dart';
+import 'package:equipro/core/model/base_model.dart';
 import 'package:equipro/core/model/enums.dart';
 import 'package:equipro/core/model/error_model.dart';
 import 'package:equipro/core/model/success_model.dart';
@@ -10,10 +12,12 @@ import 'package:equipro/utils/locator.dart';
 import 'package:equipro/utils/router/navigation_service.dart';
 import 'package:equipro/utils/router/route_names.dart';
 import 'package:flutter/material.dart';
+import 'package:stacked/stacked.dart';
+import 'package:stacked_services/stacked_services.dart';
 
-class HomeViewModel extends BaseModel {
+class HomeViewModel extends BaseViewModel {
   final Authentication _authentication = locator<Authentication>();
-  final NavigationService _navigationService = locator<NavigationService>();
+  final _navigationService = locator<NavigationService>();
   final Activities _activities = locator<Activities>();
   ScrollController? controller;
 
@@ -34,36 +38,49 @@ class HomeViewModel extends BaseModel {
   int? _count;
   int get orderCount => _count!;
 
-
   int _nextPage = 2;
   int get nextPage => _nextPage;
-
 
   List<EquipmentModel> _packageList = [];
   List<EquipmentModel> get packageList => _packageList;
 
-
-  switchOwner() async {
-    setBusy(true);
-    var result = await _authentication.switchRole("owners");
-    if (result is ErrorModel) {
-      setBusy(false);
-      showErrorToast(result.error);
-      notifyListeners();
-      return ErrorModel(result.error);
-    }
-    if (result is SuccessModel) {
-      setBusy(false);
-      // if (result.data["details"]["address"] == null) {
-      //   _navigationService.pushAndRemoveUntil(SetupOwnerRoute);
-      // } else {
-        _navigationService.pushAndRemoveUntil(HomeOwnerRoute);
-     // }
-      notifyListeners();
-      return SuccessModel(result.data);
+  void newSwitchRole(context) async {
+    BaseDataModel? res = await runBusyFuture(
+        _authentication.newSwitchRole("owners"),
+        busyObject: "Switch");
+    if (res != null) {
+      if (res.status == true) {
+        showToast(res.message ?? "", context: context);
+        _navigationService.clearStackAndShow(Routes.homeOwner);
+      } else {
+        showErrorToast(res.message ?? "", context: context);
+      }
     }
   }
 
+  switchOwner(context) async {
+    setBusy(true);
+    var result = await _authentication.switchRole("owners");
+    if (result is ErrorModel) {
+      print("Not Successful");
+      setBusy(false);
+      // showErrorToast(result.error, context: context);
+      // notifyListeners();
+      return ErrorModel(result.error);
+    }
+    if (result is SuccessModel) {
+      print("IsSuccessful");
+      setBusy(false);
+      showToast(result.data, context: context);
+      // if (result.data["details"]["address"] == null) {
+      //   _navigationService.pushAndRemoveUntil(SetupOwnerRoute);
+      // } else {
+      _navigationService.clearStackAndShow(Routes.homeOwner);
+      // }
+      // notifyListeners();
+      return SuccessModel(result.data);
+    }
+  }
 
   Future<List<EquipmentModel>> searchEquipments(String search) async {
     //setBusy(true);
@@ -78,13 +95,14 @@ class HomeViewModel extends BaseModel {
     // print(result);
     return result;
   }
+
   Future<List<EquipmentModel>> getEquipment(String? lat, String? lng) async {
     //setBusy(true);
     print("lat and lng sent");
     print(lat);
     print(lng);
     setFetchState(LoadingState.loading);
-    var result = await _activities.getEquipments(lat: lat,lng: lng);
+    var result = await _activities.getEquipments(lat: lat, lng: lng);
     if (result is ErrorModel) {
       // showToast('Login failed');
       print(result.error);
@@ -109,7 +127,8 @@ class HomeViewModel extends BaseModel {
         // showToast('all order History fetched');
       } else {
         setLoadingState(LoadingState.loading);
-        var result = await _activities.getEquipments(page: nextPage,lat: lat,lng: lng);
+        var result =
+            await _activities.getEquipments(page: nextPage, lat: lat, lng: lng);
         if (result is ErrorModel) {
           // showToast('Login failed');
           print(result.error);

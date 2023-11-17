@@ -11,7 +11,7 @@ import 'package:equipro/utils/router/route_names.dart';
 
 class RentalsViewModel extends BaseModel {
   final Authentication _authentication = locator<Authentication>();
-  final NavigationService _navigationService = locator<NavigationService>();
+  final NavService _navigationService = locator<NavService>();
   final Activities _activities = locator<Activities>();
 
   Future<List<ActiveRentalsModel>> activeRentals(String type) async {

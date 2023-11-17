@@ -1,5 +1,6 @@
 import 'package:equipro/core/model/EquipmentModel.dart';
 import 'package:equipro/ui/screens/drawer.dart';
+import 'package:equipro/ui/screens/owner/home_owner/edit_equipment.dart';
 import 'package:equipro/ui/screens/owner/home_owner/home_view_model.dart';
 import 'package:equipro/ui/widget/booking_request.dart';
 import 'package:equipro/ui/widget/dash_painter.dart';
@@ -25,7 +26,7 @@ class EquipOwnerDetails extends StatefulWidget {
 
 class LoginState extends State<EquipOwnerDetails>
     with TickerProviderStateMixin {
-  final NavigationService _navigationService = locator<NavigationService>();
+  final NavService _navigationService = locator<NavService>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   int? selectedQuantity;
   String? pickupTime = DateTime.now().toString();
@@ -79,7 +80,8 @@ class LoginState extends State<EquipOwnerDetails>
                         buttonText: 'Yes',
                         onPressed: () {
                           Navigator.pop(context);
-                          model.deleteEquip(widget.model.id.toString());
+                          model.newDeleteEquip(
+                              widget.model.id.toString(), context);
                         },
                       ),
                     ),
@@ -185,9 +187,13 @@ class LoginState extends State<EquipOwnerDetails>
                                         onSelected: (int selectedValue) async {
                                           switch (selectedValue) {
                                             case 0:
-                                              _navigationService.navigateTo(
-                                                  EditEquipmentRoute,
-                                                  arguments: widget.model);
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          EditEquipment(
+                                                              model: widget
+                                                                  .model)));
                                               break;
                                             case 1:
                                               displayDialog(context, model);
@@ -280,7 +286,6 @@ class LoginState extends State<EquipOwnerDetails>
                                         fontSize: 20,
                                         fontWeight: FontWeight.bold),
                                   ),
-
                                   widget.model.equipRequest != null
                                       ? Container(
                                           height:

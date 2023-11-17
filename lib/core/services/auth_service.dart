@@ -1,21 +1,29 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
+import 'package:equipro/core/api/dio_service.dart';
 import 'package:equipro/core/model/ReviewsModel.dart';
 import 'package:equipro/core/model/SignInResponse.dart';
 import 'package:equipro/core/model/auth_model.dart';
+import 'package:equipro/core/model/base_model.dart';
 import 'package:equipro/core/model/error_model.dart';
 import 'package:equipro/core/model/success_model.dart';
 import 'package:equipro/core/services/index.dart';
 import 'package:equipro/utils/helpers.dart';
 import 'package:equipro/utils/http/paths.dart';
-import 'package:equipro/utils/locator.dart';
 import 'package:equipro/utils/router/navigation_service.dart';
 import 'package:equipro/utils/router/route_names.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as htp;
 
+import '../../app/app_setup.locator.dart';
+import '../../app/app_setup.logger.dart';
+import '../../utils/base_model.dart';
+
 class Authentication {
-  final NavigationService _navigationService = locator<NavigationService>();
+  final _log = getLogger("Authentication");
+  final NavService _navigationService = locator<NavService>();
+  final _apiService = locator<ApiService>();
 
   late Details _currentUser;
   Details get currentUser => _currentUser;
@@ -60,10 +68,28 @@ class Authentication {
     }
   }
 
+  Future<BaseDataModel?> newSwitchRole(role) async {
+    try {
+      Response res = await _apiService.postRequest(
+          {"hirers_id": currentUser.id, "toggle": role}, Paths.switchOwner);
+      if (res.statusCode == 200) {
+        return BaseDataModel.fromJson(res.data);
+      }
+    } on DioException catch (e) {
+      _log.e(e.message);
+      _log.e(e.response.toString());
+      return BaseDataModel.fromJson(e.response?.data);
+    }
+  }
+
+  void setCurrentUser(user) {
+    _currentUser = Details.fromJson(user);
+  }
+
   switchRole(String role) async {
     try {
       var url = Paths.switchOwner;
-      final result =
+      var result =
           await http.post(url, {"hirers_id": currentUser.id, "toggle": role});
       if (result is ErrorModel) {
         print("ERROR");
@@ -74,15 +100,17 @@ class Authentication {
           AuthModel.fromJson(result.data['payload']['token']);
       _token = auth;
       Details user = Details.fromJson(result.data['payload']["details"]);
-      showToast(result.data['message']);
+      // showToast(result.data['message']);
       _currentUser = user;
+      _log.i("SavedUser: ${_currentUser.toJson()}");
       // _userId = user.id!;
       SharedPreferences prefs;
       prefs = await SharedPreferences.getInstance();
       await prefs.setString('token', auth.token);
       //  await prefs.setString('userId', user.id.toString());
       await prefs.setString("profile", json.encode(user));
-      showToast(result.data['message']);
+      // showToast(result.data['message']);
+      _log.i("Here: ${result.data["payload"]}");
       return SuccessModel(result.data["payload"]);
     } catch (e) {
       print(e.toString());
@@ -93,6 +121,34 @@ class Authentication {
                   "TimeoutException after 0:00:40.000000: Future not completed"
               ? "Your internet is not stable kindly reconnect and try again"
               : e.toString());
+    }
+  }
+
+  Future<BaseDataModel?> newLogin(Map<String, dynamic> data) async {
+    try {
+      Response res = await _apiService.postRequest(data, Paths.login);
+      if (res.statusCode == 200) {
+        return BaseDataModel.fromJson(res.data);
+      }
+    } on DioException catch (e) {
+      _log.e(e.message);
+      _log.e(e.response);
+      return BaseDataModel.fromJson(e.response?.data);
+    }
+  }
+
+  Future<BaseDataModel?> newRegister(Map<String, dynamic> data) async {
+    try {
+      Response res = await _apiService.postRequest(data, Paths.signUp);
+      if (res.statusCode == 200) {
+        return BaseDataModel.fromJson(res.data);
+      }
+    } on DioException catch (e) {
+      _log.e(e.message);
+      _log.e(e.response);
+      return BaseDataModel.fromJson(e.response?.data);
+    } catch (e) {
+      _log.e(e.toString());
     }
   }
 
@@ -274,15 +330,15 @@ class Authentication {
     }
   }
 
-  editProfile(
-    String displayPicture,
-    String address,
-    String gender,
-    String lat,
-    String lng,
-    String kyc_name,
-    String kyc_document_path,
-  ) async {
+  editProfile({
+    String? displayPicture,
+    String? address,
+    String? gender,
+    String? lat,
+    String? lng,
+    String? kyc_name,
+    String? kyc_document_path,
+  }) async {
     var header = {
       'X-APP-KEY': 'IFUKpFVCunCU0fK0tQQqTsX',
       'Content-Type': 'application/json; charset=UTF-8',
@@ -305,14 +361,14 @@ class Authentication {
     //  imageUploadRequest.fields['UserType'] = currentUser.userInformation.roleId;
 
     // Attach the file in the request
-    if (displayPicture != "") {
+    if (displayPicture != null && displayPicture != "") {
       catalogueFile =
           await htp.MultipartFile.fromPath('hirers_path', displayPicture);
       //print(catalogueFile);
       imageUploadRequest.files.add(catalogueFile);
     }
 
-    if (kyc_document_path != "") {
+    if (kyc_document_path != null && kyc_document_path != "") {
       meansOfId = await htp.MultipartFile.fromPath(
           'kyc_document_path[]', kyc_document_path);
       //print(catalogueFile);
@@ -358,6 +414,23 @@ class Authentication {
       print("from code");
       print(e);
       return null;
+    }
+  }
+
+  Future<BaseDataModel?> editNewProfile(data) async {
+    try {
+      Response res = await _apiService.postRequest(
+          data,
+          currentUser.userType == "hirers"
+              ? Paths.profile
+              : Paths.ownersProfile);
+      if (res.statusCode == 200) {
+        return BaseDataModel.fromJson(res.data);
+      }
+    } on DioException catch (e) {
+      _log.i(e.message);
+      _log.i(e.response);
+      return BaseDataModel.fromJson(e.response?.data);
     }
   }
 
