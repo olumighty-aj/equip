@@ -17,7 +17,8 @@ class ChatViewModel extends BaseViewModel {
   final Activities _activities = locator<Activities>();
 
   List<ChatListModel>? _chatList = [];
-  List<ChatListModel>? get chats => _chatList;
+  List<ChatListModel>? get chats =>
+      _chatList?.where((element) => element.chatWith != null).toList();
 
   String? emptyChatText;
 

@@ -1,5 +1,8 @@
+import 'package:dio/dio.dart';
+import 'package:equipro/app/app_setup.logger.dart';
 import 'package:equipro/app/app_setup.router.dart';
 import 'package:equipro/core/model/EquipmentModel.dart';
+import 'package:equipro/core/model/equip_booking_model.dart' as equip;
 import 'package:equipro/core/model/NotificationModel.dart';
 import 'package:equipro/core/model/ReviewsModel.dart';
 import 'package:equipro/core/model/base_model.dart';
@@ -14,6 +17,7 @@ import 'package:equipro/utils/router/navigation_service.dart';
 import 'package:equipro/utils/router/route_names.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -24,6 +28,8 @@ class HomeOwnerViewModel extends BaseViewModel {
   final Authentication _authentication = locator<Authentication>();
   final _navigationService = locator<NavigationService>();
   ScrollController? controller;
+
+  List<Map<String, dynamic>> bookingDetails = [];
 
   List<EquipmentModel>? _equipments = [];
   List<EquipmentModel>? get equipments => _equipments;
@@ -48,8 +54,28 @@ class HomeOwnerViewModel extends BaseViewModel {
   int _nextPage = 2;
   int get nextPage => _nextPage;
 
+  void setModel(model) {
+    _activities.setModel(model);
+    notifyListeners();
+  }
+
   List<EquipmentModel> _packageList = [];
   List<EquipmentModel> get packageList => _packageList;
+
+  void getEquipmentBookingDetails(id, context) async {
+    BaseDataModel res = await runBusyFuture(
+        _activities.getEquipmentBookingRequests(id),
+        busyObject: "BookingId");
+    if (res.status == true) {
+      for (var i in res.payload["content"]) {
+        Map<String, dynamic> req = i;
+        getLogger("Hi").i(req);
+        bookingDetails.add(req);
+      }
+    } else {
+      showErrorToast(res.message ?? "", context: context);
+    }
+  }
 
   postEquip(
     List images,
@@ -65,19 +91,21 @@ class HomeOwnerViewModel extends BaseViewModel {
     String address,
   ) async {
     setBusy(true);
-    var result = await _activities.postEquip(
-      images,
-      equipName,
-      costHire,
-      costHireInterval,
-      availFrom,
-      availTo,
-      quantity,
-      description,
-      latitude,
-      longitude,
-      address,
-    );
+    var result = await runBusyFuture(
+        _activities.postEquip(
+          images,
+          equipName,
+          costHire,
+          costHireInterval,
+          availFrom,
+          availTo,
+          quantity,
+          description,
+          latitude,
+          longitude,
+          address,
+        ),
+        busyObject: "Posting");
     if (result == null) {
       setBusy(false);
       notifyListeners();
@@ -85,9 +113,54 @@ class HomeOwnerViewModel extends BaseViewModel {
     }
     setBusy(false);
 
-    _navigationService.pushNamedAndRemoveUntil(HomeOwnerRoute);
+    _navigationService.clearStackAndShow(Routes.homeOwner);
     notifyListeners();
     return result;
+  }
+
+  Future<bool?> newPostEquip(
+      List images,
+      String equipName,
+      String costHire,
+      String costHireInterval,
+      String availFrom,
+      String availTo,
+      String quantity,
+      String description,
+      String latitude,
+      String longitude,
+      String address,
+      context) async {
+    List newImages = [];
+    for (var i in images) {
+      newImages.add(await MultipartFile.fromFile(i.path));
+    }
+    Map<String, dynamic> map = {
+      "equip_name": equipName,
+      "cost_of_hire": costHire,
+      "cost_of_hire_interval": costHireInterval,
+      "avail_from": availFrom,
+      "avail_to": availTo,
+      "quantity": quantity,
+      "description": description,
+      "equip_image_path[]": newImages,
+      "latitude": latitude,
+      "longitude": longitude,
+      "address": address
+    };
+    FormData data = FormData.fromMap(map);
+    BaseDataModel? res = await runBusyFuture(_activities.newPostEquip(data),
+        busyObject: "Posting");
+    if (res != null) {
+      if (res.status == true) {
+        showToast(res.message ?? "", context: context);
+        _navigationService.clearStackAndShow(Routes.homeOwner);
+        return res.status;
+      } else {
+        showErrorToast(res.message ?? "", context: context);
+        return res.status;
+      }
+    }
   }
 
   updateEquip(
@@ -131,24 +204,37 @@ class HomeOwnerViewModel extends BaseViewModel {
     return result;
   }
 
-  Future<List<EquipmentModel>> getMyEquipment() async {
+  Future<void> getMyEquipment() async {
     //setBusy(true);
     setFetchState(LoadingState.loading);
-    var result = await _activities.getMyEquipment();
-    if (result is ErrorModel) {
-      // showToast('Login failed');
-      print(result.error);
-      setFetchState(LoadingState.error);
-      notifyListeners();
-      throw Exception('Failed to load internet');
-      //return ErrorModel(result.error);
-    } else {
-      _packageList = result;
+    BaseDataModel res = await _activities.newGetMyEquipments();
+    if (res.status == true) {
+      for (var i in res.payload["content"]) {
+        EquipmentModel model = EquipmentModel.fromJson(i);
+        _packageList.add(model);
+      }
+      // _packageList = res.payload["content"];
       _count = _activities.count;
-      notifyListeners();
       setFetchState(LoadingState.done);
-      return result;
+      notifyListeners();
+    } else {
+      setLoadingState(LoadingState.error);
     }
+    // var result = await _activities.getMyEquipment();
+    // if (result is ErrorModel) {
+    //   // showToast('Login failed');
+    //   print(result.error);
+    //   setFetchState(LoadingState.error);
+    //   notifyListeners();
+    //   throw Exception('Failed to load internet');
+    //   //return ErrorModel(result.error);
+    // } else {
+    //   _packageList = result;
+    //   _count = _activities.count;
+    //   notifyListeners();
+    //   setFetchState(LoadingState.done);
+    //   return result;
+    // }
   }
 
   Future<void> getEquipments(context) async {
@@ -167,7 +253,11 @@ class HomeOwnerViewModel extends BaseViewModel {
   }
 
   void init(context) async {
-    await getEquipments(context);
+    await getMyEquipment();
+    controller = new ScrollController()
+      ..addListener(() {
+        getMyEquipmentMore();
+      });
   }
 
   getMyEquipmentMore() async {
@@ -310,6 +400,19 @@ class HomeOwnerViewModel extends BaseViewModel {
     }
   }
 
+  void newEquipApproval(
+      String id, String status, String pickDate, context) async {
+    BaseDataModel res = await runBusyFuture(
+        _activities.newEquipApproval(id, status, pickDate),
+        busyObject: "Approval");
+    if (res.status == true) {
+      showToast(res.message ?? "", context: context);
+      _navigationService.clearStackAndShow(Routes.homeOwner);
+    } else {
+      showErrorToast(res.message ?? "", context: context);
+    }
+  }
+
   updateAddress(String address, String lat, String lng) async {
     setBusy(true);
     var result = await _authentication.updateAddress(address, lat, lng);
@@ -339,18 +442,32 @@ class HomeOwnerViewModel extends BaseViewModel {
     return result;
   }
 
-  Future<List<NotificationModel>> getNotification() async {
-    //setBusy(true);
-    var result = await _activities.getNotification();
-    if (result is ErrorModel) {
-      if (kDebugMode) {
-        print(result.error);
+  // Future<List<NotificationModel>> getNotification() async {
+  //   //setBusy(true);
+  //   var result = await _activities.getNotification();
+  //   if (result is ErrorModel) {
+  //     if (kDebugMode) {
+  //       print(result.error);
+  //     }
+  //     notifyListeners();
+  //     throw Exception('Failed to load internet');
+  //     //return ErrorModel(result.error);
+  //   }
+  //   //print(result);
+  //   return result;
+  // }
+
+  Future<List<NotificationModel>> getNewNotification() async {
+    List<NotificationModel> notifs = [];
+    BaseDataModel res = await _activities.newGetNotification();
+    if (res.status == true) {
+      for (var i in res.payload["content"]) {
+        NotificationModel j = NotificationModel.fromJson(i);
+        notifs.add(j);
       }
-      notifyListeners();
-      throw Exception('Failed to load internet');
-      //return ErrorModel(result.error);
+      return notifs;
+    } else {
+      return [];
     }
-    //print(result);
-    return result;
   }
 }

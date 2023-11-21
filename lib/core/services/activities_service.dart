@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:ffi';
 import 'package:dio/dio.dart';
 import 'package:equipro/app/app_setup.logger.dart';
+import 'package:equipro/core/api/api_constants.dart';
 import 'package:equipro/core/api/dio_service.dart';
 import 'package:equipro/core/model/ActiveRentalsModel.dart';
 import 'package:equipro/core/model/ChatListModel.dart';
@@ -32,6 +33,12 @@ class Activities {
   int? _count;
   int get count => _count!;
 
+  EquipmentModel? model;
+
+  void setModel(equipModel) {
+    model = equipModel;
+  }
+
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   postEquip(
@@ -47,20 +54,23 @@ class Activities {
     String longitude,
     String address,
   ) async {
+    _log.i("Hi, I am here ");
     var header = {
       'X-APP-KEY': 'IFUKpFVCunCU0fK0tQQqTsX',
       'Content-Type': 'application/json; charset=UTF-8',
-      "Authorization": "Bearer ${_authentication.token.token}"
+      "Authorization": "Bearer ${ApiConstants.token}"
     };
     var file;
     int count = 0;
     dynamic catalogueFile;
     final imageUploadRequest =
         htp.MultipartRequest('POST', Uri.parse(baseUrl + 'owners/equipments'));
+    _log.i("Hi, I am here 2");
     imageUploadRequest.headers.addAll(header);
     //  imageUploadRequest.fields['UserType'] = currentUser.userInformation.roleId;
 
     // Attach the file in the request
+    _log.i("Hi, I am here 3");
     for (XFile multipleFile in images) {
       count++;
       print(multipleFile.path);
@@ -69,8 +79,10 @@ class Activities {
       //print(catalogueFile);
       imageUploadRequest.files.add(catalogueFile);
     }
+    _log.i("Hi, I am here 4");
 
     if (count == images.length) {
+      _log.i("Hi, I am here 5");
       imageUploadRequest.fields['equip_name'] = equipName;
       imageUploadRequest.fields['cost_of_hire'] = costHire;
       imageUploadRequest.fields['cost_of_hire_interval'] = costHireInterval;
@@ -82,12 +94,16 @@ class Activities {
       imageUploadRequest.fields['longitude'] = longitude;
       imageUploadRequest.fields['address'] = address;
     }
-
+    _log.i("Hi, I am here 6");
     try {
+      _log.i("Hi, I am here 7");
       print(imageUploadRequest.files);
       final streamedResponse = await imageUploadRequest.send();
+      _log.i("Hi, I am here 8");
       final response = await htp.Response.fromStream(streamedResponse);
+      _log.i("Hi, I am here 9");
       final Map<String, dynamic> result = json.decode(response.body);
+      _log.i("Response: ${result.toString()}");
       if (result["status"] == false) {
         // showErrorToast(result["message"]);
         print(response.body);
@@ -100,9 +116,26 @@ class Activities {
 
       return result2;
     } catch (e) {
+      _log.e("From Code");
       print("from code");
       print(e);
       return null;
+    }
+  }
+
+  Future<BaseDataModel?> newPostEquip(data) async {
+    try {
+      _log.i("Here 1");
+      Response res = await _api.postRequest(data, 'owners/equipments');
+      _log.i("Here 2");
+      if (res.statusCode == 200) {
+        _log.i("Here 3");
+        return BaseDataModel.fromJson(res.data);
+      }
+    } on DioException catch (e) {
+      _log.e(e.message);
+      _log.e(e.response);
+      return BaseDataModel.fromJson(e.response?.data);
     }
   }
 
@@ -123,7 +156,7 @@ class Activities {
     var header = {
       'X-APP-KEY': 'IFUKpFVCunCU0fK0tQQqTsX',
       'Content-Type': 'application/json; charset=UTF-8',
-      "Authorization": "Bearer ${_authentication.token.token}"
+      "Authorization": "Bearer ${ApiConstants.token}"
     };
     var file;
     int count = 0;
@@ -178,9 +211,15 @@ class Activities {
     }
   }
 
+  Future<BaseDataModel> newGetMyEquipments() async {
+    Response res = await _api.getRequest(null, Paths.ownerEquipment);
+    return BaseDataModel.fromJson(res.data);
+  }
+
   getMyEquipment({int page = 1}) async {
     try {
-      var url = Paths.ownerEquipment + "?start=0&len=10&paging=$page";
+      var url = Paths.ownerEquipment;
+      // + "?start=0&len=10&paging=$page";
       final result = await http.get(
         url,
       );
@@ -194,6 +233,7 @@ class Activities {
       }
       var data = result.data["payload"]['content'];
       _count = int.parse(result.data["payload"]["totalLength"]);
+      _log.i(result.data["payload"]);
       List<EquipmentModel> packageList = List<EquipmentModel>.from(
           data.map((item) => EquipmentModel.fromJson(item)));
       print(packageList);
@@ -207,6 +247,18 @@ class Activities {
                   "TimeoutException after 0:00:40.000000: Future not completed"
               ? "Your internet is not stable kindly reconnect and try again"
               : e.toString());
+    }
+  }
+
+  Future<BaseDataModel> getEquipmentBookingRequests(String id) async {
+    try {
+      Response res =
+          await _api.getRequest(null, Paths.equipmentBookingRequestById + id);
+      return BaseDataModel.fromJson(res.data);
+    } on DioException catch (e) {
+      _log.e(e.message);
+      _log.e(e.response);
+      return BaseDataModel.fromJson(e.response?.data);
     }
   }
 
@@ -292,8 +344,8 @@ class Activities {
     try {
       //var url = Paths.equipments + "?lat=$lat&lng=$lng";
       // var url = Paths.equipments + "?start=$page&len=5";
-      var url =
-          Paths.equipments + "?start=0&len=5&paging=$page&lat=$lat&lng=$lng";
+      var url = Paths.equipments;
+      // + "?start=0&len=5&paging=$page&lat=$lat&lng=$lng";
       final result = await http.get(
         url,
       );
@@ -399,6 +451,14 @@ class Activities {
               ? "Your internet is not stable kindly reconnect and try again"
               : e.toString());
     }
+  }
+
+  Future<BaseDataModel> newEquipApproval(
+      String id, String status, String pickDate) async {
+    Response res = await _api.postRequest(
+        {"request_status": status, "pick_date": pickDate},
+        Paths.equipApproval + id);
+    return BaseDataModel.fromJson(res.data);
   }
 
   updateBooking(String id, String status) async {
@@ -671,6 +731,20 @@ class Activities {
     } catch (e) {}
   }
 
+  newSendChat(Map<String, dynamic> payload) async {
+    try {
+      Response res = await _api.postRequest(payload, Paths.sendChat);
+      if (res.statusCode == 200) {
+        return BaseDataModel.fromJson(res.data);
+      }
+    } on DioException catch (e) {
+      _log.e(e.message);
+      _log.e(e.stackTrace);
+      _log.e(e.response);
+      // return BaseDataModel.fromJson(e.response?.data);
+    }
+  }
+
   sendChat(Map<dynamic, dynamic> payload) async {
     try {
       final result = await http.post(Paths.sendChat, payload);
@@ -695,10 +769,12 @@ class Activities {
   getNotification() async {
     try {
       final result = await http.get(Paths.getNotification);
+      _log.i("Result lot: ${result.toJson()}");
       if (result is ErrorModel) {
-        if (kDebugMode) {
-          print("ERROR");
-        }
+        _log.i("Error Model");
+        // if (kDebugMode) {
+        //   print("ERROR");
+        // }
         var data = result.error;
         if (kDebugMode) {
           print(result.error);
@@ -718,5 +794,10 @@ class Activities {
       }
       return ErrorModel('$e');
     }
+  }
+
+  Future<BaseDataModel> newGetNotification() async {
+    Response res = await _api.getRequest(null, Paths.getNotification);
+    return BaseDataModel.fromJson(res.data);
   }
 }

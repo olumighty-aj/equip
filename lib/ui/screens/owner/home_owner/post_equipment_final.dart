@@ -85,6 +85,26 @@ class LoginState extends State<PostEquipmentFinal>
     } else {}
   }
 
+  void _startUploadingNew(HomeOwnerViewModel model, context) async {
+    var response = await model.newPostEquip(
+        widget.images,
+        widget.equipName,
+        costController.text,
+        selectedPerNumber!,
+        selectedDate!,
+        selectedDateTo!,
+        selectedQuantity!,
+        widget.description,
+        pickLat.toString(),
+        pickLng.toString(),
+        deliveryController.text,
+        context);
+    print(response);
+    if (response == null) {
+      print('error');
+    } else {}
+  }
+
   @override
   void initState() {
     super.initState();
@@ -595,6 +615,7 @@ class LoginState extends State<PostEquipmentFinal>
                                           position: _navAnimation!,
                                           //  textDirection: TextDirection.rtl,
                                           child: BaseButton(
+                                              isBusy: model.busy("Posting"),
                                               onPressed: () {
                                                 if (costController
                                                         .text.isNotEmpty &&
@@ -602,10 +623,12 @@ class LoginState extends State<PostEquipmentFinal>
                                                     selectedDateTo != null &&
                                                     selectedPer != null &&
                                                     selectedQuantity != null) {
-                                                  _startUploading(model);
+                                                  _startUploadingNew(
+                                                      model, context);
                                                 } else {
                                                   showErrorToast(
-                                                      "All fields are compulsory");
+                                                      "All fields are compulsory",
+                                                      context: context);
                                                 }
                                               },
                                               label: "Post")))

@@ -202,14 +202,14 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         routeName: settings.name!,
         viewToShow: EquipOwnerDetails(model: model),
       );
-    case BookingDetailsRoute:
-      EquipRequest model = settings.arguments as EquipRequest;
-      return _getPageRoute(
-        routeName: settings.name!,
-        viewToShow: BookingDetails(
-          feed: model,
-        ),
-      );
+    // case BookingDetailsRoute:
+    //   EquipRequest model = settings.arguments as EquipRequest;
+    //   return _getPageRoute(
+    //     routeName: settings.name!,
+    //     viewToShow: BookingDetails(
+    //       feed: model,
+    //     ),
+    //   );
 
     case HirerProfileRoute:
       eq.Hirers model = settings.arguments as eq.Hirers;

@@ -4,10 +4,9 @@ import 'package:equipro/utils/locator.dart';
 import 'package:equipro/utils/progressBarManager/dialog_models.dart';
 import 'package:equipro/utils/progressBarManager/dialog_service.dart';
 
-
 class ProgressManager extends StatefulWidget {
   final Widget child;
-   const ProgressManager( {required this.child});
+  const ProgressManager({required this.child});
 
   _ProgressManagerState createState() => _ProgressManagerState();
 }
@@ -32,20 +31,12 @@ class _ProgressManagerState extends State<ProgressManager> {
   //   });
   // }
 
-
   //
-   void _showDialog(ProgressRequest request) async{
-  //
-  //  await showDialog(
-  //       context: context,
-  //       builder: (context) =>
-  //       FutureProgressDialog(getFuture()),
-  //   );
-    ArsProgressDialog progressDialog = ArsProgressDialog(
-        context,
+  void _showDialog(ProgressRequest request) async {
+    ArsProgressDialog progressDialog = ArsProgressDialog(context,
         blur: 2,
         dismissable: false,
-       // backgroundColor: const Color(0x33000000),
+        // backgroundColor: const Color(0x33000000),
         animationDuration: const Duration(milliseconds: 500),
         loadingWidget: Material(
           borderRadius: BorderRadius.circular(20),
@@ -70,13 +61,10 @@ class _ProgressManagerState extends State<ProgressManager> {
               ],
             ),
           ),
-        )
-    );
+        ));
 
     progressDialog.show(); // show dialog
     //progressDialog.dismiss();
     print('show');
-
   }
-
 }

@@ -1,4 +1,6 @@
+import 'package:equipro/app/app_setup.logger.dart';
 import 'package:equipro/app/app_setup.router.dart';
+import 'package:equipro/core/api/api_constants.dart';
 import 'package:equipro/core/model/EquipmentModel.dart';
 import 'package:equipro/core/model/base_model.dart';
 import 'package:equipro/core/model/enums.dart';
@@ -16,6 +18,7 @@ import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 class HomeViewModel extends BaseViewModel {
+  final _log = getLogger("HomeViewModel");
   final Authentication _authentication = locator<Authentication>();
   final _navigationService = locator<NavigationService>();
   final Activities _activities = locator<Activities>();
@@ -50,7 +53,11 @@ class HomeViewModel extends BaseViewModel {
         busyObject: "Switch");
     if (res != null) {
       if (res.status == true) {
-        showToast(res.message ?? "", context: context);
+        _log.i("Switch: ${res.payload}");
+        _log.i("User: ${_authentication.currentUser.toJson()}");
+        ApiConstants.token = res.payload["token"];
+        notifyListeners();
+        // showToast(res.message ?? "", context: context);
         _navigationService.clearStackAndShow(Routes.homeOwner);
       } else {
         showErrorToast(res.message ?? "", context: context);
@@ -113,6 +120,7 @@ class HomeViewModel extends BaseViewModel {
     } else {
       _packageList = result;
       _count = _activities.count;
+      _log.i("Package: ${_packageList[0].toJson()}");
       notifyListeners();
       setFetchState(LoadingState.done);
       return result;

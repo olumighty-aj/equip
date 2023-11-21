@@ -1,10 +1,1 @@
-enum DialogType {
-  passwordChange,
-  cardActivation,
-  confirmExit,
-  interbankBeneficiaries,
-  narration,
-  success,
-  workflowApprovers,
-  modalProgress
-}
+enum DialogType { loading, logout, exit }

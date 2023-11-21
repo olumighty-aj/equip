@@ -2,6 +2,7 @@ import 'package:equipro/core/model/NotificationModel.dart';
 import 'package:equipro/ui/screens/login/login_view_model.dart';
 import 'package:equipro/ui/screens/owner/home_owner/home_view_model.dart';
 import 'package:equipro/ui/widget/chat_widget.dart';
+import 'package:equipro/ui/widget/input_fields/custom_text_field.dart';
 import 'package:equipro/ui/widget/noti_widget.dart';
 import 'package:equipro/utils/colors.dart';
 import 'package:equipro/utils/locator.dart';
@@ -11,8 +12,11 @@ import 'package:equipro/utils/screensize.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:gap/gap.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:stacked/stacked.dart';
+
+import '../../../utils/app_svgs.dart';
 
 class NotificationPage extends StatefulWidget {
   const NotificationPage({Key? key}) : super(key: key);
@@ -22,7 +26,7 @@ class NotificationPage extends StatefulWidget {
 }
 
 class LoginState extends State<NotificationPage> {
-  final NavService _navigationService = locator<NavService>();
+  // final NavService _navigationService = locator<NavService>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   late String fcmToken;
   Future<List<NotificationModel>>? myFuture;
@@ -36,8 +40,8 @@ class LoginState extends State<NotificationPage> {
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<HomeOwnerViewModel>.reactive(
-        onModelReady: (model) {
-          myFuture = model.getNotification();
+        onViewModelReady: (model) {
+          // myFuture = model.getNotification();
         },
         viewModelBuilder: () => HomeOwnerViewModel(),
         builder: (context, model, child) {
@@ -105,52 +109,14 @@ class LoginState extends State<NotificationPage> {
                               const SizedBox(
                                 height: 20,
                               ),
-                              Container(
-                                height: 60.0,
-                                child: TextFormField(
-                                  textAlign: TextAlign.start,
-                                  decoration: InputDecoration(
-                                    prefixIcon: Icon(
-                                      Icons.search_outlined,
-                                      color: Colors.grey,
-                                      size: 30,
-                                    ),
-                                    contentPadding: EdgeInsets.symmetric(
-                                        vertical: 2.0, horizontal: 20.0),
-                                    hintText: "Search",
-                                    //hintText: tr.text( "Upcoming feature"),
-                                    hintStyle: TextStyle(
-                                      color: Color(0XFF818181),
-                                      fontSize: 15,
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(30.0),
-                                      ),
-                                      borderSide:
-                                          BorderSide(color: Colors.grey),
-                                    ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(30.0),
-                                      ),
-                                      borderSide:
-                                          BorderSide(color: Colors.grey),
-                                    ),
-                                  ),
-                                  onChanged: (value) {
-                                    setState(() {
-                                      // searchWord = value;
-                                      // print(searchWord);
-                                    });
-                                  },
-                                ),
+                              CustomSearchField(
+                                hintText: "Search",
                               ),
                               const SizedBox(
-                                height: 10,
+                                height: 5,
                               ),
                               FutureBuilder<List<NotificationModel>>(
-                                  future: myFuture,
+                                  future: model.getNewNotification(),
                                   builder: (context, snapshot) {
                                     if (!snapshot.hasData) {
                                       return Container(
@@ -267,14 +233,23 @@ class LoginState extends State<NotificationPage> {
                                         ],
                                       ));
                                     } else {
-                                      return Center(
-                                        child: Text(
-                                          "No Notifications available",
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              color: AppColors.black),
-                                          textAlign: TextAlign.center,
-                                        ),
+                                      return Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.stretch,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Gap(100),
+                                          SvgPicture.asset(AppSvgs.emptyNotif),
+                                          Gap(22),
+                                          Text(
+                                            "You have no notification",
+                                            style: TextStyle(
+                                                fontSize: 15,
+                                                color: AppColors.black),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ],
                                       );
                                     }
                                   }),

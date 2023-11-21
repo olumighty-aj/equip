@@ -1,9 +1,12 @@
 import 'package:badges/badges.dart';
+import 'package:dotted_border/dotted_border.dart';
 import 'package:equipro/core/model/TransactionModel.dart';
 import 'package:equipro/core/model/success_model.dart';
 import 'package:equipro/ui/screens/drawer.dart';
 import 'package:equipro/ui/screens/owner/earnings/earnings_view_model.dart';
+import 'package:equipro/ui/screens/profile/edit_profile.dart';
 import 'package:equipro/ui/widget/bank_tiles.dart';
+import 'package:equipro/ui/widget/base_button.dart';
 import 'package:equipro/ui/widget/booking_request.dart';
 import 'package:equipro/ui/widget/dash_painter.dart';
 import 'package:equipro/ui/widget/equip_tiles.dart';
@@ -18,10 +21,13 @@ import 'package:equipro/utils/screensize.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 import 'package:equipro/ui/screens/login/login_view_model.dart';
 import 'package:equipro/utils/colors.dart';
+
+import '../../../../utils/app_svgs.dart';
 
 class EarningPage extends StatefulWidget {
   const EarningPage({Key? key}) : super(key: key);
@@ -64,7 +70,7 @@ class LoginState extends State<EarningPage> with TickerProviderStateMixin {
 
   TransactionModel? wallet;
   getWalletBalance(EarningsViewModel model) async {
-    var result = await model.getWalletBalance();
+    var result = await model.getWalletBalance(context);
     if (result is SuccessModel) {
       setState(() {
         print(result.data);
@@ -76,194 +82,205 @@ class LoginState extends State<EarningPage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<EarningsViewModel>.reactive(
-        onModelReady: (v) {
-          getWalletBalance(v);
+        onViewModelReady: (v) {
+          v.newGetWalletBalance(context);
         },
         viewModelBuilder: () => EarningsViewModel(),
         builder: (context, model, child) {
-          if (wallet == null) {
-            return Scaffold(
-                backgroundColor: AppColors.grey,
-                body: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [LoaderWidget(), LoaderWidget(), LoaderWidget()],
-                ));
-          }
+          // if (wallet == null) {
+          //   return Scaffold(
+          //       backgroundColor: AppColors.grey,
+          //       body: Column(
+          //         mainAxisAlignment: MainAxisAlignment.center,
+          //         children: [LoaderWidget(), LoaderWidget(), LoaderWidget()],
+          //       ));
+          // }
           return Scaffold(
-            key: _scaffoldKey,
-            body: SingleChildScrollView(
-                child: Padding(
-                    padding: EdgeInsets.all(20),
-                    child: AnimationLimiter(
-                        child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: AnimationConfiguration.toStaggeredList(
-                                duration: const Duration(milliseconds: 200),
-                                childAnimationBuilder: (widget) =>
-                                    SlideAnimation(
-                                      horizontalOffset:
-                                          -MediaQuery.of(context).size.width /
-                                              4,
-                                      child: FadeInAnimation(
-                                          curve: Curves.fastOutSlowIn,
-                                          child: widget),
-                                    ),
-                                children: [
-                                  const SizedBox(
-                                    height: 40,
-                                  ),
-                                  Row(
-                                    children: [
-                                      Container(
-                                          //  margin: EdgeInsets.all(20),
-                                          padding: EdgeInsets.only(left: 8),
-                                          height: 40,
-                                          width: 40,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
-                                            color: AppColors.white,
-                                          ),
-                                          child: InkWell(
-                                              onTap: () {
-                                                Navigator.pop(context);
-                                              },
-                                              child: const Icon(
-                                                Icons.arrow_back_ios,
-                                                color: AppColors.primaryColor,
-                                              )))
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 30,
-                                  ),
-                                  Text(
-                                    "Earnings",
-                                    style: TextStyle(
-                                        color: AppColors.black,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 25),
-                                  ),
-                                  SizedBox(
-                                    height: 30,
-                                  ),
-                                  Row(children: [
-                                    Text(
-                                      "Your balance :",
-                                      style: TextStyle(
-                                          fontSize: 15,
-                                          color: AppColors.black,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text(
-                                      wallet!.balanceAmount.toString(),
-                                      style: TextStyle(
-                                          color: AppColors.primaryColor,
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ]),
-                                  SizedBox(
-                                    height: 20,
-                                  ),
-                                  Container(
-                                    height: 40,
-                                    width: 150,
-                                    child: GeneralButton(
-                                      borderRadius: const BorderRadius.all(
-                                          Radius.circular(5)),
-                                      splashColor: Colors.white,
-                                      buttonTextColor: AppColors.primaryColor,
-                                      borderColor: AppColors.primaryColor,
-                                      onPressed: () {
-                                        _navigationService
-                                            .navigateTo(WithdrawRoute);
-                                      },
-                                      buttonText: "Withdraw",
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 20,
-                                  ),
-                                  // Divider(
-                                  //   thickness: 1,
-                                  // ),
-                                  // SizedBox(
-                                  //   height: 20,
-                                  // ),
-                                  // Row(
-                                  //   mainAxisAlignment:
-                                  //       MainAxisAlignment.spaceBetween,
-                                  //   children: [
-                                  //     Text(
-                                  //       "Payment Methods:",
-                                  //       style: TextStyle(
-                                  //           color: Colors.black,
-                                  //           fontWeight: FontWeight.bold,
-                                  //           fontSize: 15),
-                                  //     ),
-                                  //     IconButton(
-                                  //         onPressed: () {},
-                                  //         icon: Icon(
-                                  //           Icons.add,
-                                  //           size: 40,
-                                  //           color: AppColors.primaryColor,
-                                  //         ))
-                                  //   ],
-                                  // ),
-                                  // SizedBox(
-                                  //   height: 20,
-                                  // ),
-                                  // Text(
-                                  //   "Preferred Method",
-                                  //   style: TextStyle(
-                                  //       color: Colors.grey, fontSize: 15),
-                                  // ),
-                                  // SizedBox(
-                                  //   height: 30,
-                                  // ),
-                                  // BankTile(),
-                                  // SizedBox(
-                                  //   height: 30,
-                                  // ),
-                                  // CustomPaint(painter: LineDashedPainter()),
-                                  // SizedBox(
-                                  //   height: 20,
-                                  // ),
-                                  Text(
-                                    "Transaction History",
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  SizedBox(
-                                    height: 30,
-                                  ),
-                                  wallet!.transactionHistory!.isNotEmpty
-                                      ? Container(
-                                          height:
-                                              Responsive.height(context) / 2,
-                                          child: ListView.builder(
-                                              itemCount: wallet!
-                                                  .transactionHistory!.length,
-                                              itemBuilder: (context, i) {
-                                                return TransactionTile(
-                                                  model: wallet!
-                                                      .transactionHistory![i],
-                                                );
-                                              }),
-                                        )
-                                      : Container(
-                                          child: Text(
-                                            "Not available",
-                                          ),
-                                        ),
-                                ]))))),
-          );
+              key: _scaffoldKey,
+              appBar: AppBar(
+                leading: CustomBackButton(),
+              ),
+              body: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text(
+                        "Earnings",
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                            fontSize: 25, fontWeight: FontWeight.w800),
+                      ),
+                      Gap(29),
+                      RichText(
+                          text: TextSpan(children: [
+                        TextSpan(
+                            text: "Your balance: ",
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(fontSize: 15)),
+                        TextSpan(
+                            text: "5000",
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
+                                    fontSize: 15,
+                                    color: AppColors.primaryColor))
+                      ])),
+                      Gap(29),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: BaseButton(
+                              label: "Withdraw",
+                              hasBorder: true,
+                            ),
+                          ),
+                          Expanded(child: SizedBox()),
+                        ],
+                      ),
+                      Gap(32),
+                      Divider(
+                        color: Colors.grey,
+                      ),
+                      Gap(20),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Payment Methods",
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
+                                    fontSize: 15, fontWeight: FontWeight.w600),
+                          ),
+                          GestureDetector(
+                              child: Icon(
+                            Icons.add,
+                            color: AppColors.primaryColor,
+                          ))
+                        ],
+                      ),
+                      Gap(18),
+                      Text(
+                        "Preferred Method",
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyMedium
+                            ?.copyWith(color: Colors.grey, fontSize: 15),
+                      ),
+                      Gap(20),
+                      PaymentMethodBox(),
+                      Gap(45),
+                      Divider(
+                        color: Colors.grey,
+                      ),
+                      Gap(32),
+                      Text(
+                        "Transaction History",
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            fontSize: 15, fontWeight: FontWeight.w600),
+                      ),
+                      Gap(24),
+                      Column(
+                        children: List.generate(
+                            3, (index) => TransactionHistoryTile()),
+                      )
+                    ],
+                  ),
+                ),
+              ));
         });
+  }
+}
+
+class PaymentMethodBox extends StatelessWidget {
+  const PaymentMethodBox({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return DottedBorder(
+      dashPattern: [4, 4, 4],
+      color: Colors.grey.shade400,
+      padding: EdgeInsets.symmetric(vertical: 32, horizontal: 29),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              Container(
+                width: 56,
+                height: 37,
+                color: Colors.white,
+              ),
+              Gap(10),
+              Text(
+                "Access Bank",
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyMedium
+                    ?.copyWith(fontSize: 15),
+              ),
+            ],
+          ),
+          SvgPicture.asset(AppSvgs.more)
+        ],
+      ),
+    );
+  }
+}
+
+class TransactionHistoryTile extends StatelessWidget {
+  const TransactionHistoryTile({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(bottom: 26),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "30 Oct 2021",
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodySmall
+                      ?.copyWith(color: Colors.grey, fontSize: 10),
+                ),
+                Gap(6),
+                Text(
+                  "Receipt: #27384595",
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+                Gap(7),
+                Text(
+                  "Withdrawal",
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodySmall
+                      ?.copyWith(color: AppColors.primaryColor, fontSize: 10),
+                ),
+              ],
+            ),
+          ),
+          Text(
+            "N2000",
+            style: Theme.of(context)
+                .textTheme
+                .bodySmall
+                ?.copyWith(color: Colors.grey, fontWeight: FontWeight.w600),
+          )
+        ],
+      ),
+    );
   }
 }

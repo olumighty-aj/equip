@@ -2,6 +2,7 @@ import 'package:equipro/core/model/EquipmentModel.dart';
 import 'package:equipro/ui/screens/drawer.dart';
 import 'package:equipro/ui/screens/owner/home_owner/edit_equipment.dart';
 import 'package:equipro/ui/screens/owner/home_owner/home_view_model.dart';
+import 'package:equipro/ui/screens/profile/edit_profile.dart';
 import 'package:equipro/ui/widget/booking_request.dart';
 import 'package:equipro/ui/widget/dash_painter.dart';
 import 'package:equipro/ui/widget/general_button.dart';
@@ -12,6 +13,7 @@ import 'package:equipro/utils/screensize.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 import 'package:equipro/utils/colors.dart';
@@ -119,9 +121,14 @@ class LoginState extends State<EquipOwnerDetails>
   Widget build(BuildContext context) {
     return ViewModelBuilder<HomeOwnerViewModel>.reactive(
         viewModelBuilder: () => HomeOwnerViewModel(),
+        onViewModelReady: (model) =>
+            model.getEquipmentBookingDetails(widget.model.id, context),
         builder: (context, model, child) {
           return Scaffold(
             key: _scaffoldKey,
+            appBar: AppBar(
+              leading: CustomBackButton(),
+            ),
             body: SingleChildScrollView(
                 child: Padding(
                     padding: EdgeInsets.all(20),
@@ -141,34 +148,6 @@ class LoginState extends State<EquipOwnerDetails>
                                           child: widget),
                                     ),
                                 children: [
-                                  const SizedBox(
-                                    height: 40,
-                                  ),
-                                  Row(
-                                    children: [
-                                      Container(
-                                          //  margin: EdgeInsets.all(20),
-                                          padding: EdgeInsets.only(left: 8),
-                                          height: 40,
-                                          width: 40,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
-                                            color: AppColors.white,
-                                          ),
-                                          child: InkWell(
-                                              onTap: () {
-                                                Navigator.pop(context);
-                                              },
-                                              child: const Icon(
-                                                Icons.arrow_back_ios,
-                                                color: AppColors.primaryColor,
-                                              )))
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 30,
-                                  ),
                                   Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
@@ -225,7 +204,7 @@ class LoginState extends State<EquipOwnerDetails>
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          "${widget.model.costOfHire} per ${widget.model.costOfHireInterval == "1" ? "Day" : widget.model.costOfHireInterval == "7" ? "Week" : "Month"}",
+                                          "${widget.model.address.toString().contains("Nigeria") ? "NGN" : "GBP"}${widget.model.costOfHire} per ${widget.model.costOfHireInterval == "1" ? "Day" : widget.model.costOfHireInterval == "7" ? "Week" : "Month"}",
                                           style: TextStyle(
                                               fontSize: 15,
                                               color: AppColors.green,
@@ -280,25 +259,39 @@ class LoginState extends State<EquipOwnerDetails>
                                   SizedBox(
                                     height: 20,
                                   ),
-                                  Text(
-                                    "Booking requests (${widget.model.equipRequest != null ? widget.model.equipRequest!.length.toString() : "0"})",
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  widget.model.equipRequest != null
+                                  RichText(
+                                      text: TextSpan(children: [
+                                    TextSpan(
+                                        text: "Booking requests ",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyLarge
+                                            ?.copyWith(
+                                                fontWeight: FontWeight.w800,
+                                                fontSize: 20)),
+                                    TextSpan(
+                                        text:
+                                            "(${model.bookingDetails.isNotEmpty ? model.bookingDetails.length.toString() : "0"})",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyLarge
+                                            ?.copyWith(
+                                                fontWeight: FontWeight.w800,
+                                                fontSize: 20,
+                                                color: Colors.grey))
+                                  ])),
+                                  Gap(28),
+                                  model.bookingDetails.isNotEmpty
                                       ? Container(
                                           height:
                                               Responsive.height(context) / 2,
-                                          child: ListView.builder(
-                                              itemCount: widget
-                                                  .model.equipRequest!.length,
-                                              itemBuilder: (context, i) {
-                                                return BookingRequest(
-                                                  feed: widget
-                                                      .model.equipRequest![i],
-                                                );
-                                              }),
+                                          child: Column(
+                                            children: List.generate(
+                                                model.bookingDetails.length,
+                                                (index) => BookingRequest(
+                                                    feed: model.bookingDetails[
+                                                        index])),
+                                          ),
                                         )
                                       : Container(
                                           child: Text(

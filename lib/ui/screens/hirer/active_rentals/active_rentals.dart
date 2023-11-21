@@ -3,15 +3,15 @@ import 'package:equipro/ui/screens/hirer/active_rentals/rentals_view_model.dart'
 import 'package:equipro/ui/screens/profile/edit_profile.dart';
 import 'package:equipro/ui/widget/input_fields/custom_text_field.dart';
 import 'package:equipro/ui/widget/rental_tiles.dart';
-import 'package:equipro/utils/locator.dart';
-import 'package:equipro/utils/router/navigation_service.dart';
-import 'package:equipro/utils/screensize.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:stacked/stacked.dart';
 import 'package:equipro/utils/colors.dart';
+
+import '../../../../utils/app_svgs.dart';
 
 class Rentals extends StatefulWidget {
   const Rentals({Key? key}) : super(key: key);
@@ -22,7 +22,6 @@ class Rentals extends StatefulWidget {
 
 class LoginState extends State<Rentals> with SingleTickerProviderStateMixin {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  final NavService _navigationService = locator<NavService>();
   late final TabController _controller;
 
   @override
@@ -253,20 +252,19 @@ class ReturnedRentals extends StatelessWidget {
                 child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(
-                  height: 10,
-                ),
+                SvgPicture.asset(AppSvgs.emptyRental),
+                Gap(50),
                 Text(
-                  "No rentals in this category yet",
-                  style: TextStyle(
+                  "You do not have an active rental",
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.black),
+                      fontWeight: FontWeight.w600,
+                      color: Colors.grey),
                   textAlign: TextAlign.center,
                 ),
-                SizedBox(
-                  height: 30,
-                ),
+                // SizedBox(
+                //   height: 30,
+                // ),
               ],
             ));
           }
@@ -390,20 +388,19 @@ class ReceivedRentals extends StatelessWidget {
                 child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(
-                  height: 10,
-                ),
+                SvgPicture.asset(AppSvgs.emptyRental),
+                Gap(50),
                 Text(
-                  "No rentals in this category yet",
-                  style: TextStyle(
+                  "You do not have an active rental",
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.black),
+                      fontWeight: FontWeight.w600,
+                      color: Colors.grey),
                   textAlign: TextAlign.center,
                 ),
-                SizedBox(
-                  height: 30,
-                ),
+                // SizedBox(
+                //   height: 30,
+                // ),
               ],
             ));
           }
@@ -527,20 +524,19 @@ class BookedRentals extends StatelessWidget {
                 child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(
-                  height: 10,
-                ),
+                SvgPicture.asset(AppSvgs.emptyRental),
+                Gap(50),
                 Text(
-                  "No rentals in this category yet",
-                  style: TextStyle(
+                  "You do not have an active rental",
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.black),
+                      fontWeight: FontWeight.w600,
+                      color: Colors.grey),
                   textAlign: TextAlign.center,
                 ),
-                SizedBox(
-                  height: 30,
-                ),
+                // SizedBox(
+                //   height: 30,
+                // ),
               ],
             ));
           }
@@ -665,20 +661,19 @@ class AllRentals extends StatelessWidget {
                 child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(
-                  height: 10,
-                ),
+                SvgPicture.asset(AppSvgs.emptyRental),
+                Gap(50),
                 Text(
-                  "No rentals in this category yet",
-                  style: TextStyle(
+                  "You do not have an active rental",
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.black),
+                      fontWeight: FontWeight.w600,
+                      color: Colors.grey),
                   textAlign: TextAlign.center,
                 ),
-                SizedBox(
-                  height: 30,
-                ),
+                // SizedBox(
+                //   height: 30,
+                // ),
               ],
             ));
           }

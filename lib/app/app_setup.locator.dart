@@ -6,7 +6,6 @@
 
 // ignore_for_file: public_member_api_docs, implementation_imports, depend_on_referenced_packages
 
-import 'package:equipro/core/services/payment_services.dart';
 import 'package:stacked_services/src/bottom_sheet/bottom_sheet_service.dart';
 import 'package:stacked_services/src/dialog/dialog_service.dart';
 import 'package:stacked_services/src/navigation/navigation_service.dart';
@@ -16,6 +15,7 @@ import 'package:stacked_shared/stacked_shared.dart';
 import '../core/api/dio_service.dart';
 import '../core/services/activities_service.dart';
 import '../core/services/auth_service.dart';
+import '../core/services/payment_services.dart';
 import '../utils/progressBarManager/dialog_service.dart';
 import '../utils/router/navigation_service.dart';
 

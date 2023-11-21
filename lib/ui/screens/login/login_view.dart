@@ -11,17 +11,70 @@ import 'package:equipro/ui/screens/login/login_view_model.dart';
 import 'package:equipro/ui/widget/general_button.dart';
 import 'package:equipro/utils/colors.dart';
 import 'package:equipro/utils/helpers.dart';
-import 'package:equipro/utils/locator.dart';
+// import 'package:equipro/utils/locator.dart';
 import 'package:equipro/utils/notification_helper.dart';
 import 'package:equipro/utils/router/navigation_service.dart';
 import 'package:equipro/utils/router/route_names.dart';
 
+import '../../../app/app_setup.locator.dart';
+import '../../../utils/busy_dialog.dart';
+import '../../../utils/progressBarManager/dialog_models.dart';
+import '../../../utils/progressBarManager/dialog_service.dart';
 import '../../../utils/text_styles.dart';
 import '../register/register_view.dart';
 import 'forgt_password/forgot_password.dart';
 
-class Login extends StatelessWidget {
+class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
+
+  @override
+  State<Login> createState() => _LoginState();
+}
+
+class _LoginState extends State<Login> {
+  final ProgressService _progressService = locator<ProgressService>();
+
+  @override
+  void initState() {
+    _progressService.registerProgressListener(_showDialog);
+    super.initState();
+  }
+
+  void _showDialog(ProgressRequest request) async {
+    ArsProgressDialog progressDialog = ArsProgressDialog(context,
+        blur: 2,
+        dismissable: false,
+        // backgroundColor: const Color(0x33000000),
+        animationDuration: const Duration(milliseconds: 500),
+        loadingWidget: Material(
+          borderRadius: BorderRadius.circular(20),
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Stack(
+              children: [
+                const Positioned(
+                  top: 0,
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                  ),
+                ),
+                Image.asset(
+                  'assets/images/logo.png',
+                  width: 60,
+                  height: 60,
+                ),
+              ],
+            ),
+          ),
+        ));
+
+    progressDialog.show(); // show dialog
+    //progressDialog.dismiss();
+    print('show');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,33 +83,6 @@ class Login extends StatelessWidget {
         onViewModelReady: (model) => model.init(),
         builder: (context, model, child) {
           return NewLogin();
-          //   Scaffold(
-          //     body: SingleChildScrollView(
-          //   child: Column(
-          //     children: [
-          //       Stack(
-          //         children: [
-          //           Container(
-          //               width: Responsive.width(context),
-          //               height: Responsive.height(context) / 2,
-          //               decoration: BoxDecoration(
-          //                 image: DecorationImage(
-          //                   image: AssetImage(
-          //                       "assets/images/login_background.png"),
-          //                   fit: BoxFit.fill,
-          //                   colorFilter: ColorFilter.mode(
-          //                       AppColors.black.withOpacity(0.3),
-          //                       BlendMode.darken),
-          //                 ),
-          //               )),
-          //           Align(
-          //               alignment: Alignment.bottomCenter,
-          //               child: LoginContainer()),
-          //         ],
-          //       ),
-          //     ],
-          //   ),
-          // ));
         });
   }
 }

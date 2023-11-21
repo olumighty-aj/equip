@@ -1,15 +1,19 @@
+import 'package:equipro/app/app_setup.logger.dart';
 import 'package:equipro/core/model/ActiveRentalsModel.dart';
 import 'package:equipro/ui/screens/hirer/active_rentals/rentals_view_model.dart';
+import 'package:equipro/ui/widget/base_button.dart';
 import 'package:equipro/ui/widget/general_button.dart';
 import 'package:equipro/utils/locator.dart';
 import 'package:equipro/utils/router/navigation_service.dart';
 import 'package:equipro/utils/screensize.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 import 'package:equipro/utils/colors.dart';
 
+import '../../../widget/equip_tiles.dart';
 import '../../profile/edit_profile.dart';
 
 class RentalDetails extends StatefulWidget {
@@ -54,6 +58,7 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
     return ViewModelBuilder<RentalsViewModel>.reactive(
         viewModelBuilder: () => RentalsViewModel(),
         builder: (context, model, child) {
+          getLogger("className").i(widget.feed.toJson());
           return Scaffold(
             key: _scaffoldKey,
             appBar: AppBar(
@@ -313,13 +318,61 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                   SizedBox(
                                     height: 40,
                                   ),
-                                  Text("Equipment Delivery Status",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.copyWith(
-                                              color: Colors.grey,
-                                              fontSize: 15)),
+                                  if (widget.feed.equipOrder != null)
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text("Charges"),
+                                        Divider(),
+                                        Row(
+                                          children: [
+                                            Text("Delivery Charges"),
+                                            Gap(15),
+                                            Text(
+                                                "${getCurrency(widget.feed.equipments!.address!.contains("Nigeria") ? "NGN" : "GBP")}${widget.feed.equipOrder!.deliveryCharge ?? "0"}" ??
+                                                    "0"),
+                                          ],
+                                        ),
+                                        Gap(5),
+                                        Row(
+                                          children: [
+                                            Text("Discount"),
+                                            Gap(15),
+                                            Text(
+                                                "${getCurrency(widget.feed.equipments!.address!.contains("Nigeria") ? "NGN" : "GBP")}${widget.feed.equipOrder!.discount ?? "0"}" ??
+                                                    "0"),
+                                          ],
+                                        ),
+                                        Gap(5),
+                                        Row(
+                                          children: [
+                                            Text("Total Charges"),
+                                            Gap(15),
+                                            Text(
+                                              "${getCurrency(widget.feed.equipments!.address!.contains("Nigeria") ? "NGN" : "GBP")}${widget.feed.equipOrder!.totalAmount ?? "0"}" ??
+                                                  "0",
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyMedium
+                                                  ?.copyWith(
+                                                      color: AppColors
+                                                          .primaryColor),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  if (widget.feed.equipDeliveryStatus!
+                                          .deliveryStatus !=
+                                      null)
+                                    Text("Equipment Delivery Status",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium
+                                            ?.copyWith(
+                                                color: Colors.grey,
+                                                fontSize: 15)),
                                   Divider(),
                                   widget.feed.equipDeliveryStatus != null
                                       ? Container(
@@ -443,6 +496,12 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                               },
                                               buttonText: "Equipment Returned")
                                           : Container(),
+                                  // Gap(39),
+                                  if (widget.feed.requestStatus != "pending")
+                                    BaseButton(
+                                      label: "Make Payment",
+                                      onPressed: () {},
+                                    )
 
                                   // widget.feed.requestStatus! == "returned"
                                   //     ? GeneralButton(

@@ -3,7 +3,9 @@ import 'package:equipro/core/services/auth_service.dart';
 import 'package:equipro/ui/screens/chat/chat.dart';
 import 'package:equipro/ui/screens/hirer/active_rentals/active_rentals.dart';
 import 'package:equipro/ui/screens/hirer/home/home_view_model.dart';
+import 'package:equipro/ui/screens/profile/edit_profile.dart';
 import 'package:equipro/ui/screens/profile/profile.dart';
+import 'package:equipro/ui/screens/terms_and_condition/terms_condition_screen.dart';
 import 'package:equipro/ui/widget/base_button.dart';
 import 'package:equipro/ui/widget/general_button.dart';
 import 'package:equipro/utils/colors.dart';
@@ -14,9 +16,11 @@ import 'package:equipro/utils/router/route_names.dart';
 import 'package:equipro/utils/tiny_db.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:gap/gap.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 import '../../app/app_setup.locator.dart';
+import '../../core/enums/dialog_type.dart';
 
 class CollapsingNavigationDrawer extends StatefulWidget {
   const CollapsingNavigationDrawer({Key? key}) : super(key: key);
@@ -66,12 +70,10 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Container(
-                      width: 100,
-                      child: GeneralButton(
-                        splashColor: AppColors.grey,
-                        buttonTextColor: AppColors.black,
-                        buttonText: 'No',
+                    Expanded(
+                      child: BaseButton(
+                        hasBorder: true,
+                        label: 'No',
                         onPressed: () {
                           Navigator.pop(context);
                           // if(_authentication.currentUser.address == null){
@@ -82,10 +84,10 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
                         },
                       ),
                     ),
-                    Container(
-                      width: 100,
-                      child: GeneralButton(
-                        buttonText: 'Yes',
+                    Gap(15),
+                    Expanded(
+                      child: BaseButton(
+                        label: 'Yes',
                         onPressed: () {
                           Navigator.pop(context);
                           model.newSwitchRole(context);
@@ -288,13 +290,11 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
               BaseButton(
                 label: "Become An Equipment Owner",
                 onPressed: () {
-                  print(_authentication.currentUser.address);
-                  if (_authentication.currentUser.address != null &&
-                      _authentication.currentUser.kycUpdated!) {
+                  if (_authentication.currentUser.kycApproved!) {
                     displayDialog(context, model);
                   } else {
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Profile()));
+                        MaterialPageRoute(builder: (context) => EditProfile()));
                     showErrorToast(
                         "Update your address and means of identification to become an equipment owner",
                         context: context);
@@ -309,10 +309,10 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
                   'Terms & Conditions',
                   style: TextStyle(fontSize: 16),
                 ),
-                onTap: () {
-                  TinyDb.removeAll();
-                  // _navigationService.navigateTo(loginRoute);
-                },
+                onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => TermsAndConditionScreen())),
               ),
               ListTile(
                 title: const Text(
@@ -320,8 +320,8 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
                   style: TextStyle(fontSize: 16),
                 ),
                 onTap: () {
-                  TinyDb.removeAll();
-                  _navigationService.clearStackAndShow(Routes.login);
+                  locator<DialogService>()
+                      .showCustomDialog(variant: DialogType.logout);
                 },
               ),
               const SizedBox(

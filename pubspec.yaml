@@ -70,6 +70,7 @@ dependencies:
   stacked_generator: ^1.5.1
   json_serializable: ^6.6.2
   dotted_border: ^2.1.0
+  cloud_firestore: ^4.13.1
 
 dev_dependencies:
   flutter_test:

@@ -4,6 +4,7 @@ import 'package:equipro/app/app_setup.logger.dart';
 import 'dart:io';
 
 import 'package:equipro/core/model/ReviewsModel.dart';
+import 'package:equipro/core/model/base_model.dart';
 import 'package:equipro/core/model/error_model.dart';
 import 'package:equipro/core/services/auth_service.dart';
 import 'package:equipro/utils/helpers.dart';
@@ -30,6 +31,8 @@ class ProfileViewModel extends BaseViewModel {
   String? pickLng;
   File? image;
 
+  Map<String, dynamic>? verificationDetails;
+
   TextEditingController nameController = TextEditingController();
   TextEditingController uploadController = TextEditingController();
   TextEditingController addressController = TextEditingController();
@@ -38,10 +41,9 @@ class ProfileViewModel extends BaseViewModel {
 
   String? get hirersPath => _authentication.currentUser.hirersPath;
 
-  bool get kycUpdated => _authentication.currentUser.kycUpdated!;
+  bool get kycApproved => _authentication.currentUser.kycApproved!;
 
   void init() {
-    print("Gender:${selectedGender = _authentication.currentUser.gender}");
     nameController.text = _authentication.currentUser.fullname!;
     addressController.text = _authentication.currentUser.address != null
         ? _authentication.currentUser.address!
@@ -67,6 +69,7 @@ class ProfileViewModel extends BaseViewModel {
             ? "Male"
             : "Female"
         : null;
+    verifyKYC();
   }
 
   void showPlacePicker() async {
@@ -213,6 +216,18 @@ class ProfileViewModel extends BaseViewModel {
     } else {
       showErrorToast("Profile Update failed! Please try again",
           context: context);
+    }
+  }
+
+  void verifyKYC() async {
+    BaseDataModel res =
+        await runBusyFuture(_authentication.getKYC(), busyObject: "verify");
+    if (res.status == true) {
+      verificationDetails = res.payload["content"][0];
+      notifyListeners();
+      _log.i("Verify KYC: ${res.payload}");
+    } else {
+      _log.i("Verify KYC: ${res.payload}");
     }
   }
 

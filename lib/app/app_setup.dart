@@ -15,12 +15,13 @@ import '../ui/screens/hirer/book/equip_details.dart';
 import '../ui/screens/login/forgt_password/forgot_password.dart';
 import '../ui/screens/login/login_view.dart';
 import '../ui/screens/onboarding/onboardingscreen_view.dart';
+import '../ui/screens/owner/home_owner/booking_details.dart';
 import '../ui/screens/owner/home_owner/equip_owner_details.dart';
 import '../ui/screens/owner/home_owner/home_owner.dart';
 
 @StackedApp(
   routes: [
-    MaterialRoute(page: OnboardingScreen, initial: true),
+    MaterialRoute(page: OnboardingScreen),
     MaterialRoute(
       page: Login,
     ),
@@ -41,6 +42,12 @@ import '../ui/screens/owner/home_owner/home_owner.dart';
     ),
     MaterialRoute(
       page: PlacePicker,
+    ),
+    MaterialRoute(
+      page: BookingDetails,
+    ),
+    MaterialRoute(
+      page: EquipOwnerDetails,
     ),
   ],
   dependencies: [

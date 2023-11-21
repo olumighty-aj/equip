@@ -1,5 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:equipro/core/model/EquipmentModel.dart';
+import 'package:equipro/ui/screens/owner/home_owner/booking_details.dart';
+// import 'package:equipro/core/model/equip_booking_model.dart' as equip;
 import 'package:equipro/ui/widget/general_button.dart';
 import 'package:equipro/utils/locator.dart';
 import 'package:equipro/utils/router/navigation_service.dart';
@@ -8,33 +10,33 @@ import 'package:flutter/material.dart';
 import 'package:equipro/utils/colors.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../../core/services/activities_service.dart';
+
 class BookingRequest extends StatelessWidget {
-  final EquipRequest feed;
+  final Map<String, dynamic> feed;
+  final EquipmentModel? model;
   BookingRequest({
     required this.feed,
+    this.model,
   });
-  final NavService _navigationService = locator<NavService>();
+  final _navigationService = locator<NavService>();
+  final _activity = locator<Activities>();
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
         onTap: () {
-          _navigationService.navigateTo(BookingDetailsRoute, arguments: feed);
+          _activity.setModel(model);
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => BookingDetails(feed: feed)));
         },
         child: Container(
           margin: EdgeInsets.only(bottom: 20),
-          padding: EdgeInsets.all(10),
-          height: 150,
+          padding: EdgeInsets.all(18),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
             color: AppColors.white,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.5),
-                spreadRadius: 0.3,
-                blurRadius: 1,
-                offset: Offset(0, 0.3), // changes position of shadow
-              ),
-            ],
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -48,8 +50,11 @@ class BookingRequest extends StatelessWidget {
                       CircleAvatar(
                         radius: 20,
                         child: CachedNetworkImage(
-                          imageUrl: feed.hirers!.hirersPath != null
-                              ? feed.hirers!.hirersPath!
+                          imageUrl: feed["equip_request"].first["hirers"]
+                                      ["hirers_path"] !=
+                                  null
+                              ? feed["equip_request"].first["hirers"]
+                                  ["hirers_path"]
                               : "",
                           imageBuilder: (context, imageProvider) => Container(
                             width: 120.0,
@@ -76,59 +81,64 @@ class BookingRequest extends StatelessWidget {
                         width: 10,
                       ),
                       Text(
-                        feed.hirers!.fullname!,
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 18),
+                        feed["equip_request"].first["hirers"]["fullname"] ??
+                            "-",
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            fontSize: 15, fontWeight: FontWeight.w700),
                       ),
                     ],
                   ),
                   SizedBox(
-                    height: 10,
+                    height: 16,
                   ),
                   Row(
                     children: [
                       Text(
                         "QTY Hired: ",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w500, fontSize: 14),
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodySmall
+                            ?.copyWith(color: Colors.grey),
                       ),
-                      Text(
-                        feed.quantity!,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14,
-                        ),
-                      ),
+                      Text(feed["equip_request"].first["quantity"].toString(),
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodySmall
+                              ?.copyWith(fontWeight: FontWeight.w600)),
                     ],
                   ),
                   SizedBox(
-                    height: 20,
+                    height: 15,
                   ),
                   Row(
                     children: [
                       Text(
-                        "Duration:: ",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w500, fontSize: 14),
+                        "Duration: ",
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodySmall
+                            ?.copyWith(color: Colors.grey),
                       ),
                       Text(
-                        DateTime.parse(feed.rentalTo!)
-                                .difference(DateTime.parse(feed.rentalFrom!))
-                                .inDays
-                                .toString() +
-                            " day(s)",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14,
-                        ),
-                      ),
+                          DateTime.parse(
+                                      feed["equip_request"].first["rental_to"]!)
+                                  .difference(DateTime.parse(
+                                      feed["equip_request"]
+                                          .first["rental_from"]))
+                                  .inDays
+                                  .toString() +
+                              " day(s)",
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodySmall
+                              ?.copyWith(fontWeight: FontWeight.w600)),
                     ],
                   ),
                 ],
               ),
-              InkWell(
-                onTap: () {},
-                child: Icon(Icons.arrow_forward_ios),
+              Icon(
+                Icons.arrow_forward_ios,
+                color: Colors.grey,
               )
             ],
           ),

@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:equipro/core/api/api_constants.dart';
 import 'package:equipro/core/api/dio_service.dart';
+import 'package:equipro/core/enums/dialog_type.dart';
 import 'package:equipro/core/model/LoginPayload.dart';
 import 'package:equipro/core/model/VerifyForgotPassword.dart';
 import 'package:equipro/core/model/error_model.dart';
@@ -19,9 +22,11 @@ import 'package:stacked_services/stacked_services.dart';
 import '../../../app/app_setup.logger.dart';
 import '../../../app/app_setup.router.dart';
 import '../../../utils/notification_helper.dart';
+import '../../../utils/progressBarManager/dialog_service.dart';
 
 class NewLoginViewModel extends BaseViewModel {
   final _log = getLogger("NewLoginViewModel");
+  final ProgressService dialogService = locator<ProgressService>();
   final Authentication _authentication = locator<Authentication>();
   final _navigationService = locator<NavigationService>();
 
@@ -42,6 +47,7 @@ class NewLoginViewModel extends BaseViewModel {
 
   init() {
     getFCMToken();
+    checkSavedDetails();
   }
 
   getFCMToken() async {
@@ -59,14 +65,22 @@ class NewLoginViewModel extends BaseViewModel {
     }
   }
 
+  void checkSavedDetails() async {
+    bool hasCurrentUser = await SharedPrefsClient.checkData("currentUser");
+    if (hasCurrentUser) {
+      Map<String, dynamic> userDetails =
+          jsonDecode(await SharedPrefsClient.readData("currentUser"));
+      emailController.text = userDetails["email"];
+      notifyListeners();
+    }
+  }
+
   signIn(LoginPayload signInBody) async {
     // print('dhdhd');
     _log.i(signInBody.toJson());
-    setBusy(true);
     var result = await _authentication.login(signInBody.toJson());
 
     if (result is ErrorModel) {
-      setBusy(false);
       showErrorToast(result.error);
       notifyListeners();
       return ErrorModel(result.error);
@@ -85,15 +99,19 @@ class NewLoginViewModel extends BaseViewModel {
           email: emailController.text,
           password: passwordController.text,
           fcmToken: fcmToken);
+      // showDialog(true);
       var res = await runBusyFuture(_authentication.newLogin(data.toJson()),
           busyObject: "Login");
       _log.i(res?.toJson());
       if (res != null) {
+        // showDialog(false);
         if (res.status == true) {
           _log.i(res.payload.toString());
           locator<ApiService>().setAccessToken(res.payload["token"]);
           _authentication.setCurrentUser(res.payload["details"]);
           SharedPrefsClient.saveData("token", res.payload["token"]);
+          SharedPrefsClient.saveData(
+              "currentUser", jsonEncode(res.payload["details"]));
           ApiConstants.token = res.payload["token"];
           _navigationService.clearStackAndShow(Routes.home);
         } else {
@@ -102,6 +120,15 @@ class NewLoginViewModel extends BaseViewModel {
               context: context);
         }
       }
+    }
+  }
+
+  showDialog(isLoading) async {
+    if (isLoading) {
+      locator<DialogService>().showCustomDialog(
+          variant: DialogType.loading, barrierDismissible: false);
+    } else {
+      locator<DialogService>().completeDialog(DialogResponse(confirmed: true));
     }
   }
 

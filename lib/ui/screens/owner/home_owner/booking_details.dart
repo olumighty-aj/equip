@@ -1,8 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:equipro/core/model/ChatListModel.dart';
 import 'package:equipro/core/model/EquipmentModel.dart';
+import 'package:equipro/ui/screens/chat/chats_widget/chat_details.dart';
 import 'package:equipro/ui/screens/owner/home_owner/home_view_model.dart';
 import 'package:equipro/ui/screens/profile/profile_view_model.dart';
+import 'package:equipro/ui/widget/base_button.dart';
 import 'package:equipro/ui/widget/general_button.dart';
 import 'package:equipro/utils/locator.dart';
 import 'package:equipro/utils/router/navigation_service.dart';
@@ -10,12 +12,13 @@ import 'package:equipro/utils/router/route_names.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 import 'package:equipro/utils/colors.dart';
 
 class BookingDetails extends StatefulWidget {
-  final EquipRequest feed;
+  final Map<String, dynamic> feed;
   const BookingDetails({Key? key, required this.feed}) : super(key: key);
 
   @override
@@ -60,7 +63,7 @@ class LoginState extends State<BookingDetails> with TickerProviderStateMixin {
             key: _scaffoldKey,
             body: SingleChildScrollView(
                 child: Padding(
-                    padding: EdgeInsets.all(10),
+                    padding: EdgeInsets.all(16),
                     child: AnimationLimiter(
                         child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
@@ -105,22 +108,27 @@ class LoginState extends State<BookingDetails> with TickerProviderStateMixin {
                                   SizedBox(
                                     height: 20,
                                   ),
-                                  InkWell(
+                                  GestureDetector(
                                       onTap: () {
                                         _navigationService.navigateTo(
                                             HirerProfileRoute,
-                                            arguments: widget.feed.hirers);
+                                            arguments: widget
+                                                .feed["equip_request"]
+                                                .first["hirers"]);
                                       },
                                       child: Row(
                                         children: [
                                           CircleAvatar(
                                             radius: 25,
                                             child: CachedNetworkImage(
-                                              imageUrl: widget.feed.hirers!
-                                                          .hirersPath !=
+                                              imageUrl: widget
+                                                              .feed["equip_request"]
+                                                              .first["hirers"]
+                                                          ["hirers_path"] !=
                                                       null
-                                                  ? widget
-                                                      .feed.hirers!.hirersPath!
+                                                  ? widget.feed["equip_request"]
+                                                          .first["hirers"]
+                                                      ["hirers_path"]!
                                                   : "",
                                               imageBuilder:
                                                   (context, imageProvider) =>
@@ -152,7 +160,8 @@ class LoginState extends State<BookingDetails> with TickerProviderStateMixin {
                                             width: 10,
                                           ),
                                           Text(
-                                            widget.feed.hirers!.fullname!,
+                                            widget.feed["equip_request"]
+                                                .first["hirers"]["fullname"]!,
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: 18),
@@ -174,44 +183,53 @@ class LoginState extends State<BookingDetails> with TickerProviderStateMixin {
                                         ),
                                         InkWell(
                                             onTap: () {
-                                              _navigationService.navigateTo(
-                                                  chatDetailsPageRoute,
-                                                  arguments: ChatListModel(
-                                                      id: widget.feed.id,
-                                                      userId: "",
-                                                      chatWithId: "",
-                                                      messageCount: "",
-                                                      lastMessage: "",
-                                                      dateCreated: "",
-                                                      dateModified: "",
-                                                      chatWith: ChatWith(
-                                                        id: widget
-                                                            .feed.hirers!.id!,
-                                                        fullname: widget.feed
-                                                            .hirers!.fullname!,
-                                                        email: "",
-                                                        phoneNumber: "",
-                                                        gender: "",
-                                                        address: "",
-                                                        addressOpt: "",
-                                                        localState: "",
-                                                        country: "",
-                                                        latitude: "",
-                                                        longitude: "",
-                                                        hirersPath: widget
-                                                                    .feed
-                                                                    .hirers!
-                                                                    .hirersPath !=
-                                                                null
-                                                            ? widget
-                                                                .feed
-                                                                .hirers!
-                                                                .hirersPath!
-                                                            : "",
-                                                        status: "",
-                                                        dateModified: "",
-                                                        dateCreated: "",
-                                                      )));
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) => ChatDetailsPage(
+                                                          feed: ChatListModel(
+                                                              id: widget.feed["ID"],
+                                                              userId: "",
+                                                              chatWithId: "",
+                                                              messageCount: "",
+                                                              lastMessage: "",
+                                                              dateCreated: "",
+                                                              dateModified: "",
+                                                              chatWith: ChatWith(
+                                                                id: widget
+                                                                        .feed[
+                                                                            "equip_request"]
+                                                                        .first[
+                                                                    "hirers"]["ID"],
+                                                                fullname: widget
+                                                                        .feed[
+                                                                            "equip_request"]
+                                                                        .first["hirers"]
+                                                                    [
+                                                                    "fullname"],
+                                                                email: "",
+                                                                phoneNumber: "",
+                                                                gender: "",
+                                                                address: "",
+                                                                addressOpt: "",
+                                                                localState: "",
+                                                                country: "",
+                                                                latitude: "",
+                                                                longitude: "",
+                                                                hirersPath: widget.feed["equip_request"].first["hirers"]
+                                                                            [
+                                                                            "hirers_path"] !=
+                                                                        null
+                                                                    ? widget
+                                                                        .feed[
+                                                                            "equip_request"]
+                                                                        .first["hirers"]["hirers_path"]
+                                                                    : "",
+                                                                status: "",
+                                                                dateModified:
+                                                                    "",
+                                                                dateCreated: "",
+                                                              )))));
                                             },
                                             child: Row(
                                               children: [
@@ -238,208 +256,259 @@ class LoginState extends State<BookingDetails> with TickerProviderStateMixin {
                                   SizedBox(
                                     height: 20,
                                   ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
+                                  Column(
                                     children: [
-                                      SizedBox(
-                                        height: 30,
-                                      ),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Container(
-                                              height: 70,
-                                              child: Text(
-                                                "QTY Hired: ",
-                                                style: TextStyle(
+                                          Text(
+                                            "QTY Hired: ",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium
+                                                ?.copyWith(
+                                                    fontSize: 15,
                                                     color: Colors.grey,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 15),
-                                              )),
-                                          Container(
-                                              height: 70,
-                                              child: Text(
-                                                "Rental Start Date: ",
-                                                style: TextStyle(
-                                                    color: Colors.grey,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 15),
-                                              )),
-                                          Container(
-                                              height: 70,
-                                              child: Text(
-                                                "Duration: ",
-                                                style: TextStyle(
-                                                    color: Colors.grey,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 15),
-                                              )),
-                                          Container(
-                                              height: 100,
-                                              child: Text(
-                                                "Delivery Location: ",
-                                                style: TextStyle(
-                                                    color: Colors.grey,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 15),
-                                              )),
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        width: 30,
-                                      ),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.end,
-                                        children: [
-                                          Container(
-                                            height: 70,
-                                            width: 200,
-                                            child: Text(
-                                              widget.feed.quantity!,
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 15,
-                                                  fontWeight: FontWeight.w500),
-                                            ),
+                                                    fontWeight:
+                                                        FontWeight.w700),
                                           ),
-                                          Container(
-                                            height: 70,
-                                            width: 200,
-                                            child: Text(
-                                              DateFormat(
-                                                "dd MMM, yyyy",
-                                              )
-                                                  .format(DateTime.parse(
-                                                    widget.feed.rentalFrom!,
-                                                  ))
-                                                  .toString(),
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 15,
-                                                  fontWeight: FontWeight.w500),
-                                            ),
-                                          ),
-                                          Container(
-                                            height: 70,
-                                            width: 200,
-                                            child: Text(
-                                              DateTime.parse(
-                                                          widget.feed.rentalTo!)
-                                                      .difference(
-                                                          DateTime.parse(widget
-                                                              .feed
-                                                              .rentalFrom!))
-                                                      .inDays
-                                                      .toString() +
-                                                  " day(s)",
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 15,
-                                                  fontWeight: FontWeight.w500),
-                                            ),
-                                          ),
-                                          Container(
-                                            height: 100,
-                                            width: 200,
-                                            child: Text(
-                                                widget.feed.deliveryLocation!,
-                                                style: TextStyle(
-                                                    color: Colors.black,
+                                          Text(
+                                            widget.feed["equip_request"]
+                                                .first["quantity"],
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium
+                                                ?.copyWith(
                                                     fontSize: 15,
                                                     fontWeight:
-                                                        FontWeight.w500)),
+                                                        FontWeight.w600),
                                           ),
                                         ],
                                       ),
+                                      Gap(15),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            "Rental Start Date: ",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium
+                                                ?.copyWith(
+                                                    fontSize: 15,
+                                                    color: Colors.grey,
+                                                    fontWeight:
+                                                        FontWeight.w700),
+                                          ),
+                                          Text(
+                                            DateFormat(
+                                              "dd MMM, yyyy",
+                                            )
+                                                .format(DateTime.parse(
+                                                  widget.feed["equip_request"]
+                                                      .first["rental_from"]!,
+                                                ))
+                                                .toString(),
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium
+                                                ?.copyWith(
+                                                    fontSize: 15,
+                                                    fontWeight:
+                                                        FontWeight.w600),
+                                          ),
+                                        ],
+                                      ),
+                                      Gap(15),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            "Duration: ",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium
+                                                ?.copyWith(
+                                                    fontSize: 15,
+                                                    color: Colors.grey,
+                                                    fontWeight:
+                                                        FontWeight.w700),
+                                          ),
+                                          Text(
+                                            DateTime.parse(widget
+                                                        .feed["equip_request"]
+                                                        .first["rental_to"]!)
+                                                    .difference(DateTime.parse(
+                                                        widget
+                                                            .feed[
+                                                                "equip_request"]
+                                                            .first["rental_from"]!))
+                                                    .inDays
+                                                    .toString() +
+                                                " day(s)",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium
+                                                ?.copyWith(
+                                                    fontSize: 15,
+                                                    fontWeight:
+                                                        FontWeight.w600),
+                                          ),
+                                        ],
+                                      ),
+                                      Gap(15),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            "Delivery Location: ",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium
+                                                ?.copyWith(
+                                                    fontSize: 15,
+                                                    color: Colors.grey,
+                                                    fontWeight:
+                                                        FontWeight.w700),
+                                          ),
+                                          Gap(15),
+                                          Expanded(
+                                            child: Text(
+                                              widget.feed["equip_request"]
+                                                  .first["delivery_location"]!,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyMedium
+                                                  ?.copyWith(
+                                                      fontSize: 15,
+                                                      fontWeight:
+                                                          FontWeight.w600),
+                                              textAlign: TextAlign.end,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Gap(15),
                                     ],
                                   ),
                                   SizedBox(
                                     height: 40,
                                   ),
-                                  // Text(
-                                  //   "Charges",
-                                  //   style: TextStyle(
-                                  //       color: Colors.grey,
-                                  //       fontWeight: FontWeight.w500,
-                                  //       fontSize: 18),
-                                  // ),
-                                  // Divider(
-                                  //   thickness: 2,
-                                  // ),
-                                  // SizedBox(
-                                  //   height: 30,
-                                  // ),
-                                  // Row(
-                                  //   children: [
-                                  //     Text(
-                                  //       "Equipment charges:",
-                                  //       style: TextStyle(
-                                  //           color: Colors.black,
-                                  //           fontWeight: FontWeight.w600,
-                                  //           fontSize: 18),
-                                  //     ),
-                                  //     SizedBox(
-                                  //       width: 10,
-                                  //     ),
-                                  //     Text(
-                                  //       widget.feed.rentalFrom!,
-                                  //       style: TextStyle(
-                                  //           color: AppColors.primaryColor,
-                                  //           fontWeight: FontWeight.w500,
-                                  //           fontSize: 18),
-                                  //     ),
-                                  //   ],
-                                  // ),
-                                  SizedBox(
-                                    height: 50,
+                                  Text("Charges",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium
+                                          ?.copyWith(
+                                              color: Colors.grey,
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 15)),
+                                  Divider(
+                                    thickness: 2,
                                   ),
-                                  widget.feed.equipOrder!.orderStatus ==
-                                          "pending"
+                                  SizedBox(
+                                    height: 30,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text("Equipment charges:",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium
+                                              ?.copyWith(
+                                                  fontWeight: FontWeight.w600,
+                                                  fontSize: 15)),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      Text(
+                                          "${widget.feed["equip_request"].first["delivery_location"].contains("Nigeria") ? "NGN" : "GBP"}${widget.feed["total_amount"].toString()}",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium
+                                              ?.copyWith(
+                                                  color: AppColors.primaryColor,
+                                                  fontWeight: FontWeight.w600,
+                                                  fontSize: 15)),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 70,
+                                  ),
+                                  widget.feed["order_status"] == "pending"
                                       ? Column(
                                           children: [
-                                            GeneralButton(
-                                                onPressed: () {
-                                                  model.equipApproval(
-                                                      widget.feed.equipOrderId
-                                                          .toString(),
-                                                      "accepted");
-                                                },
-                                                buttonText: "Accept Booking"),
-                                            SizedBox(
-                                              height: 20,
+                                            BaseButton(
+                                              onPressed: () {
+                                                model.newEquipApproval(
+                                                    widget.feed["equip_request"]
+                                                        .first["equip_order_id"]
+                                                        .toString(),
+                                                    "accepted",
+                                                    DateFormat('yyyy-MM-dd')
+                                                        .format(DateTime.parse(
+                                                          widget
+                                                                  .feed[
+                                                                      "equip_request"]
+                                                                  .first[
+                                                              "rental_from"]!,
+                                                        ))
+                                                        .toString(),
+                                                    context);
+                                              },
+                                              label: "Accept Booking",
+                                              isBusy: model.busy("Approval"),
                                             ),
-                                            InkWell(
+                                            SizedBox(
+                                              height: 23,
+                                            ),
+                                            GestureDetector(
                                                 onTap: () {
-                                                  model.equipApproval(
-                                                      widget.feed.equipOrderId
+                                                  model.newEquipApproval(
+                                                      widget
+                                                          .feed["equip_request"]
+                                                          .first[
+                                                              "equip_order_id"]
                                                           .toString(),
-                                                      "rejected");
+                                                      "rejected",
+                                                      DateFormat('yyyy-MM-dd')
+                                                          .format(
+                                                              DateTime.parse(
+                                                            widget
+                                                                    .feed[
+                                                                        "equip_request"]
+                                                                    .first[
+                                                                "rental_from"]!,
+                                                          ))
+                                                          .toString(),
+                                                      context);
                                                 },
-                                                child: Center(
-                                                    child: Text(
+                                                child: Text(
                                                   "Decline Booking",
-                                                  style: TextStyle(
-                                                      decoration: TextDecoration
-                                                          .underline,
-                                                      color: Colors.black,
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                      fontSize: 16),
-                                                ))),
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyLarge
+                                                      ?.copyWith(
+                                                          color: Colors.grey,
+                                                          decoration:
+                                                              TextDecoration
+                                                                  .underline,
+                                                          fontWeight:
+                                                              FontWeight.w600),
+                                                )),
                                           ],
                                         )
                                       : Center(
                                           child: Text(
-                                          widget.feed.equipOrder!.orderStatus!
+                                          widget.feed["order_status"]
                                               .toUpperCase(),
                                           style: TextStyle(
-                                              color: widget.feed.equipOrder!
-                                                          .orderStatus ==
-                                                      "accepted"
-                                                  ? AppColors.green
-                                                  : AppColors.red,
+                                              color:
+                                                  widget.feed["order_status"] ==
+                                                          "accepted"
+                                                      ? AppColors.green
+                                                      : AppColors.red,
                                               fontWeight: FontWeight.bold,
                                               fontSize: 15),
                                         ))

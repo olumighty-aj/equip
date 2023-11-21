@@ -1,4 +1,5 @@
 import 'package:equipro/core/model/ActiveRentalsModel.dart';
+import 'package:equipro/core/model/base_model.dart';
 import 'package:equipro/core/model/error_model.dart';
 import 'package:equipro/core/model/success_model.dart';
 import 'package:equipro/core/services/activities_service.dart';
@@ -12,11 +13,15 @@ import 'package:equipro/utils/router/route_names.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_paystack/flutter_paystack.dart';
 
+import '../../../../core/model/TransactionModel.dart';
+
 class EarningsViewModel extends BaseModel {
   final Authentication _authentication = locator<Authentication>();
   final NavService _navigationService = locator<NavService>();
   final Activities _activities = locator<Activities>();
   final PaymentService _paymentService = locator<PaymentService>();
+
+  TransactionModel? wallet;
 
   withdraw(
     String amount,
@@ -38,17 +43,27 @@ class EarningsViewModel extends BaseModel {
     }
   }
 
-  getWalletBalance() async {
+  getWalletBalance(context) async {
     var result = await _paymentService.getWalletBalance();
 
     if (result is ErrorModel) {
-      showErrorToast(result.error);
+      showErrorToast(result.error, context: context);
       notifyListeners();
       return ErrorModel(result.error);
     }
     if (result is SuccessModel) {
       notifyListeners();
       return SuccessModel(result.data);
+    }
+  }
+
+  void newGetWalletBalance(context) async {
+    BaseDataModel res = await _paymentService.newGetWalletBalance();
+    if (res.status == true) {
+      wallet = TransactionModel.fromJson(res.payload);
+      notifyListeners();
+    } else {
+      showErrorToast(res.message ?? "", context: context);
     }
   }
 

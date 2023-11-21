@@ -23,10 +23,11 @@ class PostEquipment extends StatefulWidget {
   const PostEquipment({Key? key}) : super(key: key);
 
   @override
-  LoginState createState() => LoginState();
+  PostEquipmentState createState() => PostEquipmentState();
 }
 
-class LoginState extends State<PostEquipment> with TickerProviderStateMixin {
+class PostEquipmentState extends State<PostEquipment>
+    with TickerProviderStateMixin {
   final NavService _navigationService = locator<NavService>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   File? image;
@@ -69,7 +70,7 @@ class LoginState extends State<PostEquipment> with TickerProviderStateMixin {
           // imageQuality: quality,
           );
       setState(() {
-        listImages = pickedFileList!;
+        listImages = pickedFileList;
       });
     } catch (e) {
       print(e);
@@ -224,76 +225,72 @@ class LoginState extends State<PostEquipment> with TickerProviderStateMixin {
                                     height: 20,
                                   ),
                                   listImages.isNotEmpty
-                                      ? Container(
-                                          height: 200,
-                                          child: ListView.builder(
-                                              physics: ClampingScrollPhysics(),
-                                              itemCount: listImages.length,
-                                              scrollDirection: Axis.vertical,
-                                              itemBuilder:
-                                                  (BuildContext context,
-                                                      int index) {
-                                                return Padding(
-                                                    padding: EdgeInsets.all(5),
-                                                    child: Container(
-                                                      //padding: EdgeInsets.all(20),
-                                                      height: 120,
-                                                      child: Row(
-                                                        children: [
-                                                          Container(
-                                                              decoration:
-                                                                  BoxDecoration(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            10),
-                                                                color: AppColors
-                                                                    .primaryColor,
-                                                              ),
-                                                              height: 100,
-                                                              width: 100,
-                                                              child: Container(
-                                                                  padding:
-                                                                      EdgeInsets
-                                                                          .all(
-                                                                              5),
-                                                                  height: 95,
-                                                                  width: 95,
-                                                                  child: ClipRRect(
-                                                                      borderRadius: BorderRadius.circular(10.0),
-                                                                      child: Image.file(
-                                                                        File(listImages[index]
-                                                                            .path),
-                                                                        fit: BoxFit
-                                                                            .fill,
-                                                                      )))),
-                                                          SizedBox(
-                                                            width: 20,
-                                                          ),
-                                                          InkWell(
-                                                              onTap: () {
-                                                                setState(() {
-                                                                  listImages
-                                                                      .removeAt(
-                                                                          index);
-                                                                });
-                                                              },
-                                                              child: Text(
-                                                                "Remove",
-                                                                style: TextStyle(
-                                                                    color:
-                                                                        AppColors
-                                                                            .red,
-                                                                    fontSize:
-                                                                        20,
-                                                                    decoration:
-                                                                        TextDecoration
-                                                                            .underline),
-                                                              )),
-                                                        ],
-                                                      ),
-                                                    ));
-                                              }))
+                                      ? Column(
+                                          children: List.generate(
+                                              listImages.length,
+                                              (index) => Padding(
+                                                  padding: EdgeInsets.all(5),
+                                                  child: Container(
+                                                    //padding: EdgeInsets.all(20),
+                                                    height: 120,
+                                                    child: Row(
+                                                      children: [
+                                                        Container(
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10),
+                                                              color: AppColors
+                                                                  .primaryColor,
+                                                            ),
+                                                            height: 100,
+                                                            width: 100,
+                                                            child: Container(
+                                                                padding:
+                                                                    EdgeInsets
+                                                                        .all(5),
+                                                                height: 95,
+                                                                width: 95,
+                                                                child:
+                                                                    ClipRRect(
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(
+                                                                                10.0),
+                                                                        child: Image
+                                                                            .file(
+                                                                          File(listImages[index]
+                                                                              .path),
+                                                                          fit: BoxFit
+                                                                              .fill,
+                                                                        )))),
+                                                        SizedBox(
+                                                          width: 20,
+                                                        ),
+                                                        InkWell(
+                                                            onTap: () {
+                                                              setState(() {
+                                                                listImages
+                                                                    .removeAt(
+                                                                        index);
+                                                              });
+                                                            },
+                                                            child: Text(
+                                                              "Remove",
+                                                              style: TextStyle(
+                                                                  color:
+                                                                      AppColors
+                                                                          .red,
+                                                                  fontSize: 20,
+                                                                  decoration:
+                                                                      TextDecoration
+                                                                          .underline),
+                                                            )),
+                                                      ],
+                                                    ),
+                                                  ))),
+                                        )
                                       : Container(),
                                   InkWell(
                                       onTap: () {

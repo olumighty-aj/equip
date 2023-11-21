@@ -13,6 +13,7 @@ import 'package:equipro/utils/helpers.dart';
 import 'package:equipro/utils/http/paths.dart';
 import 'package:equipro/utils/router/navigation_service.dart';
 import 'package:equipro/utils/router/route_names.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as htp;
 
@@ -39,6 +40,10 @@ class Authentication {
 
   late AuthModel _token;
   AuthModel get token => _token;
+
+  void setToken(token) {
+    _token = token;
+  }
 
   saveRegPhone(String phone) async {
     _phoneNumber = phone;
@@ -73,6 +78,7 @@ class Authentication {
       Response res = await _apiService.postRequest(
           {"hirers_id": currentUser.id, "toggle": role}, Paths.switchOwner);
       if (res.statusCode == 200) {
+        _apiService.setAccessToken(res.data["payload"]["token"]);
         return BaseDataModel.fromJson(res.data);
       }
     } on DioException catch (e) {
@@ -111,6 +117,7 @@ class Authentication {
       await prefs.setString("profile", json.encode(user));
       // showToast(result.data['message']);
       _log.i("Here: ${result.data["payload"]}");
+      _apiService.setAccessToken(result.data["payload"]["token"]);
       return SuccessModel(result.data["payload"]);
     } catch (e) {
       print(e.toString());
@@ -431,6 +438,22 @@ class Authentication {
       _log.i(e.message);
       _log.i(e.response);
       return BaseDataModel.fromJson(e.response?.data);
+    }
+  }
+
+  Future<BaseDataModel> getKYC() async {
+    Response res =
+        await _apiService.getRequest(null, Paths.verifyKYC + currentUser.id!);
+    return BaseDataModel.fromJson(res.data);
+  }
+
+  Future<dynamic> logout({BuildContext? context}) async {
+    Response res = await _apiService.postRequest(null, Paths.logout);
+    if (res.statusCode == 200) {
+      showToast(res.data["message"] ?? "", context: context);
+      return true;
+    } else {
+      return false;
     }
   }
 

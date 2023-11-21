@@ -14,7 +14,7 @@ import 'package:stacked_services/stacked_services.dart';
 
 import '../../../app/app_setup.locator.dart';
 
-class LoginViewModel extends BaseViewModel {
+class LoginViewModel extends BaseViewModel with BusyMixin {
   final Authentication _authentication = locator<Authentication>();
   final _navigationService = locator<NavigationService>();
 

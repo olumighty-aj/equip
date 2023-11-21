@@ -7,18 +7,23 @@ import 'package:equipro/utils/router/navigation_service.dart';
 import 'package:equipro/utils/screensize.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:gap/gap.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:stacked/stacked.dart';
 import 'package:equipro/utils/colors.dart';
+
+import '../../../../utils/app_svgs.dart';
+import '../../profile/edit_profile.dart';
 
 class OwnerRentals extends StatefulWidget {
   const OwnerRentals({Key? key}) : super(key: key);
 
   @override
-  LoginState createState() => LoginState();
+  OwnerRentalsState createState() => OwnerRentalsState();
 }
 
-class LoginState extends State<OwnerRentals>
+class OwnerRentalsState extends State<OwnerRentals>
     with SingleTickerProviderStateMixin {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final NavService _navigationService = locator<NavService>();
@@ -37,6 +42,9 @@ class LoginState extends State<OwnerRentals>
         viewModelBuilder: () => OwnerRentalsViewModel(),
         builder: (context, model, child) {
           return Scaffold(
+              appBar: AppBar(
+                leading: CustomBackButton(),
+              ),
               key: _scaffoldKey,
               body: Padding(
                   padding: EdgeInsets.all(20),
@@ -54,41 +62,6 @@ class LoginState extends State<OwnerRentals>
                                         child: widget),
                                   ),
                               children: [
-                                const SizedBox(
-                                  height: 60,
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Container(
-                                        height: 40,
-                                        width: 40,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(12),
-                                          color: AppColors.white,
-                                        ),
-                                        child: InkWell(
-                                            onTap: () {
-                                              Navigator.pop(context);
-                                            },
-                                            child: const Icon(
-                                              Icons.arrow_back_ios,
-                                              color: AppColors.primaryColor,
-                                            ))),
-                                    const Text(
-                                      '',
-                                      style: TextStyle(
-                                          fontSize: 20,
-                                          color: AppColors.black,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 30,
-                                ),
                                 Text(
                                   "Active Rentals",
                                   style: TextStyle(
@@ -318,24 +291,30 @@ class LoginState extends State<OwnerRentals>
                                                             MainAxisAlignment
                                                                 .center,
                                                         children: [
-                                                          SizedBox(
-                                                            height: 10,
-                                                          ),
+                                                          SvgPicture.asset(
+                                                              AppSvgs
+                                                                  .emptyRental),
+                                                          Gap(50),
                                                           Text(
-                                                            "No rentals in this category yet",
-                                                            style: TextStyle(
-                                                                fontSize: 15,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                color: AppColors
-                                                                    .black),
+                                                            "You do not have an active rental",
+                                                            style: Theme.of(
+                                                                    context)
+                                                                .textTheme
+                                                                .bodyMedium
+                                                                ?.copyWith(
+                                                                    fontSize:
+                                                                        15,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600,
+                                                                    color: Colors
+                                                                        .grey),
                                                             textAlign: TextAlign
                                                                 .center,
                                                           ),
-                                                          SizedBox(
-                                                            height: 30,
-                                                          ),
+                                                          // SizedBox(
+                                                          //   height: 30,
+                                                          // ),
                                                         ],
                                                       ));
                                                     }
@@ -638,24 +617,30 @@ class LoginState extends State<OwnerRentals>
                                                             MainAxisAlignment
                                                                 .center,
                                                         children: [
-                                                          SizedBox(
-                                                            height: 10,
-                                                          ),
+                                                          SvgPicture.asset(
+                                                              AppSvgs
+                                                                  .emptyRental),
+                                                          Gap(50),
                                                           Text(
-                                                            "No rentals in this category yet",
-                                                            style: TextStyle(
-                                                                fontSize: 15,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                color: AppColors
-                                                                    .black),
+                                                            "You do not have an active rental",
+                                                            style: Theme.of(
+                                                                    context)
+                                                                .textTheme
+                                                                .bodyMedium
+                                                                ?.copyWith(
+                                                                    fontSize:
+                                                                        15,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600,
+                                                                    color: Colors
+                                                                        .grey),
                                                             textAlign: TextAlign
                                                                 .center,
                                                           ),
-                                                          SizedBox(
-                                                            height: 30,
-                                                          ),
+                                                          // SizedBox(
+                                                          //   height: 30,
+                                                          // ),
                                                         ],
                                                       ));
                                                     }
@@ -798,24 +783,30 @@ class LoginState extends State<OwnerRentals>
                                                             MainAxisAlignment
                                                                 .center,
                                                         children: [
-                                                          SizedBox(
-                                                            height: 10,
-                                                          ),
+                                                          SvgPicture.asset(
+                                                              AppSvgs
+                                                                  .emptyRental),
+                                                          Gap(50),
                                                           Text(
-                                                            "No rentals in this category yet",
-                                                            style: TextStyle(
-                                                                fontSize: 15,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                color: AppColors
-                                                                    .black),
+                                                            "You do not have an active rental",
+                                                            style: Theme.of(
+                                                                    context)
+                                                                .textTheme
+                                                                .bodyMedium
+                                                                ?.copyWith(
+                                                                    fontSize:
+                                                                        15,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600,
+                                                                    color: Colors
+                                                                        .grey),
                                                             textAlign: TextAlign
                                                                 .center,
                                                           ),
-                                                          SizedBox(
-                                                            height: 30,
-                                                          ),
+                                                          // SizedBox(
+                                                          //   height: 30,
+                                                          // ),
                                                         ],
                                                       ));
                                                     }

@@ -1,3 +1,5 @@
+import 'package:dio/dio.dart';
+import 'package:equipro/core/api/dio_service.dart';
 import 'package:equipro/core/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_paystack/flutter_paystack.dart';
@@ -8,8 +10,11 @@ import 'package:equipro/utils/http/paths.dart';
 import 'package:equipro/utils/locator.dart';
 import 'package:uuid/uuid.dart';
 
+import '../model/base_model.dart';
+
 class PaymentService {
   PaystackPlugin plugin = PaystackPlugin();
+  final _api = locator<ApiService>();
   late BuildContext contextB;
   BuildContext get context => contextB;
   final Authentication authentication = locator<Authentication>();
@@ -18,7 +23,6 @@ class PaymentService {
   //response after payment
   late CheckoutResponse _response;
   CheckoutResponse get response => _response;
-
 
   //process payment
   handleCheckout(CheckoutMethod method, int amount) async {
@@ -63,13 +67,18 @@ class PaymentService {
       return SuccessModel(result.data[""]);
     } catch (e) {
       return ErrorModel(e.toString() ==
-          "SocketException: Failed host lookup: '$baseUrlError' (OS Error: nodename nor servname provided, or not known, errno = 8)"
+              "SocketException: Failed host lookup: '$baseUrlError' (OS Error: nodename nor servname provided, or not known, errno = 8)"
           ? "Your internet is not stable kindly reconnect and try again"
           : e.toString() ==
-          "TimeoutException after 0:00:40.000000: Future not completed"
-          ? "Your internet is not stable kindly reconnect and try again"
-          : e.toString());
+                  "TimeoutException after 0:00:40.000000: Future not completed"
+              ? "Your internet is not stable kindly reconnect and try again"
+              : e.toString());
     }
+  }
+
+  Future<BaseDataModel> newGetWalletBalance() async {
+    Response res = await _api.getRequest(null, Paths.earnings);
+    return BaseDataModel.fromJson(res.data);
   }
 }
 
@@ -90,7 +99,6 @@ showMessage(String message, [Duration duration = const Duration(seconds: 4)]) {
   // ));
   print(message);
 }
-
 
 class MyLogo extends StatelessWidget {
   @override

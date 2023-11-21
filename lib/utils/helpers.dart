@@ -20,6 +20,8 @@ showToast(String message, {context}) {
     CustomSnackBar.success(
       backgroundColor: AppColors.green,
       message: message,
+      textStyle:
+          Theme.of(context).textTheme.bodyMedium!.copyWith(color: Colors.white),
     ),
   );
 }
@@ -30,6 +32,8 @@ showErrorToast(String message, {context}) {
     CustomSnackBar.info(
       backgroundColor: AppColors.red,
       message: message,
+      textStyle:
+          Theme.of(context).textTheme.bodySmall!.copyWith(color: Colors.white),
     ),
   );
 }

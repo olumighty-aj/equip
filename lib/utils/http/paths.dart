@@ -12,6 +12,8 @@ class Paths {
   static const String searchMyEquipment = 'owners/equipments?q=';
   static const String searchEquipments = 'equipments?q=';
   static const String book = 'equip_booking';
+  static const String equipmentBookingRequestById =
+      'equip_booking?equipments_id=';
   static const String active_rentals = 'rentals?active_status=';
   static const String active_owner_rentals = 'owners/rentals?active_status=';
   static const String rate = 'reviews';
@@ -28,4 +30,6 @@ class Paths {
   static const String chatDetails = 'get_chat_details?user_1=';
   static const String sendChat = 'send_chat';
   static const String getNotification = 'notification';
+  static const String verifyKYC = 'verify_document?hirers_id=';
+  static const String logout = 'logout';
 }

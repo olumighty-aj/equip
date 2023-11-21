@@ -1,5 +1,13 @@
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:equipro/app/app.dart';
+import 'package:equipro/core/api/api_constants.dart';
+import 'package:equipro/core/services/auth_service.dart';
+import 'package:equipro/core/services/shared_prefs.dart';
+import 'package:equipro/ui/screens/login/login_view.dart';
 import 'package:equipro/ui/screens/notification/notification.dart';
+import 'package:equipro/ui/screens/onboarding/onboardingscreen_view.dart';
 import 'package:equipro/utils/locator.dart';
 import 'package:equipro/utils/colors.dart';
 import 'package:equipro/utils/theme_manager.dart';
@@ -23,108 +31,55 @@ import 'app/app_setup.router.dart';
 late BuildContext contextB;
 void main() async {
   await App.initialize();
-  runApp(const MyApp());
+  bool userExists = await App.checkIfUserIsNew();
+  runApp(MyApp(
+    isNewUser: !userExists,
+  ));
   await Firebase.initializeApp();
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
+  final bool isNewUser;
+  const MyApp({Key? key, required this.isNewUser}) : super(key: key);
 
   @override
   State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
-  late FirebaseMessaging messaging;
+  Timer? _rootTimer;
 
-  late AndroidNotificationChannel channel;
-
-  displayDialog(String title, String body) {
-    return showTopSnackBar(
-      contextB,
-      CustomSnackBar.info(
-        backgroundColor: AppColors.primaryColor,
-        message: "$title\n$body",
-      ),
-    );
-  }
-
-  void selectNotification(String? payload) async {
-    if (payload != null) {
-      debugPrint('notification payload: $payload');
-    }
-    await Navigator.push(
-      context,
-      MaterialPageRoute<void>(builder: (context) => NotificationPage()),
-    );
-  }
-
-  /// Initialize the [FlutterLocalNotificationsPlugin] package.
-  late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
-
-  void registerNotification() async {
-    FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-        FlutterLocalNotificationsPlugin();
-// initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
-    const AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings('app_icon');
-    final IOSInitializationSettings initializationSettingsIOS =
-        IOSInitializationSettings();
-    final MacOSInitializationSettings initializationSettingsMacOS =
-        MacOSInitializationSettings();
-    final InitializationSettings initializationSettings =
-        InitializationSettings(
-            android: initializationSettingsAndroid,
-            iOS: initializationSettingsIOS,
-            macOS: initializationSettingsMacOS);
-    await flutterLocalNotificationsPlugin.initialize(initializationSettings,
-        onSelectNotification: selectNotification);
-    // var initializationSettings = InitializationSettings();
-    // channel = const AndroidNotificationChannel(
-    //   'high_importance_channel', // id
-    //   'High Importance Notifications', // title
-    //   //'This channel is used for important notifications.', // description
-    //   importance: Importance.high,
-    // );
-    //
-    // flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-    // flutterLocalNotificationsPlugin.initialize(initializationSettings);
-    // await flutterLocalNotificationsPlugin
-    //     .resolvePlatformSpecificImplementation<
-    //         AndroidFlutterLocalNotificationsPlugin>()
-    //     ?.createNotificationChannel(channel);
-
-    /// Update the iOS foreground notification presentation options to allow
-    /// heads up notifications.
-    await FirebaseMessaging.instance
-        .setForegroundNotificationPresentationOptions(
-      alert: true,
-      badge: true,
-      sound: true,
-    );
-
-    FirebaseMessaging.onMessage.listen((RemoteMessage event) {
-      print("message recieved");
-      print(event.notification?.body);
-      displayDialog(
-          '${event.notification?.title}', '${event.notification?.body}');
-
-      // Get.snackbar('${event.notification.body}', '${event.notification.title}',
-      //     backgroundColor: AppColors.secondaryColor);
+  void initializeTimer() {
+    var time = const Duration(minutes: 31);
+    _rootTimer = Timer(time, () async {
+      logOutUser();
     });
-    FirebaseMessaging.onMessageOpenedApp.listen((message) {});
-  }
-
-  Future<void> _messageHandler(RemoteMessage message) async {
-    //await Firebase.initializeApp(options: DefaultFirebaseConfig.platformOptions);
-    print('Handling a background message ${message.messageId}');
-    print('background message ${message.notification?.body}');
   }
 
   void initState() {
+    // checkIfUserIsNew();
     // TODO: implement initState
-    registerNotification();
-    FirebaseMessaging.onBackgroundMessage(_messageHandler);
+  }
+
+  void logOutUser() async {
+    // Log out the user if they're logged in, then cancel the timer.
+    await locator<Authentication>().logout().then((value) {
+      if (value == true) {
+        _rootTimer?.cancel();
+        SharedPrefsClient.deleteData("loginDetails");
+        locator<NavigationService>().clearStackAndShow(Routes.login);
+      }
+    });
+  }
+
+  void handleUserInteraction([_]) {
+    if (_rootTimer != null && !_rootTimer!.isActive) {
+      // This means the user has been logged out
+      return;
+    }
+    print(_rootTimer?.tick);
+    _rootTimer?.cancel();
+    initializeTimer();
   }
 
   @override
@@ -134,22 +89,23 @@ class _MyAppState extends State<MyApp> {
     //     ChangeNotifierProvider(create: (context) => AppStateProvider()),
     // ],
     // child:
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Equippro',
-      // builder: (context, child) => Navigator(
-      //   key: locator<ProgressService>().progressNavigationKey,
-      //   onGenerateRoute: (settings) => MaterialPageRoute(builder: (context) {
-      //     return ProgressManager(child: child!);
-      //   }),
-      // ),
-      navigatorKey: StackedService.navigatorKey,
-      initialRoute: Routes.onboardingScreen,
-      onGenerateRoute: (settings) {
-        print("Route: ${settings.name}");
-        return StackedRouter().onGenerateRoute(settings);
-      },
-      theme: ThemeNotifier().lightTheme,
+    return Listener(
+      behavior: HitTestBehavior.translucent,
+      onPointerDown: handleUserInteraction,
+      onPointerMove: handleUserInteraction,
+      onPointerUp: handleUserInteraction,
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Equippro',
+        navigatorKey: StackedService.navigatorKey,
+        home: widget.isNewUser ? OnboardingScreen() : Login(),
+        // initialRoute: initialRoute,
+        onGenerateRoute: (settings) {
+          print("Route: ${settings.name}");
+          return StackedRouter().onGenerateRoute(settings);
+        },
+        theme: ThemeNotifier().lightTheme,
+      ),
     );
   }
 }

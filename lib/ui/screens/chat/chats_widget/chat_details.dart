@@ -157,22 +157,35 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
   }
 
   sendSocket(Map<String, dynamic> data) {
-    _activities.sendChat(data);
+    _activities.newSendChat(data);
     // channel.trigger("sendData", data);
   }
 
-  bool containsSensitiveInformation(String message) {
-    // Regular expressions to match phone numbers and emails
-    final RegExp naijphoneRegExp = RegExp(r'\+?(234)?[789]\d{9}');
-    final RegExp ukphoneRegExp = RegExp(r'^\+(44\s?|0)\d{10,14}');
+  bool containsEmailOrPhoneNumber(String message) {
+    // Regular expressions for Nigerian phone numbers and email addresses
+    final RegExp nigeriaRegExp = RegExp(r'\+?(234)?[789]\d{1,4}');
+    final RegExp ukRegExp = RegExp(r'^\+(44\s?|0)\d{1,4}$');
     final RegExp emailRegExp =
         RegExp(r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b');
 
     // Check if the message contains a phone number or email
-    return naijphoneRegExp.hasMatch(message) ||
-        ukphoneRegExp.hasMatch(message) ||
+    return nigeriaRegExp.hasMatch(message) ||
+        ukRegExp.hasMatch(message) ||
         emailRegExp.hasMatch(message);
   }
+
+  // bool containsSensitiveInformation(String message) {
+  //   // Regular expressions to match phone numbers and emails
+  //   final RegExp naijphoneRegExp = RegExp(r'\+?(234)?[789]\d{9}');
+  //   final RegExp ukphoneRegExp = RegExp(r'^\+(44\s?|0)\d{10,14}');
+  //   final RegExp emailRegExp =
+  //       RegExp(r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b');
+  //
+  //   // Check if the message contains a phone number or email
+  //   return naijphoneRegExp.hasMatch(message) ||
+  //       ukphoneRegExp.hasMatch(message) ||
+  //       emailRegExp.hasMatch(message);
+  // }
 
   // void onTriggerEventPressed() async {
   // //  var eventFormValidated = _eventFormKey.currentState!.validate();
@@ -219,106 +232,89 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
       bottom: 20,
       left: 10,
       right: 10,
-      child: Container(
-        color: Colors.white,
-        height: 60.0,
-        child: TextFormField(
-          controller: textController,
-          maxLines: null,
-          keyboardType: TextInputType.multiline,
-          textAlign: TextAlign.start,
-          decoration: InputDecoration(
-            suffixIcon: Container(
-                width: 90,
-                child: Row(
-                  children: [
-                    InkWell(
-                      onTap: () {},
-                      child: SvgPicture.asset(
-                        "assets/images/attach.svg",
-                        height: 25,
-                      ),
-                    ),
-                    SizedBox(
-                      width: 20,
-                    ),
-                    InkWell(
-                      onTap: () {
-                        if (textController.text.isNotEmpty &&
-                            containsSensitiveInformation(textController.text)) {
-                          showErrorToast(
-                              "You can't share phone number or email address",
-                              context: context);
-                        } else if (textController.text.isNotEmpty &&
-                            !containsSensitiveInformation(
-                                textController.text)) {
-                          //Send the message as JSON data to send_message event
-                          var data;
+      child: TextFormField(
+        controller: textController,
+        maxLines: null,
+        keyboardType: TextInputType.multiline,
+        textAlign: TextAlign.start,
+        decoration: InputDecoration(
+          fillColor: Colors.white,
+          filled: true,
+          suffixIcon: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: GestureDetector(
+              onTap: () {
+                if (textController.text.isNotEmpty &&
+                    containsEmailOrPhoneNumber(textController.text)) {
+                  showErrorToast(
+                      "You can't share phone number or email address",
+                      context: context);
+                } else if (textController.text.isNotEmpty &&
+                    !containsEmailOrPhoneNumber(textController.text)) {
+                  //Send the message as JSON data to send_message event
+                  var data;
 
-                          data = {
-                            "sender_id": _authentication.currentUser.id,
-                            "receiver_id": widget.feed.chatWith!.id!,
-                            "message": textController.text,
-                          };
+                  data = {
+                    "sender_id": _authentication.currentUser.id,
+                    "receiver_id": widget.feed.chatWith!.id!,
+                    "message": textController.text,
+                  };
 
-                          sendSocket(data);
-                          setState(() {
-                            chatResponse.add(ChatMessages(
-                              id: "",
-                              senderId: _authentication.currentUser.id,
-                              receiverId: widget.feed.chatWith!.id!,
-                              message: textController.text,
-                              type: "sent",
-                              inboxId: "1",
-                              status: "0",
-                              dateModified: DateTime.now().toString(),
-                              dateCreated: DateTime.now().toString(),
-                            ));
-                          });
-                          textController.text = '';
-                          //Scrolldown the list to show the latest message
-                          scrollController.animateTo(
-                            scrollController.position.maxScrollExtent,
-                            duration: const Duration(milliseconds: 600),
-                            curve: Curves.ease,
-                          );
-                        }
-                      },
-                      child: SvgPicture.asset(
-                        "assets/images/send.svg",
-                        height: 25,
-                      ),
-                    ),
-                  ],
-                )),
-            contentPadding:
-                EdgeInsets.symmetric(vertical: 2.0, horizontal: 20.0),
-            hintText: "Type here...",
-            //hintText: tr.text( "Upcoming feature"),
-            hintStyle: TextStyle(
-              color: Color(0XFF818181),
-              fontSize: 15,
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(
-                Radius.circular(30.0),
+                  sendSocket(data);
+                  setState(() {
+                    chatResponse.add(ChatMessages(
+                      id: "",
+                      senderId: _authentication.currentUser.id,
+                      receiverId: widget.feed.chatWith!.id!,
+                      message: textController.text,
+                      type: "sent",
+                      inboxId: "1",
+                      status: "0",
+                      dateModified: DateTime.now().toString(),
+                      dateCreated: DateTime.now().toString(),
+                    ));
+                  });
+                  textController.text = '';
+                  //Scrolldown the list to show the latest message
+                  scrollController.animateTo(
+                    scrollController.position.maxScrollExtent,
+                    duration: const Duration(milliseconds: 600),
+                    curve: Curves.ease,
+                  );
+                }
+              },
+              child: SvgPicture.asset(
+                "assets/images/send.svg",
+                height: 15,
               ),
-              borderSide: BorderSide(color: Colors.grey),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(
-                Radius.circular(30.0),
-              ),
-              borderSide: BorderSide(color: Colors.grey),
             ),
           ),
-          onChanged: (value) {
-            //  setState(() {
-            // searchWord = value;
-            // print(searchWord);
-            // });
-          },
+          contentPadding: EdgeInsets.symmetric(vertical: 2.0, horizontal: 20.0),
+          hintText: "Type here...",
+          //hintText: tr.text( "Upcoming feature"),
+          hintStyle: TextStyle(
+            color: Color(0XFF818181),
+            fontSize: 15,
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(30.0),
+            ),
+            borderSide: BorderSide(color: Colors.grey),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(30.0),
+            ),
+            borderSide: BorderSide(color: Colors.grey),
+          ),
         ),
+        onChanged: (value) {
+          //  setState(() {
+          // searchWord = value;
+          // print(searchWord);
+          // });
+        },
       ),
     );
 
@@ -404,7 +400,7 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
                               Column(
                                 children: [
                                   Text(
-                                    widget.feed.chatWith!.fullname!,
+                                    widget.feed.chatWith?.fullname ?? "",
                                     style: TextStyle(
                                         fontSize: 20,
                                         color: AppColors.black,

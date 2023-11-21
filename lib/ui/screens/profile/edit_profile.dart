@@ -536,7 +536,7 @@ class LoginState extends State<EditProfile> with TickerProviderStateMixin {
                                   SizedBox(
                                     height: 20,
                                   ),
-                                  model.kycUpdated
+                                  model.kycApproved
                                       ? Container()
                                       : Column(
                                           crossAxisAlignment:

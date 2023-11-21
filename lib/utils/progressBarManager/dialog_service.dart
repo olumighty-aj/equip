@@ -3,20 +3,21 @@ import 'package:flutter/cupertino.dart';
 import 'package:equipro/utils/progressBarManager/dialog_models.dart';
 
 class ProgressService {
-  final GlobalKey<NavigatorState> _progressNavigationKey = GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> _progressNavigationKey =
+      GlobalKey<NavigatorState>();
   late Function(ProgressRequest) _showProgressListener;
   late Completer<ProgressResponse> _progressCompleter;
 
   GlobalKey<NavigatorState> get progressNavigationKey => _progressNavigationKey;
 
   /// Registers a callback function. Typically to show the dialog
-  void registerProgressListener(Function(ProgressRequest) showProgressListener) {
+  void registerProgressListener(
+      Function(ProgressRequest) showProgressListener) {
     _showProgressListener = showProgressListener;
   }
 
   /// Calls the dialog listener and returns a Future that will wait for dialogComplete.
   Future<ProgressResponse> showDialog({
-
     required String title,
     required String description,
     String buttonTitle = 'Ok',
@@ -25,7 +26,8 @@ class ProgressService {
     _showProgressListener(ProgressRequest(
       title: title,
       description: description,
-      buttonTitle: buttonTitle, cancelTitle: '',
+      buttonTitle: buttonTitle,
+      cancelTitle: '',
     ));
     return _progressCompleter.future;
   }
@@ -47,9 +49,9 @@ class ProgressService {
 
   /// Completes the _dialogCompleter to resume the Future's execution call
   void dialogComplete() {
-   // Navigator.pop(context);
+    // Navigator.pop(context);
     _progressNavigationKey.currentState!.pop();
- // _progressCompleter.complete();
-  // _progressCompleter = null;
+    // _progressCompleter.complete();
+    // _progressCompleter = null;
   }
 }

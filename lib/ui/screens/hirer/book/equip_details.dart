@@ -14,14 +14,7 @@ import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 import 'package:stacked/stacked.dart';
-import 'package:equipro/ui/widget/general_button.dart';
 import 'package:equipro/utils/colors.dart';
-// import 'package:equipro/utils/locator.dart';
-import 'package:equipro/utils/router/navigation_service.dart';
-import 'package:equipro/utils/router/route_names.dart';
-import 'package:stacked_services/stacked_services.dart';
-
-import '../../../../app/app_setup.locator.dart';
 import '../../../../utils/text_styles.dart';
 
 class EquipDetails extends StatefulWidget {
@@ -35,7 +28,7 @@ class EquipDetails extends StatefulWidget {
 class LoginState extends State<EquipDetails> with TickerProviderStateMixin {
   // final _navigationService = locator<NavigationService>();
 
-  String? selected = "1";
+  String? selected;
   late bool active = false;
 
   AnimationController? _navController;
@@ -80,7 +73,7 @@ class LoginState extends State<EquipDetails> with TickerProviderStateMixin {
                   Hero(
                       tag: widget.model.id.toString(),
                       child: CachedNetworkImage(
-                        imageUrl:
+                        imageUrl: selected ??
                             widget.model.equipImages!.first.equipImagesPath!,
                         imageBuilder: (context, imageProvider) => Container(
                           width: Responsive.width(context),
@@ -89,7 +82,7 @@ class LoginState extends State<EquipDetails> with TickerProviderStateMixin {
                             shape: BoxShape.rectangle,
                             image: DecorationImage(
                               image: imageProvider,
-                              fit: BoxFit.fill,
+                              fit: BoxFit.cover,
                               colorFilter: ColorFilter.mode(
                                   AppColors.black.withOpacity(0.3),
                                   BlendMode.darken),
@@ -164,7 +157,7 @@ class LoginState extends State<EquipDetails> with TickerProviderStateMixin {
                                                               .model
                                                               .equipImages![
                                                                   index]
-                                                              .id!
+                                                              .equipImagesPath
                                                               .toString();
                                                         });
                                                       },
@@ -178,18 +171,18 @@ class LoginState extends State<EquipDetails> with TickerProviderStateMixin {
                                                             border: Border.all(
                                                                 color: AppColors
                                                                     .primaryColor,
-                                                                width: 2),
+                                                                width: 0.5),
                                                             color: widget
                                                                         .model
                                                                         .equipImages![
                                                                             index]
-                                                                        .id!
+                                                                        .equipImagesPath!
                                                                         .toString() !=
                                                                     selected
                                                                 ? AppColors
-                                                                    .primaryColor
+                                                                    .white
                                                                 : AppColors
-                                                                    .white,
+                                                                    .primaryColor,
                                                           ),
                                                           height: 70,
                                                           width: 70,
@@ -199,39 +192,42 @@ class LoginState extends State<EquipDetails> with TickerProviderStateMixin {
                                                               padding:
                                                                   EdgeInsets
                                                                       .all(3),
-                                                              child: ClipRRect(
+                                                              child:
+                                                                  CachedNetworkImage(
+                                                                imageUrl: widget
+                                                                    .model
+                                                                    .equipImages![
+                                                                        index]
+                                                                    .equipImagesPath!,
+                                                                fit: BoxFit
+                                                                    .cover,
+                                                                placeholder: (context,
+                                                                        url) =>
+                                                                    SizedBox(
+                                                                        height:
+                                                                            20,
+                                                                        width:
+                                                                            20,
+                                                                        child:
+                                                                            CircularProgressIndicator(
+                                                                          color:
+                                                                              AppColors.primaryColor,
+                                                                        )),
+                                                                errorWidget: (context,
+                                                                        url,
+                                                                        error) =>
+                                                                    ClipRRect(
                                                                   borderRadius:
                                                                       BorderRadius
                                                                           .circular(
-                                                                              10.0),
-                                                                  child:
-                                                                      CachedNetworkImage(
-                                                                    imageUrl: widget
-                                                                        .model
-                                                                        .equipImages![
-                                                                            index]
-                                                                        .equipImagesPath!,
-                                                                    fit: BoxFit
-                                                                        .fill,
-                                                                    placeholder:
-                                                                        (context,
-                                                                                url) =>
-                                                                            CircularProgressIndicator(),
-                                                                    errorWidget: (context,
-                                                                            url,
-                                                                            error) =>
-                                                                        ClipRRect(
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
                                                                               8.0),
-                                                                      child: Image
-                                                                          .asset(
-                                                                        "assets/images/logo.png",
-                                                                        scale:
-                                                                            2,
-                                                                      ),
-                                                                    ),
-                                                                  ))))),
+                                                                  child: Image
+                                                                      .asset(
+                                                                    "assets/images/logo.png",
+                                                                    scale: 2,
+                                                                  ),
+                                                                ),
+                                                              )))),
                                                 )),
                                       )
                                     : Container(
