@@ -4,5 +4,6 @@ enum BottomSheetType {
   cardDeliverySheet,
   billReviewSheet,
   phoneNetwork,
-  flightSearch
+  flightSearch,
+  location
 }

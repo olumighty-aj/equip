@@ -457,24 +457,30 @@ class OwnerRentalsState extends State<OwnerRentals>
                                                             MainAxisAlignment
                                                                 .center,
                                                         children: [
-                                                          SizedBox(
-                                                            height: 10,
-                                                          ),
+                                                          SvgPicture.asset(
+                                                              AppSvgs
+                                                                  .emptyRental),
+                                                          Gap(50),
                                                           Text(
-                                                            "No rentals in this category yet",
-                                                            style: TextStyle(
-                                                                fontSize: 15,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                color: AppColors
-                                                                    .black),
+                                                            "You do not have an active rental",
+                                                            style: Theme.of(
+                                                                    context)
+                                                                .textTheme
+                                                                .bodyMedium
+                                                                ?.copyWith(
+                                                                    fontSize:
+                                                                        15,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600,
+                                                                    color: Colors
+                                                                        .grey),
                                                             textAlign: TextAlign
                                                                 .center,
                                                           ),
-                                                          SizedBox(
-                                                            height: 30,
-                                                          ),
+                                                          // SizedBox(
+                                                          //   height: 30,
+                                                          // ),
                                                         ],
                                                       ));
                                                     }

@@ -15,7 +15,6 @@ import 'package:stacked_shared/stacked_shared.dart';
 import '../core/api/dio_service.dart';
 import '../core/services/activities_service.dart';
 import '../core/services/auth_service.dart';
-import '../core/services/payment_services.dart';
 import '../utils/progressBarManager/dialog_service.dart';
 import '../utils/router/navigation_service.dart';
 
@@ -39,5 +38,4 @@ Future<void> setupLocator({
   locator.registerLazySingleton(() => DialogService());
   locator.registerLazySingleton(() => SnackbarService());
   locator.registerLazySingleton(() => ProgressService());
-  locator.registerLazySingleton(() => PaymentService());
 }

@@ -1,3 +1,4 @@
+import 'package:equipro/core/enums/bottom_sheet_type.dart';
 import 'package:equipro/core/model/LoginPayload.dart';
 import 'package:equipro/ui/screens/login/view_model.dart';
 import 'package:equipro/ui/screens/login/view_model.dart';
@@ -6,6 +7,7 @@ import 'package:equipro/utils/screensize.dart';
 import 'package:equipro/utils/theme_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:location/location.dart';
 import 'package:stacked/stacked.dart';
 import 'package:equipro/ui/screens/login/login_view_model.dart';
 import 'package:equipro/ui/widget/general_button.dart';
@@ -15,6 +17,7 @@ import 'package:equipro/utils/helpers.dart';
 import 'package:equipro/utils/notification_helper.dart';
 import 'package:equipro/utils/router/navigation_service.dart';
 import 'package:equipro/utils/router/route_names.dart';
+import 'package:stacked_services/stacked_services.dart';
 
 import '../../../app/app_setup.locator.dart';
 import '../../../utils/busy_dialog.dart';
@@ -34,9 +37,46 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   final ProgressService _progressService = locator<ProgressService>();
 
+  LocationData? locationData;
+
+  Location location = Location();
+
+  bool? _serviceEnabled;
+  PermissionStatus? _permissionGranted;
+
+  Future<LocationData> getUserLocation() async {
+    print("ajdjdj");
+    _serviceEnabled = await location.serviceEnabled();
+    if (!_serviceEnabled!) {
+      _serviceEnabled = await location.requestService();
+      if (!_serviceEnabled!) {
+        showLocationBottomSheet();
+        // return null;
+      }
+    }
+    // _permissionGranted = await location.hasPermission();
+    // if (_permissionGranted == PermissionStatus.denied) {
+    //   _permissionGranted = await location.requestPermission();
+    //   if (_permissionGranted != PermissionStatus.granted) {
+    //     print(_permissionGranted);
+    //     // showLocationBottomSheet();
+    //   }
+    //   print(_permissionGranted);
+    // }
+
+    // var locationData2 = await location.getLocation();
+    // print("Location");
+    // print(locationData);
+    // //setState(() {
+    // locationData = locationData2;
+    // });
+    return locationData!;
+  }
+
   @override
   void initState() {
     _progressService.registerProgressListener(_showDialog);
+    getUserLocation();
     super.initState();
   }
 
@@ -74,6 +114,11 @@ class _LoginState extends State<Login> {
     progressDialog.show(); // show dialog
     //progressDialog.dismiss();
     print('show');
+  }
+
+  void showLocationBottomSheet() async {
+    SheetResponse? res = await locator<BottomSheetService>().showCustomSheet(
+        variant: BottomSheetType.location, barrierDismissible: false);
   }
 
   @override

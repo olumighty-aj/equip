@@ -7,5 +7,6 @@ class AppSvgs {
   static const emptyRental = "assets/images/empty_rental.svg";
   static const emptyChat = "assets/images/empty_chat.svg";
   static const more = "assets/images/more.svg";
+  static const logoMark = "assets/images/svg_logomark.svg";
   // static const more = "assets/images/more.svg";
 }

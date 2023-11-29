@@ -8,21 +8,10 @@ import 'package:equipro/core/services/index.dart';
 import 'package:equipro/ui/screens/drawer.dart';
 import 'package:equipro/ui/screens/profile/profile_view_model.dart';
 import 'package:equipro/ui/widget/base_button.dart';
-import 'package:equipro/ui/widget/equip_tiles.dart';
-import 'package:equipro/ui/widget/general_button.dart';
-import 'package:equipro/utils/helpers.dart';
-import 'package:equipro/utils/locator.dart';
-import 'package:equipro/utils/router/navigation_service.dart';
-import 'package:equipro/utils/router/route_names.dart';
 import 'package:equipro/utils/screensize.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
-import 'package:place_picker/place_picker.dart';
 import 'package:stacked/stacked.dart';
-import 'package:equipro/ui/screens/login/login_view_model.dart';
 import 'package:equipro/utils/colors.dart';
 
 class EditProfile extends StatefulWidget {
@@ -212,87 +201,6 @@ class LoginState extends State<EditProfile> with TickerProviderStateMixin {
                                       ],
                                     ),
                                   )),
-                                  // Center(
-                                  //     child: Stack(
-                                  //   children: [
-                                  //     Container(
-                                  //       width: 150.0,
-                                  //       height: 150.0,
-                                  //       child: Image.asset(
-                                  //           "assets/images/dot_circle.png"),
-                                  //     ),
-                                  //     PopupMenuButton<int>(
-                                  //       offset: Offset(100, 100),
-                                  //       iconSize: 120,
-                                  //       icon: model.image != null
-                                  //           ? Padding(
-                                  //               padding: EdgeInsets.only(
-                                  //                   left: 15, top: 13),
-                                  //               child: CircleAvatar(
-                                  //                   radius: 70,
-                                  //                   backgroundImage: FileImage(
-                                  //                       model.image!)))
-                                  //           : Padding(
-                                  //               padding: EdgeInsets.only(
-                                  //                   left: 15, top: 13),
-                                  //               child: CachedNetworkImage(
-                                  //                 imageUrl:
-                                  //                     model.hirersPath != null
-                                  //                         ? model.hirersPath!
-                                  //                         : baseUrl,
-                                  //                 imageBuilder: (context,
-                                  //                         imageProvider) =>
-                                  //                     Container(
-                                  //                   width: 140.0,
-                                  //                   height: 140.0,
-                                  //                   decoration: BoxDecoration(
-                                  //                     shape: BoxShape.circle,
-                                  //                     image: DecorationImage(
-                                  //                         image: imageProvider,
-                                  //                         fit: BoxFit.contain),
-                                  //                   ),
-                                  //                 ),
-                                  //                 placeholder: (context, url) =>
-                                  //                     CircularProgressIndicator(),
-                                  //                 errorWidget:
-                                  //                     (context, url, error) =>
-                                  //                         CircleAvatar(
-                                  //                   radius: 70,
-                                  //                   backgroundColor:
-                                  //                       AppColors.grey,
-                                  //                   child: Image.asset(
-                                  //                     "assets/images/icon.png",
-                                  //                     scale: 2,
-                                  //                   ),
-                                  //                 ),
-                                  //               )),
-                                  //       onSelected: (int selectedValue) async {
-                                  //         switch (selectedValue) {
-                                  //           case 0:
-                                  //             model.handleChooseFromCamera();
-                                  //             break;
-                                  //           case 1:
-                                  //             model.handleChooseFromGallery();
-                                  //             break;
-                                  //           default:
-                                  //         }
-                                  //       },
-                                  //       itemBuilder: (context) => [
-                                  //         PopupMenuItem(
-                                  //           value: 0,
-                                  //           child: Text(
-                                  //             "Camera",
-                                  //           ),
-                                  //         ),
-                                  //         PopupMenuItem(
-                                  //             value: 1,
-                                  //             child: Text(
-                                  //               "Gallery",
-                                  //             )),
-                                  //       ],
-                                  //     ),
-                                  //   ],
-                                  // )),
                                   SizedBox(
                                     height: 20,
                                   ),

@@ -1,6 +1,7 @@
 import 'package:country_pickers/country.dart';
 import 'package:country_pickers/country_pickers.dart';
 import 'package:equipro/core/model/SignUpModel.dart';
+import 'package:equipro/ui/screens/login/login_view.dart';
 import 'package:equipro/ui/screens/register/register_view_model.dart';
 import 'package:equipro/ui/widget/base_button.dart';
 import 'package:equipro/ui/widget/phonenoTextInput.dart';
@@ -321,11 +322,23 @@ class RegisterState extends State<Register> {
                                                                 MainAxisAlignment
                                                                     .spaceEvenly,
                                                             children: [
+                                                              // showCountryPickerDialog(),
+                                                              // showCountryPicker(
+                                                              //   context: context,
+                                                              //   countryFilter: <String>['CD', 'CG', 'KE', 'UG'], // only specific countries
+                                                              //   onSelect: (){....},
+                                                              // )
                                                               Container(
                                                                 //width: widthSizer(120, context),
                                                                 //height: heightSizer(16, context),
                                                                 child:
                                                                     CountryPickerDropdown(
+                                                                        itemFilter: (c) =>
+                                                                            [
+                                                                              'NG',
+                                                                              'GB',
+                                                                            ].contains(c
+                                                                                .isoCode),
                                                                         initialValue:
                                                                             'NG',
                                                                         itemBuilder:
@@ -468,11 +481,11 @@ class RegisterState extends State<Register> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text("Already have an account? "),
-                                    InkWell(
-                                        onTap: () {
-                                          _navigationService
-                                              .navigateTo(loginRoute);
-                                        },
+                                    GestureDetector(
+                                        onTap: () => Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) => Login())),
                                         child: Text(" Log In",
                                             style: TextStyle(
                                                 color: AppColors.primaryColor,

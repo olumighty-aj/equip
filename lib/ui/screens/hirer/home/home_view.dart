@@ -24,6 +24,8 @@ import 'package:stacked_services/stacked_services.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
+import '../../../../core/enums/bottom_sheet_type.dart';
+
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
 
@@ -33,7 +35,6 @@ class Home extends StatefulWidget {
 
 class LoginState extends State<Home> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  final NavService _navigationService = locator<NavService>();
 
   late FirebaseMessaging messaging;
 
@@ -57,6 +58,7 @@ class LoginState extends State<Home> {
     if (!_serviceEnabled!) {
       _serviceEnabled = await location.requestService();
       if (!_serviceEnabled!) {
+        showLocationBottomSheet();
         // return null;
       }
     }
@@ -77,6 +79,11 @@ class LoginState extends State<Home> {
     locationData = locationData2;
     // });
     return locationData!;
+  }
+
+  void showLocationBottomSheet() async {
+    SheetResponse? res = await locator<BottomSheetService>().showCustomSheet(
+        variant: BottomSheetType.location, barrierDismissible: false);
   }
 
   void selectNotification(String? payload) async {
@@ -170,6 +177,7 @@ class LoginState extends State<Home> {
     return ViewModelBuilder<HomeViewModel>.reactive(
         onViewModelReady: (v) async {
           getUserLocation();
+          v.init();
         },
         viewModelBuilder: () => HomeViewModel(),
         builder: (context, model, child) {

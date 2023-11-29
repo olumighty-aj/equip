@@ -42,6 +42,7 @@ dependencies:
   cached_network_image:
   top_snackbar_flutter: ^1.0.2
   country_pickers:
+  country_picker:
   flutter_staggered_animations: ^1.0.0
   smooth_star_rating:
     git:
@@ -55,7 +56,7 @@ dependencies:
   place_picker: ^0.9.20-nullsafety
   location: ^4.4.0
   pusher_channels_flutter: ^2.2.0
-  flutter_paystack: ^1.0.7
+#  flutter_paystack: ^1.0.7
   flutter_stripe: ^9.2.1
   file: ^6.1.4
 

@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:equipro/core/api/dio_service.dart';
 import 'package:equipro/core/services/auth_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_paystack/flutter_paystack.dart';
+// import 'package:flutter_paystack/flutter_paystack.dart';
 import 'package:equipro/core/model/error_model.dart';
 import 'package:equipro/core/model/success_model.dart';
 import 'package:equipro/core/services/index.dart';
@@ -13,7 +13,7 @@ import 'package:uuid/uuid.dart';
 import '../model/base_model.dart';
 
 class PaymentService {
-  PaystackPlugin plugin = PaystackPlugin();
+  // PaystackPlugin plugin = PaystackPlugin();
   final _api = locator<ApiService>();
   late BuildContext contextB;
   BuildContext get context => contextB;
@@ -21,42 +21,42 @@ class PaymentService {
   var uuid = Uuid();
 
   //response after payment
-  late CheckoutResponse _response;
-  CheckoutResponse get response => _response;
+  // late CheckoutResponse _response;
+  // CheckoutResponse get response => _response;
 
   //process payment
-  handleCheckout(CheckoutMethod method, int amount) async {
-    Charge charge = Charge()
-      ..amount = amount * 100
-      ..email = authentication.currentUser.email
-      ..reference = uuid.v4();
-
-    if (method == CheckoutMethod.bank) {
-      charge.accessCode = uuid.v4();
-    } // In base currency
-
-    try {
-      _response = await plugin.checkout(
-        context,
-        method: method,
-        charge: charge,
-        fullscreen: false,
-        logo: MyLogo(),
-      );
-      print('Response = $_response');
-      if (_response.message == "Success") {
-        final reference = _response.reference;
-        updateStatus(reference!, _response.message);
-        return SuccessModel(_response.message);
-      } else {
-        ErrorModel('Payment Failed');
-      }
-    } catch (e) {
-      showMessage("Check console for error");
-      ErrorModel('failed');
-      rethrow;
-    }
-  }
+  // handleCheckout(CheckoutMethod method, int amount) async {
+  //   Charge charge = Charge()
+  //     ..amount = amount * 100
+  //     ..email = authentication.currentUser.email
+  //     ..reference = uuid.v4();
+  //
+  //   if (method == CheckoutMethod.bank) {
+  //     charge.accessCode = uuid.v4();
+  //   } // In base currency
+  //
+  //   try {
+  //     _response = await plugin.checkout(
+  //       context,
+  //       method: method,
+  //       charge: charge,
+  //       fullscreen: false,
+  //       logo: MyLogo(),
+  //     );
+  //     print('Response = $_response');
+  //     if (_response.message == "Success") {
+  //       final reference = _response.reference;
+  //       updateStatus(reference!, _response.message);
+  //       return SuccessModel(_response.message);
+  //     } else {
+  //       ErrorModel('Payment Failed');
+  //     }
+  //   } catch (e) {
+  //     showMessage("Check console for error");
+  //     ErrorModel('failed');
+  //     rethrow;
+  //   }
+  // }
 
   getWalletBalance() async {
     try {

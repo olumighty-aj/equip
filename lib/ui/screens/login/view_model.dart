@@ -5,6 +5,7 @@ import 'package:equipro/core/api/dio_service.dart';
 import 'package:equipro/core/enums/dialog_type.dart';
 import 'package:equipro/core/model/LoginPayload.dart';
 import 'package:equipro/core/model/VerifyForgotPassword.dart';
+import 'package:equipro/core/model/base_model.dart';
 import 'package:equipro/core/model/error_model.dart';
 import 'package:equipro/core/model/success_model.dart';
 import 'package:equipro/core/services/auth_service.dart';
@@ -129,6 +130,30 @@ class NewLoginViewModel extends BaseViewModel {
           variant: DialogType.loading, barrierDismissible: false);
     } else {
       locator<DialogService>().completeDialog(DialogResponse(confirmed: true));
+    }
+  }
+
+  void newForgotPassword(String email, context) async {
+    BaseDataModel res = await runBusyFuture(
+        _authentication.newForgotPassword({"email": email}),
+        busyObject: "ForgotPassword");
+    if (res.status == true) {
+      _navigationService.navigateTo(Routes.verifyForgotPasswordPage,
+          arguments: VerifyForgotPasswordPageArguments(email: email));
+    } else {
+      showErrorToast(res.message ?? "", context: context);
+    }
+  }
+
+  void newVerifyForgotPassword(data, context) async {
+    BaseDataModel res = await runBusyFuture(
+        _authentication.newVerifyForgotPassword(data.toJson()),
+        busyObject: "Verify");
+    if (res.status == true) {
+      showToast(res.message ?? "", context: context);
+      _navigationService.clearStackAndShow(Routes.login);
+    } else {
+      showToast(res.message ?? "", context: context);
     }
   }
 

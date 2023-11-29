@@ -414,6 +414,20 @@ class Activities {
     }
   }
 
+  Future<BaseDataModel?> newBook(Map<dynamic, dynamic> data) async {
+    try {
+      Response res = await _api.postRequest(data, Paths.book);
+      if (res.statusCode == 200) {
+        return BaseDataModel.fromJson(res.data);
+      }
+    } on DioException catch (e) {
+      _log.e(e.message);
+      _log.e(e.stackTrace);
+      _log.e(e.response);
+      return BaseDataModel.fromJson(e.response?.data);
+    }
+  }
+
   book(Map<dynamic, dynamic> payload) async {
     try {
       final result = await http.post(Paths.book, payload);
@@ -522,6 +536,15 @@ class Activities {
                   "TimeoutException after 0:00:40.000000: Future not completed"
               ? "Your internet is not stable kindly reconnect and try again"
               : e.toString());
+    }
+  }
+
+  Future<BaseDataModel?> getNewEarnings() async {
+    Response res = await _api.getRequest(null, Paths.ownersEarnings);
+    if (res.data != null) {
+      return BaseDataModel.fromJson(res.data);
+    } else {
+      return null;
     }
   }
 

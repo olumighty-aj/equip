@@ -15,6 +15,7 @@ import 'package:intl/intl.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 import 'package:stacked/stacked.dart';
 import 'package:equipro/utils/colors.dart';
+import '../../../../app/app_setup.logger.dart';
 import '../../../../utils/text_styles.dart';
 
 class EquipDetails extends StatefulWidget {
@@ -48,6 +49,7 @@ class LoginState extends State<EquipDetails> with TickerProviderStateMixin {
       parent: _navController!,
       curve: Curves.easeIn,
     ));
+    getLogger("EquipDetails").i(widget.model.toJson());
   }
 
   @override
@@ -499,15 +501,18 @@ class LoginState extends State<EquipDetails> with TickerProviderStateMixin {
                                       allowHalfRating: true,
                                       onRated: (v) {},
                                       starCount: 5,
-                                      rating: double.parse(widget
-                                          .model.averageRating!
-                                          .toString()),
+                                      rating:
+                                          widget.model.averageRating == "0.00"
+                                              ? 5.0
+                                              : double.parse(widget
+                                                  .model.averageRating!
+                                                  .toString()),
                                       size: 20,
                                       isReadOnly: true,
                                       filledIconData: Icons.star_rounded,
                                       halfFilledIconData:
                                           Icons.star_half_rounded,
-                                      color: AppColors.yellow,
+                                      color: AppColors.yellow.withOpacity(0.5),
                                       borderColor: Colors.grey,
                                       spacing: 0.5),
                                 ],

@@ -271,6 +271,18 @@ class Authentication {
     }
   }
 
+  Future<BaseDataModel> newForgotPassword(Map<String, dynamic> payload) async {
+    Response res = await _apiService.postRequest(payload, Paths.forgotPassword);
+    return BaseDataModel.fromJson(res.data);
+  }
+
+  Future<BaseDataModel> newVerifyForgotPassword(
+      Map<dynamic, dynamic> payload) async {
+    Response res =
+        await _apiService.postRequest(payload, Paths.forgotPasswordVerify);
+    return BaseDataModel.fromJson(res.data);
+  }
+
   //
   verifyForgotPassword(Map<dynamic, dynamic> payload) async {
     try {
@@ -335,6 +347,10 @@ class Authentication {
       print(e);
       return null;
     }
+  }
+
+  void updateUser(user) {
+    _currentUser = user;
   }
 
   editProfile({
@@ -422,6 +438,11 @@ class Authentication {
       print(e);
       return null;
     }
+  }
+
+  Future<BaseDataModel> getUserProfile() async {
+    Response res = await _apiService.getRequest(null, Paths.profile);
+    return BaseDataModel.fromJson(res.data);
   }
 
   Future<BaseDataModel?> editNewProfile(data) async {

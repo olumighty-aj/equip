@@ -23,7 +23,7 @@ class LoginState extends State<Rating> with TickerProviderStateMixin {
   final NavService _navigationService = locator<NavService>();
   final Authentication _authentication = locator<Authentication>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  double? rate = 1;
+  double? rate = 5;
   TextEditingController commentController = TextEditingController();
   AnimationController? _navController;
   Animation<Offset>? _navAnimation;

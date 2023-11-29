@@ -292,6 +292,11 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
                 onPressed: () {
                   if (_authentication.currentUser.kycApproved!) {
                     displayDialog(context, model);
+                  } else if (!_authentication.currentUser.kycApproved! &&
+                      _authentication.currentUser.kycUpdated == true) {
+                    showToast(
+                        "Your KYC is still pending approval from the admin, please try again later",
+                        context: context);
                   } else {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) => EditProfile()));

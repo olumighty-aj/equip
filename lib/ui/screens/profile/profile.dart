@@ -297,40 +297,69 @@ class ProfileState extends State<Profile> with TickerProviderStateMixin {
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           Expanded(child: Text("Means of ID")),
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              if (model.verificationDetails !=
-                                                  null)
+                                          if (model.verificationDetails !=
+                                                  null &&
+                                              model.verificationDetails!
+                                                  .isNotEmpty)
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
                                                 Text(model.verificationDetails?[
                                                         "document_name"] ??
                                                     ""),
-                                              Gap(5),
-                                              Container(
-                                                padding: EdgeInsets.all(10),
-                                                decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10),
-                                                    color: model.verificationDetails?[
-                                                                "verify_status"] ==
-                                                            "verified"
-                                                        ? Colors.green.shade200
-                                                        : AppColors.primaryColor
-                                                            .withOpacity(0.4)),
-                                                child: Text(
-                                                  "${model.verificationDetails?["verify_status"] == "verified" && _authentication.currentUser.kycUpdated! ? "Verified" : model.verificationDetails?["verify_status"] == "not_verified" && _authentication.currentUser.kycUpdated! ? "Not Verified" : "Pending"}",
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .bodySmall
-                                                      ?.copyWith(
-                                                          color: Colors.white,
-                                                          fontSize: 10),
-                                                ),
-                                              )
-                                            ],
-                                          )
+                                                Gap(5),
+                                                Container(
+                                                  padding: EdgeInsets.all(10),
+                                                  decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10),
+                                                      color: model.verificationDetails?[
+                                                                      "verify_status"] ==
+                                                                  "verified" &&
+                                                              _authentication
+                                                                  .currentUser
+                                                                  .kycUpdated!
+                                                          ? Colors
+                                                              .green.shade200
+                                                          : AppColors
+                                                              .primaryColor
+                                                              .withOpacity(
+                                                                  0.4)),
+                                                  child: Text(
+                                                    "${model.verificationDetails?["verify_status"] == "verified" && _authentication.currentUser.kycUpdated! ? "Verified" : model.verificationDetails?["verify_status"] == "not_verified" && _authentication.currentUser.kycUpdated! ? "Not Verified" : "Pending"}",
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .bodySmall
+                                                        ?.copyWith(
+                                                            color: Colors.white,
+                                                            fontSize: 10),
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          if (model.verificationDetails !=
+                                                  null &&
+                                              model
+                                                  .verificationDetails!.isEmpty)
+                                            Container(
+                                              padding: EdgeInsets.all(10),
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  color: Colors.red),
+                                              child: Text(
+                                                "Not Verified",
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodySmall
+                                                    ?.copyWith(
+                                                        color: Colors.white,
+                                                        fontSize: 10),
+                                              ),
+                                            )
+
                                           // Expanded(
                                           //   child: BaseButton(
                                           //     onPressed: !_authentication

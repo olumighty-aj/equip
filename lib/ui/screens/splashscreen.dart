@@ -1,12 +1,18 @@
 import 'dart:async';
+import 'package:equipro/app/app_setup.router.dart';
 import 'package:equipro/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:equipro/utils/screensize.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:equipro/core/services/auth_service.dart';
-import 'package:equipro/utils/locator.dart';
+// import 'package:equipro/utils/locator.dart';
 import 'package:equipro/utils/router/navigation_service.dart';
 import 'package:equipro/utils/router/route_names.dart';
+import 'package:stacked_services/stacked_services.dart';
+
+import '../../app/app_setup.locator.dart';
+import '../../utils/app_svgs.dart';
 
 class AnimatedSplashScreen extends StatefulWidget {
   const AnimatedSplashScreen({Key? key}) : super(key: key);
@@ -18,7 +24,7 @@ class AnimatedSplashScreen extends StatefulWidget {
 class SplashScreenState extends State<AnimatedSplashScreen>
     with SingleTickerProviderStateMixin {
   var _visible = true;
-  final NavService _navigationService = locator<NavService>();
+  final _navigationService = locator<NavigationService>();
   late AnimationController animationController;
   late Animation<double> animation;
   final Authentication _authentication = locator<Authentication>();
@@ -34,7 +40,7 @@ class SplashScreenState extends State<AnimatedSplashScreen>
     if (id != null) {
       _authentication.alreadyLoggedIn();
     } else {
-      _navigationService.navigateReplacementTo(OnBoardingScreenRoute);
+      _navigationService.clearStackAndShow(Routes.onboardingScreen);
       // _navigationService.navigateReplacementTo(loginRoute);
     }
   }
@@ -43,7 +49,7 @@ class SplashScreenState extends State<AnimatedSplashScreen>
   void initState() {
     super.initState();
     animationController =
-        AnimationController(vsync: this, duration: const Duration(seconds: 2));
+        AnimationController(vsync: this, duration: const Duration(seconds: 3));
     animation =
         CurvedAnimation(parent: animationController, curve: Curves.easeOut);
 
@@ -53,7 +59,9 @@ class SplashScreenState extends State<AnimatedSplashScreen>
     setState(() {
       _visible = !_visible;
     });
-    startTime();
+    Future.delayed(Duration(seconds: 4)).then((value) =>
+        _navigationService.clearStackAndShow(Routes.onboardingScreen));
+    // startTime();
   }
 
   @override
@@ -75,10 +83,7 @@ class SplashScreenState extends State<AnimatedSplashScreen>
               children: <Widget>[
                 Container(
                     width: animation.value * 200,
-                    child: Image.asset(
-                      "assets/images/logo.png",
-                      //color: AppColors.white,
-                    )),
+                    child: SvgPicture.asset(AppSvgs.logoMark)),
                 // Text("equipro",style: TextStyle(color: AppColors.primaryColor,fontWeight: FontWeight.bold, fontSize: 50),)
               ]),
         ],

@@ -562,32 +562,27 @@ class PlaceBookingState extends State<PlaceBooking>
                                           //  textDirection: TextDirection.rtl,
                                           child: BaseButton(
                                               isBusy: model.busy("Book"),
-                                              onPressed: () async {
-                                                var result = await model.book(
-                                                    BookModel(
-                                                        equipmentsId: widget
-                                                            .model.id
-                                                            .toString(),
-                                                        quantity:
-                                                            selectedQuantity
-                                                                .toString(),
-                                                        rentalFrom:
-                                                            selectedDate,
-                                                        rentalTo:
-                                                            selectedDateTo,
-                                                        latitude:
-                                                            pickLat.toString(),
-                                                        longitude:
-                                                            pickLng.toString(),
-                                                        deliveryLocation:
-                                                            deliveryController
-                                                                .text),
-                                                    context);
+                                              onPressed: () => model.newBook(
+                                                  BookModel(
+                                                      equipmentsId: widget
+                                                          .model.id
+                                                          .toString(),
+                                                      quantity: selectedQuantity
+                                                          .toString(),
+                                                      rentalFrom: selectedDate,
+                                                      rentalTo: selectedDateTo,
+                                                      latitude:
+                                                          pickLat.toString(),
+                                                      longitude:
+                                                          pickLng.toString(),
+                                                      deliveryLocation:
+                                                          deliveryController
+                                                              .text),
+                                                  context),
 
-                                                if (result is SuccessModel) {
-                                                  displayDialog(context);
-                                                }
-                                              },
+                                              // if (result is SuccessModel) {
+                                              //   displayDialog(context);
+                                              // }
                                               label: "Book Now")))
                                 ]))))),
             drawer: CollapsingNavigationDrawer(),

@@ -19,6 +19,7 @@ import 'package:equipro/utils/screensize.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:gap/gap.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:stacked/stacked.dart';
 import 'package:equipro/ui/screens/login/login_view_model.dart';
@@ -26,6 +27,7 @@ import 'package:equipro/utils/colors.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 import '../../../../core/enums/dialog_type.dart';
+import '../../../../utils/app_svgs.dart';
 
 class HomeOwner extends StatefulWidget {
   const HomeOwner({Key? key}) : super(key: key);
@@ -244,29 +246,27 @@ class HomeOwnerState extends State<HomeOwner> {
                                       } else {
                                         return Center(
                                             child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
                                           children: [
-                                            SizedBox(
-                                              height: 10,
-                                            ),
-                                            Text("No equipment saved yet",
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .bodyMedium),
-                                            // SizedBox(
-                                            //   height: 10,
-                                            // ),
+                                            SvgPicture.asset(
+                                                AppSvgs.emptyRental),
+                                            Gap(50),
                                             Text(
-                                                "When you do they will be here",
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .bodyMedium),
-                                            SizedBox(
-                                              height: 30,
+                                              "No equipments saved yet",
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyMedium
+                                                  ?.copyWith(
+                                                      fontSize: 15,
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      color: Colors.grey),
+                                              textAlign: TextAlign.center,
                                             ),
+                                            // SizedBox(
+                                            //   height: 30,
+                                            // ),
                                           ],
                                         ));
                                       }

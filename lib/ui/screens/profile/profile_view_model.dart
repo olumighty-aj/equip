@@ -222,11 +222,12 @@ class ProfileViewModel extends BaseViewModel {
   void verifyKYC() async {
     BaseDataModel res =
         await runBusyFuture(_authentication.getKYC(), busyObject: "verify");
-    if (res.status == true) {
+    if (res.status == true && res.payload["content"].isNotEmpty) {
       verificationDetails = res.payload["content"][0];
       notifyListeners();
       _log.i("Verify KYC: ${res.payload}");
     } else {
+      verificationDetails = {};
       _log.i("Verify KYC: ${res.payload}");
     }
   }

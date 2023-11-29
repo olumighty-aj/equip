@@ -69,21 +69,21 @@ class LoginState extends State<EarningPage> with TickerProviderStateMixin {
   }
 
   TransactionModel? wallet;
-  getWalletBalance(EarningsViewModel model) async {
-    var result = await model.getWalletBalance(context);
-    if (result is SuccessModel) {
-      setState(() {
-        print(result.data);
-        wallet = TransactionModel.fromJson(result.data);
-      });
-    }
-  }
+  // getWalletBalance(EarningsViewModel model) async {
+  //   var result = await model.getWalletBalance(context);
+  //   if (result is SuccessModel) {
+  //     setState(() {
+  //       print(result.data);
+  //       wallet = TransactionModel.fromJson(result.data);
+  //     });
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<EarningsViewModel>.reactive(
         onViewModelReady: (v) {
-          v.newGetWalletBalance(context);
+          v.getEarnings();
         },
         viewModelBuilder: () => EarningsViewModel(),
         builder: (context, model, child) {
@@ -112,83 +112,103 @@ class LoginState extends State<EarningPage> with TickerProviderStateMixin {
                             fontSize: 25, fontWeight: FontWeight.w800),
                       ),
                       Gap(29),
-                      RichText(
-                          text: TextSpan(children: [
-                        TextSpan(
-                            text: "Your balance: ",
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(fontSize: 15)),
-                        TextSpan(
-                            text: "5000",
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(
-                                    fontSize: 15,
-                                    color: AppColors.primaryColor))
-                      ])),
-                      Gap(29),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: BaseButton(
-                              label: "Withdraw",
-                              hasBorder: true,
+                      if (model.wallet != null)
+                        Column(
+                          children: [
+                            RichText(
+                                text: TextSpan(children: [
+                              TextSpan(
+                                  text: "Your balance: ",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(fontSize: 15)),
+                              TextSpan(
+                                  text: "5000",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(
+                                          fontSize: 15,
+                                          color: AppColors.primaryColor))
+                            ])),
+                            Gap(29),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: BaseButton(
+                                    label: "Withdraw",
+                                    hasBorder: true,
+                                  ),
+                                ),
+                                Expanded(child: SizedBox()),
+                              ],
                             ),
-                          ),
-                          Expanded(child: SizedBox()),
-                        ],
-                      ),
-                      Gap(32),
-                      Divider(
-                        color: Colors.grey,
-                      ),
-                      Gap(20),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "Payment Methods",
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(
-                                    fontSize: 15, fontWeight: FontWeight.w600),
-                          ),
-                          GestureDetector(
-                              child: Icon(
-                            Icons.add,
-                            color: AppColors.primaryColor,
-                          ))
-                        ],
-                      ),
-                      Gap(18),
-                      Text(
-                        "Preferred Method",
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyMedium
-                            ?.copyWith(color: Colors.grey, fontSize: 15),
-                      ),
-                      Gap(20),
-                      PaymentMethodBox(),
-                      Gap(45),
-                      Divider(
-                        color: Colors.grey,
-                      ),
-                      Gap(32),
-                      Text(
-                        "Transaction History",
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            fontSize: 15, fontWeight: FontWeight.w600),
-                      ),
-                      Gap(24),
-                      Column(
-                        children: List.generate(
-                            3, (index) => TransactionHistoryTile()),
-                      )
+                            Gap(32),
+                            Divider(
+                              color: Colors.grey,
+                            ),
+                            Gap(20),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "Payment Methods",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w600),
+                                ),
+                                GestureDetector(
+                                    child: Icon(
+                                  Icons.add,
+                                  color: AppColors.primaryColor,
+                                ))
+                              ],
+                            ),
+                            Gap(18),
+                            Text(
+                              "Preferred Method",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(color: Colors.grey, fontSize: 15),
+                            ),
+                            Gap(20),
+                            PaymentMethodBox(),
+                            Gap(45),
+                            Divider(
+                              color: Colors.grey,
+                            ),
+                            Gap(32),
+                            Text(
+                              "Transaction History",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w600),
+                            ),
+                            Gap(24),
+                            Column(
+                              children: List.generate(
+                                  3, (index) => TransactionHistoryTile()),
+                            )
+                          ],
+                        ),
+                      if (model.wallet == null)
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Gap(200),
+                            SvgPicture.asset(AppSvgs.emptyRental),
+                            Gap(20),
+                            Text("No information available")
+                          ],
+                        )
                     ],
                   ),
                 ),

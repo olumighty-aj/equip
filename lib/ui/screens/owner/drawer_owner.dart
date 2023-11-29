@@ -85,7 +85,7 @@ class CollapsingNavigationDrawerState extends State<OwnerDrawer>
                         label: 'Yes',
                         onPressed: () {
                           Navigator.pop(context);
-                          model.switchHirer(context);
+                          model.newSwitchRole(context);
                         },
                       ),
                     ),

@@ -17,6 +17,8 @@ import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
+import '../../../../core/model/SignInResponse.dart';
+
 class HomeViewModel extends BaseViewModel {
   final _log = getLogger("HomeViewModel");
   final Authentication _authentication = locator<Authentication>();
@@ -43,6 +45,12 @@ class HomeViewModel extends BaseViewModel {
 
   int _nextPage = 2;
   int get nextPage => _nextPage;
+
+  void init() async {
+    BaseDataModel data = await _authentication.getUserProfile();
+    _authentication.updateUser(Details.fromJson(data.payload));
+    notifyListeners();
+  }
 
   List<EquipmentModel> _packageList = [];
   List<EquipmentModel> get packageList => _packageList;

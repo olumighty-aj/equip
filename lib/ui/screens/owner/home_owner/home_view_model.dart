@@ -22,10 +22,12 @@ import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 import '../../../../app/app_setup.locator.dart';
+import '../../../../core/api/api_constants.dart';
 
 class HomeOwnerViewModel extends BaseViewModel {
   final Activities _activities = locator<Activities>();
   final Authentication _authentication = locator<Authentication>();
+  final _log = getLogger("OwnerHomeViewModel");
   final _navigationService = locator<NavigationService>();
   ScrollController? controller;
 
@@ -361,6 +363,24 @@ class HomeOwnerViewModel extends BaseViewModel {
       _navigationService.pushNamedAndRemoveUntil(Routes.home);
       notifyListeners();
       return SuccessModel(result.data);
+    }
+  }
+
+  void newSwitchRole(context) async {
+    BaseDataModel? res = await runBusyFuture(
+        _authentication.newSwitchRole("hirers"),
+        busyObject: "Switch");
+    if (res != null) {
+      if (res.status == true) {
+        _log.i("Switch: ${res.payload}");
+        _log.i("User: ${_authentication.currentUser.toJson()}");
+        ApiConstants.token = res.payload["token"];
+        notifyListeners();
+        // showToast(res.message ?? "", context: context);
+        _navigationService.clearStackAndShow(Routes.home);
+      } else {
+        showErrorToast(res.message ?? "", context: context);
+      }
     }
   }
 

@@ -98,7 +98,7 @@ class _MyAppState extends State<MyApp> {
         debugShowCheckedModeBanner: false,
         title: 'Equippro',
         navigatorKey: StackedService.navigatorKey,
-        home: widget.isNewUser ? OnboardingScreen() : Login(),
+        home: widget.isNewUser ? AnimatedSplashScreen() : Login(),
         // initialRoute: initialRoute,
         onGenerateRoute: (settings) {
           print("Route: ${settings.name}");

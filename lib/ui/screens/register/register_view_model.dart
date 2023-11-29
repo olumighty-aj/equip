@@ -44,7 +44,8 @@ class RegisterViewModel extends BaseViewModel {
             context: context);
         _navigationService.clearStackAndShow(Routes.login);
       } else {
-        showToast(res.message ?? "Sign Up Failed, please try again");
+        showErrorToast(res.message ?? "Sign Up Failed, please try again",
+            context: context);
       }
     }
   }

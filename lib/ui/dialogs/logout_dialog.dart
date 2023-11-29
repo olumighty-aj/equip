@@ -66,7 +66,7 @@ class LogoutDialog extends StatelessWidget {
                         .logout(context: context)
                         .then((value) {
                       if (value == true) {
-                        TinyDb.removeAll();
+                        // TinyDb.removeAll();
                         locator<NavigationService>()
                             .clearStackAndShow(Routes.login);
                       } else {
