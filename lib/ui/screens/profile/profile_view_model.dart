@@ -38,12 +38,17 @@ class ProfileViewModel extends BaseViewModel {
   TextEditingController addressController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
+  TextEditingController stateController = TextEditingController();
+  TextEditingController countryController = TextEditingController();
 
   String? get hirersPath => _authentication.currentUser.hirersPath;
 
-  bool get kycApproved => _authentication.currentUser.kycApproved!;
+  bool get kycApproved => _authentication.currentUser.kycApproved! == "1";
 
   void init() {
+    _log.i(_authentication.currentUser.toJson());
+    stateController.text = _authentication.currentUser.localState ?? "";
+    countryController.text = _authentication.currentUser.country ?? "";
     nameController.text = _authentication.currentUser.fullname!;
     addressController.text = _authentication.currentUser.address != null
         ? _authentication.currentUser.address!
@@ -173,6 +178,8 @@ class ProfileViewModel extends BaseViewModel {
       data = FormData.fromMap({
         "address": addressController.text,
         "gender": selectedGender,
+        "local_state": stateController.text,
+        "country": countryController.text,
         "hirers_path":
             image != null ? await MultipartFile.fromFile(image!.path) : null,
         "kyc_name": selectedMOI == "International Passport"

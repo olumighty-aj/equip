@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:equipro/app/app_setup.logger.dart';
 import 'package:equipro/app/app_setup.router.dart';
 import 'package:equipro/core/api/api_constants.dart';
@@ -18,6 +20,7 @@ import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 import '../../../../core/model/SignInResponse.dart';
+import '../../../../core/services/shared_prefs.dart';
 
 class HomeViewModel extends BaseViewModel {
   final _log = getLogger("HomeViewModel");
@@ -63,7 +66,12 @@ class HomeViewModel extends BaseViewModel {
       if (res.status == true) {
         _log.i("Switch: ${res.payload}");
         _log.i("User: ${_authentication.currentUser.toJson()}");
+        _authentication.setCurrentUser(res.payload["details"]);
+        SharedPrefsClient.saveData(
+            "currentUser", jsonEncode(res.payload["details"]));
         ApiConstants.token = res.payload["token"];
+        SharedPrefsClient.saveData("token", res.payload["token"]);
+        _log.i("User: ${_authentication.currentUser.toJson()}");
         notifyListeners();
         // showToast(res.message ?? "", context: context);
         _navigationService.clearStackAndShow(Routes.homeOwner);
@@ -109,6 +117,22 @@ class HomeViewModel extends BaseViewModel {
     }
     // print(result);
     return result;
+  }
+
+  Future<List<EquipmentModel>> newGetEquipments(
+      String? lat, String? lng) async {
+    BaseDataModel? res = await _activities.newGetEquipments(lat, lng);
+    if (res!.status == true) {
+      for (var i in res.payload["content"]) {
+        EquipmentModel equip = EquipmentModel.fromJson(i);
+        _packageList.add(equip);
+      }
+      _count = _activities.count;
+      notifyListeners();
+      setFetchState(LoadingState.done);
+      _log.i("Package: ${_packageList[0].toJson()}");
+    }
+    return _packageList;
   }
 
   Future<List<EquipmentModel>> getEquipment(String? lat, String? lng) async {

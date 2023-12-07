@@ -465,6 +465,8 @@ class Authentication {
   Future<BaseDataModel> getKYC() async {
     Response res =
         await _apiService.getRequest(null, Paths.verifyKYC + currentUser.id!);
+    _log.i("STATUS code: ${res.statusCode}");
+    _log.i("Here: ${res.data}");
     return BaseDataModel.fromJson(res.data);
   }
 

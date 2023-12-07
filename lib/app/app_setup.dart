@@ -67,7 +67,7 @@ import '../ui/screens/splashscreen.dart';
     LazySingleton(classType: DialogService),
     LazySingleton(classType: SnackbarService),
     LazySingleton(classType: ProgressService),
-    // LazySingleton(classType: PaymentService),
+    LazySingleton(classType: PaymentService),
   ],
   logger: StackedLogger(),
 )

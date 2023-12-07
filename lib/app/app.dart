@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:equipro/core/api/dio_service.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -41,6 +42,17 @@ class App {
       // print(initialRoute);
       locator<Authentication>().setCurrentUser(
           jsonDecode(await SharedPrefsClient.readData("currentUser")));
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  static checkIfIsHirer() async {
+    var details = jsonDecode(await SharedPrefsClient.readData("currentUser"));
+    String token = await SharedPrefsClient.readData("token");
+    locator<ApiService>().setAccessToken(token);
+    if (details["user_type"] == "hirers") {
       return true;
     } else {
       return false;

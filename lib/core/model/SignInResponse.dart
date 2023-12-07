@@ -3,23 +3,28 @@
 
 class SignInResponse {
   SignInResponse({
-      String? token, 
-      Details? details,}){
+    String? token,
+    Details? details,
+  }) {
     _token = token;
     _details = details;
-}
+  }
 
   SignInResponse.fromJson(dynamic json) {
     _token = json['token'];
-    _details = json['details'] != null ? Details.fromJson(json['details']) : null;
+    _details =
+        json['details'] != null ? Details.fromJson(json['details']) : null;
   }
   String? _token;
   Details? _details;
-SignInResponse copyWith({  String? token,
-  Details? details,
-}) => SignInResponse(  token: token ?? _token,
-  details: details ?? _details,
-);
+  SignInResponse copyWith({
+    String? token,
+    Details? details,
+  }) =>
+      SignInResponse(
+        token: token ?? _token,
+        details: details ?? _details,
+      );
   String? get token => _token;
   Details? get details => _details;
 
@@ -31,7 +36,6 @@ SignInResponse copyWith({  String? token,
     }
     return map;
   }
-
 }
 
 /// ID : "9"
@@ -61,30 +65,31 @@ SignInResponse copyWith({  String? token,
 
 class Details {
   Details({
-      String? id, 
-      String? fullname, 
-      String? email, 
-      String? phoneNumber, 
-      String? gender, 
-      String? address, 
-      dynamic addressOpt, 
-      dynamic localState, 
-      String? country, 
-      dynamic latitude, 
-      dynamic longitude, 
-      dynamic hirersPath, 
-      String? status, 
-      String? dateModified, 
-      String? dateCreated, 
-      String? username, 
-      String? userType, 
-      String? lastLogin, 
-      String? activityLog, 
-      String? fcmToken, 
-      dynamic lastLogout, 
-      String? lastChangePassword, 
-      bool? kycUpdated, 
-      bool? kycApproved,}){
+    String? id,
+    String? fullname,
+    String? email,
+    String? phoneNumber,
+    String? gender,
+    String? address,
+    dynamic addressOpt,
+    dynamic localState,
+    String? country,
+    dynamic latitude,
+    dynamic longitude,
+    dynamic hirersPath,
+    String? status,
+    String? dateModified,
+    String? dateCreated,
+    String? username,
+    String? userType,
+    String? lastLogin,
+    String? activityLog,
+    String? fcmToken,
+    dynamic lastLogout,
+    String? lastChangePassword,
+    bool? kycUpdated,
+    String? kycApproved,
+  }) {
     _id = id;
     _fullname = fullname;
     _email = email;
@@ -109,7 +114,7 @@ class Details {
     _lastChangePassword = lastChangePassword;
     _kycUpdated = kycUpdated;
     _kycApproved = kycApproved;
-}
+  }
 
   Details.fromJson(dynamic json) {
     _id = json['ID'];
@@ -160,56 +165,59 @@ class Details {
   dynamic _lastLogout;
   String? _lastChangePassword;
   bool? _kycUpdated;
-  bool? _kycApproved;
-Details copyWith({  String? id,
-  String? fullname,
-  String? email,
-  String? phoneNumber,
-  String? gender,
-  String? address,
-  dynamic addressOpt,
-  dynamic localState,
-  String? country,
-  dynamic latitude,
-  dynamic longitude,
-  dynamic hirersPath,
-  String? status,
-  String? dateModified,
-  String? dateCreated,
-  String? username,
-  String? userType,
-  String? lastLogin,
-  String? activityLog,
-  String? fcmToken,
-  dynamic lastLogout,
-  String? lastChangePassword,
-  bool? kycUpdated,
-  bool? kycApproved,
-}) => Details(  id: id ?? _id,
-  fullname: fullname ?? _fullname,
-  email: email ?? _email,
-  phoneNumber: phoneNumber ?? _phoneNumber,
-  gender: gender ?? _gender,
-  address: address ?? _address,
-  addressOpt: addressOpt ?? _addressOpt,
-  localState: localState ?? _localState,
-  country: country ?? _country,
-  latitude: latitude ?? _latitude,
-  longitude: longitude ?? _longitude,
-  hirersPath: hirersPath ?? _hirersPath,
-  status: status ?? _status,
-  dateModified: dateModified ?? _dateModified,
-  dateCreated: dateCreated ?? _dateCreated,
-  username: username ?? _username,
-  userType: userType ?? _userType,
-  lastLogin: lastLogin ?? _lastLogin,
-  activityLog: activityLog ?? _activityLog,
-  fcmToken: fcmToken ?? _fcmToken,
-  lastLogout: lastLogout ?? _lastLogout,
-  lastChangePassword: lastChangePassword ?? _lastChangePassword,
-  kycUpdated: kycUpdated ?? _kycUpdated,
-  kycApproved: kycApproved ?? _kycApproved,
-);
+  String? _kycApproved;
+  Details copyWith({
+    String? id,
+    String? fullname,
+    String? email,
+    String? phoneNumber,
+    String? gender,
+    String? address,
+    dynamic addressOpt,
+    dynamic localState,
+    String? country,
+    dynamic latitude,
+    dynamic longitude,
+    dynamic hirersPath,
+    String? status,
+    String? dateModified,
+    String? dateCreated,
+    String? username,
+    String? userType,
+    String? lastLogin,
+    String? activityLog,
+    String? fcmToken,
+    dynamic lastLogout,
+    String? lastChangePassword,
+    bool? kycUpdated,
+    String? kycApproved,
+  }) =>
+      Details(
+        id: id ?? _id,
+        fullname: fullname ?? _fullname,
+        email: email ?? _email,
+        phoneNumber: phoneNumber ?? _phoneNumber,
+        gender: gender ?? _gender,
+        address: address ?? _address,
+        addressOpt: addressOpt ?? _addressOpt,
+        localState: localState ?? _localState,
+        country: country ?? _country,
+        latitude: latitude ?? _latitude,
+        longitude: longitude ?? _longitude,
+        hirersPath: hirersPath ?? _hirersPath,
+        status: status ?? _status,
+        dateModified: dateModified ?? _dateModified,
+        dateCreated: dateCreated ?? _dateCreated,
+        username: username ?? _username,
+        userType: userType ?? _userType,
+        lastLogin: lastLogin ?? _lastLogin,
+        activityLog: activityLog ?? _activityLog,
+        fcmToken: fcmToken ?? _fcmToken,
+        lastLogout: lastLogout ?? _lastLogout,
+        lastChangePassword: lastChangePassword ?? _lastChangePassword,
+        kycUpdated: kycUpdated ?? _kycUpdated,
+        kycApproved: kycApproved ?? _kycApproved,
+      );
   String? get id => _id;
   String? get fullname => _fullname;
   String? get email => _email;
@@ -233,7 +241,7 @@ Details copyWith({  String? id,
   dynamic get lastLogout => _lastLogout;
   String? get lastChangePassword => _lastChangePassword;
   bool? get kycUpdated => _kycUpdated;
-  bool? get kycApproved => _kycApproved;
+  String? get kycApproved => _kycApproved;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -263,5 +271,4 @@ Details copyWith({  String? id,
     map['kyc_approved'] = _kycApproved;
     return map;
   }
-
 }

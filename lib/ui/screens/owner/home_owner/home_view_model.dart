@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:equipro/app/app_setup.logger.dart';
 import 'package:equipro/app/app_setup.router.dart';
@@ -23,6 +25,7 @@ import 'package:stacked_services/stacked_services.dart';
 
 import '../../../../app/app_setup.locator.dart';
 import '../../../../core/api/api_constants.dart';
+import '../../../../core/services/shared_prefs.dart';
 
 class HomeOwnerViewModel extends BaseViewModel {
   final Activities _activities = locator<Activities>();
@@ -375,6 +378,10 @@ class HomeOwnerViewModel extends BaseViewModel {
         _log.i("Switch: ${res.payload}");
         _log.i("User: ${_authentication.currentUser.toJson()}");
         ApiConstants.token = res.payload["token"];
+        SharedPrefsClient.saveData("token", res.payload["token"]);
+        _authentication.setCurrentUser(res.payload["details"]);
+        SharedPrefsClient.saveData(
+            "currentUser", jsonEncode(res.payload["details"]));
         notifyListeners();
         // showToast(res.message ?? "", context: context);
         _navigationService.clearStackAndShow(Routes.home);

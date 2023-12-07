@@ -56,7 +56,7 @@ class NotiItem extends StatelessWidget {
                               children: [
                                 Expanded(
                                   child: Text(
-                                    feed.message!,
+                                    feed.message ?? "",
                                     style: const TextStyle(
                                       fontSize: 13,
                                       // overflow: TextOverflow.ellipsis,

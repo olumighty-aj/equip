@@ -11,6 +11,7 @@ import 'package:equipro/utils/router/navigation_service.dart';
 import 'package:equipro/utils/router/route_names.dart';
 import 'package:stacked_services/stacked_services.dart';
 
+import '../../app/app.dart';
 import '../../app/app_setup.locator.dart';
 import '../../utils/app_svgs.dart';
 
@@ -24,8 +25,11 @@ class AnimatedSplashScreen extends StatefulWidget {
 class SplashScreenState extends State<AnimatedSplashScreen>
     with SingleTickerProviderStateMixin {
   var _visible = true;
+
+  bool? isHirer;
   final _navigationService = locator<NavigationService>();
   late AnimationController animationController;
+  bool? userExists;
   late Animation<double> animation;
   final Authentication _authentication = locator<Authentication>();
   startTime() async {
@@ -45,8 +49,14 @@ class SplashScreenState extends State<AnimatedSplashScreen>
     }
   }
 
+  void check() async {
+    userExists = await App.checkIfUserIsNew();
+    isHirer = await App.checkIfIsHirer();
+  }
+
   @override
   void initState() {
+    check();
     super.initState();
     animationController =
         AnimationController(vsync: this, duration: const Duration(seconds: 3));
@@ -59,8 +69,12 @@ class SplashScreenState extends State<AnimatedSplashScreen>
     setState(() {
       _visible = !_visible;
     });
-    Future.delayed(Duration(seconds: 4)).then((value) =>
-        _navigationService.clearStackAndShow(Routes.onboardingScreen));
+    Future.delayed(Duration(seconds: 4)).then(
+        (value) => _navigationService.clearStackAndShow(userExists! && isHirer!
+            ? Routes.home
+            : userExists! && !isHirer!
+                ? Routes.homeOwner
+                : Routes.onboardingScreen));
     // startTime();
   }
 

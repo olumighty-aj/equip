@@ -31,7 +31,7 @@ class Activities {
   final Authentication _authentication = locator<Authentication>();
   final _api = locator<ApiService>();
   int? _count;
-  int get count => _count!;
+  int get count => _count ?? 0;
 
   EquipmentModel? model;
 
@@ -340,11 +340,27 @@ class Activities {
     }
   }
 
+  Future<BaseDataModel?> newGetEquipments(String? lat, String? lng) async {
+    try {
+      Response res = await _api.getRequest(null, Paths.equipments
+          // + "/lat=$lat&lng=$lng"
+          );
+      _log.i("Response: ${res.data}");
+      if (res.statusCode == 200) {
+        return BaseDataModel.fromJson(res.data);
+      }
+    } on DioException catch (e) {
+      _log.e(e.message);
+      _log.e(e.response);
+      return BaseDataModel.fromJson(e.response?.data);
+    }
+  }
+
   getEquipments({int page = 1, String? lat, String? lng}) async {
     try {
       //var url = Paths.equipments + "?lat=$lat&lng=$lng";
       // var url = Paths.equipments + "?start=$page&len=5";
-      var url = Paths.equipments;
+      var url = Paths.equipments + "/lat=$lat&lng=$lng";
       // + "?start=0&len=5&paging=$page&lat=$lat&lng=$lng";
       final result = await http.get(
         url,

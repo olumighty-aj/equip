@@ -290,9 +290,9 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
               BaseButton(
                 label: "Become An Equipment Owner",
                 onPressed: () {
-                  if (_authentication.currentUser.kycApproved!) {
+                  if (_authentication.currentUser.kycApproved! == "1") {
                     displayDialog(context, model);
-                  } else if (!_authentication.currentUser.kycApproved! &&
+                  } else if (_authentication.currentUser.kycApproved! == "0" &&
                       _authentication.currentUser.kycUpdated == true) {
                     showToast(
                         "Your KYC is still pending approval from the admin, please try again later",

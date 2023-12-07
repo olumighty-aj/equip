@@ -15,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:gap/gap.dart';
 import 'package:location/location.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:stacked/stacked.dart';
@@ -25,6 +26,7 @@ import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 import '../../../../core/enums/bottom_sheet_type.dart';
+import '../../../../utils/app_svgs.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -376,7 +378,7 @@ class LoginState extends State<Home> {
                                                 viewModelBuilder: () =>
                                                     HomeViewModel(),
                                                 onViewModelReady: (vm) {
-                                                  vm.getEquipment(
+                                                  vm.newGetEquipments(
                                                       locationData != null
                                                           ? locationData!
                                                               .latitude
@@ -493,46 +495,35 @@ class LoginState extends State<Home> {
                                                     } else {
                                                       return Center(
                                                           child: Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .center,
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
+                                                        // mainAxisAlignment:
+                                                        //     MainAxisAlignment
+                                                        //         .center,
                                                         children: [
-                                                          SizedBox(
-                                                            height: 10,
-                                                          ),
+                                                          Gap(100),
+                                                          SvgPicture.asset(
+                                                              AppSvgs
+                                                                  .emptyRental),
+                                                          Gap(30),
                                                           Text(
-                                                            "No equipment near you yet",
-                                                            style: TextStyle(
-                                                                fontSize: 20,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                color: AppColors
-                                                                    .primaryColor),
+                                                            "No available equipments near you",
+                                                            style: Theme.of(
+                                                                    context)
+                                                                .textTheme
+                                                                .bodyMedium
+                                                                ?.copyWith(
+                                                                    fontSize:
+                                                                        15,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600,
+                                                                    color: Colors
+                                                                        .grey),
                                                             textAlign: TextAlign
                                                                 .center,
                                                           ),
-                                                          SizedBox(
-                                                            height: 10,
-                                                          ),
-                                                          Text(
-                                                            "Kindly check later",
-                                                            style: TextStyle(
-                                                                fontSize: 20,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                color: AppColors
-                                                                    .primaryColor),
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                          ),
-                                                          SizedBox(
-                                                            height: 30,
-                                                          ),
+                                                          // SizedBox(
+                                                          //   height: 30,
+                                                          // ),
                                                         ],
                                                       ));
                                                     }

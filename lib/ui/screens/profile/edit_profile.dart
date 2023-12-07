@@ -349,6 +349,102 @@ class LoginState extends State<EditProfile> with TickerProviderStateMixin {
                                     height: 20,
                                   ),
                                   Text(
+                                    "State",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.grey),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  TextFormField(
+                                    // enabled: false,
+                                    controller: model.stateController,
+                                    decoration: InputDecoration(
+                                      hintText: '',
+                                      hintStyle: const TextStyle(
+                                        color: Colors.grey,
+                                      ),
+                                      focusedBorder: const OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(4)),
+                                        borderSide: BorderSide(
+                                            width: 1, color: Colors.grey),
+                                      ),
+                                      disabledBorder: const OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(4)),
+                                        borderSide: BorderSide(
+                                            width: 1, color: Colors.grey),
+                                      ),
+                                      enabledBorder: const OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(4)),
+                                        borderSide: BorderSide(
+                                            width: 1, color: Colors.grey),
+                                      ),
+                                      border: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(5.0),
+                                        borderSide: const BorderSide(),
+                                      ),
+                                    ),
+                                    keyboardType: TextInputType.emailAddress,
+                                    style: const TextStyle(color: Colors.black),
+                                    cursorColor: Colors.black,
+                                  ),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  Text(
+                                    "Country",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.grey),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  TextFormField(
+                                    // enabled: false,
+                                    controller: model.countryController,
+                                    decoration: InputDecoration(
+                                      hintText: '',
+                                      hintStyle: const TextStyle(
+                                        color: Colors.grey,
+                                      ),
+                                      focusedBorder: const OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(4)),
+                                        borderSide: BorderSide(
+                                            width: 1, color: Colors.grey),
+                                      ),
+                                      disabledBorder: const OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(4)),
+                                        borderSide: BorderSide(
+                                            width: 1, color: Colors.grey),
+                                      ),
+                                      enabledBorder: const OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(4)),
+                                        borderSide: BorderSide(
+                                            width: 1, color: Colors.grey),
+                                      ),
+                                      border: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(5.0),
+                                        borderSide: const BorderSide(),
+                                      ),
+                                    ),
+                                    keyboardType: TextInputType.emailAddress,
+                                    style: const TextStyle(color: Colors.black),
+                                    cursorColor: Colors.black,
+                                  ),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  Text(
                                     "Gender",
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
