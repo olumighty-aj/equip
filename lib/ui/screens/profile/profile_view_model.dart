@@ -43,7 +43,10 @@ class ProfileViewModel extends BaseViewModel {
 
   String? get hirersPath => _authentication.currentUser.hirersPath;
 
-  bool get kycApproved => _authentication.currentUser.kycApproved! == "1";
+  bool get kycApproved =>
+      _authentication.currentUser.kycApproved! == "approved";
+  bool get kycPendng => _authentication.currentUser.kycApproved! == "pending";
+  bool get kycUpdated => _authentication.currentUser.kycUpdated!;
 
   void init() {
     _log.i(_authentication.currentUser.toJson());
@@ -174,7 +177,8 @@ class ProfileViewModel extends BaseViewModel {
   void newEditProfile(context) async {
     _log.i("KYC APPROVED: ${_authentication.currentUser.kycApproved}");
     FormData data;
-    if (_authentication.currentUser.kycApproved == false) {
+    if (_authentication.currentUser.kycApproved != "approved" &&
+        _authentication.currentUser.kycApproved != "pending") {
       data = FormData.fromMap({
         "address": addressController.text,
         "gender": selectedGender,
@@ -211,7 +215,7 @@ class ProfileViewModel extends BaseViewModel {
         busyObject: "Edit");
     if (res != null) {
       if (res.status == true) {
-        _log.i(res.payload);
+        _log.i("Profile Update res${res.payload}");
         showToast(res.message ?? "Success", context: context);
         _navigationService.clearStackAndShow(
             _authentication.currentUser.userType == "hirers"
@@ -221,6 +225,7 @@ class ProfileViewModel extends BaseViewModel {
         showErrorToast(res.message ?? "", context: context);
       }
     } else {
+      // _log.i("Profile Update res${res}");
       showErrorToast("Profile Update failed! Please try again",
           context: context);
     }

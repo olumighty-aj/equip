@@ -38,9 +38,9 @@ import '../ui/screens/splashscreen.dart';
     MaterialRoute(
       page: HomeOwner,
     ),
-    MaterialRoute(
-      page: EquipOwnerDetails,
-    ),
+    // MaterialRoute(
+    //   page: EquipOwnerDetails,
+    // ),
     MaterialRoute(
       page: Home,
     ),

@@ -1,5 +1,6 @@
 import 'package:equipro/core/model/EquipmentModel.dart';
 import 'package:equipro/ui/screens/drawer.dart';
+import 'package:equipro/ui/screens/hirer/book/details_view_model.dart';
 import 'package:equipro/ui/screens/owner/home_owner/edit_equipment.dart';
 import 'package:equipro/ui/screens/owner/home_owner/home_view_model.dart';
 import 'package:equipro/ui/screens/profile/edit_profile.dart';
@@ -204,7 +205,7 @@ class LoginState extends State<EquipOwnerDetails>
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          "${widget.model.address.toString().contains("Nigeria") ? "NGN" : "GBP"}${widget.model.costOfHire} per ${widget.model.costOfHireInterval == "1" ? "Day" : widget.model.costOfHireInterval == "7" ? "Week" : "Month"}",
+                                          "${widget.model.address.toString().contains("Nigeria") ? "NGN" : "GBP"}${widget.model.costOfHire!.withCommas} per ${widget.model.costOfHireInterval == "1" ? "Day" : widget.model.costOfHireInterval == "7" ? "Week" : "Month"}",
                                           style: TextStyle(
                                               fontSize: 15,
                                               color: AppColors.green,

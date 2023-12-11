@@ -121,6 +121,7 @@ class HomeViewModel extends BaseViewModel {
 
   Future<List<EquipmentModel>> newGetEquipments(
       String? lat, String? lng) async {
+    setFetchState(LoadingState.loading);
     BaseDataModel? res = await _activities.newGetEquipments(lat, lng);
     if (res!.status == true) {
       for (var i in res.payload["content"]) {

@@ -148,7 +148,7 @@ class LoginState extends State<Rating> with TickerProviderStateMixin {
                                                   Icons.star_rounded,
                                               halfFilledIconData:
                                                   Icons.star_half_rounded,
-                                              color: AppColors.yellow,
+                                              color: Color(0xffF6DF08),
                                               borderColor: Colors.grey,
                                               spacing: 0.5))),
                                   SizedBox(

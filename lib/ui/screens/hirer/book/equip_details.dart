@@ -207,9 +207,9 @@ class LoginState extends State<EquipDetails> with TickerProviderStateMixin {
                                                                         url) =>
                                                                     SizedBox(
                                                                         height:
-                                                                            20,
+                                                                            10,
                                                                         width:
-                                                                            20,
+                                                                            10,
                                                                         child:
                                                                             CircularProgressIndicator(
                                                                           color:
@@ -512,7 +512,7 @@ class LoginState extends State<EquipDetails> with TickerProviderStateMixin {
                                       filledIconData: Icons.star_rounded,
                                       halfFilledIconData:
                                           Icons.star_half_rounded,
-                                      color: AppColors.yellow.withOpacity(0.5),
+                                      color: Color(0xffF6DF08),
                                       borderColor: Colors.grey,
                                       spacing: 0.5),
                                 ],

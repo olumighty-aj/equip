@@ -3,6 +3,10 @@ import 'package:equipro/core/model/NotificationModel.dart';
 import 'package:equipro/utils/colors.dart';
 import 'package:equipro/utils/screensize.dart';
 import 'package:flutter/material.dart';
+import 'package:stacked_services/stacked_services.dart';
+
+import '../../app/app_setup.locator.dart';
+import '../../core/enums/dialog_type.dart';
 
 class NotiItem extends StatelessWidget {
   final NotificationModel feed;
@@ -14,7 +18,10 @@ class NotiItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-        onTap: () {},
+        onTap: () => locator<DialogService>().showCustomDialog(
+            variant: DialogType.notification,
+            data: feed.toJson(),
+            barrierDismissible: true),
         child: Padding(
           padding: const EdgeInsets.only(bottom: 12.0),
           child: Container(

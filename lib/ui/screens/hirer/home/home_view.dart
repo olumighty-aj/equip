@@ -5,6 +5,7 @@ import 'package:equipro/ui/screens/drawer.dart';
 import 'package:equipro/ui/screens/hirer/home/home_view_model.dart';
 import 'package:equipro/ui/screens/notification/notification.dart';
 import 'package:equipro/ui/widget/equip_tiles.dart';
+import 'package:equipro/ui/widget/input_fields/custom_text_field.dart';
 import 'package:equipro/ui/widget/loader_widget.dart';
 import 'package:equipro/utils/locator.dart';
 import 'package:equipro/utils/router/navigation_service.dart';
@@ -285,54 +286,60 @@ class LoginState extends State<Home> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.start,
                                         children: [
-                                          SizedBox(
-                                            width:
-                                                Responsive.width(context) / 1.3,
-                                            child: TextFormField(
-                                              textAlign: TextAlign.center,
-                                              decoration: const InputDecoration(
-                                                prefixIcon: Icon(
-                                                  Icons.search_outlined,
-                                                  color: AppColors.grey,
-                                                  size: 30,
-                                                ),
-                                                contentPadding:
-                                                    EdgeInsets.symmetric(
-                                                        vertical: 2.0,
-                                                        horizontal: 20.0),
-                                                hintText:
-                                                    "Search by location, name of equipment, etc",
-                                                hintStyle: TextStyle(
-                                                  color: Color(0XFF818181),
-                                                  fontSize: 12,
-                                                ),
-                                                // fillColor: Colors.white,
-                                                // filled: true,
-                                                focusedBorder:
-                                                    OutlineInputBorder(
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                    Radius.circular(30.0),
-                                                  ),
-                                                  borderSide: BorderSide(
-                                                      color: Colors.black),
-                                                ),
-                                                enabledBorder:
-                                                    OutlineInputBorder(
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                    Radius.circular(30.0),
-                                                  ),
-                                                  borderSide: BorderSide(
-                                                      color: Colors.grey),
-                                                ),
-                                              ),
-                                              onChanged: (value) {
-                                                setState(() {
-                                                  searchWord = value;
-                                                  print(searchWord);
-                                                });
-                                              },
+                                          // SizedBox(
+                                          //   width:
+                                          //       Responsive.width(context) / 1.3,
+                                          //   child: TextFormField(
+                                          //     textAlign: TextAlign.center,
+                                          //     decoration: const InputDecoration(
+                                          //       prefixIcon: Icon(
+                                          //         Icons.search_outlined,
+                                          //         color: AppColors.grey,
+                                          //         size: 30,
+                                          //       ),
+                                          //       contentPadding:
+                                          //           EdgeInsets.symmetric(
+                                          //               vertical: 2.0,
+                                          //               horizontal: 20.0),
+                                          //       hintText:
+                                          //           "Search by location, name of equipment, etc",
+                                          //       hintStyle: TextStyle(
+                                          //         color: Color(0XFF818181),
+                                          //         fontSize: 12,
+                                          //       ),
+                                          //       // fillColor: Colors.white,
+                                          //       // filled: true,
+                                          //       focusedBorder:
+                                          //           OutlineInputBorder(
+                                          //         borderRadius:
+                                          //             BorderRadius.all(
+                                          //           Radius.circular(30.0),
+                                          //         ),
+                                          //         borderSide: BorderSide(
+                                          //             color: Colors.black),
+                                          //       ),
+                                          //       enabledBorder:
+                                          //           OutlineInputBorder(
+                                          //         borderRadius:
+                                          //             BorderRadius.all(
+                                          //           Radius.circular(30.0),
+                                          //         ),
+                                          //         borderSide: BorderSide(
+                                          //             color: Colors.grey),
+                                          //       ),
+                                          //     ),
+                                          //     onChanged: (value) {
+                                          //       setState(() {
+                                          //         searchWord = value;
+                                          //         print(searchWord);
+                                          //       });
+                                          //     },
+                                          //   ),
+                                          // ),
+                                          Expanded(
+                                            child: CustomSearchField(
+                                              hintText:
+                                                  "Search by location, name of...",
                                             ),
                                           ),
                                           const SizedBox(

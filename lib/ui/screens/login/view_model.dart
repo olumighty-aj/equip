@@ -103,11 +103,11 @@ class NewLoginViewModel extends BaseViewModel {
       // showDialog(true);
       var res = await runBusyFuture(_authentication.newLogin(data.toJson()),
           busyObject: "Login");
-      _log.i(res?.toJson());
+      _log.i("Response before true: ${res?.toJson()}");
       if (res != null) {
         // showDialog(false);
         if (res.status == true) {
-          _log.i(res.payload.toString());
+          _log.i("Response Payload from true login${res.payload.toString()}");
           locator<ApiService>().setAccessToken(res.payload["token"]);
           _authentication.setCurrentUser(res.payload["details"]);
           SharedPrefsClient.saveData("token", res.payload["token"]);

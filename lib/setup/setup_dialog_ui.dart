@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 import '../../app/app_setup.locator.dart';
@@ -6,6 +7,7 @@ import '../core/enums/dialog_type.dart';
 import '../ui/dialogs/exit_app.dart';
 import '../ui/dialogs/loading_dialog.dart';
 import '../ui/dialogs/logout_dialog.dart';
+import '../ui/dialogs/notification_details.dart';
 
 void setupDialogUi() {
   var dialogService = locator<DialogService>();
@@ -22,6 +24,11 @@ void setupDialogUi() {
           completer: completer,
         ),
     DialogType.exit: (context, sheetRequest, completer) => ExitApp(
+          request: sheetRequest,
+          completer: completer,
+        ),
+    DialogType.notification: (context, sheetRequest, completer) =>
+        NotificationDetail(
           request: sheetRequest,
           completer: completer,
         ),

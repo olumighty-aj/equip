@@ -44,11 +44,23 @@ class DetailsViewModel extends BaseViewModel {
         busyObject: "Book");
     if (result != null) {
       if (result.status == true) {
+        print("Status ${result.status}");
+        print("Status ${result.message}");
         showToast(result.message ?? "", context: context);
         _navigationService.clearStackAndShow(Routes.home);
       } else {
         showErrorToast(result.message ?? "", context: context);
       }
     }
+  }
+}
+
+extension AmountFormatting on String {
+  String get withCommas {
+    final formattedWholeNumber = replaceAllMapped(
+      RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+      (match) => '${match[1]},',
+    );
+    return formattedWholeNumber;
   }
 }

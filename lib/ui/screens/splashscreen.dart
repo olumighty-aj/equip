@@ -40,7 +40,7 @@ class SplashScreenState extends State<AnimatedSplashScreen>
   void navigationPage() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    var id = prefs.getString('profile');
+    var id = prefs.getString('currentUser');
     if (id != null) {
       _authentication.alreadyLoggedIn();
     } else {

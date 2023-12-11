@@ -89,6 +89,7 @@ class Authentication {
   }
 
   void setCurrentUser(user) {
+    _log.i("Set current User: $user");
     _currentUser = Details.fromJson(user);
   }
 
@@ -163,7 +164,7 @@ class Authentication {
   alreadyLoggedIn() async {
     SharedPreferences prefs;
     prefs = await SharedPreferences.getInstance();
-    var d = prefs.getString('profile');
+    var d = prefs.getString('currentUser');
     Details user = Details.fromJson(json.decode(d!));
     _currentUser = user;
     print(_currentUser.id.toString());

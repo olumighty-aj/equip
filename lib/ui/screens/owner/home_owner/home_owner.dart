@@ -188,11 +188,7 @@ class HomeOwnerState extends State<HomeOwner> {
                                               children: [
                                                 Column(
                                                     children: model.packageList
-                                                        .map((feed) => Padding(
-                                                            padding:
-                                                                EdgeInsets.all(
-                                                                    10),
-                                                            child: InkWell(
+                                                        .map((feed) => InkWell(
                                                               onTap: () {
                                                                 // _navigationService.navigateTo(
                                                                 //     OrderInfoRoute,
@@ -202,7 +198,7 @@ class HomeOwnerState extends State<HomeOwner> {
                                                                   OwnerEquipTiles(
                                                                       model:
                                                                           feed),
-                                                            )))
+                                                            ))
                                                         .toList()),
                                                 SizedBox(height: 20),
                                                 model.loadingState ==

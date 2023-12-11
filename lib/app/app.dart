@@ -49,13 +49,16 @@ class App {
   }
 
   static checkIfIsHirer() async {
-    var details = jsonDecode(await SharedPrefsClient.readData("currentUser"));
-    String token = await SharedPrefsClient.readData("token");
-    locator<ApiService>().setAccessToken(token);
-    if (details["user_type"] == "hirers") {
-      return true;
-    } else {
-      return false;
+    bool isDetails = await SharedPrefsClient.checkData("currentUser");
+    if (isDetails) {
+      var details = jsonDecode(await SharedPrefsClient.readData("currentUser"));
+      String token = await SharedPrefsClient.readData("token");
+      locator<ApiService>().setAccessToken(token);
+      if (details["user_type"] == "hirers") {
+        return true;
+      } else {
+        return false;
+      }
     }
   }
 }

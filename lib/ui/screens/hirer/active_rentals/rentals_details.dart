@@ -1,6 +1,9 @@
 import 'package:equipro/app/app_setup.logger.dart';
 import 'package:equipro/core/model/ActiveRentalsModel.dart';
+import 'package:equipro/ui/screens/chat/chat.dart';
+import 'package:equipro/ui/screens/chat/chats_widget/chat_details.dart';
 import 'package:equipro/ui/screens/hirer/active_rentals/rentals_view_model.dart';
+import 'package:equipro/ui/screens/hirer/book/details_view_model.dart';
 import 'package:equipro/ui/widget/base_button.dart';
 import 'package:equipro/ui/widget/general_button.dart';
 import 'package:equipro/utils/locator.dart';
@@ -13,6 +16,7 @@ import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 import 'package:equipro/utils/colors.dart';
 
+import '../../../../core/model/ChatListModel.dart';
 import '../../../widget/equip_tiles.dart';
 import '../../profile/edit_profile.dart';
 
@@ -70,7 +74,7 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                     child: AnimationLimiter(
                         child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: AnimationConfiguration.toStaggeredList(
                                 duration: const Duration(milliseconds: 200),
                                 childAnimationBuilder: (widget) =>
@@ -132,7 +136,7 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                                 color: widget.feed
                                                             .requestStatus! ==
                                                         "pending"
-                                                    ? Colors.blue
+                                                    ? Colors.orange
                                                         .withOpacity(0.3)
                                                     : widget.feed.requestStatus! ==
                                                             "rejected"
@@ -143,16 +147,20 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                                             ? AppColors.green
                                                                 .withOpacity(
                                                                     0.3)
-                                                            : widget.feed
-                                                                        .requestStatus! ==
+                                                            : widget.feed.requestStatus! ==
                                                                     "received"
                                                                 ? AppColors.blue
                                                                     .withOpacity(
                                                                         0.3)
-                                                                : AppColors
-                                                                    .primaryColor
-                                                                    .withOpacity(
-                                                                        0.3),
+                                                                : widget.feed.requestStatus! ==
+                                                                        "accepted"
+                                                                    ? Colors
+                                                                        .green
+                                                                        .shade500
+                                                                    : AppColors
+                                                                        .primaryColor
+                                                                        .withOpacity(
+                                                                            0.3),
                                                 borderRadius:
                                                     BorderRadius.circular(10)),
                                             child: Text(
@@ -197,7 +205,9 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                       SizedBox(
                                         width: 40,
                                       ),
-                                      Text(widget.feed.equipOrder!.totalAmount!,
+                                      Text(
+                                          widget.feed.equipOrder!.totalAmount!
+                                              .withCommas,
                                           style: Theme.of(context)
                                               .textTheme
                                               .bodyMedium
@@ -323,7 +333,14 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text("Charges"),
+                                        Text(
+                                          "Charges",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyLarge
+                                              ?.copyWith(
+                                                  fontWeight: FontWeight.w600),
+                                        ),
                                         Divider(),
                                         Row(
                                           children: [
@@ -334,7 +351,7 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                                     "0"),
                                           ],
                                         ),
-                                        Gap(5),
+                                        Gap(10),
                                         Row(
                                           children: [
                                             Text("Discount"),
@@ -344,13 +361,13 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                                     "0"),
                                           ],
                                         ),
-                                        Gap(5),
+                                        Gap(10),
                                         Row(
                                           children: [
                                             Text("Total Charges"),
                                             Gap(15),
                                             Text(
-                                              "${getCurrency(widget.feed.equipments!.address!.contains("Nigeria") ? "NGN" : "GBP")}${widget.feed.equipOrder!.totalAmount ?? "0"}" ??
+                                              "${getCurrency(widget.feed.equipments!.address!.contains("Nigeria") ? "NGN" : "GBP")}${widget.feed.equipOrder!.totalAmount!.withCommas ?? "0"}" ??
                                                   "0",
                                               style: Theme.of(context)
                                                   .textTheme
@@ -363,22 +380,33 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                         ),
                                       ],
                                     ),
+                                  Gap(30),
                                   if (widget.feed.equipDeliveryStatus!
                                           .deliveryStatus !=
                                       null)
-                                    Text("Equipment Delivery Status",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyMedium
-                                            ?.copyWith(
-                                                color: Colors.grey,
-                                                fontSize: 15)),
+                                    Column(
+                                      children: [
+                                        Gap(10),
+                                        Text("Equipment Delivery Status",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium
+                                                ?.copyWith(
+                                                    color: Colors.grey,
+                                                    fontSize: 15)),
+                                      ],
+                                    ),
+                                  Gap(10),
                                   Divider(),
-                                  widget.feed.equipDeliveryStatus != null
+                                  Gap(10),
+                                  widget.feed.equipDeliveryStatus!
+                                              .deliveryStatus !=
+                                          null
                                       ? Container(
-                                          height:
-                                              Responsive.height(context) / 2.8,
+                                          // height:
+                                          //     Responsive.height(context) / 2.8,
                                           child: ListView.builder(
+                                              shrinkWrap: true,
                                               physics:
                                                   NeverScrollableScrollPhysics(),
                                               itemCount: widget
@@ -470,38 +498,76 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                             "Process pending",
                                           ),
                                         ),
-                                  SizedBox(
-                                    height: 50,
-                                  ),
-                                  widget.feed.equipDeliveryStatus!
-                                              .deliveryStatus ==
-                                          "pending"
-                                      ? GeneralButton(
-                                          onPressed: () {
-                                            model.updateBooking(
-                                                widget.feed.equipOrderId
-                                                    .toString(),
-                                                "picked_from_owner");
-                                          },
-                                          buttonText:
-                                              "Equipment Picked From Owner")
-                                      : widget.feed.requestStatus! ==
-                                              "delivered_hirer"
-                                          ? GeneralButton(
-                                              onPressed: () {
-                                                model.updateBooking(
-                                                    widget.feed.equipOrderId
-                                                        .toString(),
-                                                    "picked_from_hirer");
-                                              },
-                                              buttonText: "Equipment Returned")
-                                          : Container(),
-                                  // Gap(39),
-                                  if (widget.feed.requestStatus != "pending")
+                                  Gap(30),
+                                  if (widget.feed.requestStatus == "accepted")
                                     BaseButton(
                                       label: "Make Payment",
                                       onPressed: () {},
-                                    )
+                                    ),
+                                  Gap(10),
+                                  // GestureDetector(
+                                  //   onTap: () => Navigator.push(
+                                  //       context,
+                                  //       MaterialPageRoute(
+                                  //           builder: (context) =>
+                                  //               ChatDetailsPage(
+                                  //                   feed: ChatListModel(
+                                  //                       id: widget
+                                  //                           .feed
+                                  //                           .equipments!
+                                  //                           .ownersId,
+                                  //                       userId: "",
+                                  //                       chatWithId: "",
+                                  //                       messageCount: "",
+                                  //                       lastMessage: "",
+                                  //                       dateCreated: "",
+                                  //                       dateModified: "",
+                                  //                       chatWith: ChatWith(
+                                  //                         id: widget
+                                  //                             .feed
+                                  //                             .equipments!
+                                  //                             .ownersId,
+                                  //                         fullname: widget
+                                  //                             .feed
+                                  //                             .equipments!
+                                  //                             .ownersId,
+                                  //                         email: "",
+                                  //                         phoneNumber: "",
+                                  //                         gender: "",
+                                  //                         address: "",
+                                  //                         addressOpt: "",
+                                  //                         localState: "",
+                                  //                         country: "",
+                                  //                         latitude: "",
+                                  //                         longitude: "",
+                                  //                         hirersPath: widget
+                                  //                                     .feed
+                                  //                                     .hirers!
+                                  //                                     .hirersPath !=
+                                  //                                 null
+                                  //                             ? widget
+                                  //                                 .feed
+                                  //                                 .hirers!
+                                  //                                 .hirersPath!
+                                  //                             : "",
+                                  //                         status: "",
+                                  //                         dateModified: "",
+                                  //                         dateCreated: "",
+                                  //                       ))))),
+                                  //   child: Text(
+                                  //     "Chat Owner",
+                                  //     textAlign: TextAlign.center,
+                                  //     style: Theme.of(context)
+                                  //         .textTheme
+                                  //         .bodyLarge
+                                  //         ?.copyWith(
+                                  //             color: AppColors.primaryColor,
+                                  //             fontSize: 16,
+                                  //             fontWeight: FontWeight.w600,
+                                  //             decoration:
+                                  //                 TextDecoration.underline),
+                                  //   ),
+                                  // )
 
                                   // widget.feed.requestStatus! == "returned"
                                   //     ? GeneralButton(

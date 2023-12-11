@@ -129,15 +129,17 @@ class RentalTiles extends StatelessWidget {
                             EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                         decoration: BoxDecoration(
                             color: feed.requestStatus! == "pending"
-                                ? Colors.blue.withOpacity(0.3)
+                                ? Colors.orange.withOpacity(0.4)
                                 : feed.requestStatus! == "rejected"
                                     ? AppColors.red.withOpacity(0.3)
                                     : feed.requestStatus! == "returned"
                                         ? AppColors.green.withOpacity(0.3)
                                         : feed.requestStatus! == "received"
                                             ? AppColors.blue.withOpacity(0.3)
-                                            : AppColors.primaryColor
-                                                .withOpacity(0.3),
+                                            : feed.requestStatus! == "accepted"
+                                                ? Colors.green.shade500
+                                                : AppColors.primaryColor
+                                                    .withOpacity(0.3),
                             borderRadius: BorderRadius.circular(10)),
                         child: Text(
                           toBeginningOfSentenceCase(feed.requestStatus!)!,

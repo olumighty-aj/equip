@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:equipro/core/model/ChatListModel.dart';
 import 'package:equipro/core/model/EquipmentModel.dart';
 import 'package:equipro/ui/screens/chat/chats_widget/chat_details.dart';
+import 'package:equipro/ui/screens/hirer/book/details_view_model.dart';
 import 'package:equipro/ui/screens/owner/home_owner/home_view_model.dart';
 import 'package:equipro/ui/screens/profile/profile_view_model.dart';
 import 'package:equipro/ui/widget/base_button.dart';
@@ -423,7 +424,7 @@ class LoginState extends State<BookingDetails> with TickerProviderStateMixin {
                                         width: 10,
                                       ),
                                       Text(
-                                          "${widget.feed["equip_request"].first["delivery_location"].contains("Nigeria") ? "NGN" : "GBP"}${widget.feed["total_amount"].toString()}",
+                                          "${widget.feed["equip_request"].first["delivery_location"].contains("Nigeria") ? "NGN" : "GBP"}${widget.feed["total_amount"].toString().withCommas}",
                                           style: Theme.of(context)
                                               .textTheme
                                               .bodyMedium

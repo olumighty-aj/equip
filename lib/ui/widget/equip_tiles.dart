@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:equipro/core/model/EquipmentModel.dart';
+import 'package:equipro/ui/screens/hirer/book/details_view_model.dart';
 import 'package:equipro/ui/widget/base_button.dart';
 import 'package:equipro/ui/widget/general_button.dart';
 // import 'package:equipro/utils/locator.dart';
@@ -89,7 +90,7 @@ class EquipTiles extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                            "${getCurrency(model.owners!.country) + model.costOfHire!}",
+                            "${getCurrency(model.owners!.country) + model.costOfHire!.withCommas}",
                             style: Theme.of(context).textTheme.bodySmall),
                         Text(
                             " per ${model.costOfHireInterval == "1" ? "Day" : model.costOfHireInterval == "7" ? "Week" : "Month"}",
