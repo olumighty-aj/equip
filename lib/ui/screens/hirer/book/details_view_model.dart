@@ -1,4 +1,5 @@
 import 'package:equipro/app/app_setup.router.dart';
+import 'package:equipro/core/enums/dialog_type.dart';
 import 'package:equipro/core/model/BookModel.dart';
 import 'package:equipro/core/model/base_model.dart';
 import 'package:equipro/core/model/error_model.dart';
@@ -16,8 +17,9 @@ import 'package:stacked_services/stacked_services.dart';
 import '../../../../app/app_setup.locator.dart';
 
 class DetailsViewModel extends BaseViewModel {
-  final Authentication _authentication = locator<Authentication>();
+  final Authentication authentication = locator<Authentication>();
   final _navigationService = locator<NavigationService>();
+  final _dialogService = locator<DialogService>();
   final Activities _activities = locator<Activities>();
 
   book(BookModel bookModel, context) async {
@@ -46,8 +48,9 @@ class DetailsViewModel extends BaseViewModel {
       if (result.status == true) {
         print("Status ${result.status}");
         print("Status ${result.message}");
-        showToast(result.message ?? "", context: context);
-        _navigationService.clearStackAndShow(Routes.home);
+        showToast(result.message!, context: context);
+        _dialogService.showCustomDialog(variant: DialogType.bookingRequest);
+        // _navigationService.clearStackAndShow(Routes.home);
       } else {
         showErrorToast(result.message ?? "", context: context);
       }

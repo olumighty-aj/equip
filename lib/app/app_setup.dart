@@ -2,6 +2,7 @@ import 'package:equipro/core/model/VerifyForgotPassword.dart';
 import 'package:equipro/core/services/activities_service.dart';
 import 'package:equipro/core/services/auth_service.dart';
 import 'package:equipro/core/services/payment_services.dart';
+import 'package:equipro/ui/screens/hirer/active_rentals/active_rentals.dart';
 import 'package:equipro/ui/screens/hirer/home/home_view.dart';
 import 'package:equipro/utils/progressBarManager/dialog_service.dart';
 import 'package:equipro/utils/router/navigation_service.dart';
@@ -49,6 +50,10 @@ import '../ui/screens/splashscreen.dart';
     ),
     MaterialRoute(
       page: PlacePicker,
+    ),
+
+    MaterialRoute(
+      page: Rentals,
     ),
     MaterialRoute(
       page: BookingDetails,

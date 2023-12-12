@@ -16,6 +16,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:pusher_channels_flutter/pusher_channels_flutter.dart';
 
+import '../../../../utils/app_svgs.dart';
+
 class ChatDetailsPage extends StatefulWidget {
   final ChatListModel feed;
 
@@ -133,7 +135,7 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
     print("resulttt: ${result.toString()}");
     if (result is Map<String, dynamic>) {
       print("Result: ${result["message"]}");
-      showErrorToast(result["message"], context: context);
+      // showErrorToast(result["message"], context: context);
       // return ErrorModel(result.error);
     } else {
       setState(() {
@@ -356,68 +358,16 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
                         ),
                       ],
                     )),
-                Padding(
-                    padding: EdgeInsets.only(right: 20),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(""),
-                        Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              SizedBox(),
-                              // CachedNetworkImage(
-                              //   imageUrl:
-                              //       widget.feed.chatWith!.hirersPath != null
-                              //           ? widget.feed.chatWith!.hirersPath!
-                              //           : "",
-                              //   imageBuilder: (context, imageProvider) =>
-                              //       Container(
-                              //     width: 35.0,
-                              //     height: 35.0,
-                              //     decoration: BoxDecoration(
-                              //       shape: BoxShape.circle,
-                              //       image: DecorationImage(
-                              //           image: imageProvider,
-                              //           fit: BoxFit.contain),
-                              //     ),
-                              //   ),
-                              //   placeholder: (context, url) =>
-                              //       CircularProgressIndicator(),
-                              //   errorWidget: (context, url, error) =>
-                              //       CircleAvatar(
-                              //     radius: 17,
-                              //     backgroundColor: AppColors.grey,
-                              //     child: Image.asset(
-                              //       "assets/images/icon.png",
-                              //       scale: 2,
-                              //     ),
-                              //   ),
-                              // ),
-                              // Container(
-                              //   width: 10,
-                              // ),
-                              Column(
-                                children: [
-                                  Text(
-                                    widget.feed.chatWith?.fullname ?? "",
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        color: AppColors.black,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  Gap(5),
-                                  // Text("Online")
-                                ],
-                              ),
-                            ]),
-                        SvgPicture.asset("assets/images/more.svg"),
-                        // SvgPicture.asset(
-                        //   "assets/images/sort.svg",
-                        //   width: 23.0,
-                        // ),
-                      ],
-                    )),
+                Column(
+                  children: [
+                    Text(widget.feed.chatWith?.fullname ?? "",
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                            fontSize: 20, fontWeight: FontWeight.w600)),
+                    Gap(5),
+                    // Text("Online")
+                  ],
+                ),
                 SizedBox(
                   height: 20,
                 ),
@@ -429,12 +379,16 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
                     ? Flexible(
                         child: messageList,
                       )
-                    : Center(
-                        child: Text(
-                          "There is no available chat between the users",
-                          style: TextStyle(color: Colors.grey.shade400),
-                        ),
-                      ),
+                    : Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Gap(100),
+                          SvgPicture.asset(AppSvgs.emptyChat),
+                          Gap(10),
+                          Text(
+                              "Ask ${widget.feed.chatWith!.fullname} a question"),
+                        ],
+                      )
               ],
             ),
           ),

@@ -21,7 +21,7 @@ class NotificationDetail extends StatelessWidget {
       elevation: 0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       child: Container(
-          height: MediaQuery.of(context).size.height * 0.42,
+          height: MediaQuery.of(context).size.height * 0.25,
           width: 150,
           padding: EdgeInsets.all(20),
           decoration: BoxDecoration(

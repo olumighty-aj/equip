@@ -13,6 +13,7 @@ import 'package:stacked/stacked.dart';
 
 import '../../../utils/app_svgs.dart';
 import '../../widget/input_fields/custom_text_field.dart';
+import '../profile/edit_profile.dart';
 
 class Chat extends StatefulWidget {
   const Chat({Key? key}) : super(key: key);
@@ -41,23 +42,20 @@ class ChatState extends State<Chat> {
         builder: (context, model, child) {
           return Scaffold(
             key: _scaffoldKey,
-            appBar: AppBar(),
+            appBar: AppBar(
+              leading: CustomBackButton(),
+            ),
             body: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        'Chat',
-                        style: TextStyle(
-                            fontSize: 25,
-                            color: AppColors.black,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      SvgPicture.asset("assets/images/more.svg"),
-                    ],
+                  const Text(
+                    'Chat',
+                    style: TextStyle(
+                        fontSize: 25,
+                        color: AppColors.black,
+                        fontWeight: FontWeight.bold),
                   ),
                   Expanded(
                     child: Column(

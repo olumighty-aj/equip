@@ -133,44 +133,22 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                             padding: EdgeInsets.symmetric(
                                                 vertical: 5, horizontal: 10),
                                             decoration: BoxDecoration(
-                                                color: widget.feed
-                                                            .requestStatus! ==
-                                                        "pending"
-                                                    ? Colors.orange
-                                                        .withOpacity(0.3)
-                                                    : widget.feed.requestStatus! ==
-                                                            "rejected"
-                                                        ? AppColors.red
-                                                            .withOpacity(0.3)
-                                                        : widget.feed.requestStatus! ==
-                                                                "returned"
-                                                            ? AppColors.green
-                                                                .withOpacity(
-                                                                    0.3)
-                                                            : widget.feed.requestStatus! ==
-                                                                    "received"
-                                                                ? AppColors.blue
-                                                                    .withOpacity(
-                                                                        0.3)
-                                                                : widget.feed.requestStatus! ==
-                                                                        "accepted"
-                                                                    ? Colors
-                                                                        .green
-                                                                        .shade500
-                                                                    : AppColors
-                                                                        .primaryColor
-                                                                        .withOpacity(
-                                                                            0.3),
+                                                color: Color(0x1400DEB9),
                                                 borderRadius:
                                                     BorderRadius.circular(10)),
                                             child: Text(
-                                              toBeginningOfSentenceCase(
-                                                  widget.feed.requestStatus!)!,
+                                              widget.feed.requestStatus! ==
+                                                          "pending" ||
+                                                      widget.feed
+                                                              .requestStatus! ==
+                                                          "accepted"
+                                                  ? "Booked"
+                                                  : "Received",
                                               style: Theme.of(context)
                                                   .textTheme
                                                   .bodySmall
                                                   ?.copyWith(
-                                                      color: Colors.white),
+                                                      color: Color(0xFF00E0A8)),
                                             )),
                                       ]),
                                   SizedBox(
@@ -180,66 +158,100 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                     thickness: 4,
                                   ),
                                   SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(
+                                      widget.feed.requestStatus! == "pending"
+                                          ? "Booking approval pending"
+                                          : widget.feed.requestStatus! ==
+                                                  "accepted"
+                                              ? "Your booking has been approved"
+                                              : "null",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium
+                                          ?.copyWith(
+                                              color:
+                                                  widget.feed.requestStatus! ==
+                                                          "pending"
+                                                      ? Colors.red
+                                                      : Colors.green)),
+                                  SizedBox(
                                     height: 30,
                                   ),
                                   Text(
-                                    "View rental agreement",
-                                    style: TextStyle(
-                                        decoration: TextDecoration.underline,
-                                        color: AppColors.primaryColor,
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 15),
+                                    "Booking",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyLarge
+                                        ?.copyWith(
+                                            color: Colors.grey,
+                                            fontWeight: FontWeight.w600),
                                   ),
-                                  SizedBox(
-                                    height: 30,
-                                  ),
+                                  Divider(),
+                                  Gap(10),
+                                  // Row(
+                                  //   mainAxisAlignment:
+                                  //       MainAxisAlignment.spaceBetween,
+                                  //   children: [
+                                  //     Text("Amount Paid:",
+                                  //         style: Theme.of(context)
+                                  //             .textTheme
+                                  //             .bodyMedium
+                                  //             ?.copyWith(
+                                  //                 color: Colors.grey,
+                                  //                 fontSize: 15,
+                                  //                 fontWeight: FontWeight.w700)),
+                                  //     SizedBox(
+                                  //       width: 60,
+                                  //     ),
+                                  //     Expanded(
+                                  //       child: Text(
+                                  //           widget.feed.equipOrder!.totalAmount!
+                                  //               .withCommas,
+                                  //           style: Theme.of(context)
+                                  //               .textTheme
+                                  //               .bodyMedium
+                                  //               ?.copyWith(fontSize: 15)),
+                                  //     ),
+                                  //   ],
+                                  // ),
+                                  // SizedBox(
+                                  //   height: 30,
+                                  // ),
                                   Row(
-                                    children: [
-                                      Text("Amount Paid:",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium
-                                              ?.copyWith(
-                                                  color: Colors.grey,
-                                                  fontSize: 15)),
-                                      SizedBox(
-                                        width: 40,
-                                      ),
-                                      Text(
-                                          widget.feed.equipOrder!.totalAmount!
-                                              .withCommas,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium
-                                              ?.copyWith(fontSize: 15)),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 30,
-                                  ),
-                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text("QTY Hired:",
                                           style: Theme.of(context)
                                               .textTheme
                                               .bodyMedium
                                               ?.copyWith(
+                                                  fontWeight: FontWeight.w700,
                                                   color: Colors.grey,
                                                   fontSize: 15)),
                                       SizedBox(
-                                        width: 40,
+                                        width: 80,
                                       ),
-                                      Text(widget.feed.equipOrder!.quantity!,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium
-                                              ?.copyWith(fontSize: 15)),
+                                      Expanded(
+                                        child: Text(
+                                            widget.feed.equipOrder!.quantity!,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium
+                                                ?.copyWith(
+                                                  fontSize: 15,
+                                                )),
+                                      ),
                                     ],
                                   ),
                                   SizedBox(
                                     height: 30,
                                   ),
                                   Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text("Rental Start Date:",
                                           style: Theme.of(context)
@@ -247,29 +259,35 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                               .bodyMedium
                                               ?.copyWith(
                                                   color: Colors.grey,
-                                                  fontSize: 15)),
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w700)),
                                       SizedBox(
-                                        width: 40,
+                                        width: 25,
                                       ),
-                                      Text(
-                                          widget.feed.rentalFrom != null
-                                              ? DateFormat(
-                                                  "dd MMM, yyyy",
-                                                )
-                                                  .format(DateTime.parse(
-                                                      widget.feed.rentalFrom!))
-                                                  .toString()
-                                              : "Unknown",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium
-                                              ?.copyWith(fontSize: 15)),
+                                      Expanded(
+                                        child: Text(
+                                            widget.feed.rentalFrom != null
+                                                ? DateFormat(
+                                                    "dd MMM, yyyy",
+                                                  )
+                                                    .format(DateTime.parse(
+                                                        widget
+                                                            .feed.rentalFrom!))
+                                                    .toString()
+                                                : "Unknown",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium
+                                                ?.copyWith(fontSize: 15)),
+                                      ),
                                     ],
                                   ),
                                   SizedBox(
                                     height: 30,
                                   ),
                                   Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text("Rental End Date",
                                           style: Theme.of(context)
@@ -277,23 +295,26 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                               .bodyMedium
                                               ?.copyWith(
                                                   color: Colors.grey,
-                                                  fontSize: 15)),
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w700)),
                                       SizedBox(
                                         width: 40,
                                       ),
-                                      Text(
-                                          widget.feed.rentalTo != null
-                                              ? DateFormat(
-                                                  "dd MMM, yyyy",
-                                                )
-                                                  .format(DateTime.parse(
-                                                      widget.feed.rentalTo!))
-                                                  .toString()
-                                              : "Unknown",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium
-                                              ?.copyWith(fontSize: 15)),
+                                      Expanded(
+                                        child: Text(
+                                            widget.feed.rentalTo != null
+                                                ? DateFormat(
+                                                    "dd MMM, yyyy",
+                                                  )
+                                                    .format(DateTime.parse(
+                                                        widget.feed.rentalTo!))
+                                                    .toString()
+                                                : "Unknown",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium
+                                                ?.copyWith(fontSize: 15)),
+                                      ),
                                     ],
                                   ),
                                   SizedBox(
@@ -311,7 +332,8 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                               .bodyMedium
                                               ?.copyWith(
                                                   color: Colors.grey,
-                                                  fontSize: 15)),
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w700)),
                                       SizedBox(
                                         width: 40,
                                       ),
@@ -339,42 +361,88 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                               .textTheme
                                               .bodyLarge
                                               ?.copyWith(
-                                                  fontWeight: FontWeight.w600),
+                                                  fontWeight: FontWeight.w600,
+                                                  color: Colors.grey),
                                         ),
+                                        Gap(6),
                                         Divider(),
+                                        Gap(26),
                                         Row(
                                           children: [
-                                            Text("Delivery Charges"),
-                                            Gap(15),
                                             Text(
-                                                "${getCurrency(widget.feed.equipments!.address!.contains("Nigeria") ? "NGN" : "GBP")}${widget.feed.equipOrder!.deliveryCharge ?? "0"}" ??
-                                                    "0"),
-                                          ],
-                                        ),
-                                        Gap(10),
-                                        Row(
-                                          children: [
-                                            Text("Discount"),
-                                            Gap(15),
-                                            Text(
-                                                "${getCurrency(widget.feed.equipments!.address!.contains("Nigeria") ? "NGN" : "GBP")}${widget.feed.equipOrder!.discount ?? "0"}" ??
-                                                    "0"),
-                                          ],
-                                        ),
-                                        Gap(10),
-                                        Row(
-                                          children: [
-                                            Text("Total Charges"),
-                                            Gap(15),
-                                            Text(
-                                              "${getCurrency(widget.feed.equipments!.address!.contains("Nigeria") ? "NGN" : "GBP")}${widget.feed.equipOrder!.totalAmount!.withCommas ?? "0"}" ??
-                                                  "0",
+                                              "Delivery Charges:",
                                               style: Theme.of(context)
                                                   .textTheme
-                                                  .bodyMedium
+                                                  .bodyLarge
                                                   ?.copyWith(
-                                                      color: AppColors
-                                                          .primaryColor),
+                                                      fontWeight:
+                                                          FontWeight.w600),
+                                            ),
+                                            Gap(20),
+                                            Expanded(
+                                              child: Text(
+                                                "${getCurrency(widget.feed.equipments!.address!.contains("Nigeria") ? "NGN" : "GBP")}${widget.feed.equipOrder!.deliveryCharge ?? "0"}",
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyLarge
+                                                    ?.copyWith(
+                                                        fontWeight:
+                                                            FontWeight.w700),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Gap(27),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              "Discount:",
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyLarge
+                                                  ?.copyWith(
+                                                      fontWeight:
+                                                          FontWeight.w600),
+                                            ),
+                                            Gap(80),
+                                            Expanded(
+                                              child: Text(
+                                                "${getCurrency(widget.feed.equipments!.address!.contains("Nigeria") ? "NGN" : "GBP")}${widget.feed.equipOrder!.discount ?? "0"}",
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyLarge
+                                                    ?.copyWith(
+                                                        fontWeight:
+                                                            FontWeight.w700),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Gap(27),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              "Total Charges:",
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyLarge
+                                                  ?.copyWith(
+                                                      fontWeight:
+                                                          FontWeight.w600),
+                                            ),
+                                            Gap(45),
+                                            Expanded(
+                                              child: Text(
+                                                "${getCurrency(widget.feed.equipments!.address!.contains("Nigeria") ? "NGN" : "GBP")}${widget.feed.equipOrder!.totalAmount!.withCommas ?? "0"}",
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyLarge
+                                                    ?.copyWith(
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        color: AppColors
+                                                            .primaryColor),
+                                              ),
                                             ),
                                           ],
                                         ),
@@ -387,13 +455,14 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                     Column(
                                       children: [
                                         Gap(10),
-                                        Text("Equipment Delivery Status",
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyMedium
-                                                ?.copyWith(
-                                                    color: Colors.grey,
-                                                    fontSize: 15)),
+                                        Text(
+                                          "Equipment Delivery Status",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyLarge
+                                              ?.copyWith(
+                                                  fontWeight: FontWeight.w600),
+                                        ),
                                       ],
                                     ),
                                   Gap(10),

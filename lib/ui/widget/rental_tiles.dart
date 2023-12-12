@@ -4,6 +4,7 @@ import 'package:equipro/core/services/auth_service.dart';
 import 'package:equipro/ui/screens/hirer/active_rentals/rentals_details.dart';
 import 'package:equipro/ui/screens/owner/active_rentals/rentals_details.dart';
 import 'package:equipro/ui/widget/general_button.dart';
+import 'package:equipro/utils/app_svgs.dart';
 // import 'package:equipro/utils/locator.dart';
 import 'package:equipro/utils/router/navigation_service.dart';
 import 'package:equipro/utils/router/route_names.dart';
@@ -11,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:equipro/utils/colors.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 import '../../app/app_setup.locator.dart';
@@ -66,15 +68,39 @@ class RentalTiles extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10.0),
                       child: CachedNetworkImage(
                         imageUrl: feed.equipments!.id != null
-                            ? feed.equipments!.id!
+                            ? feed.equipments!.equipImages![0].equipImagesPath!
                             : "",
-                        placeholder: (context, url) =>
-                            CircularProgressIndicator(),
+                        placeholder: (context, url) => Container(
+                            height: 400,
+                            padding: EdgeInsets.only(left: 20.0, right: 20),
+                            child: Center(
+                              child: Shimmer.fromColors(
+                                  direction: ShimmerDirection.ltr,
+                                  period: Duration(seconds: 2),
+                                  child: ListView(
+                                    scrollDirection: Axis.vertical,
+                                    // shrinkWrap: true,
+                                    children: [0, 1, 2, 3]
+                                        .map((_) => Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Container(
+                                                width: double.infinity,
+                                                height: 8.0,
+                                                color: Colors.white,
+                                              ),
+                                            ))
+                                        .toList(),
+                                  ),
+                                  baseColor: AppColors.grey,
+                                  highlightColor: Colors.white),
+                            )),
                         errorWidget: (context, url, error) => ClipRRect(
                           borderRadius: BorderRadius.circular(8.0),
-                          child: Image.asset(
-                            "assets/images/logo.png",
-                            scale: 1,
+                          child: SvgPicture.asset(
+                            AppSvgs.svgLogo,
+                            height: 50,
+                            width: 50,
                           ),
                         ),
                       ))),

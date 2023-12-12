@@ -1,1 +1,1 @@
-enum DialogType { loading, logout, exit, notification }
+enum DialogType { loading, logout, exit, notification, bookingRequest }

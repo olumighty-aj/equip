@@ -10,7 +10,9 @@ import 'package:flutter/material.dart';
 import 'package:equipro/utils/colors.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../../app/app_setup.logger.dart';
 import '../../core/services/activities_service.dart';
+import '../../utils/app_svgs.dart';
 
 class BookingRequest extends StatelessWidget {
   final Map<String, dynamic> feed;
@@ -23,6 +25,7 @@ class BookingRequest extends StatelessWidget {
   final _activity = locator<Activities>();
   @override
   Widget build(BuildContext context) {
+    getLogger("Requests").i(feed);
     return GestureDetector(
         onTap: () {
           _activity.setModel(model);
@@ -70,10 +73,7 @@ class BookingRequest extends StatelessWidget {
                           errorWidget: (context, url, error) => CircleAvatar(
                             radius: 40,
                             backgroundColor: AppColors.grey,
-                            child: Image.asset(
-                              "assets/images/logo.png",
-                              scale: 2,
-                            ),
+                            child: SvgPicture.asset(AppSvgs.svgLogo),
                           ),
                         ),
                       ),

@@ -358,7 +358,7 @@ class LoginState extends State<EditProfile> with TickerProviderStateMixin {
                                     height: 10,
                                   ),
                                   TextFormField(
-                                    // enabled: false,
+                                    enabled: false,
                                     controller: model.stateController,
                                     decoration: InputDecoration(
                                       hintText: '',
@@ -406,7 +406,7 @@ class LoginState extends State<EditProfile> with TickerProviderStateMixin {
                                     height: 10,
                                   ),
                                   TextFormField(
-                                    // enabled: false,
+                                    enabled: false,
                                     controller: model.countryController,
                                     decoration: InputDecoration(
                                       hintText: '',

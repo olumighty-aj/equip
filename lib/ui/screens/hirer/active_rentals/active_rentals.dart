@@ -43,95 +43,77 @@ class LoginState extends State<Rentals> with SingleTickerProviderStateMixin {
               key: _scaffoldKey,
               body: Padding(
                   padding: EdgeInsets.all(20),
-                  child: AnimationLimiter(
-                      child: DefaultTabController(
+                  child: DefaultTabController(
                     length: 4,
                     child: SingleChildScrollView(
-                      child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: AnimationConfiguration.toStaggeredList(
-                              duration: const Duration(milliseconds: 200),
-                              childAnimationBuilder: (widget) => SlideAnimation(
-                                    horizontalOffset:
-                                        -MediaQuery.of(context).size.width / 4,
-                                    child: FadeInAnimation(
-                                        curve: Curves.fastOutSlowIn,
-                                        child: widget),
-                                  ),
-                              children: [
-                                Text(
-                                  "Active Rentals",
-                                  style: TextStyle(
-                                      fontSize: 25,
-                                      fontWeight: FontWeight.bold),
+                        physics: BouncingScrollPhysics(),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Text(
+                              "Active Rentals",
+                              style: TextStyle(
+                                  fontSize: 25, fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(
+                              height: 30,
+                            ),
+                            CustomSearchField(
+                              hintText: "Search",
+                            ),
+                            SizedBox(
+                              height: 30,
+                            ),
+                            TabBar(
+                              controller: _controller,
+                              unselectedLabelColor: Colors.grey,
+                              indicatorWeight: 3,
+                              labelStyle: TextStyle(fontSize: 12),
+                              labelColor: AppColors.primaryColor,
+                              indicatorColor: AppColors.primaryColor,
+                              isScrollable: true,
+                              tabs: [
+                                Tab(
+                                  text: "All",
                                 ),
-                                SizedBox(
-                                  height: 30,
+                                Tab(
+                                  text: "Booked",
                                 ),
-                                CustomSearchField(
-                                  hintText: "Search",
+                                Tab(
+                                  text: "Received",
                                 ),
-                                SizedBox(
-                                  height: 30,
-                                ),
-                                TabBar(
-                                  controller: _controller,
-                                  unselectedLabelColor: Colors.grey,
-                                  indicatorWeight: 3,
-                                  labelStyle: TextStyle(fontSize: 12),
-                                  labelColor: AppColors.primaryColor,
-                                  indicatorColor: AppColors.primaryColor,
-                                  tabs: [
-                                    Tab(
-                                      text: "All",
-                                    ),
-                                    Tab(
-                                      text: "Booked",
-                                    ),
-                                    Tab(
-                                      text: "Received",
-                                    ),
-                                    Tab(
-                                      text: "Returned",
-                                    )
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                Text(
-                                  "List of equipments you have booked for hire",
-                                  style: TextStyle(
-                                      color: Colors.grey,
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 15),
-                                ),
-                                SizedBox(
-                                  height: 5,
-                                ),
-                                SizedBox(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.6,
-                                  child: TabBarView(
-                                    controller: _controller,
-                                    children: [
-                                      AllRentals(
-                                        model: model,
-                                      ),
-                                      BookedRentals(
-                                        model: model,
-                                      ),
-                                      ReceivedRentals(
-                                        model: model,
-                                      ),
-                                      ReturnedRentals(model: model),
-                                    ],
-                                  ),
+                                Tab(
+                                  text: "Returned",
                                 )
-                              ])),
-                    ),
-                  ))));
+                              ],
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            // SizedBox(
+                            //   height: 10,
+                            // ),
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * 0.9,
+                              child: TabBarView(
+                                controller: _controller,
+                                children: [
+                                  AllRentals(
+                                    model: model,
+                                  ),
+                                  BookedRentals(
+                                    model: model,
+                                  ),
+                                  ReceivedRentals(
+                                    model: model,
+                                  ),
+                                  ReturnedRentals(model: model),
+                                ],
+                              ),
+                            ),
+                          ],
+                        )),
+                  )));
         });
   }
 }
@@ -212,8 +194,8 @@ class ReturnedRentals extends StatelessWidget {
                       highlightColor: Colors.white),
                 ));
           } else if (snapshot.data!.isNotEmpty) {
-            return ListView(
-                scrollDirection: Axis.vertical,
+            return Column(
+                // scrollDirection: Axis.vertical,
                 // shrinkWrap: true,
                 children: snapshot.data!
                     .map((feed) => InkWell(
@@ -225,8 +207,8 @@ class ReturnedRentals extends StatelessWidget {
                             ))))
                     .toList());
           } else if (snapshot.hasError) {
-            return Center(
-                child: Column(
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 SizedBox(
                   height: 100,
@@ -246,10 +228,9 @@ class ReturnedRentals extends StatelessWidget {
                   height: 100,
                 ),
               ],
-            ));
+            );
           } else {
-            return Center(
-                child: Column(
+            return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SvgPicture.asset(AppSvgs.emptyRental),
@@ -266,7 +247,7 @@ class ReturnedRentals extends StatelessWidget {
                 //   height: 30,
                 // ),
               ],
-            ));
+            );
           }
         });
   }
@@ -348,8 +329,8 @@ class ReceivedRentals extends StatelessWidget {
                       highlightColor: Colors.white),
                 ));
           } else if (snapshot.data!.isNotEmpty) {
-            return ListView(
-                scrollDirection: Axis.vertical,
+            return Column(
+                // scrollDirection: Axis.vertical,
                 // shrinkWrap: true,
                 children: snapshot.data!
                     .map((feed) => InkWell(
@@ -361,31 +342,21 @@ class ReceivedRentals extends StatelessWidget {
                             ))))
                     .toList());
           } else if (snapshot.hasError) {
-            return Center(
-                child: Column(
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 SizedBox(
                   height: 100,
                 ),
-                Text(
-                  'Network error',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Text('Network error'),
+                Text('Network error',
+                    style: Theme.of(context).textTheme.bodyMedium),
                 SizedBox(
                   height: 100,
                 ),
               ],
-            ));
+            );
           } else {
-            return Center(
-                child: Column(
+            return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SvgPicture.asset(AppSvgs.emptyRental),
@@ -402,7 +373,7 @@ class ReceivedRentals extends StatelessWidget {
                 //   height: 30,
                 // ),
               ],
-            ));
+            );
           }
         });
   }
@@ -564,9 +535,9 @@ class AllRentals extends StatelessWidget {
                   child: Shimmer.fromColors(
                       direction: ShimmerDirection.ltr,
                       period: Duration(seconds: 2),
-                      child: ListView(
-                        scrollDirection: Axis.vertical,
-                        shrinkWrap: true,
+                      child: Column(
+                        // scrollDirection: Axis.vertical,
+                        // shrinkWrap: true,
                         children: [0, 1, 2, 3]
                             .map((_) => Padding(
                                   padding: const EdgeInsets.all(8.0),
@@ -620,22 +591,20 @@ class AllRentals extends StatelessWidget {
                       highlightColor: Colors.white),
                 ));
           } else if (snapshot.data!.isNotEmpty) {
-            return ListView(
-                scrollDirection: Axis.vertical,
+            return Column(
+                // scrollDirection: Axis.vertical,
                 // physics: NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
+                // shrinkWrap: true,
                 children: snapshot.data!
-                    .map((feed) => InkWell(
+                    .map((feed) => GestureDetector(
                         onTap: () {},
-                        child: Padding(
-                            padding: EdgeInsets.all(5),
-                            child: RentalTiles(
-                              feed: feed,
-                            ))))
+                        child: RentalTiles(
+                          feed: feed,
+                        )))
                     .toList());
           } else if (snapshot.hasError) {
-            return Center(
-                child: Column(
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 SizedBox(
                   height: 100,
@@ -655,10 +624,9 @@ class AllRentals extends StatelessWidget {
                   height: 100,
                 ),
               ],
-            ));
+            );
           } else {
-            return Center(
-                child: Column(
+            return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SvgPicture.asset(AppSvgs.emptyRental),
@@ -675,7 +643,7 @@ class AllRentals extends StatelessWidget {
                 //   height: 30,
                 // ),
               ],
-            ));
+            );
           }
         });
   }

@@ -147,7 +147,7 @@ class LoginState extends State<EditEquipment> with TickerProviderStateMixin {
           // imageQuality: quality,
           );
       setState(() {
-        listImages = pickedFileList!;
+        listImages = pickedFileList;
       });
     } catch (e) {
       print(e);

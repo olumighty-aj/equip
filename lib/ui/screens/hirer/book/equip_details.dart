@@ -7,6 +7,7 @@ import 'package:equipro/ui/screens/hirer/book/place_booking.dart';
 import 'package:equipro/ui/widget/base_button.dart';
 import 'package:equipro/ui/widget/dash_painter.dart';
 import 'package:equipro/ui/widget/equip_tiles.dart';
+import 'package:equipro/utils/extensions.dart';
 import 'package:equipro/utils/screensize.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
@@ -529,90 +530,99 @@ class LoginState extends State<EquipDetails> with TickerProviderStateMixin {
                                 height: 20,
                               ),
                               Text(
-                                'Location: ${widget.model.owners!.address}',
+                                'Location: ${widget.model.owners!.address!.extractState()}',
                                 style: TextStyle(
                                     fontSize: 15, fontWeight: FontWeight.w600),
                               ),
                               SizedBox(
                                 height: 30,
                               ),
-                              SlideTransition(
-                                  position: _navAnimation!,
-                                  //   textDirection: TextDirection.r,
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Expanded(
-                                        child: BaseButton(
-                                          label: "Chat Owner",
-                                          bgColor: AppColors.primaryColor
-                                              .withOpacity(0.3),
-                                          labelStyle: buttonText.copyWith(
-                                              color: AppColors.primaryColor),
-                                          onPressed: () => Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      ChatDetailsPage(
-                                                          feed: ChatListModel(
-                                                              id: widget.model
-                                                                  .ownersId,
-                                                              userId: "",
-                                                              chatWithId: "",
-                                                              messageCount: "",
-                                                              lastMessage: "",
-                                                              dateCreated: "",
-                                                              dateModified: "",
-                                                              chatWith:
-                                                                  ChatWith(
+                              if (model.authentication.currentUser.id !=
+                                  widget.model.owners!.id)
+                                SlideTransition(
+                                    position: _navAnimation!,
+                                    //   textDirection: TextDirection.r,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Expanded(
+                                          child: BaseButton(
+                                            label: "Chat Owner",
+                                            bgColor: AppColors.primaryColor
+                                                .withOpacity(0.3),
+                                            labelStyle: buttonText.copyWith(
+                                                color: AppColors.primaryColor),
+                                            onPressed: () => Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        ChatDetailsPage(
+                                                            feed: ChatListModel(
                                                                 id: widget.model
                                                                     .ownersId,
-                                                                fullname: widget
-                                                                    .model
-                                                                    .owners!
-                                                                    .fullname!,
-                                                                email: "",
-                                                                phoneNumber: "",
-                                                                gender: "",
-                                                                address: "",
-                                                                addressOpt: "",
-                                                                localState: "",
-                                                                country: "",
-                                                                latitude: "",
-                                                                longitude: "",
-                                                                hirersPath: widget
-                                                                            .model
-                                                                            .owners!
-                                                                            .hirersPath !=
-                                                                        null
-                                                                    ? widget
-                                                                        .model
-                                                                        .owners!
-                                                                        .hirersPath!
-                                                                    : "",
-                                                                status: "",
+                                                                userId: "",
+                                                                chatWithId: "",
+                                                                messageCount:
+                                                                    "",
+                                                                lastMessage: "",
+                                                                dateCreated: "",
                                                                 dateModified:
                                                                     "",
-                                                                dateCreated: "",
-                                                              ))))),
+                                                                chatWith:
+                                                                    ChatWith(
+                                                                  id: widget
+                                                                      .model
+                                                                      .ownersId,
+                                                                  fullname: widget
+                                                                      .model
+                                                                      .owners!
+                                                                      .fullname!,
+                                                                  email: "",
+                                                                  phoneNumber:
+                                                                      "",
+                                                                  gender: "",
+                                                                  address: "",
+                                                                  addressOpt:
+                                                                      "",
+                                                                  localState:
+                                                                      "",
+                                                                  country: "",
+                                                                  latitude: "",
+                                                                  longitude: "",
+                                                                  hirersPath: widget
+                                                                              .model
+                                                                              .owners!
+                                                                              .hirersPath !=
+                                                                          null
+                                                                      ? widget
+                                                                          .model
+                                                                          .owners!
+                                                                          .hirersPath!
+                                                                      : "",
+                                                                  status: "",
+                                                                  dateModified:
+                                                                      "",
+                                                                  dateCreated:
+                                                                      "",
+                                                                ))))),
+                                          ),
                                         ),
-                                      ),
-                                      Gap(10),
-                                      Expanded(
-                                        child: BaseButton(
-                                          label: "Book Now",
-                                          onPressed: () => Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      PlaceBooking(
-                                                          model:
-                                                              widget.model))),
-                                        ),
-                                      )
-                                    ],
-                                  ))
+                                        Gap(10),
+                                        Expanded(
+                                          child: BaseButton(
+                                            label: "Book Now",
+                                            onPressed: () => Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        PlaceBooking(
+                                                            model:
+                                                                widget.model))),
+                                          ),
+                                        )
+                                      ],
+                                    ))
                             ],
                           ))),
                     ],

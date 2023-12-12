@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:equipro/core/model/EquipmentModel.dart';
 import 'package:equipro/core/services/index.dart';
+import 'package:equipro/ui/screens/hirer/book/details_view_model.dart';
+import 'package:equipro/ui/widget/equip_tiles.dart';
 import 'package:equipro/ui/widget/general_button.dart';
 import 'package:equipro/utils/locator.dart';
 import 'package:equipro/utils/router/navigation_service.dart';
@@ -10,6 +12,7 @@ import 'package:equipro/utils/colors.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 
+import '../../utils/app_svgs.dart';
 import '../screens/hirer/book/equip_details.dart';
 import '../screens/owner/home_owner/equip_owner_details.dart';
 
@@ -66,9 +69,8 @@ class OwnerEquipTiles extends StatelessWidget {
                                 ))),
                         errorWidget: (context, url, error) => ClipRRect(
                           borderRadius: BorderRadius.circular(8.0),
-                          child: Image.asset(
-                            "assets/images/logo.png",
-                            scale: 2,
+                          child: SvgPicture.asset(
+                            AppSvgs.svgLogo,
                           ),
                         ),
                       ))),
@@ -91,7 +93,8 @@ class OwnerEquipTiles extends StatelessWidget {
                     ),
                     Row(
                       children: [
-                        Text("NGN${model.costOfHire!}",
+                        Text(
+                            "${getCurrency(model.owners!.country)}${model.costOfHire!.withCommas}",
                             style: Theme.of(context).textTheme.bodySmall),
                         Text(
                             " per ${model.costOfHireInterval == "1" ? "Day" : model.costOfHireInterval == "7" ? "Week" : "Month"}",

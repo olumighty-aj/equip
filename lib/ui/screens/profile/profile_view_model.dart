@@ -7,6 +7,7 @@ import 'package:equipro/core/model/ReviewsModel.dart';
 import 'package:equipro/core/model/base_model.dart';
 import 'package:equipro/core/model/error_model.dart';
 import 'package:equipro/core/services/auth_service.dart';
+import 'package:equipro/utils/extensions.dart';
 import 'package:equipro/utils/helpers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:image_picker/image_picker.dart';
@@ -50,8 +51,10 @@ class ProfileViewModel extends BaseViewModel {
 
   void init() {
     _log.i(_authentication.currentUser.toJson());
-    stateController.text = _authentication.currentUser.localState ?? "";
-    countryController.text = _authentication.currentUser.country ?? "";
+    stateController.text = _authentication.currentUser.localState ??
+        _authentication.currentUser.address!.extractState();
+    countryController.text = _authentication.currentUser.country ??
+        _authentication.currentUser.address!.extractCountry();
     nameController.text = _authentication.currentUser.fullname!;
     addressController.text = _authentication.currentUser.address != null
         ? _authentication.currentUser.address!

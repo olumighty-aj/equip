@@ -53,9 +53,10 @@ class PlaceBookingState extends State<PlaceBooking>
   Animation<Offset>? _navAnimation;
   var quantityList;
   void showPlacePicker() async {
-    LocationResult result = await Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) =>
-            PlacePicker("AIzaSyAsoaOKfTVMSJll6LvVcQ3sYgALbwJ0B9A")));
+    LocationResult result =
+        await Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+      return PlacePicker("AIzaSyAsoaOKfTVMSJll6LvVcQ3sYgALbwJ0B9A");
+    }));
     // Handle the result in your way
     print(result);
 
@@ -244,62 +245,64 @@ class PlaceBookingState extends State<PlaceBooking>
                                   SizedBox(
                                     height: 30,
                                   ),
-                                  SizedBox(
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.5,
-                                    child: BaseButton(
-                                      label: "Chat Owner",
-                                      labelStyle: buttonText.copyWith(
-                                          color: AppColors.primaryColor,
-                                          fontWeight: FontWeight.w500),
-                                      bgColor: AppColors.primaryColor
-                                          .withOpacity(0.2),
-                                      onPressed: () => Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  ChatDetailsPage(
-                                                      feed: ChatListModel(
-                                                          id: widget
-                                                              .model.ownersId,
-                                                          userId: "",
-                                                          chatWithId: "",
-                                                          messageCount: "",
-                                                          lastMessage: "",
-                                                          dateCreated: "",
-                                                          dateModified: "",
-                                                          chatWith: ChatWith(
+                                  if (model.authentication.currentUser.id !=
+                                      widget.model.owners!.id)
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.5,
+                                      child: BaseButton(
+                                        label: "Chat Owner",
+                                        labelStyle: buttonText.copyWith(
+                                            color: AppColors.primaryColor,
+                                            fontWeight: FontWeight.w500),
+                                        bgColor: AppColors.primaryColor
+                                            .withOpacity(0.2),
+                                        onPressed: () => Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ChatDetailsPage(
+                                                        feed: ChatListModel(
                                                             id: widget
                                                                 .model.ownersId,
-                                                            fullname: widget
-                                                                .model
-                                                                .owners!
-                                                                .fullname!,
-                                                            email: "",
-                                                            phoneNumber: "",
-                                                            gender: "",
-                                                            address: "",
-                                                            addressOpt: "",
-                                                            localState: "",
-                                                            country: "",
-                                                            latitude: "",
-                                                            longitude: "",
-                                                            hirersPath: widget
-                                                                        .model
-                                                                        .owners!
-                                                                        .hirersPath !=
-                                                                    null
-                                                                ? widget
-                                                                    .model
-                                                                    .owners!
-                                                                    .hirersPath!
-                                                                : "",
-                                                            status: "",
-                                                            dateModified: "",
+                                                            userId: "",
+                                                            chatWithId: "",
+                                                            messageCount: "",
+                                                            lastMessage: "",
                                                             dateCreated: "",
-                                                          ))))),
+                                                            dateModified: "",
+                                                            chatWith: ChatWith(
+                                                              id: widget.model
+                                                                  .ownersId,
+                                                              fullname: widget
+                                                                  .model
+                                                                  .owners!
+                                                                  .fullname!,
+                                                              email: "",
+                                                              phoneNumber: "",
+                                                              gender: "",
+                                                              address: "",
+                                                              addressOpt: "",
+                                                              localState: "",
+                                                              country: "",
+                                                              latitude: "",
+                                                              longitude: "",
+                                                              hirersPath: widget
+                                                                          .model
+                                                                          .owners!
+                                                                          .hirersPath !=
+                                                                      null
+                                                                  ? widget
+                                                                      .model
+                                                                      .owners!
+                                                                      .hirersPath!
+                                                                  : "",
+                                                              status: "",
+                                                              dateModified: "",
+                                                              dateCreated: "",
+                                                            ))))),
+                                      ),
                                     ),
-                                  ),
                                   SizedBox(
                                     height: 30,
                                   ),

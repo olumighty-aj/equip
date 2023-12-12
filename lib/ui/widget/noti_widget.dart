@@ -17,74 +17,72 @@ class NotiItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return GestureDetector(
         onTap: () => locator<DialogService>().showCustomDialog(
             variant: DialogType.notification,
             data: feed.toJson(),
             barrierDismissible: true),
-        child: Padding(
-          padding: const EdgeInsets.only(bottom: 12.0),
-          child: Container(
-              // padding: EdgeInsets.only(bottom: 10),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                color: AppColors.white,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.2),
-                    spreadRadius: 1,
-                    blurRadius: 3,
-                    offset: Offset(0, 3), // changes position of shadow
-                  ),
-                ],
-              ),
-              //  color: AppColors.white,
-              height: 80,
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      width: 10,
-                      // width: Responsive.width(context)/1.5,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(10),
-                            bottomLeft: Radius.circular(10)),
-                        color: AppColors.primaryColor,
-                      ),
-                      alignment: Alignment.center,
+        child: Container(
+            // padding: EdgeInsets.only(bottom: 10),
+            margin: EdgeInsets.only(bottom: 10),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color: AppColors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.2),
+                  spreadRadius: 1,
+                  blurRadius: 3,
+                  offset: Offset(0, 3), // changes position of shadow
+                ),
+              ],
+            ),
+            //  color: AppColors.white,
+            height: 80,
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: 10,
+                    // width: Responsive.width(context)/1.5,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(10),
+                          bottomLeft: Radius.circular(10)),
+                      color: AppColors.primaryColor,
                     ),
-                    Expanded(
-                      child: Container(
-                          padding: EdgeInsets.all(10),
-                          child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                    feed.message ?? "",
-                                    style: const TextStyle(
-                                      fontSize: 13,
-                                      // overflow: TextOverflow.ellipsis,
-                                    ),
-                                    // maxLines: 2,
+                    alignment: Alignment.center,
+                  ),
+                  Expanded(
+                    child: Container(
+                        padding: EdgeInsets.all(10),
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  feed.message ?? "",
+                                  style: const TextStyle(
+                                    fontSize: 13,
+                                    // overflow: TextOverflow.ellipsis,
                                   ),
+                                  // maxLines: 2,
                                 ),
-                                SizedBox(
-                                  height: 12,
-                                ),
-                                Text(
-                                    DateTime.parse(feed.dateCreated!)
-                                        .formatToCustomFormat(),
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodySmall
-                                        ?.copyWith(color: Colors.grey)),
-                              ])),
-                    )
-                  ])),
-        ));
+                              ),
+                              SizedBox(
+                                height: 12,
+                              ),
+                              Text(
+                                  DateTime.parse(feed.dateCreated!)
+                                      .formatToCustomFormat(),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodySmall
+                                      ?.copyWith(color: Colors.grey)),
+                            ])),
+                  )
+                ])));
   }
 }
 

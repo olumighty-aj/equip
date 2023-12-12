@@ -283,16 +283,12 @@ class LoginState extends State<EquipOwnerDetails>
                                   ])),
                                   Gap(28),
                                   model.bookingDetails.isNotEmpty
-                                      ? Container(
-                                          height:
-                                              Responsive.height(context) / 2,
-                                          child: Column(
-                                            children: List.generate(
-                                                model.bookingDetails.length,
-                                                (index) => BookingRequest(
-                                                    feed: model.bookingDetails[
-                                                        index])),
-                                          ),
+                                      ? Column(
+                                          children: List.generate(
+                                              model.bookingDetails.length,
+                                              (index) => BookingRequest(
+                                                  feed: model
+                                                      .bookingDetails[index])),
                                         )
                                       : Container(
                                           child: Text(

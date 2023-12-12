@@ -51,245 +51,184 @@ class LoginState extends State<NotificationPage> {
               child: Scaffold(
                   key: _scaffoldKey,
                   body: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: AnimationLimiter(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: AnimationConfiguration.toStaggeredList(
-                            duration: const Duration(milliseconds: 200),
-                            childAnimationBuilder: (widget) => SlideAnimation(
-                              horizontalOffset:
-                                  -MediaQuery.of(context).size.width / 4,
-                              child: FadeInAnimation(
-                                  curve: Curves.fastOutSlowIn, child: widget),
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(
+                          height: 60,
+                        ),
+                        Container(
+                            height: 40,
+                            width: 40,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              color: AppColors.white,
                             ),
-                            children: [
-                              const SizedBox(
-                                height: 60,
-                              ),
-                              Container(
-                                  height: 40,
-                                  width: 40,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(12),
-                                    color: AppColors.white,
-                                  ),
-                                  child: InkWell(
-                                      onTap: () {
-                                        Navigator.pop(context);
-                                      },
-                                      child: const Icon(
-                                        Icons.clear,
-                                        color: AppColors.primaryColor,
-                                      ))),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              const Text(
-                                'Notification',
-                                style: TextStyle(
-                                    fontSize: 20,
-                                    color: AppColors.black,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              // Container(
-                              //   height: 60.0,
-                              //   child: TextFormField(
-                              //     textAlign: TextAlign.start,
-                              //     decoration: InputDecoration(
-                              //       prefixIcon: Icon(
-                              //         Icons.search_outlined,
-                              //         color: Colors.grey,
-                              //         size: 30,
-                              //       ),
-                              //       contentPadding: EdgeInsets.symmetric(
-                              //           vertical: 2.0, horizontal: 20.0),
-                              //       hintText: "Search",
-                              //       //hintText: tr.text( "Upcoming feature"),
-                              //       hintStyle: TextStyle(
-                              //         color: Color(0XFF818181),
-                              //         fontSize: 15,
-                              //       ),
-                              //       focusedBorder: OutlineInputBorder(
-                              //         borderRadius: BorderRadius.all(
-                              //           Radius.circular(30.0),
-                              //         ),
-                              //         borderSide:
-                              //             BorderSide(color: Colors.grey),
-                              //       ),
-                              //       enabledBorder: OutlineInputBorder(
-                              //         borderRadius: BorderRadius.all(
-                              //           Radius.circular(30.0),
-                              //         ),
-                              //         borderSide:
-                              //             BorderSide(color: Colors.grey),
-                              //       ),
-                              //     ),
-                              //     onChanged: (value) {
-                              //       setState(() {
-                              //         // searchWord = value;
-                              //         // print(searchWord);
-                              //       });
-                              //     },
-                              //   ),
-                              // ),
-                              CustomSearchField(
-                                hintText: "Search",
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              SizedBox(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.6,
-                                child: FutureBuilder<List<NotificationModel>>(
-                                    future: myFuture,
-                                    builder: (context, snapshot) {
-                                      if (!snapshot.hasData) {
-                                        return Container(
-                                            height:
-                                                Responsive.height(context) / 2,
-                                            padding: const EdgeInsets.only(
-                                                left: 20.0, right: 20),
-                                            child: Center(
-                                              child: Shimmer.fromColors(
-                                                  direction:
-                                                      ShimmerDirection.ltr,
-                                                  period: const Duration(
-                                                      seconds: 2),
-                                                  baseColor: AppColors.grey
-                                                      .withOpacity(0.5),
-                                                  highlightColor: Colors.white,
-                                                  child: ListView(
-                                                    scrollDirection:
-                                                        Axis.vertical,
-                                                    // shrinkWrap: true,
-                                                    children: [0, 1, 2, 3]
-                                                        .map((_) => Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(8.0),
-                                                              child: Row(
+                            child: InkWell(
+                                onTap: () {
+                                  Navigator.pop(context);
+                                },
+                                child: const Icon(
+                                  Icons.clear,
+                                  color: AppColors.primaryColor,
+                                ))),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        const Text(
+                          'Notification',
+                          style: TextStyle(
+                              fontSize: 20,
+                              color: AppColors.black,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        // const SizedBox(
+                        //   height: 10,
+                        // ),
+                        FutureBuilder<List<NotificationModel>>(
+                            future: myFuture,
+                            builder: (context, snapshot) {
+                              if (!snapshot.hasData) {
+                                return Expanded(
+                                  child: Container(
+                                      height: Responsive.height(context) / 2,
+                                      padding: const EdgeInsets.only(
+                                          left: 20.0, right: 20),
+                                      child: Center(
+                                        child: Shimmer.fromColors(
+                                            direction: ShimmerDirection.ltr,
+                                            period: const Duration(seconds: 2),
+                                            baseColor:
+                                                AppColors.grey.withOpacity(0.5),
+                                            highlightColor: Colors.white,
+                                            child: ListView(
+                                              scrollDirection: Axis.vertical,
+                                              // shrinkWrap: true,
+                                              children: [0, 1, 2, 3]
+                                                  .map((_) => Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(8.0),
+                                                        child: Row(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            const Padding(
+                                                              padding: EdgeInsets
+                                                                  .symmetric(
+                                                                      horizontal:
+                                                                          8.0),
+                                                            ),
+                                                            Expanded(
+                                                              child: Column(
                                                                 crossAxisAlignment:
                                                                     CrossAxisAlignment
                                                                         .start,
                                                                 children: [
+                                                                  Container(
+                                                                    width: double
+                                                                        .infinity,
+                                                                    height: 8.0,
+                                                                    color: Colors
+                                                                        .white,
+                                                                  ),
                                                                   const Padding(
                                                                     padding: EdgeInsets.symmetric(
-                                                                        horizontal:
-                                                                            8.0),
+                                                                        vertical:
+                                                                            2.0),
                                                                   ),
-                                                                  Expanded(
-                                                                    child:
-                                                                        Column(
-                                                                      crossAxisAlignment:
-                                                                          CrossAxisAlignment
-                                                                              .start,
-                                                                      children: [
-                                                                        Container(
-                                                                          width:
-                                                                              double.infinity,
-                                                                          height:
-                                                                              8.0,
-                                                                          color:
-                                                                              Colors.white,
-                                                                        ),
-                                                                        const Padding(
-                                                                          padding:
-                                                                              EdgeInsets.symmetric(vertical: 2.0),
-                                                                        ),
-                                                                        Container(
-                                                                          width:
-                                                                              double.infinity,
-                                                                          height:
-                                                                              8.0,
-                                                                          color:
-                                                                              Colors.white,
-                                                                        ),
-                                                                        const Padding(
-                                                                          padding:
-                                                                              EdgeInsets.symmetric(vertical: 2.0),
-                                                                        ),
-                                                                        Container(
-                                                                          width:
-                                                                              40.0,
-                                                                          height:
-                                                                              8.0,
-                                                                          color:
-                                                                              Colors.white,
-                                                                        ),
-                                                                      ],
-                                                                    ),
-                                                                  )
+                                                                  Container(
+                                                                    width: double
+                                                                        .infinity,
+                                                                    height: 8.0,
+                                                                    color: Colors
+                                                                        .white,
+                                                                  ),
+                                                                  const Padding(
+                                                                    padding: EdgeInsets.symmetric(
+                                                                        vertical:
+                                                                            2.0),
+                                                                  ),
+                                                                  Container(
+                                                                    width: 40.0,
+                                                                    height: 8.0,
+                                                                    color: Colors
+                                                                        .white,
+                                                                  ),
                                                                 ],
                                                               ),
-                                                            ))
-                                                        .toList(),
-                                                  )),
-                                            ));
-                                      } else if (snapshot.data!.isNotEmpty) {
-                                        return ListView(
-                                            shrinkWrap: true,
-                                            scrollDirection: Axis.vertical,
-                                            // shrinkWrap: true,
-                                            children: snapshot.data!
-                                                .map(
-                                                  (feed) =>
-                                                      NotiItem(feed: feed),
-                                                )
-                                                .toList());
-                                      } else if (snapshot.hasError) {
-                                        return Center(
-                                            child: Column(
-                                          children: <Widget>[
-                                            SizedBox(
-                                              height: 100,
-                                            ),
-                                            Text(
-                                              'Network error',
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 20,
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              height: 10,
-                                            ),
-                                            Text('Network error'),
-                                            SizedBox(
-                                              height: 100,
-                                            ),
-                                          ],
-                                        ));
-                                      } else {
-                                        return Center(
-                                            child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              "No Notifications available",
-                                              style: TextStyle(
-                                                  fontSize: 15,
-                                                  color: AppColors.black),
-                                              textAlign: TextAlign.center,
-                                            ),
-                                            SizedBox(
-                                              height: 20,
-                                            ),
-                                          ],
-                                        ));
-                                      }
-                                    }),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ))));
+                                                            )
+                                                          ],
+                                                        ),
+                                                      ))
+                                                  .toList(),
+                                            )),
+                                      )),
+                                );
+                              } else if (snapshot.data!.isNotEmpty) {
+                                return Expanded(
+                                  child: ListView(
+                                      physics: BouncingScrollPhysics(),
+                                      shrinkWrap: true,
+                                      // shrinkWrap: true,
+                                      children: snapshot.data!
+                                          .map(
+                                            (feed) => NotiItem(feed: feed),
+                                          )
+                                          .toList()),
+                                );
+                              } else if (snapshot.hasError) {
+                                return Expanded(
+                                  child: Center(
+                                      child: Column(
+                                    children: <Widget>[
+                                      SizedBox(
+                                        height: 100,
+                                      ),
+                                      Text(
+                                        'Network error',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      Text('Network error'),
+                                      SizedBox(
+                                        height: 100,
+                                      ),
+                                    ],
+                                  )),
+                                );
+                              } else {
+                                return Expanded(
+                                  child: Center(
+                                      child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        "No Notifications available",
+                                        style: TextStyle(
+                                            fontSize: 15,
+                                            color: AppColors.black),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      SizedBox(
+                                        height: 20,
+                                      ),
+                                    ],
+                                  )),
+                                );
+                              }
+                            }),
+                      ],
+                    ),
+                  )));
         });
   }
 }
