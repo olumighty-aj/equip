@@ -1,4 +1,7 @@
+import 'package:equipro/app/app_setup.logger.dart';
 import 'package:equipro/app/app_setup.router.dart';
+import 'package:equipro/core/model/base_model.dart';
+import 'package:equipro/core/services/activities_service.dart';
 import 'package:equipro/core/services/auth_service.dart';
 import 'package:equipro/ui/screens/chat/chat.dart';
 import 'package:equipro/ui/screens/owner/active_rentals/owner_active_rentals.dart';
@@ -9,6 +12,7 @@ import 'package:equipro/ui/screens/profile/profile.dart';
 import 'package:equipro/ui/screens/terms_and_condition/terms_condition_screen.dart';
 import 'package:equipro/ui/widget/base_button.dart';
 import 'package:equipro/ui/widget/general_button.dart';
+import 'package:equipro/utils/app_svgs.dart';
 import 'package:equipro/utils/colors.dart';
 // import 'package:equipro/utils/locator.dart';
 import 'package:equipro/utils/router/navigation_service.dart';
@@ -16,11 +20,13 @@ import 'package:equipro/utils/router/route_names.dart';
 import 'package:equipro/utils/tiny_db.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 import '../../../app/app_setup.locator.dart';
 import '../../../core/enums/dialog_type.dart';
+import '../settings/settings_screen.dart';
 
 class OwnerDrawer extends StatefulWidget {
   const OwnerDrawer({Key? key}) : super(key: key);
@@ -40,6 +46,7 @@ class CollapsingNavigationDrawerState extends State<OwnerDrawer>
   late Animation<double> widthAnimation;
   final _navigationService = locator<NavigationService>();
   final Authentication _authentication = locator<Authentication>();
+  final Activities _activities = locator<Activities>();
   HomeOwnerViewModel model = HomeOwnerViewModel();
 
   displayDialog(BuildContext context, HomeOwnerViewModel model) {
@@ -125,26 +132,24 @@ class CollapsingNavigationDrawerState extends State<OwnerDrawer>
           child: Padding(
             padding: const EdgeInsets.all(18.0),
             child: ListView(children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(""),
-                  Container(
-                      height: 40,
-                      width: 40,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        color: AppColors.white,
-                      ),
-                      child: InkWell(
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                          child: const Icon(
-                            Icons.clear,
-                            color: AppColors.primaryColor,
-                          )))
-                ],
+              Align(
+                alignment: Alignment.topRight,
+                child: Container(
+                    height: 40,
+                    width: 40,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: Colors.grey.shade300),
+                      color: AppColors.white,
+                    ),
+                    child: GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Icon(
+                          Icons.clear,
+                          color: AppColors.primaryColor,
+                        ))),
               ),
               GestureDetector(
                   onTap: () => Navigator.push(context,
@@ -156,19 +161,19 @@ class CollapsingNavigationDrawerState extends State<OwnerDrawer>
                           // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             CachedNetworkImage(
+                              fit: BoxFit.cover,
                               imageUrl:
                                   _authentication.currentUser.hirersPath != null
                                       ? _authentication.currentUser.hirersPath!
                                       : "",
                               imageBuilder: (context, imageProvider) =>
                                   Container(
-                                width: 70.0,
-                                height: 70.0,
+                                width: 50.0,
+                                height: 50.0,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   image: DecorationImage(
-                                      image: imageProvider,
-                                      fit: BoxFit.contain),
+                                      image: imageProvider, fit: BoxFit.cover),
                                 ),
                               ),
                               placeholder: (context, url) =>
@@ -177,9 +182,8 @@ class CollapsingNavigationDrawerState extends State<OwnerDrawer>
                                   CircleAvatar(
                                 radius: 40,
                                 backgroundColor: AppColors.grey,
-                                child: Image.asset(
-                                  "assets/images/icon.png",
-                                  scale: 2,
+                                child: SvgPicture.asset(
+                                  AppSvgs.svgLogo,
                                 ),
                               ),
                             ),
@@ -270,6 +274,14 @@ class CollapsingNavigationDrawerState extends State<OwnerDrawer>
                 onTap: () => Navigator.push(context,
                     MaterialPageRoute(builder: (context) => Profile())),
               ),
+              ListTile(
+                title: const Text(
+                  'Settings',
+                  style: TextStyle(fontSize: 16),
+                ),
+                onTap: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => SettingScreen())),
+              ),
               // ListTile(
               //   title: const Text(
               //     'Settings',
@@ -281,13 +293,13 @@ class CollapsingNavigationDrawerState extends State<OwnerDrawer>
               //   },
               // ),
               SizedBox(
-                height: 10,
+                height: 5,
               ),
               Divider(
                 thickness: 1,
               ),
               SizedBox(
-                height: 30,
+                height: 10,
               ),
 
               BaseButton(

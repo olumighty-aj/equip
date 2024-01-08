@@ -1,7 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:equipro/core/model/ChatListModel.dart';
 import 'package:equipro/ui/screens/chat/chat_view_model.dart';
 import 'package:equipro/ui/screens/chat/chats_widget/chat_details.dart';
 import 'package:equipro/ui/widget/chat_widget.dart';
+import 'package:equipro/ui/widget/noti_widget.dart';
 import 'package:equipro/utils/colors.dart';
 import 'package:equipro/utils/locator.dart';
 import 'package:equipro/utils/router/navigation_service.dart';
@@ -11,6 +13,7 @@ import 'package:gap/gap.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:stacked/stacked.dart';
 
+import '../../../app/app_setup.logger.dart';
 import '../../../utils/app_svgs.dart';
 import '../../widget/input_fields/custom_text_field.dart';
 import '../profile/edit_profile.dart';
@@ -71,9 +74,11 @@ class ChatState extends State<Chat> {
                         Gap(37),
                         Builder(builder: (context) {
                           if (model.busy("Chats") && model.chats!.isEmpty) {
-                            return Center(
-                              child: CircularProgressIndicator(
-                                color: AppColors.primaryColor,
+                            return Expanded(
+                              child: Center(
+                                child: CircularProgressIndicator(
+                                  color: AppColors.primaryColor,
+                                ),
                               ),
                             );
                           } else if (!model.busy("Chats") &&
@@ -86,6 +91,7 @@ class ChatState extends State<Chat> {
                               ],
                             );
                           } else {
+                            // getLogger("ChatList").i(model.c)
                             return Expanded(
                               child: Column(
                                 children: List.generate(
@@ -116,22 +122,49 @@ class ChatListTile extends StatelessWidget {
     return Column(
       children: [
         ListTile(
-          onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => ChatDetailsPage(feed: model))),
-          leading: CircleAvatar(
-            radius: 25,
-            child: model.chatWith?.hirersPath != null
-                ? Image.network(
-                    model.chatWith?.hirersPath!,
-                    fit: BoxFit.cover,
-                  )
-                : Image.asset(
-                    "assets/images/icon.png",
-                    fit: BoxFit.cover,
-                  ),
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ChatDetailsPage(feed: model)));
+          },
+          leading: CachedNetworkImage(
+            fit: BoxFit.cover,
+            imageUrl: model.chatWith?.hirersPath != null
+                ? model.chatWith?.hirersPath!
+                : "",
+            imageBuilder: (context, imageProvider) => Container(
+              width: 40.0,
+              height: 40.0,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+              ),
+            ),
+            placeholder: (context, url) => SizedBox(
+                height: 15,
+                child: CircularProgressIndicator(
+                  color: AppColors.primaryColor,
+                )),
+            errorWidget: (context, url, error) => CircleAvatar(
+              radius: 20,
+              backgroundColor: AppColors.grey,
+              child: SvgPicture.asset(AppSvgs.svgLogo),
+            ),
           ),
+
+          // CircleAvatar(
+          //   // radius: 25,
+          //   child: model.chatWith?.hirersPath != null
+          //       ? Image.network(
+          //           model.chatWith?.hirersPath!,
+          //           fit: BoxFit.cover,
+          //         )
+          //       : SvgPicture.asset(
+          //           AppSvgs.svgLogo,
+          //           fit: BoxFit.cover,
+          //         ),
+          // ),
           title: Text(
             model.chatWith?.fullname ?? "",
             style: Theme.of(context)
@@ -175,7 +208,7 @@ String formatDateTime(DateTime dateTime) {
 
   if (dateTime.day == today.day) {
     // Return in time format
-    return '${dateTime.hour}:${dateTime.minute}';
+    return dateTime.formatTimeIn12HourFormat();
   } else if (dateTime.isAtSameMomentAs(yesterday)) {
     // Return "yesterday"
     return 'Yesterday';

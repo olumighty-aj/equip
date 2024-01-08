@@ -11,8 +11,11 @@ import 'package:equipro/ui/widget/base_button.dart';
 import 'package:equipro/utils/screensize.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:stacked/stacked.dart';
 import 'package:equipro/utils/colors.dart';
+
+import '../../../utils/app_svgs.dart';
 
 class EditProfile extends StatefulWidget {
   const EditProfile({Key? key}) : super(key: key);
@@ -135,7 +138,7 @@ class LoginState extends State<EditProfile> with TickerProviderStateMixin {
                                                     shape: BoxShape.circle,
                                                     image: DecorationImage(
                                                         image: imageProvider,
-                                                        fit: BoxFit.contain),
+                                                        fit: BoxFit.cover),
                                                   ),
                                                 ),
                                                 placeholder: (context, url) =>
@@ -146,9 +149,8 @@ class LoginState extends State<EditProfile> with TickerProviderStateMixin {
                                                   radius: 70,
                                                   backgroundColor:
                                                       AppColors.grey,
-                                                  child: Image.asset(
-                                                    "assets/images/icon.png",
-                                                    scale: 2,
+                                                  child: SvgPicture.asset(
+                                                    AppSvgs.svgLogo,
                                                   ),
                                                 ),
                                               ),
@@ -358,7 +360,7 @@ class LoginState extends State<EditProfile> with TickerProviderStateMixin {
                                     height: 10,
                                   ),
                                   TextFormField(
-                                    enabled: false,
+                                    enabled: true,
                                     controller: model.stateController,
                                     decoration: InputDecoration(
                                       hintText: '',
@@ -406,7 +408,7 @@ class LoginState extends State<EditProfile> with TickerProviderStateMixin {
                                     height: 10,
                                   ),
                                   TextFormField(
-                                    enabled: false,
+                                    enabled: true,
                                     controller: model.countryController,
                                     decoration: InputDecoration(
                                       hintText: '',

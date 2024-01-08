@@ -1,3 +1,4 @@
+import 'package:custom_refresh_indicator/custom_refresh_indicator.dart';
 import 'package:equipro/core/enums/dialog_type.dart';
 import 'package:equipro/core/model/EquipmentModel.dart';
 import 'package:equipro/core/model/enums.dart';
@@ -27,7 +28,11 @@ import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 import '../../../../core/enums/bottom_sheet_type.dart';
+import '../../../../main.dart';
 import '../../../../utils/app_svgs.dart';
+import 'dart:async';
+import 'dart:developer';
+import 'dart:io';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -38,6 +43,24 @@ class Home extends StatefulWidget {
 
 class LoginState extends State<Home> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+
+  Future<void> initializeNotif() async {
+    NotificationSettings permission =
+        await _firebaseMessaging.requestPermission(
+            sound: true, badge: true, alert: true, provisional: false);
+    if (permission.authorizationStatus == AuthorizationStatus.authorized) {
+      _firebaseMessaging.subscribeToTopic("equippro_general");
+      if (Platform.isAndroid) {
+        _firebaseMessaging.subscribeToTopic("equippro_android");
+      } else {
+        _firebaseMessaging.subscribeToTopic("equippro_ios");
+      }
+      FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+        messageHandler(message);
+      });
+    }
+  }
 
   late FirebaseMessaging messaging;
 
@@ -100,8 +123,7 @@ class LoginState extends State<Home> {
   }
 
   void registerNotification() async {
-    FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-        FlutterLocalNotificationsPlugin();
+    flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 // initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('app_icon');
@@ -139,8 +161,8 @@ class LoginState extends State<Home> {
       badge: true,
       sound: true,
     );
-
     displayDialog(String title, String body) {
+      print("Notification from display: $title, $body");
       return showTopSnackBar(
         context,
         CustomSnackBar.info(
@@ -150,29 +172,41 @@ class LoginState extends State<Home> {
       );
     }
 
-    FirebaseMessaging.onMessage.listen((RemoteMessage event) {
-      print("message recieved");
-      print(event.notification?.body);
-      displayDialog(
-          '${event.notification?.title}', '${event.notification?.body}');
-
-      // Get.snackbar('${event.notification.body}', '${event.notification.title}',
-      //     backgroundColor: AppColors.secondaryColor);
-    });
+    // FirebaseMessaging.onMessage.listen((RemoteMessage event) {
+    //   print("message recieved");
+    //   print("I am message");
+    //   print("Notif: ${event.data}");
+    //   // print("Notification: ${event.data}");
+    //   // displayDialog('${event.notification?.title}', '${event.data}');
+    //   pushNotification(
+    //       event.notification?.title ?? "", event.notification?.body ?? "");
+    //
+    //   // Get.snackbar('${event.notification.body}', '${event.notification.title}',
+    //   //     backgroundColor: AppColors.secondaryColor);
+    // });
     FirebaseMessaging.onMessageOpenedApp.listen((message) {});
   }
 
-  Future<void> _messageHandler(RemoteMessage message) async {
-    //await Firebase.initializeApp(options: DefaultFirebaseConfig.platformOptions);
-    print('Handling a background message ${message.messageId}');
-    print('background message ${message.notification?.body}');
-  }
+  var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
+      "Equippro", 'Notification',
+      channelDescription: 'This is Equippro notification center',
+      importance: Importance.max,
+      priority: Priority.high,
+      playSound: false,
+      enableVibration: true);
+  var iOSPlatformChannelSpecifics =
+      new IOSNotificationDetails(presentBadge: true, presentSound: true);
+
+  get platformChannelSpecifics => new NotificationDetails(
+      android: androidPlatformChannelSpecifics,
+      iOS: iOSPlatformChannelSpecifics);
 
   @override
   void initState() {
     super.initState();
-    registerNotification();
-    FirebaseMessaging.onBackgroundMessage(_messageHandler);
+    // registerNotification();
+    initializeNotif();
+    // FirebaseMessaging.onBackgroundMessage(_messageHandler);
   }
 
   @override
@@ -209,463 +243,399 @@ class LoginState extends State<Home> {
                   ),
                 ),
               ),
-              body: SingleChildScrollView(
-                  child: Padding(
-                      padding: EdgeInsets.all(20),
-                      child: AnimationLimiter(
-                          child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: AnimationConfiguration.toStaggeredList(
-                                  duration: const Duration(milliseconds: 200),
-                                  childAnimationBuilder: (widget) =>
-                                      SlideAnimation(
-                                        horizontalOffset:
-                                            -MediaQuery.of(context).size.width /
-                                                4,
-                                        child: FadeInAnimation(
-                                            curve: Curves.fastOutSlowIn,
-                                            child: widget),
-                                      ),
+              body: CustomRefreshIndicator(
+                onRefresh: () => model.newGetEquipments(
+                    locationData != null
+                        ? locationData!.latitude.toString()
+                        : "6.4478",
+                    locationData != null
+                        ? locationData!.longitude.toString()
+                        : "3.4723"),
+                builder: (BuildContext context, Widget child,
+                    IndicatorController controller) {
+                  return Stack(
+                    alignment: Alignment.topCenter,
+                    children: <Widget>[
+                      if (!controller.isIdle)
+                        Positioned(
+                          top: 35.0 * controller.value,
+                          child: SizedBox(
+                            height: 30,
+                            width: 30,
+                            child: CircularProgressIndicator(
+                              color: AppColors.primaryColor,
+                              value: !controller.isLoading
+                                  ? controller.value.clamp(0.0, 1.0)
+                                  : null,
+                            ),
+                          ),
+                        ),
+                      Transform.translate(
+                        offset: Offset(0, 100.0 * controller.value),
+                        child: child,
+                      ),
+                    ],
+                  );
+                  ;
+                },
+                child: Padding(
+                  padding: EdgeInsets.all(20),
+                  child: SingleChildScrollView(
+                    child: AnimationLimiter(
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: AnimationConfiguration.toStaggeredList(
+                              duration: const Duration(milliseconds: 200),
+                              childAnimationBuilder: (widget) => SlideAnimation(
+                                    horizontalOffset:
+                                        -MediaQuery.of(context).size.width / 4,
+                                    child: FadeInAnimation(
+                                        curve: Curves.fastOutSlowIn,
+                                        child: widget),
+                                  ),
+                              children: [
+                                Row(
                                   children: [
-                                    // const SizedBox(
-                                    //   height: 60,
-                                    // ),
-                                    // Row(
-                                    //   mainAxisAlignment:
-                                    //       MainAxisAlignment.spaceBetween,
-                                    //   children: [
-                                    //     InkWell(
-                                    //       onTap: () {
-                                    //         _scaffoldKey.currentState!
-                                    //             .openDrawer();
-                                    //       },
-                                    //       child: SvgPicture.asset(
-                                    //         "assets/images/hamburger.svg",
-                                    //       ),
-                                    //     ),
-                                    //     const Text(
-                                    //       '',
-                                    //       style: TextStyle(
-                                    //           fontSize: 20,
-                                    //           color: AppColors.black,
-                                    //           fontWeight: FontWeight.bold),
-                                    //     ),
-                                    //   ],
-                                    // ),
-                                    // SizedBox(
-                                    //   height: 30,
-                                    // ),
-                                    Row(
-                                      children: [
-                                        Text(
-                                          "Find an ",
-                                          style: TextStyle(
-                                              fontSize: 30,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        Text(
-                                          "equipment",
-                                          style: TextStyle(
-                                              color: AppColors.primaryColor,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 30),
-                                        )
-                                      ],
-                                    ),
                                     Text(
-                                      "quickly!",
+                                      "Find an ",
                                       style: TextStyle(
                                           fontSize: 30,
                                           fontWeight: FontWeight.bold),
                                     ),
-                                    SizedBox(
-                                      height: 30,
-                                    ),
-                                    Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          // SizedBox(
-                                          //   width:
-                                          //       Responsive.width(context) / 1.3,
-                                          //   child: TextFormField(
-                                          //     textAlign: TextAlign.center,
-                                          //     decoration: const InputDecoration(
-                                          //       prefixIcon: Icon(
-                                          //         Icons.search_outlined,
-                                          //         color: AppColors.grey,
-                                          //         size: 30,
-                                          //       ),
-                                          //       contentPadding:
-                                          //           EdgeInsets.symmetric(
-                                          //               vertical: 2.0,
-                                          //               horizontal: 20.0),
-                                          //       hintText:
-                                          //           "Search by location, name of equipment, etc",
-                                          //       hintStyle: TextStyle(
-                                          //         color: Color(0XFF818181),
-                                          //         fontSize: 12,
-                                          //       ),
-                                          //       // fillColor: Colors.white,
-                                          //       // filled: true,
-                                          //       focusedBorder:
-                                          //           OutlineInputBorder(
-                                          //         borderRadius:
-                                          //             BorderRadius.all(
-                                          //           Radius.circular(30.0),
-                                          //         ),
-                                          //         borderSide: BorderSide(
-                                          //             color: Colors.black),
-                                          //       ),
-                                          //       enabledBorder:
-                                          //           OutlineInputBorder(
-                                          //         borderRadius:
-                                          //             BorderRadius.all(
-                                          //           Radius.circular(30.0),
-                                          //         ),
-                                          //         borderSide: BorderSide(
-                                          //             color: Colors.grey),
-                                          //       ),
-                                          //     ),
-                                          //     onChanged: (value) {
-                                          //       setState(() {
-                                          //         searchWord = value;
-                                          //         print(searchWord);
-                                          //       });
-                                          //     },
-                                          //   ),
-                                          // ),
-                                          Expanded(
-                                            child: CustomSearchField(
-                                              hintText:
-                                                  "Search by location, name of...",
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                            width: 10,
-                                          ),
-                                          InkWell(
-                                              onTap: () => Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          NotificationPage())),
-                                              child: Badge(
-                                                label: Text(
-                                                  "0",
-                                                  style: TextStyle(
-                                                      color: Colors.white),
-                                                ),
-                                                child: SvgPicture.asset(
-                                                    "assets/images/notification.svg"),
-                                              ))
-                                        ]),
-                                    SizedBox(
-                                      height: 30,
-                                    ),
                                     Text(
-                                      "EQUIPMENTS LISTING NEAR YOU",
+                                      "equipment",
                                       style: TextStyle(
-                                          color: Colors.grey,
+                                          color: AppColors.primaryColor,
                                           fontWeight: FontWeight.bold,
-                                          fontSize: 15),
-                                    ),
-                                    SizedBox(
-                                      height: 30,
-                                    ),
-                                    searchWord.isEmpty
-                                        ? Container(
-                                            height: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
+                                          fontSize: 30),
+                                    )
+                                  ],
+                                ),
+                                Text(
+                                  "quickly!",
+                                  style: TextStyle(
+                                      fontSize: 30,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                SizedBox(
+                                  height: 30,
+                                ),
+                                Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Expanded(
+                                        child: CustomSearchField(
+                                          hintText:
+                                              "Search by location, name of...",
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        width: 10,
+                                      ),
+                                      InkWell(
+                                          onTap: () => Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      NotificationPage())),
+                                          child: Badge(
+                                            label: Text(
+                                              "0",
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                            child: SvgPicture.asset(
+                                                "assets/images/notification.svg"),
+                                          ))
+                                    ]),
+                                SizedBox(
+                                  height: 30,
+                                ),
+                                Text(
+                                  "EQUIPMENTS LISTING NEAR YOU",
+                                  style: TextStyle(
+                                      color: Colors.grey,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15),
+                                ),
+                                SizedBox(
+                                  height: 30,
+                                ),
+                                searchWord.isEmpty
+                                    ? Container(
+                                        height:
+                                            MediaQuery.of(context).size.height *
                                                 0.6,
-                                            child: ViewModelBuilder<
-                                                    HomeViewModel>.reactive(
-                                                viewModelBuilder: () =>
-                                                    HomeViewModel(),
-                                                onViewModelReady: (vm) {
-                                                  vm.newGetEquipments(
-                                                      locationData != null
-                                                          ? locationData!
-                                                              .latitude
-                                                              .toString()
-                                                          : "6.4478",
-                                                      locationData != null
-                                                          ? locationData!
+                                        child: ViewModelBuilder<
+                                                HomeViewModel>.reactive(
+                                            viewModelBuilder: () =>
+                                                HomeViewModel(),
+                                            onViewModelReady: (vm) {
+                                              vm.newGetEquipments(
+                                                  locationData != null
+                                                      ? locationData!.latitude
+                                                          .toString()
+                                                      : "6.4478",
+                                                  locationData != null
+                                                      ? locationData!.longitude
+                                                          .toString()
+                                                      : "3.4723");
+                                              vm.controller =
+                                                  new ScrollController()
+                                                    ..addListener(() {
+                                                      vm.getEquipmentMore(
+                                                          //  "6.4478", "3.4723"
+                                                          locationData!.latitude
+                                                              .toString(),
+                                                          locationData!
                                                               .longitude
-                                                              .toString()
-                                                          : "3.4723");
-                                                  vm.controller =
-                                                      new ScrollController()
-                                                        ..addListener(() {
-                                                          vm.getEquipmentMore(
-                                                              //  "6.4478", "3.4723"
-                                                              locationData!
-                                                                  .latitude
-                                                                  .toString(),
-                                                              locationData!
-                                                                  .longitude
-                                                                  .toString());
-                                                        });
-                                                },
-                                                builder: (context, v, child) {
-                                                  if (v.fetchState ==
-                                                      LoadingState.loading) {
-                                                    return Container(
-                                                        height: 400,
-                                                        padding: EdgeInsets.all(
-                                                            20.0),
-                                                        child: Center(
-                                                          child: Shimmer
-                                                              .fromColors(
-                                                                  direction:
-                                                                      ShimmerDirection
-                                                                          .ltr,
-                                                                  period: Duration(
-                                                                      seconds:
-                                                                          2),
-                                                                  child:
-                                                                      ListView(
-                                                                    scrollDirection:
-                                                                        Axis.vertical,
-                                                                    // shrinkWrap: true,
-                                                                    children: [
-                                                                      0,
-                                                                      1,
-                                                                      2,
-                                                                      3
-                                                                    ]
-                                                                        .map((_) =>
-                                                                            LoaderWidget())
-                                                                        .toList(),
-                                                                  ),
-                                                                  baseColor:
-                                                                      AppColors
-                                                                          .white,
-                                                                  highlightColor:
-                                                                      AppColors
-                                                                          .grey),
-                                                        ));
-                                                  } else if (v.fetchState ==
-                                                      LoadingState.done) {
-                                                    if (v.packageList
-                                                        .isNotEmpty) {
-                                                      return SingleChildScrollView(
-                                                          scrollDirection:
-                                                              Axis.vertical,
-                                                          controller:
-                                                              v.controller,
-                                                          physics:
-                                                              BouncingScrollPhysics(),
-                                                          // shrinkWrap: true,
-                                                          child: Column(
+                                                              .toString());
+                                                    });
+                                            },
+                                            builder: (context, v, child) {
+                                              if (v.fetchState ==
+                                                  LoadingState.loading) {
+                                                return Container(
+                                                    height: 400,
+                                                    padding:
+                                                        EdgeInsets.all(20.0),
+                                                    child: Center(
+                                                      child: Shimmer.fromColors(
+                                                          direction:
+                                                              ShimmerDirection
+                                                                  .ltr,
+                                                          period: Duration(
+                                                              seconds: 2),
+                                                          child: ListView(
+                                                            scrollDirection:
+                                                                Axis.vertical,
+                                                            // shrinkWrap: true,
                                                             children: [
-                                                              Column(
-                                                                  children: v
-                                                                      .packageList
-                                                                      .map((feed) =>
-                                                                          EquipTiles(
-                                                                              model: feed))
-                                                                      .toList()),
-                                                              SizedBox(
-                                                                  height: 20),
-                                                              v.loadingState ==
-                                                                      LoadingState
-                                                                          .loading
-                                                                  ? Container(
-                                                                      height:
-                                                                          400,
-                                                                      padding:
-                                                                          EdgeInsets.all(
-                                                                              20.0),
-                                                                      child:
-                                                                          Center(
-                                                                        child: Shimmer.fromColors(
-                                                                            direction: ShimmerDirection.ltr,
-                                                                            period: Duration(seconds: 2),
-                                                                            child: ListView(
-                                                                              scrollDirection: Axis.vertical,
-                                                                              // shrinkWrap: true,
-                                                                              children: [
-                                                                                0,
-                                                                                1,
-                                                                              ].map((_) => LoaderWidget()).toList(),
-                                                                            ),
-                                                                            baseColor: AppColors.white,
-                                                                            highlightColor: AppColors.grey),
-                                                                      ))
-                                                                  : SizedBox(
-                                                                      height: 1)
-                                                            ],
-                                                          ));
-                                                    } else {
-                                                      return Center(
-                                                          child: Column(
-                                                        // mainAxisAlignment:
-                                                        //     MainAxisAlignment
-                                                        //         .center,
-                                                        children: [
-                                                          Gap(100),
-                                                          SvgPicture.asset(
-                                                              AppSvgs
-                                                                  .emptyRental),
-                                                          Gap(30),
-                                                          Text(
-                                                            "No available equipments near you",
-                                                            style: Theme.of(
-                                                                    context)
-                                                                .textTheme
-                                                                .bodyMedium
-                                                                ?.copyWith(
-                                                                    fontSize:
-                                                                        15,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w600,
-                                                                    color: Colors
-                                                                        .grey),
-                                                            textAlign: TextAlign
-                                                                .center,
+                                                              0,
+                                                              1,
+                                                              2,
+                                                              3
+                                                            ]
+                                                                .map((_) =>
+                                                                    LoaderWidget())
+                                                                .toList(),
                                                           ),
-                                                          // SizedBox(
-                                                          //   height: 30,
-                                                          // ),
+                                                          baseColor:
+                                                              AppColors.white,
+                                                          highlightColor:
+                                                              AppColors.grey),
+                                                    ));
+                                              } else if (v.fetchState ==
+                                                  LoadingState.done) {
+                                                if (v.packageList.isNotEmpty) {
+                                                  return SingleChildScrollView(
+                                                      scrollDirection:
+                                                          Axis.vertical,
+                                                      controller: v.controller,
+                                                      physics:
+                                                          BouncingScrollPhysics(),
+                                                      // shrinkWrap: true,
+                                                      child: Column(
+                                                        children: [
+                                                          Column(
+                                                              children: v
+                                                                  .packageList
+                                                                  .map((feed) =>
+                                                                      EquipTiles(
+                                                                          model:
+                                                                              feed))
+                                                                  .toList()),
+                                                          SizedBox(height: 20),
+                                                          v.loadingState ==
+                                                                  LoadingState
+                                                                      .loading
+                                                              ? Container(
+                                                                  height: 400,
+                                                                  padding:
+                                                                      EdgeInsets
+                                                                          .all(
+                                                                              20.0),
+                                                                  child: Center(
+                                                                    child: Shimmer.fromColors(
+                                                                        direction: ShimmerDirection.ltr,
+                                                                        period: Duration(seconds: 2),
+                                                                        child: ListView(
+                                                                          scrollDirection:
+                                                                              Axis.vertical,
+                                                                          // shrinkWrap: true,
+                                                                          children:
+                                                                              [
+                                                                            0,
+                                                                            1,
+                                                                          ].map((_) => LoaderWidget()).toList(),
+                                                                        ),
+                                                                        baseColor: AppColors.white,
+                                                                        highlightColor: AppColors.grey),
+                                                                  ))
+                                                              : SizedBox(
+                                                                  height: 1)
                                                         ],
                                                       ));
-                                                    }
-                                                  } else {
-                                                    return Center(
-                                                        child: Column(
-                                                      children: <Widget>[
-                                                        SizedBox(
-                                                          height: 100,
-                                                        ),
-                                                        Text(
-                                                          'Network error',
-                                                          style: TextStyle(
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontSize: 20,
+                                                } else {
+                                                  return Center(
+                                                      child: Column(
+                                                    // mainAxisAlignment:
+                                                    //     MainAxisAlignment
+                                                    //         .center,
+                                                    children: [
+                                                      Gap(100),
+                                                      SvgPicture.asset(
+                                                          AppSvgs.emptyRental),
+                                                      Gap(30),
+                                                      Text(
+                                                        "No available equipments near you",
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .bodyMedium
+                                                            ?.copyWith(
+                                                                fontSize: 15,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w600,
+                                                                color: Colors
+                                                                    .grey),
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                      ),
+                                                      // SizedBox(
+                                                      //   height: 30,
+                                                      // ),
+                                                    ],
+                                                  ));
+                                                }
+                                              } else {
+                                                return Center(
+                                                    child: Column(
+                                                  children: <Widget>[
+                                                    SizedBox(
+                                                      height: 100,
+                                                    ),
+                                                    Text(
+                                                      'Network error',
+                                                      style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 20,
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      height: 10,
+                                                    ),
+                                                    Text('Network error'),
+                                                    SizedBox(
+                                                      height: 100,
+                                                    ),
+                                                  ],
+                                                ));
+                                              }
+                                            }),
+                                      )
+                                    : Container(
+                                        height: Responsive.height(context) / 2,
+                                        child: FutureBuilder<
+                                                List<EquipmentModel>>(
+                                            future: model
+                                                .searchEquipments(searchWord),
+                                            builder: (context, snapshot) {
+                                              if (!snapshot.hasData) {
+                                                return Container(
+                                                    height: 400,
+                                                    padding:
+                                                        EdgeInsets.all(20.0),
+                                                    child: Center(
+                                                      child: Shimmer.fromColors(
+                                                          direction:
+                                                              ShimmerDirection
+                                                                  .ltr,
+                                                          period: Duration(
+                                                              seconds: 2),
+                                                          child: ListView(
+                                                            scrollDirection:
+                                                                Axis.vertical,
+                                                            // shrinkWrap: true,
+                                                            children: [
+                                                              0,
+                                                              1,
+                                                              2,
+                                                              3
+                                                            ]
+                                                                .map((_) =>
+                                                                    LoaderWidget())
+                                                                .toList(),
                                                           ),
-                                                        ),
-                                                        SizedBox(
-                                                          height: 10,
-                                                        ),
-                                                        Text('Network error'),
-                                                        SizedBox(
-                                                          height: 100,
-                                                        ),
-                                                      ],
+                                                          baseColor:
+                                                              AppColors.white,
+                                                          highlightColor:
+                                                              AppColors.grey),
                                                     ));
-                                                  }
-                                                }),
-                                          )
-                                        : Container(
-                                            height:
-                                                Responsive.height(context) / 2,
-                                            child: FutureBuilder<
-                                                    List<EquipmentModel>>(
-                                                future: model.searchEquipments(
-                                                    searchWord),
-                                                builder: (context, snapshot) {
-                                                  if (!snapshot.hasData) {
-                                                    return Container(
-                                                        height: 400,
-                                                        padding: EdgeInsets.all(
-                                                            20.0),
-                                                        child: Center(
-                                                          child: Shimmer
-                                                              .fromColors(
-                                                                  direction:
-                                                                      ShimmerDirection
-                                                                          .ltr,
-                                                                  period: Duration(
-                                                                      seconds:
-                                                                          2),
-                                                                  child:
-                                                                      ListView(
-                                                                    scrollDirection:
-                                                                        Axis.vertical,
-                                                                    // shrinkWrap: true,
-                                                                    children: [
-                                                                      0,
-                                                                      1,
-                                                                      2,
-                                                                      3
-                                                                    ]
-                                                                        .map((_) =>
-                                                                            LoaderWidget())
-                                                                        .toList(),
-                                                                  ),
-                                                                  baseColor:
-                                                                      AppColors
-                                                                          .white,
-                                                                  highlightColor:
-                                                                      AppColors
-                                                                          .grey),
-                                                        ));
-                                                  } else if (snapshot
-                                                      .data!.isNotEmpty) {
-                                                    return ListView(
-                                                        children: snapshot.data!
-                                                            .map((feed) => Padding(
-                                                                padding:
-                                                                    EdgeInsets
-                                                                        .all(
-                                                                            10),
-                                                                child: EquipTiles(
-                                                                    model:
-                                                                        feed)))
-                                                            .toList());
-                                                  } else if (snapshot
-                                                      .hasError) {
-                                                    return Center(
-                                                        child: Column(
-                                                      children: <Widget>[
-                                                        SizedBox(
-                                                          height: 10,
-                                                        ),
-                                                        Text(
-                                                          'Network error',
-                                                          style: TextStyle(
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontSize: 20,
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ));
-                                                  } else {
-                                                    return Center(
-                                                        child: Column(
-                                                      children: <Widget>[
-                                                        SizedBox(
-                                                          height: 10,
-                                                        ),
-                                                        Text(
-                                                          'Equipment not found',
-                                                          style: TextStyle(
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontSize: 20,
-                                                          ),
-                                                        ),
-                                                        SizedBox(
-                                                          height: 10,
-                                                        ),
-                                                        Text(
-                                                          'Equipment not found',
-                                                        ),
-                                                        SizedBox(
-                                                          height: 10,
-                                                        ),
-                                                      ],
-                                                    ));
-                                                  }
-                                                }),
-                                          ),
-                                  ]))))),
+                                              } else if (snapshot
+                                                  .data!.isNotEmpty) {
+                                                return ListView(
+                                                    children: snapshot.data!
+                                                        .map((feed) => Padding(
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    10),
+                                                            child: EquipTiles(
+                                                                model: feed)))
+                                                        .toList());
+                                              } else if (snapshot.hasError) {
+                                                return Center(
+                                                    child: Column(
+                                                  children: <Widget>[
+                                                    SizedBox(
+                                                      height: 10,
+                                                    ),
+                                                    Text(
+                                                      'Network error',
+                                                      style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 20,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ));
+                                              } else {
+                                                return Center(
+                                                    child: Column(
+                                                  children: <Widget>[
+                                                    SizedBox(
+                                                      height: 10,
+                                                    ),
+                                                    Text(
+                                                      'Equipment not found',
+                                                      style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 20,
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      height: 10,
+                                                    ),
+                                                    Text(
+                                                      'Equipment not found',
+                                                    ),
+                                                    SizedBox(
+                                                      height: 10,
+                                                    ),
+                                                  ],
+                                                ));
+                                              }
+                                            }),
+                                      ),
+                              ])),
+                    ),
+                  ),
+                ),
+              ),
               drawer: CollapsingNavigationDrawer(),
             ),
           );

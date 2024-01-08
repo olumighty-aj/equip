@@ -50,11 +50,16 @@ class ProfileViewModel extends BaseViewModel {
   bool get kycUpdated => _authentication.currentUser.kycUpdated!;
 
   void init() {
+    print("KYC Approved: $kycApproved");
+    print("KYC Updated: $kycUpdated");
+    print("KYC Pending: $kycPendng");
     _log.i(_authentication.currentUser.toJson());
     stateController.text = _authentication.currentUser.localState ??
-        _authentication.currentUser.address!.extractState();
+        _authentication.currentUser.address?.extractState() ??
+        "";
     countryController.text = _authentication.currentUser.country ??
-        _authentication.currentUser.address!.extractCountry();
+        _authentication.currentUser.address?.extractCountry() ??
+        "";
     nameController.text = _authentication.currentUser.fullname!;
     addressController.text = _authentication.currentUser.address != null
         ? _authentication.currentUser.address!

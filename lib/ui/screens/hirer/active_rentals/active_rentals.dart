@@ -56,13 +56,13 @@ class LoginState extends State<Rentals> with SingleTickerProviderStateMixin {
                                   fontSize: 25, fontWeight: FontWeight.bold),
                             ),
                             SizedBox(
-                              height: 30,
+                              height: 20,
                             ),
                             CustomSearchField(
                               hintText: "Search",
                             ),
                             SizedBox(
-                              height: 30,
+                              height: 20,
                             ),
                             TabBar(
                               controller: _controller,
@@ -231,8 +231,9 @@ class ReturnedRentals extends StatelessWidget {
             );
           } else {
             return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              // mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                Gap(100),
                 SvgPicture.asset(AppSvgs.emptyRental),
                 Gap(50),
                 Text(
@@ -357,8 +358,9 @@ class ReceivedRentals extends StatelessWidget {
             );
           } else {
             return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              // mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                Gap(100),
                 SvgPicture.asset(AppSvgs.emptyRental),
                 Gap(50),
                 Text(
@@ -493,8 +495,9 @@ class BookedRentals extends StatelessWidget {
           } else {
             return Center(
                 child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              // mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                Gap(100),
                 SvgPicture.asset(AppSvgs.emptyRental),
                 Gap(50),
                 Text(
@@ -593,7 +596,6 @@ class AllRentals extends StatelessWidget {
           } else if (snapshot.data!.isNotEmpty) {
             return Column(
                 // scrollDirection: Axis.vertical,
-                // physics: NeverScrollableScrollPhysics(),
                 // shrinkWrap: true,
                 children: snapshot.data!
                     .map((feed) => GestureDetector(
@@ -627,8 +629,9 @@ class AllRentals extends StatelessWidget {
             );
           } else {
             return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              // mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                Gap(100),
                 SvgPicture.asset(AppSvgs.emptyRental),
                 Gap(50),
                 Text(

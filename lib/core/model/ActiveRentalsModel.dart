@@ -18,23 +18,24 @@
 
 class ActiveRentalsModel {
   ActiveRentalsModel({
-      String? id, 
-      String? equipOrderId, 
-      String? hirersId, 
-      String? equipmentsId, 
-      String? quantity, 
-      String? rentalFrom, 
-      String? rentalTo, 
-      String? deliveryLocation, 
-      String? requestStatus, 
-      String? dateModified, 
-      String? dateCreated, 
-      EquipOrder? equipOrder, 
-      Equipments? equipments, 
-      ExtendEquipRequest? extendEquipRequest, 
-      EquipDeliveryStatus? equipDeliveryStatus, 
-      Hirers? hirers, 
-      dynamic equipPayment,}){
+    String? id,
+    String? equipOrderId,
+    String? hirersId,
+    String? equipmentsId,
+    String? quantity,
+    String? rentalFrom,
+    String? rentalTo,
+    String? deliveryLocation,
+    String? requestStatus,
+    String? dateModified,
+    String? dateCreated,
+    EquipOrder? equipOrder,
+    Equipments? equipments,
+    ExtendEquipRequest? extendEquipRequest,
+    EquipDeliveryStatus? equipDeliveryStatus,
+    Hirers? hirers,
+    dynamic equipPayment,
+  }) {
     _id = id;
     _equipOrderId = equipOrderId;
     _hirersId = hirersId;
@@ -52,7 +53,7 @@ class ActiveRentalsModel {
     _equipDeliveryStatus = equipDeliveryStatus;
     _hirers = hirers;
     _equipPayment = equipPayment;
-}
+  }
 
   ActiveRentalsModel.fromJson(dynamic json) {
     _id = json['ID'];
@@ -66,10 +67,18 @@ class ActiveRentalsModel {
     _requestStatus = json['request_status'];
     _dateModified = json['date_modified'];
     _dateCreated = json['date_created'];
-    _equipOrder = json['equip_order'] != null ? EquipOrder.fromJson(json['equip_order']) : null;
-    _equipments = json['equipments'] != null ? Equipments.fromJson(json['equipments']) : null;
-    _extendEquipRequest = json['extend_equip_request'] != null ? ExtendEquipRequest.fromJson(json['extend_equip_request']) : null;
-    _equipDeliveryStatus = json['equip_delivery_status'] != null ? EquipDeliveryStatus.fromJson(json['equip_delivery_status']) : null;
+    _equipOrder = json['equip_order'] != null
+        ? EquipOrder.fromJson(json['equip_order'])
+        : null;
+    _equipments = json['equipments'] != null
+        ? Equipments.fromJson(json['equipments'])
+        : null;
+    _extendEquipRequest = json['extend_equip_request'] != null
+        ? ExtendEquipRequest.fromJson(json['extend_equip_request'])
+        : null;
+    _equipDeliveryStatus = json['equip_delivery_status'] != null
+        ? EquipDeliveryStatus.fromJson(json['equip_delivery_status'])
+        : null;
     _hirers = json['hirers'] != null ? Hirers.fromJson(json['hirers']) : null;
     _equipPayment = json['equip_payment'];
   }
@@ -90,41 +99,44 @@ class ActiveRentalsModel {
   EquipDeliveryStatus? _equipDeliveryStatus;
   Hirers? _hirers;
   dynamic _equipPayment;
-ActiveRentalsModel copyWith({  String? id,
-  String? equipOrderId,
-  String? hirersId,
-  String? equipmentsId,
-  String? quantity,
-  String? rentalFrom,
-  String? rentalTo,
-  String? deliveryLocation,
-  String? requestStatus,
-  String? dateModified,
-  String? dateCreated,
-  EquipOrder? equipOrder,
-  Equipments? equipments,
-  ExtendEquipRequest? extendEquipRequest,
-  EquipDeliveryStatus? equipDeliveryStatus,
-  Hirers? hirers,
-  dynamic equipPayment,
-}) => ActiveRentalsModel(  id: id ?? _id,
-  equipOrderId: equipOrderId ?? _equipOrderId,
-  hirersId: hirersId ?? _hirersId,
-  equipmentsId: equipmentsId ?? _equipmentsId,
-  quantity: quantity ?? _quantity,
-  rentalFrom: rentalFrom ?? _rentalFrom,
-  rentalTo: rentalTo ?? _rentalTo,
-  deliveryLocation: deliveryLocation ?? _deliveryLocation,
-  requestStatus: requestStatus ?? _requestStatus,
-  dateModified: dateModified ?? _dateModified,
-  dateCreated: dateCreated ?? _dateCreated,
-  equipOrder: equipOrder ?? _equipOrder,
-  equipments: equipments ?? _equipments,
-  extendEquipRequest: extendEquipRequest ?? _extendEquipRequest,
-  equipDeliveryStatus: equipDeliveryStatus ?? _equipDeliveryStatus,
-  hirers: hirers ?? _hirers,
-  equipPayment: equipPayment ?? _equipPayment,
-);
+  ActiveRentalsModel copyWith({
+    String? id,
+    String? equipOrderId,
+    String? hirersId,
+    String? equipmentsId,
+    String? quantity,
+    String? rentalFrom,
+    String? rentalTo,
+    String? deliveryLocation,
+    String? requestStatus,
+    String? dateModified,
+    String? dateCreated,
+    EquipOrder? equipOrder,
+    Equipments? equipments,
+    ExtendEquipRequest? extendEquipRequest,
+    EquipDeliveryStatus? equipDeliveryStatus,
+    Hirers? hirers,
+    dynamic equipPayment,
+  }) =>
+      ActiveRentalsModel(
+        id: id ?? _id,
+        equipOrderId: equipOrderId ?? _equipOrderId,
+        hirersId: hirersId ?? _hirersId,
+        equipmentsId: equipmentsId ?? _equipmentsId,
+        quantity: quantity ?? _quantity,
+        rentalFrom: rentalFrom ?? _rentalFrom,
+        rentalTo: rentalTo ?? _rentalTo,
+        deliveryLocation: deliveryLocation ?? _deliveryLocation,
+        requestStatus: requestStatus ?? _requestStatus,
+        dateModified: dateModified ?? _dateModified,
+        dateCreated: dateCreated ?? _dateCreated,
+        equipOrder: equipOrder ?? _equipOrder,
+        equipments: equipments ?? _equipments,
+        extendEquipRequest: extendEquipRequest ?? _extendEquipRequest,
+        equipDeliveryStatus: equipDeliveryStatus ?? _equipDeliveryStatus,
+        hirers: hirers ?? _hirers,
+        equipPayment: equipPayment ?? _equipPayment,
+      );
   String? get id => _id;
   String? get equipOrderId => _equipOrderId;
   String? get hirersId => _hirersId;
@@ -174,7 +186,6 @@ ActiveRentalsModel copyWith({  String? id,
     map['equip_payment'] = _equipPayment;
     return map;
   }
-
 }
 
 /// ID : "8"
@@ -195,21 +206,22 @@ ActiveRentalsModel copyWith({  String? id,
 
 class Hirers {
   Hirers({
-      String? id, 
-      String? fullname, 
-      String? email, 
-      String? phoneNumber, 
-      String? gender, 
-      String? address, 
-      dynamic addressOpt, 
-      String? localState, 
-      String? country, 
-      dynamic latitude, 
-      dynamic longitude, 
-      dynamic hirersPath, 
-      String? status, 
-      String? dateModified, 
-      String? dateCreated,}){
+    String? id,
+    String? fullname,
+    String? email,
+    String? phoneNumber,
+    String? gender,
+    String? address,
+    dynamic addressOpt,
+    String? localState,
+    String? country,
+    dynamic latitude,
+    dynamic longitude,
+    dynamic hirersPath,
+    String? status,
+    String? dateModified,
+    String? dateCreated,
+  }) {
     _id = id;
     _fullname = fullname;
     _email = email;
@@ -225,7 +237,7 @@ class Hirers {
     _status = status;
     _dateModified = dateModified;
     _dateCreated = dateCreated;
-}
+  }
 
   Hirers.fromJson(dynamic json) {
     _id = json['ID'];
@@ -259,37 +271,40 @@ class Hirers {
   String? _status;
   String? _dateModified;
   String? _dateCreated;
-Hirers copyWith({  String? id,
-  String? fullname,
-  String? email,
-  String? phoneNumber,
-  String? gender,
-  String? address,
-  dynamic addressOpt,
-  String? localState,
-  String? country,
-  dynamic latitude,
-  dynamic longitude,
-  dynamic hirersPath,
-  String? status,
-  String? dateModified,
-  String? dateCreated,
-}) => Hirers(  id: id ?? _id,
-  fullname: fullname ?? _fullname,
-  email: email ?? _email,
-  phoneNumber: phoneNumber ?? _phoneNumber,
-  gender: gender ?? _gender,
-  address: address ?? _address,
-  addressOpt: addressOpt ?? _addressOpt,
-  localState: localState ?? _localState,
-  country: country ?? _country,
-  latitude: latitude ?? _latitude,
-  longitude: longitude ?? _longitude,
-  hirersPath: hirersPath ?? _hirersPath,
-  status: status ?? _status,
-  dateModified: dateModified ?? _dateModified,
-  dateCreated: dateCreated ?? _dateCreated,
-);
+  Hirers copyWith({
+    String? id,
+    String? fullname,
+    String? email,
+    String? phoneNumber,
+    String? gender,
+    String? address,
+    dynamic addressOpt,
+    String? localState,
+    String? country,
+    dynamic latitude,
+    dynamic longitude,
+    dynamic hirersPath,
+    String? status,
+    String? dateModified,
+    String? dateCreated,
+  }) =>
+      Hirers(
+        id: id ?? _id,
+        fullname: fullname ?? _fullname,
+        email: email ?? _email,
+        phoneNumber: phoneNumber ?? _phoneNumber,
+        gender: gender ?? _gender,
+        address: address ?? _address,
+        addressOpt: addressOpt ?? _addressOpt,
+        localState: localState ?? _localState,
+        country: country ?? _country,
+        latitude: latitude ?? _latitude,
+        longitude: longitude ?? _longitude,
+        hirersPath: hirersPath ?? _hirersPath,
+        status: status ?? _status,
+        dateModified: dateModified ?? _dateModified,
+        dateCreated: dateCreated ?? _dateCreated,
+      );
   String? get id => _id;
   String? get fullname => _fullname;
   String? get email => _email;
@@ -325,7 +340,6 @@ Hirers copyWith({  String? id,
     map['date_created'] = _dateCreated;
     return map;
   }
-
 }
 
 /// delivery_status : "picked_from_owner"
@@ -333,11 +347,12 @@ Hirers copyWith({  String? id,
 
 class EquipDeliveryStatus {
   EquipDeliveryStatus({
-      String? deliveryStatus, 
-      List<DeliveryStatusLists>? deliveryStatusLists,}){
+    String? deliveryStatus,
+    List<DeliveryStatusLists>? deliveryStatusLists,
+  }) {
     _deliveryStatus = deliveryStatus;
     _deliveryStatusLists = deliveryStatusLists;
-}
+  }
 
   EquipDeliveryStatus.fromJson(dynamic json) {
     _deliveryStatus = json['delivery_status'];
@@ -350,11 +365,14 @@ class EquipDeliveryStatus {
   }
   String? _deliveryStatus;
   List<DeliveryStatusLists>? _deliveryStatusLists;
-EquipDeliveryStatus copyWith({  String? deliveryStatus,
-  List<DeliveryStatusLists>? deliveryStatusLists,
-}) => EquipDeliveryStatus(  deliveryStatus: deliveryStatus ?? _deliveryStatus,
-  deliveryStatusLists: deliveryStatusLists ?? _deliveryStatusLists,
-);
+  EquipDeliveryStatus copyWith({
+    String? deliveryStatus,
+    List<DeliveryStatusLists>? deliveryStatusLists,
+  }) =>
+      EquipDeliveryStatus(
+        deliveryStatus: deliveryStatus ?? _deliveryStatus,
+        deliveryStatusLists: deliveryStatusLists ?? _deliveryStatusLists,
+      );
   String? get deliveryStatus => _deliveryStatus;
   List<DeliveryStatusLists>? get deliveryStatusLists => _deliveryStatusLists;
 
@@ -362,11 +380,11 @@ EquipDeliveryStatus copyWith({  String? deliveryStatus,
     final map = <String, dynamic>{};
     map['delivery_status'] = _deliveryStatus;
     if (_deliveryStatusLists != null) {
-      map['delivery_status_lists'] = _deliveryStatusLists?.map((v) => v.toJson()).toList();
+      map['delivery_status_lists'] =
+          _deliveryStatusLists?.map((v) => v.toJson()).toList();
     }
     return map;
   }
-
 }
 
 /// ID : "1"
@@ -376,15 +394,16 @@ EquipDeliveryStatus copyWith({  String? deliveryStatus,
 
 class DeliveryStatusLists {
   DeliveryStatusLists({
-      String? id, 
-      String? deliveryStatus, 
-      String? dateModified, 
-      String? dateCreated,}){
+    String? id,
+    String? deliveryStatus,
+    String? dateModified,
+    String? dateCreated,
+  }) {
     _id = id;
     _deliveryStatus = deliveryStatus;
     _dateModified = dateModified;
     _dateCreated = dateCreated;
-}
+  }
 
   DeliveryStatusLists.fromJson(dynamic json) {
     _id = json['ID'];
@@ -396,15 +415,18 @@ class DeliveryStatusLists {
   String? _deliveryStatus;
   String? _dateModified;
   String? _dateCreated;
-DeliveryStatusLists copyWith({  String? id,
-  String? deliveryStatus,
-  String? dateModified,
-  String? dateCreated,
-}) => DeliveryStatusLists(  id: id ?? _id,
-  deliveryStatus: deliveryStatus ?? _deliveryStatus,
-  dateModified: dateModified ?? _dateModified,
-  dateCreated: dateCreated ?? _dateCreated,
-);
+  DeliveryStatusLists copyWith({
+    String? id,
+    String? deliveryStatus,
+    String? dateModified,
+    String? dateCreated,
+  }) =>
+      DeliveryStatusLists(
+        id: id ?? _id,
+        deliveryStatus: deliveryStatus ?? _deliveryStatus,
+        dateModified: dateModified ?? _dateModified,
+        dateCreated: dateCreated ?? _dateCreated,
+      );
   String? get id => _id;
   String? get deliveryStatus => _deliveryStatus;
   String? get dateModified => _dateModified;
@@ -418,7 +440,6 @@ DeliveryStatusLists copyWith({  String? id,
     map['date_created'] = _dateCreated;
     return map;
   }
-
 }
 
 /// ID : "9"
@@ -434,16 +455,17 @@ DeliveryStatusLists copyWith({  String? id,
 
 class ExtendEquipRequest {
   ExtendEquipRequest({
-      String? id, 
-      String? hirersId, 
-      String? equipRequestId, 
-      String? equipOrderId, 
-      String? prevEquipOrder, 
-      String? rentalFrom, 
-      String? rentalTo, 
-      String? requestStatus, 
-      String? dateModified, 
-      String? dateCreated,}){
+    String? id,
+    String? hirersId,
+    String? equipRequestId,
+    String? equipOrderId,
+    String? prevEquipOrder,
+    String? rentalFrom,
+    String? rentalTo,
+    String? requestStatus,
+    String? dateModified,
+    String? dateCreated,
+  }) {
     _id = id;
     _hirersId = hirersId;
     _equipRequestId = equipRequestId;
@@ -454,7 +476,7 @@ class ExtendEquipRequest {
     _requestStatus = requestStatus;
     _dateModified = dateModified;
     _dateCreated = dateCreated;
-}
+  }
 
   ExtendEquipRequest.fromJson(dynamic json) {
     _id = json['ID'];
@@ -478,27 +500,30 @@ class ExtendEquipRequest {
   String? _requestStatus;
   String? _dateModified;
   String? _dateCreated;
-ExtendEquipRequest copyWith({  String? id,
-  String? hirersId,
-  String? equipRequestId,
-  String? equipOrderId,
-  String? prevEquipOrder,
-  String? rentalFrom,
-  String? rentalTo,
-  String? requestStatus,
-  String? dateModified,
-  String? dateCreated,
-}) => ExtendEquipRequest(  id: id ?? _id,
-  hirersId: hirersId ?? _hirersId,
-  equipRequestId: equipRequestId ?? _equipRequestId,
-  equipOrderId: equipOrderId ?? _equipOrderId,
-  prevEquipOrder: prevEquipOrder ?? _prevEquipOrder,
-  rentalFrom: rentalFrom ?? _rentalFrom,
-  rentalTo: rentalTo ?? _rentalTo,
-  requestStatus: requestStatus ?? _requestStatus,
-  dateModified: dateModified ?? _dateModified,
-  dateCreated: dateCreated ?? _dateCreated,
-);
+  ExtendEquipRequest copyWith({
+    String? id,
+    String? hirersId,
+    String? equipRequestId,
+    String? equipOrderId,
+    String? prevEquipOrder,
+    String? rentalFrom,
+    String? rentalTo,
+    String? requestStatus,
+    String? dateModified,
+    String? dateCreated,
+  }) =>
+      ExtendEquipRequest(
+        id: id ?? _id,
+        hirersId: hirersId ?? _hirersId,
+        equipRequestId: equipRequestId ?? _equipRequestId,
+        equipOrderId: equipOrderId ?? _equipOrderId,
+        prevEquipOrder: prevEquipOrder ?? _prevEquipOrder,
+        rentalFrom: rentalFrom ?? _rentalFrom,
+        rentalTo: rentalTo ?? _rentalTo,
+        requestStatus: requestStatus ?? _requestStatus,
+        dateModified: dateModified ?? _dateModified,
+        dateCreated: dateCreated ?? _dateCreated,
+      );
   String? get id => _id;
   String? get hirersId => _hirersId;
   String? get equipRequestId => _equipRequestId;
@@ -524,7 +549,6 @@ ExtendEquipRequest copyWith({  String? id,
     map['date_created'] = _dateCreated;
     return map;
   }
-
 }
 
 /// ID : "3"
@@ -547,23 +571,24 @@ ExtendEquipRequest copyWith({  String? id,
 
 class Equipments {
   Equipments({
-      String? id, 
-      String? userId, 
-      String? ownersId, 
-      String? equipName, 
-      String? costOfHire, 
-      String? costOfHireInterval, 
-      String? availFrom, 
-      String? availTo, 
-      String? quantity, 
-      String? description, 
-      String? latitude, 
-      String? longitude, 
-      String? address, 
-      String? status, 
-      String? dateModified, 
-      String? dateCreated, 
-      List<EquipImages>? equipImages,}){
+    String? id,
+    String? userId,
+    String? ownersId,
+    String? equipName,
+    String? costOfHire,
+    String? costOfHireInterval,
+    String? availFrom,
+    String? availTo,
+    String? quantity,
+    String? description,
+    String? latitude,
+    String? longitude,
+    String? address,
+    String? status,
+    String? dateModified,
+    String? dateCreated,
+    List<EquipImages>? equipImages,
+  }) {
     _id = id;
     _userId = userId;
     _ownersId = ownersId;
@@ -581,7 +606,7 @@ class Equipments {
     _dateModified = dateModified;
     _dateCreated = dateCreated;
     _equipImages = equipImages;
-}
+  }
 
   Equipments.fromJson(dynamic json) {
     _id = json['ID'];
@@ -624,41 +649,44 @@ class Equipments {
   String? _dateModified;
   String? _dateCreated;
   List<EquipImages>? _equipImages;
-Equipments copyWith({  String? id,
-  String? userId,
-  String? ownersId,
-  String? equipName,
-  String? costOfHire,
-  String? costOfHireInterval,
-  String? availFrom,
-  String? availTo,
-  String? quantity,
-  String? description,
-  String? latitude,
-  String? longitude,
-  String? address,
-  String? status,
-  String? dateModified,
-  String? dateCreated,
-  List<EquipImages>? equipImages,
-}) => Equipments(  id: id ?? _id,
-  userId: userId ?? _userId,
-  ownersId: ownersId ?? _ownersId,
-  equipName: equipName ?? _equipName,
-  costOfHire: costOfHire ?? _costOfHire,
-  costOfHireInterval: costOfHireInterval ?? _costOfHireInterval,
-  availFrom: availFrom ?? _availFrom,
-  availTo: availTo ?? _availTo,
-  quantity: quantity ?? _quantity,
-  description: description ?? _description,
-  latitude: latitude ?? _latitude,
-  longitude: longitude ?? _longitude,
-  address: address ?? _address,
-  status: status ?? _status,
-  dateModified: dateModified ?? _dateModified,
-  dateCreated: dateCreated ?? _dateCreated,
-  equipImages: equipImages ?? _equipImages,
-);
+  Equipments copyWith({
+    String? id,
+    String? userId,
+    String? ownersId,
+    String? equipName,
+    String? costOfHire,
+    String? costOfHireInterval,
+    String? availFrom,
+    String? availTo,
+    String? quantity,
+    String? description,
+    String? latitude,
+    String? longitude,
+    String? address,
+    String? status,
+    String? dateModified,
+    String? dateCreated,
+    List<EquipImages>? equipImages,
+  }) =>
+      Equipments(
+        id: id ?? _id,
+        userId: userId ?? _userId,
+        ownersId: ownersId ?? _ownersId,
+        equipName: equipName ?? _equipName,
+        costOfHire: costOfHire ?? _costOfHire,
+        costOfHireInterval: costOfHireInterval ?? _costOfHireInterval,
+        availFrom: availFrom ?? _availFrom,
+        availTo: availTo ?? _availTo,
+        quantity: quantity ?? _quantity,
+        description: description ?? _description,
+        latitude: latitude ?? _latitude,
+        longitude: longitude ?? _longitude,
+        address: address ?? _address,
+        status: status ?? _status,
+        dateModified: dateModified ?? _dateModified,
+        dateCreated: dateCreated ?? _dateCreated,
+        equipImages: equipImages ?? _equipImages,
+      );
   String? get id => _id;
   String? get userId => _userId;
   String? get ownersId => _ownersId;
@@ -700,7 +728,6 @@ Equipments copyWith({  String? id,
     }
     return map;
   }
-
 }
 
 /// ID : "3"
@@ -712,19 +739,20 @@ Equipments copyWith({  String? id,
 
 class EquipImages {
   EquipImages({
-      String? id, 
-      String? equipmentsId, 
-      String? equipImagesPath, 
-      String? status, 
-      String? dateModified, 
-      String? dateCreated,}){
+    String? id,
+    String? equipmentsId,
+    String? equipImagesPath,
+    String? status,
+    String? dateModified,
+    String? dateCreated,
+  }) {
     _id = id;
     _equipmentsId = equipmentsId;
     _equipImagesPath = equipImagesPath;
     _status = status;
     _dateModified = dateModified;
     _dateCreated = dateCreated;
-}
+  }
 
   EquipImages.fromJson(dynamic json) {
     _id = json['ID'];
@@ -740,19 +768,22 @@ class EquipImages {
   String? _status;
   String? _dateModified;
   String? _dateCreated;
-EquipImages copyWith({  String? id,
-  String? equipmentsId,
-  String? equipImagesPath,
-  String? status,
-  String? dateModified,
-  String? dateCreated,
-}) => EquipImages(  id: id ?? _id,
-  equipmentsId: equipmentsId ?? _equipmentsId,
-  equipImagesPath: equipImagesPath ?? _equipImagesPath,
-  status: status ?? _status,
-  dateModified: dateModified ?? _dateModified,
-  dateCreated: dateCreated ?? _dateCreated,
-);
+  EquipImages copyWith({
+    String? id,
+    String? equipmentsId,
+    String? equipImagesPath,
+    String? status,
+    String? dateModified,
+    String? dateCreated,
+  }) =>
+      EquipImages(
+        id: id ?? _id,
+        equipmentsId: equipmentsId ?? _equipmentsId,
+        equipImagesPath: equipImagesPath ?? _equipImagesPath,
+        status: status ?? _status,
+        dateModified: dateModified ?? _dateModified,
+        dateCreated: dateCreated ?? _dateCreated,
+      );
   String? get id => _id;
   String? get equipmentsId => _equipmentsId;
   String? get equipImagesPath => _equipImagesPath;
@@ -770,7 +801,6 @@ EquipImages copyWith({  String? id,
     map['date_created'] = _dateCreated;
     return map;
   }
-
 }
 
 /// ID : "4"
@@ -792,22 +822,24 @@ EquipImages copyWith({  String? id,
 
 class EquipOrder {
   EquipOrder({
-      String? id, 
-      String? hirersId, 
-      String? ownersId, 
-      String? orderNumber, 
-      String? quantity, 
-      dynamic discount, 
-      String? totalAmount, 
-      String? deliveryCharge, 
-      String? orderStatus, 
-      String? orderType, 
-      String? pickupDate, 
-      String? latitude, 
-      String? longitude, 
-      String? paymentStatus, 
-      String? dateModified, 
-      String? dateCreated,}){
+    String? id,
+    String? hirersId,
+    String? ownersId,
+    String? orderNumber,
+    String? quantity,
+    String? serviceCharge,
+    dynamic discount,
+    String? totalAmount,
+    String? deliveryCharge,
+    String? orderStatus,
+    String? orderType,
+    String? pickupDate,
+    String? latitude,
+    String? longitude,
+    String? paymentStatus,
+    String? dateModified,
+    String? dateCreated,
+  }) {
     _id = id;
     _hirersId = hirersId;
     _ownersId = ownersId;
@@ -820,17 +852,19 @@ class EquipOrder {
     _orderType = orderType;
     _pickupDate = pickupDate;
     _latitude = latitude;
+    _serviceCharge = serviceCharge;
     _longitude = longitude;
     _paymentStatus = paymentStatus;
     _dateModified = dateModified;
     _dateCreated = dateCreated;
-}
+  }
 
   EquipOrder.fromJson(dynamic json) {
     _id = json['ID'];
     _hirersId = json['hirers_id'];
     _ownersId = json['owners_id'];
     _orderNumber = json['order_number'];
+    _serviceCharge = json["service_charge"];
     _quantity = json['quantity'];
     _discount = json['discount'];
     _totalAmount = json['total_amount'];
@@ -846,6 +880,7 @@ class EquipOrder {
   }
   String? _id;
   String? _hirersId;
+  String? _serviceCharge;
   String? _ownersId;
   String? _orderNumber;
   String? _quantity;
@@ -860,39 +895,42 @@ class EquipOrder {
   String? _paymentStatus;
   String? _dateModified;
   String? _dateCreated;
-EquipOrder copyWith({  String? id,
-  String? hirersId,
-  String? ownersId,
-  String? orderNumber,
-  String? quantity,
-  dynamic discount,
-  String? totalAmount,
-  String? deliveryCharge,
-  String? orderStatus,
-  String? orderType,
-  String? pickupDate,
-  String? latitude,
-  String? longitude,
-  String? paymentStatus,
-  String? dateModified,
-  String? dateCreated,
-}) => EquipOrder(  id: id ?? _id,
-  hirersId: hirersId ?? _hirersId,
-  ownersId: ownersId ?? _ownersId,
-  orderNumber: orderNumber ?? _orderNumber,
-  quantity: quantity ?? _quantity,
-  discount: discount ?? _discount,
-  totalAmount: totalAmount ?? _totalAmount,
-  deliveryCharge: deliveryCharge ?? _deliveryCharge,
-  orderStatus: orderStatus ?? _orderStatus,
-  orderType: orderType ?? _orderType,
-  pickupDate: pickupDate ?? _pickupDate,
-  latitude: latitude ?? _latitude,
-  longitude: longitude ?? _longitude,
-  paymentStatus: paymentStatus ?? _paymentStatus,
-  dateModified: dateModified ?? _dateModified,
-  dateCreated: dateCreated ?? _dateCreated,
-);
+  EquipOrder copyWith({
+    String? id,
+    String? hirersId,
+    String? ownersId,
+    String? orderNumber,
+    String? quantity,
+    dynamic discount,
+    String? totalAmount,
+    String? deliveryCharge,
+    String? orderStatus,
+    String? orderType,
+    String? pickupDate,
+    String? latitude,
+    String? longitude,
+    String? paymentStatus,
+    String? dateModified,
+    String? dateCreated,
+  }) =>
+      EquipOrder(
+        id: id ?? _id,
+        hirersId: hirersId ?? _hirersId,
+        ownersId: ownersId ?? _ownersId,
+        orderNumber: orderNumber ?? _orderNumber,
+        quantity: quantity ?? _quantity,
+        discount: discount ?? _discount,
+        totalAmount: totalAmount ?? _totalAmount,
+        deliveryCharge: deliveryCharge ?? _deliveryCharge,
+        orderStatus: orderStatus ?? _orderStatus,
+        orderType: orderType ?? _orderType,
+        pickupDate: pickupDate ?? _pickupDate,
+        latitude: latitude ?? _latitude,
+        longitude: longitude ?? _longitude,
+        paymentStatus: paymentStatus ?? _paymentStatus,
+        dateModified: dateModified ?? _dateModified,
+        dateCreated: dateCreated ?? _dateCreated,
+      );
   String? get id => _id;
   String? get hirersId => _hirersId;
   String? get ownersId => _ownersId;
@@ -909,6 +947,7 @@ EquipOrder copyWith({  String? id,
   String? get paymentStatus => _paymentStatus;
   String? get dateModified => _dateModified;
   String? get dateCreated => _dateCreated;
+  String? get serviceCharge => _serviceCharge;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -928,7 +967,7 @@ EquipOrder copyWith({  String? id,
     map['payment_status'] = _paymentStatus;
     map['date_modified'] = _dateModified;
     map['date_created'] = _dateCreated;
+    map['service_charge'] = _serviceCharge;
     return map;
   }
-
 }

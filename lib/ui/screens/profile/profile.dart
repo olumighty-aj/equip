@@ -7,6 +7,7 @@ import 'package:equipro/ui/screens/drawer.dart';
 import 'package:equipro/ui/screens/profile/edit_profile.dart';
 import 'package:equipro/ui/screens/profile/profile_view_model.dart';
 import 'package:equipro/ui/widget/reviews_widget.dart';
+import 'package:equipro/utils/app_svgs.dart';
 import 'package:equipro/utils/locator.dart';
 import 'package:equipro/utils/screensize.dart';
 import 'package:flutter/material.dart';
@@ -120,7 +121,7 @@ class ProfileState extends State<Profile> with TickerProviderStateMixin {
                                                   shape: BoxShape.circle,
                                                   image: DecorationImage(
                                                       image: imageProvider,
-                                                      fit: BoxFit.contain),
+                                                      fit: BoxFit.cover),
                                                 ),
                                               ),
                                               placeholder: (context, url) =>
@@ -130,9 +131,8 @@ class ProfileState extends State<Profile> with TickerProviderStateMixin {
                                                       CircleAvatar(
                                                 radius: 70,
                                                 backgroundColor: AppColors.grey,
-                                                child: Image.asset(
-                                                  "assets/images/icon.png",
-                                                  scale: 2,
+                                                child: SvgPicture.asset(
+                                                  AppSvgs.svgLogo,
                                                 ),
                                               ),
                                             ),

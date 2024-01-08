@@ -12,12 +12,18 @@ import '../../utils/app_svgs.dart';
 import '../../utils/colors.dart';
 import '../../utils/tiny_db.dart';
 
-class LogoutDialog extends StatelessWidget {
+class LogoutDialog extends StatefulWidget {
   final DialogRequest request;
   final Function(DialogResponse) completer;
   const LogoutDialog({Key? key, required this.request, required this.completer})
       : super(key: key);
 
+  @override
+  State<LogoutDialog> createState() => _LogoutDialogState();
+}
+
+class _LogoutDialogState extends State<LogoutDialog> {
+  bool isBusy = false;
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -36,7 +42,8 @@ class LogoutDialog extends StatelessWidget {
               Align(
                 alignment: Alignment.topRight,
                 child: GestureDetector(
-                    onTap: () => completer(DialogResponse(confirmed: false)),
+                    onTap: () =>
+                        widget.completer(DialogResponse(confirmed: false)),
                     child: Icon(
                       Icons.close,
                       color: Colors.black54,
@@ -60,16 +67,26 @@ class LogoutDialog extends StatelessWidget {
               ),
               Gap(41),
               BaseButton(
+                  isBusy: isBusy,
                   label: "Yes, Log Out",
                   onPressed: () {
+                    setState(() {
+                      isBusy = true;
+                    });
                     locator<Authentication>()
                         .logout(context: context)
                         .then((value) {
                       if (value == true) {
-                        // TinyDb.removeAll();
+                        setState(() {
+                          isBusy = false;
+                        });
+                        TinyDb.removeAll();
                         locator<NavigationService>()
                             .clearStackAndShow(Routes.login);
                       } else {
+                        setState(() {
+                          isBusy = false;
+                        });
                         showErrorToast("Failed, please try again",
                             context: context);
                       }
@@ -77,7 +94,7 @@ class LogoutDialog extends StatelessWidget {
                   }),
               Gap(32),
               GestureDetector(
-                onTap: () => completer(DialogResponse(confirmed: false)),
+                onTap: () => widget.completer(DialogResponse(confirmed: false)),
                 child: Text(
                   "Not Yet",
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(

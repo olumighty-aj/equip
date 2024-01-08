@@ -1,16 +1,20 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:equipro/core/model/ChatListModel.dart';
 import 'package:equipro/core/model/EquipmentModel.dart';
+// import 'package:equipro/core/services/stripe_payment_service.dart';
 import 'package:equipro/ui/screens/chat/chats_widget/chat_details.dart';
+import 'package:equipro/ui/screens/hirer/active_rentals/active_rentals.dart';
 import 'package:equipro/ui/screens/hirer/book/details_view_model.dart';
 import 'package:equipro/ui/screens/hirer/book/place_booking.dart';
 import 'package:equipro/ui/widget/base_button.dart';
 import 'package:equipro/ui/widget/dash_painter.dart';
 import 'package:equipro/ui/widget/equip_tiles.dart';
+import 'package:equipro/utils/app_svgs.dart';
 import 'package:equipro/utils/extensions.dart';
 import 'package:equipro/utils/screensize.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
@@ -93,13 +97,14 @@ class LoginState extends State<EquipDetails> with TickerProviderStateMixin {
                           ),
                         ),
                         placeholder: (context, url) =>
-                            CircularProgressIndicator(),
+                            CircularProgressIndicator(
+                          color: AppColors.primaryColor,
+                        ),
                         errorWidget: (context, url, error) => Container(
                           width: Responsive.width(context),
                           height: Responsive.height(context) / 2.5,
-                          child: Image.asset(
-                            "assets/images/logo.png",
-                            scale: 2,
+                          child: SvgPicture.asset(
+                            AppSvgs.svgLogo,
                           ),
                         ),
                       )),
@@ -146,92 +151,94 @@ class LoginState extends State<EquipDetails> with TickerProviderStateMixin {
                                   height: Responsive.height(context) / 4,
                                 ),
                                 widget.model.equipImages != null
-                                    ? Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: List.generate(
-                                            widget.model.equipImages!.length,
-                                            (index) => Padding(
-                                                  padding: EdgeInsets.all(5),
-                                                  child: GestureDetector(
-                                                      onTap: () {
-                                                        setState(() {
-                                                          selected = widget
-                                                              .model
-                                                              .equipImages![
-                                                                  index]
-                                                              .equipImagesPath
-                                                              .toString();
-                                                        });
-                                                      },
-                                                      child: Container(
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10),
-                                                            border: Border.all(
-                                                                color: AppColors
-                                                                    .primaryColor,
-                                                                width: 0.5),
-                                                            color: widget
-                                                                        .model
-                                                                        .equipImages![
-                                                                            index]
-                                                                        .equipImagesPath!
-                                                                        .toString() !=
-                                                                    selected
-                                                                ? AppColors
-                                                                    .white
-                                                                : AppColors
-                                                                    .primaryColor,
-                                                          ),
-                                                          height: 70,
-                                                          width: 70,
-                                                          child: Container(
-                                                              height: 60,
-                                                              width: 60,
-                                                              padding:
-                                                                  EdgeInsets
-                                                                      .all(3),
-                                                              child:
-                                                                  CachedNetworkImage(
-                                                                imageUrl: widget
-                                                                    .model
-                                                                    .equipImages![
-                                                                        index]
-                                                                    .equipImagesPath!,
-                                                                fit: BoxFit
-                                                                    .cover,
-                                                                placeholder: (context,
-                                                                        url) =>
-                                                                    SizedBox(
-                                                                        height:
-                                                                            10,
-                                                                        width:
-                                                                            10,
-                                                                        child:
-                                                                            CircularProgressIndicator(
-                                                                          color:
-                                                                              AppColors.primaryColor,
-                                                                        )),
-                                                                errorWidget: (context,
-                                                                        url,
-                                                                        error) =>
-                                                                    ClipRRect(
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              8.0),
-                                                                  child: Image
-                                                                      .asset(
-                                                                    "assets/images/logo.png",
-                                                                    scale: 2,
+                                    ? SingleChildScrollView(
+                                        scrollDirection: Axis.horizontal,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: List.generate(
+                                              widget.model.equipImages!.length,
+                                              (index) => Padding(
+                                                    padding: EdgeInsets.all(5),
+                                                    child: GestureDetector(
+                                                        onTap: () {
+                                                          setState(() {
+                                                            selected = widget
+                                                                .model
+                                                                .equipImages![
+                                                                    index]
+                                                                .equipImagesPath
+                                                                .toString();
+                                                          });
+                                                        },
+                                                        child: Container(
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10),
+                                                              border: Border.all(
+                                                                  color: AppColors
+                                                                      .primaryColor,
+                                                                  width: 0.5),
+                                                              color: widget
+                                                                          .model
+                                                                          .equipImages![
+                                                                              index]
+                                                                          .equipImagesPath!
+                                                                          .toString() !=
+                                                                      selected
+                                                                  ? AppColors
+                                                                      .white
+                                                                  : AppColors
+                                                                      .primaryColor,
+                                                            ),
+                                                            height: 70,
+                                                            width: 70,
+                                                            child: Container(
+                                                                height: 60,
+                                                                width: 60,
+                                                                padding:
+                                                                    EdgeInsets
+                                                                        .all(3),
+                                                                child:
+                                                                    CachedNetworkImage(
+                                                                  imageUrl: widget
+                                                                      .model
+                                                                      .equipImages![
+                                                                          index]
+                                                                      .equipImagesPath!,
+                                                                  fit: BoxFit
+                                                                      .cover,
+                                                                  placeholder: (context,
+                                                                          url) =>
+                                                                      SizedBox(
+                                                                          height:
+                                                                              10,
+                                                                          width:
+                                                                              10,
+                                                                          child:
+                                                                              CircularProgressIndicator(
+                                                                            color:
+                                                                                AppColors.primaryColor,
+                                                                          )),
+                                                                  errorWidget: (context,
+                                                                          url,
+                                                                          error) =>
+                                                                      ClipRRect(
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            8.0),
+                                                                    child: Image
+                                                                        .asset(
+                                                                      "assets/images/logo.png",
+                                                                      scale: 2,
+                                                                    ),
                                                                   ),
-                                                                ),
-                                                              )))),
-                                                )),
+                                                                )))),
+                                                  )),
+                                        ),
                                       )
                                     : Container(
                                         child: Text(
@@ -451,15 +458,21 @@ class LoginState extends State<EquipDetails> with TickerProviderStateMixin {
                                           .bodySmall
                                           ?.copyWith(
                                               fontWeight: FontWeight.w700)),
-                                  Text(
-                                    'View rental agreement',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodySmall
-                                        ?.copyWith(
-                                            color: AppColors.primaryColor,
-                                            decoration:
-                                                TextDecoration.underline),
+                                  GestureDetector(
+                                    onTap: () => Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => Rentals())),
+                                    child: Text(
+                                      'Check active rentals',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall
+                                          ?.copyWith(
+                                              color: AppColors.primaryColor,
+                                              decoration:
+                                                  TextDecoration.underline),
+                                    ),
                                   ),
                                 ],
                               ),
@@ -530,7 +543,7 @@ class LoginState extends State<EquipDetails> with TickerProviderStateMixin {
                                 height: 20,
                               ),
                               Text(
-                                'Location: ${widget.model.owners!.address!.extractState()}',
+                                'Location: ${widget.model.owners!.localState}',
                                 style: TextStyle(
                                     fontSize: 15, fontWeight: FontWeight.w600),
                               ),
@@ -554,71 +567,66 @@ class LoginState extends State<EquipDetails> with TickerProviderStateMixin {
                                             labelStyle: buttonText.copyWith(
                                                 color: AppColors.primaryColor),
                                             onPressed: () => Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        ChatDetailsPage(
-                                                            feed: ChatListModel(
-                                                                id: widget.model
-                                                                    .ownersId,
-                                                                userId: "",
-                                                                chatWithId: "",
-                                                                messageCount:
-                                                                    "",
-                                                                lastMessage: "",
-                                                                dateCreated: "",
-                                                                dateModified:
-                                                                    "",
-                                                                chatWith:
-                                                                    ChatWith(
-                                                                  id: widget
-                                                                      .model
-                                                                      .ownersId,
-                                                                  fullname: widget
-                                                                      .model
-                                                                      .owners!
-                                                                      .fullname!,
-                                                                  email: "",
-                                                                  phoneNumber:
-                                                                      "",
-                                                                  gender: "",
-                                                                  address: "",
-                                                                  addressOpt:
-                                                                      "",
-                                                                  localState:
-                                                                      "",
-                                                                  country: "",
-                                                                  latitude: "",
-                                                                  longitude: "",
-                                                                  hirersPath: widget
-                                                                              .model
-                                                                              .owners!
-                                                                              .hirersPath !=
-                                                                          null
-                                                                      ? widget
-                                                                          .model
-                                                                          .owners!
-                                                                          .hirersPath!
-                                                                      : "",
-                                                                  status: "",
-                                                                  dateModified:
-                                                                      "",
-                                                                  dateCreated:
-                                                                      "",
-                                                                ))))),
+                                                context, MaterialPageRoute(
+                                                    builder: (context) {
+                                              getLogger("Chtas").i(
+                                                  "Chat details: ${widget.model.toJson()}");
+                                              return ChatDetailsPage(
+                                                  feed: ChatListModel(
+                                                      id: widget.model.userId,
+                                                      userId:
+                                                          widget.model.ownersId,
+                                                      chatWithId:
+                                                          widget.model.userId,
+                                                      messageCount: "",
+                                                      lastMessage: "",
+                                                      dateCreated: "",
+                                                      dateModified: "",
+                                                      chatWith: ChatWith(
+                                                        id: widget.model.userId,
+                                                        fullname: widget.model
+                                                            .owners!.fullname!,
+                                                        email: "",
+                                                        phoneNumber: "",
+                                                        gender: "",
+                                                        address: "",
+                                                        addressOpt: "",
+                                                        localState: "",
+                                                        country: "",
+                                                        latitude: "",
+                                                        longitude: "",
+                                                        hirersPath: widget
+                                                                    .model
+                                                                    .owners!
+                                                                    .hirersPath !=
+                                                                null
+                                                            ? widget
+                                                                .model
+                                                                .owners!
+                                                                .hirersPath!
+                                                            : "",
+                                                        status: "",
+                                                        dateModified: "",
+                                                        dateCreated: "",
+                                                      )));
+                                            })),
                                           ),
                                         ),
                                         Gap(10),
                                         Expanded(
                                           child: BaseButton(
                                             label: "Book Now",
-                                            onPressed: () => Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        PlaceBooking(
-                                                            model:
-                                                                widget.model))),
+                                            onPressed: () {
+                                              // StripePaymentService()
+                                              //     .stripeMakePayment();
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          PlaceBooking(
+                                                              model: widget
+                                                                  .model)));
+                                            },
                                           ),
                                         )
                                       ],

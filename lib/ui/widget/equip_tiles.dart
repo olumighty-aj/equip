@@ -109,7 +109,7 @@ class EquipTiles extends StatelessWidget {
                               ),
                               Gap(5),
                               Expanded(
-                                child: Text(model.address!,
+                                child: Text(model.owners?.localState ?? "",
                                     overflow: TextOverflow.ellipsis,
                                     style: Theme.of(context)
                                         .textTheme

@@ -18,6 +18,9 @@ import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 import 'package:equipro/utils/colors.dart';
 
+import '../../../../app/app_setup.logger.dart';
+import '../../../../utils/app_svgs.dart';
+
 class BookingDetails extends StatefulWidget {
   final Map<String, dynamic> feed;
   const BookingDetails({Key? key, required this.feed}) : super(key: key);
@@ -47,6 +50,8 @@ class LoginState extends State<BookingDetails> with TickerProviderStateMixin {
       parent: _navController!,
       curve: Curves.easeIn,
     ));
+
+    getLogger("BookDetails").i(widget.feed);
   }
 
   @override
@@ -150,10 +155,8 @@ class LoginState extends State<BookingDetails> with TickerProviderStateMixin {
                                                       CircleAvatar(
                                                 radius: 40,
                                                 backgroundColor: AppColors.grey,
-                                                child: Image.asset(
-                                                  "assets/images/logo.png",
-                                                  scale: 2,
-                                                ),
+                                                child: SvgPicture.asset(
+                                                    AppSvgs.svgLogo),
                                               ),
                                             ),
                                           ),
@@ -182,14 +185,14 @@ class LoginState extends State<BookingDetails> with TickerProviderStateMixin {
                                               color: AppColors.black,
                                               fontSize: 15),
                                         ),
-                                        InkWell(
+                                        GestureDetector(
                                             onTap: () {
                                               Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
                                                       builder: (context) => ChatDetailsPage(
                                                           feed: ChatListModel(
-                                                              id: widget.feed["ID"],
+                                                              id: widget.feed["hirers_id"],
                                                               userId: "",
                                                               chatWithId: "",
                                                               messageCount: "",

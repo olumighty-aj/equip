@@ -1,5 +1,6 @@
 import 'package:equipro/ui/screens/hirer/active_rentals/rentals_view_model.dart';
 import 'package:equipro/ui/screens/profile/profile_view_model.dart';
+import 'package:equipro/ui/widget/base_button.dart';
 import 'package:equipro/ui/widget/general_button.dart';
 import 'package:equipro/utils/locator.dart';
 import 'package:equipro/utils/router/navigation_service.dart';
@@ -193,12 +194,16 @@ class LoginState extends State<Rating> with TickerProviderStateMixin {
                                   SizedBox(
                                     height: 50,
                                   ),
-                                  GeneralButton(
+                                  BaseButton(
                                       onPressed: () {
-                                        model.rate(widget.id,
-                                            commentController.text, rate!);
+                                        model.giveFeedback(
+                                            widget.id,
+                                            commentController.text,
+                                            rate!,
+                                            context);
                                       },
-                                      buttonText: "Submit")
+                                      isBusy: model.busy("feedback"),
+                                      label: "Submit")
                                 ]))))),
           );
         });

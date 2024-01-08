@@ -169,6 +169,50 @@ class HomeOwnerViewModel extends BaseViewModel {
   }
 
   updateEquip(
+      List images,
+      String equipName,
+      String costHire,
+      String costHireInterval,
+      String availFrom,
+      String availTo,
+      String quantity,
+      String description,
+      String id,
+      String latitude,
+      String longitude,
+      String address,
+      context) async {
+    setBusy(true);
+    var result = await runBusyFuture(
+        _activities.updateEquip(
+          images,
+          equipName,
+          costHire,
+          costHireInterval,
+          availFrom,
+          availTo,
+          quantity,
+          description,
+          id,
+          latitude,
+          longitude,
+          address,
+        ),
+        busyObject: "UpdateMyEquip");
+    if (result == null) {
+      setBusy(false);
+      showErrorToast("Failed, please try again", context: context);
+      notifyListeners();
+      return result;
+    }
+    setBusy(false);
+    notifyListeners();
+    showToast(result["message"], context: context);
+    _navigationService.clearStackAndShow(Routes.homeOwner);
+    return result;
+  }
+
+  void newUpdateMyEquipment(
     List images,
     String equipName,
     String costHire,
@@ -181,33 +225,7 @@ class HomeOwnerViewModel extends BaseViewModel {
     String latitude,
     String longitude,
     String address,
-  ) async {
-    setBusy(true);
-    var result = await _activities.updateEquip(
-      images,
-      equipName,
-      costHire,
-      costHireInterval,
-      availFrom,
-      availTo,
-      quantity,
-      description,
-      id,
-      latitude,
-      longitude,
-      address,
-    );
-    if (result == null) {
-      setBusy(false);
-      notifyListeners();
-      return result;
-    }
-    setBusy(false);
-
-    _navigationService.pushNamedAndRemoveUntil(HomeOwnerRoute);
-    notifyListeners();
-    return result;
-  }
+  ) {}
 
   Future<void> getMyEquipment() async {
     //setBusy(true);
@@ -257,12 +275,11 @@ class HomeOwnerViewModel extends BaseViewModel {
     }
   }
 
-  void init(context) async {
-    await getMyEquipment();
-    controller = new ScrollController()
+  Future<void> init(context) async {
+    await getMyEquipment().then((value) => controller = new ScrollController()
       ..addListener(() {
         getMyEquipmentMore();
-      });
+      }));
   }
 
   getMyEquipmentMore() async {
@@ -345,6 +362,7 @@ class HomeOwnerViewModel extends BaseViewModel {
   void newDeleteEquip(String id, context) async {
     BaseDataModel? res = await _activities.newDeleteEquip(id);
     if (res != null && res.status == true) {
+      // _navigationService.back();
       showToast(res.message ?? "", context: context);
       _navigationService.clearStackAndShow(Routes.homeOwner);
     } else {
@@ -363,7 +381,7 @@ class HomeOwnerViewModel extends BaseViewModel {
     }
     if (result is SuccessModel) {
       setBusy(false);
-      _navigationService.pushNamedAndRemoveUntil(Routes.home);
+      _navigationService.clearStackAndShow(Routes.home);
       notifyListeners();
       return SuccessModel(result.data);
     }

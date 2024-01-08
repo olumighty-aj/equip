@@ -4,6 +4,7 @@ import 'package:equipro/ui/screens/hirer/book/details_view_model.dart';
 import 'package:equipro/ui/screens/owner/home_owner/edit_equipment.dart';
 import 'package:equipro/ui/screens/owner/home_owner/home_view_model.dart';
 import 'package:equipro/ui/screens/profile/edit_profile.dart';
+import 'package:equipro/ui/widget/base_button.dart';
 import 'package:equipro/ui/widget/booking_request.dart';
 import 'package:equipro/ui/widget/dash_painter.dart';
 import 'package:equipro/ui/widget/general_button.dart';
@@ -66,21 +67,19 @@ class LoginState extends State<EquipOwnerDetails>
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Container(
-                      width: 100,
-                      child: GeneralButton(
-                        splashColor: AppColors.grey,
-                        buttonTextColor: AppColors.black,
-                        buttonText: 'No',
+                    Expanded(
+                      child: BaseButton(
+                        hasBorder: true,
+                        label: 'Cancel',
                         onPressed: () {
                           Navigator.pop(context);
                         },
                       ),
                     ),
-                    Container(
-                      width: 100,
-                      child: GeneralButton(
-                        buttonText: 'Yes',
+                    Gap(20),
+                    Expanded(
+                      child: BaseButton(
+                        label: 'Yes',
                         onPressed: () {
                           Navigator.pop(context);
                           model.newDeleteEquip(

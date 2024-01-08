@@ -14,7 +14,7 @@ import 'package:equipro/utils/theme_manager.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_stripe/flutter_stripe.dart';
+// import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:equipro/ui/screens/splashscreen.dart';
 import 'package:equipro/utils/progressBarManager/dialog_manager.dart';
@@ -58,6 +58,17 @@ class _MyAppState extends State<MyApp> {
 
   void initState() {
     // checkIfUserIsNew();
+    var initializationSettingsAndroid =
+        new AndroidInitializationSettings('app_icon');
+    var initializationSettingsIOS = new IOSInitializationSettings();
+    var initializationSettings = new InitializationSettings(
+        android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
+    _flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
+    // _flutterLocalNotificationsPlugin.initialize(initializationSettings);
+    _flutterLocalNotificationsPlugin.initialize(
+      initializationSettings,
+      // onDidReceiveBackgroundNotificationResponse: onSelectNotification
+    );
     // TODO: implement initState
   }
 
@@ -109,3 +120,62 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
+
+// void generalPushNotification(String title, String body, String json) {
+//   var data = jsonDecode(json);
+//   NotificationEntity notificationEntity = NotificationEntity.fromJson(data);
+//   if (notificationEntity.active == ActiveStatus.active) {
+//     Repository.getInstance().saveNotifications([notificationEntity]);
+//     pushNotification(title, body);
+//   } else
+//     Repository.getInstance().deleteNotice(notificationEntity);
+// }
+Future<void> messageHandler(RemoteMessage message) async {
+  //await Firebase.initializeApp(options: DefaultFirebaseConfig.platformOptions);
+  print('Handling a background message ${message.messageId}');
+  print('background message ${message.notification?.body}');
+  pushNotification(
+      message.notification?.title ?? "", message.notification?.body ?? "");
+}
+
+FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
+var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
+    "Equippro", 'Notification',
+    channelDescription: 'This is Equippro notification center',
+    importance: Importance.max,
+    priority: Priority.high,
+    playSound: true,
+    enableVibration: true);
+var iOSPlatformChannelSpecifics =
+    new IOSNotificationDetails(presentBadge: true, presentSound: true);
+var platformChannelSpecifics = new NotificationDetails(
+    android: androidPlatformChannelSpecifics, iOS: iOSPlatformChannelSpecifics);
+
+void pushNotification(String title, String body) {
+  _flutterLocalNotificationsPlugin.show(
+      0, title, body, platformChannelSpecifics);
+}
+
+// void selectNotification(String? payload) async {
+//   if (payload != null) {
+//     debugPrint('notification payload: $payload');
+//   }
+//   await Navigator.push(
+//     context,
+//     MaterialPageRoute<void>(builder: (context) => NotificationPage()),
+//   );
+// }
+
+// var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
+//     "Equippro", 'Notification',
+//     channelDescription: 'This is Equippro notification center',
+//     importance: Importance.max,
+//     priority: Priority.high,
+//     playSound: false,
+//     enableVibration: true);
+// var iOSPlatformChannelSpecifics =
+//     new IOSNotificationDetails(presentBadge: true, presentSound: true);
+//
+// get platformChannelSpecifics => new NotificationDetails(
+//     android: androidPlatformChannelSpecifics, iOS: iOSPlatformChannelSpecifics);

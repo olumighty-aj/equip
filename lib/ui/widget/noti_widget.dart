@@ -3,6 +3,7 @@ import 'package:equipro/core/model/NotificationModel.dart';
 import 'package:equipro/utils/colors.dart';
 import 'package:equipro/utils/screensize.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 import '../../app/app_setup.locator.dart';
@@ -118,5 +119,11 @@ extension DateTimeFormatter on DateTime {
 
     // Combine date, time, and AM/PM
     return "$formattedDate $formattedTime$amPm";
+  }
+}
+
+extension DateTimeExtension on DateTime {
+  String formatTimeIn12HourFormat() {
+    return DateFormat.jm().format(this);
   }
 }

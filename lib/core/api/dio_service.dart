@@ -82,7 +82,7 @@ class ApiService {
     _log.i("Path: ${path}");
     _log.i("Payload: ${data.toString()}");
     Response res = await _dio.get(path,
-        queryParameters: data, options: Options(headers: getHeaders()));
+        queryParameters: data ?? null, options: Options(headers: getHeaders()));
     _log.i("Response: ${res.data}");
     return res;
   }

@@ -9,6 +9,8 @@ import '../ui/dialogs/exit_app.dart';
 import '../ui/dialogs/loading_dialog.dart';
 import '../ui/dialogs/logout_dialog.dart';
 import '../ui/dialogs/notification_details.dart';
+import '../ui/dialogs/payment_successful.dart';
+import '../ui/dialogs/return_equip_dialog.dart';
 
 void setupDialogUi() {
   var dialogService = locator<DialogService>();
@@ -21,6 +23,16 @@ void setupDialogUi() {
           completer: completer,
         ),
     DialogType.logout: (context, sheetRequest, completer) => LogoutDialog(
+          request: sheetRequest,
+          completer: completer,
+        ),
+    DialogType.returnEquip: (context, sheetRequest, completer) =>
+        ReturnEquipDialog(
+          request: sheetRequest,
+          completer: completer,
+        ),
+    DialogType.paymentSuccessful: (context, sheetRequest, completer) =>
+        PaymentSuccessfulDialog(
           request: sheetRequest,
           completer: completer,
         ),

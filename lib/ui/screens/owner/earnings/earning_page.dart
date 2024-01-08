@@ -2,6 +2,7 @@ import 'package:badges/badges.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:equipro/core/model/TransactionModel.dart';
 import 'package:equipro/core/model/success_model.dart';
+import 'package:equipro/core/services/auth_service.dart';
 import 'package:equipro/ui/screens/drawer.dart';
 import 'package:equipro/ui/screens/owner/earnings/earnings_view_model.dart';
 import 'package:equipro/ui/screens/profile/edit_profile.dart';
@@ -13,6 +14,7 @@ import 'package:equipro/ui/widget/equip_tiles.dart';
 import 'package:equipro/ui/widget/general_button.dart';
 import 'package:equipro/ui/widget/loader_widget.dart';
 import 'package:equipro/ui/widget/transaction_tile.dart';
+import 'package:equipro/utils/extensions.dart';
 import 'package:equipro/utils/helpers.dart';
 import 'package:equipro/utils/locator.dart';
 import 'package:equipro/utils/router/navigation_service.dart';
@@ -100,60 +102,65 @@ class LoginState extends State<EarningPage> with TickerProviderStateMixin {
               appBar: AppBar(
                 leading: CustomBackButton(),
               ),
-              body: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Text(
-                        "Earnings",
-                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            fontSize: 25, fontWeight: FontWeight.w800),
-                      ),
-                      Gap(29),
-                      if (model.wallet != null)
-                        Column(
-                          children: [
-                            RichText(
-                                text: TextSpan(children: [
-                              TextSpan(
-                                  text: "Your balance: ",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium
-                                      ?.copyWith(fontSize: 15)),
-                              TextSpan(
-                                  text: "5000",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium
-                                      ?.copyWith(
-                                          fontSize: 15,
-                                          color: AppColors.primaryColor))
-                            ])),
-                            Gap(29),
-                            Row(
+              body: Builder(builder: (context) {
+                if (!model.busy("Earnings") && model.earningsWallet != null) {
+                  return Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Text(
+                            "Earnings",
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyLarge
+                                ?.copyWith(
+                                    fontSize: 25, fontWeight: FontWeight.w800),
+                          ),
+                          Gap(29),
+                          if (model.earningsWallet != null)
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
-                                Expanded(
-                                  child: BaseButton(
-                                    label: "Withdraw",
-                                    hasBorder: true,
-                                  ),
+                                RichText(
+                                    text: TextSpan(children: [
+                                  TextSpan(
+                                      text: "Your balance: ",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium
+                                          ?.copyWith(fontSize: 15)),
+                                  TextSpan(
+                                      text:
+                                          "${getCurrency(locator<Authentication>().currentUser.country)}${model.earningsWallet!["content"]["balance_amount"].toString()}",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium
+                                          ?.copyWith(
+                                              fontSize: 18,
+                                              color: AppColors.primaryColor))
+                                ])),
+                                Gap(29),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: BaseButton(
+                                        label: "Withdraw",
+                                        hasBorder: true,
+                                        onPressed: null,
+                                      ),
+                                    ),
+                                    Expanded(child: SizedBox()),
+                                  ],
                                 ),
-                                Expanded(child: SizedBox()),
-                              ],
-                            ),
-                            Gap(32),
-                            Divider(
-                              color: Colors.grey,
-                            ),
-                            Gap(20),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
+                                Gap(32),
+                                Divider(
+                                  color: Colors.grey,
+                                ),
+                                Gap(32),
                                 Text(
-                                  "Payment Methods",
+                                  "Transaction History",
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodyMedium
@@ -161,58 +168,57 @@ class LoginState extends State<EarningPage> with TickerProviderStateMixin {
                                           fontSize: 15,
                                           fontWeight: FontWeight.w600),
                                 ),
-                                GestureDetector(
-                                    child: Icon(
-                                  Icons.add,
-                                  color: AppColors.primaryColor,
-                                ))
+                                Gap(24),
+                                if (model
+                                    .earningsWallet!["content"]
+                                        ["transaction_history"]
+                                    .isNotEmpty)
+                                  Column(
+                                    children: List.generate(
+                                      model
+                                          .earningsWallet!["content"]
+                                              ["transaction_history"]
+                                          .length,
+                                      (index) => TransactionHistoryTile(
+                                          transactions: model
+                                                  .earningsWallet!["content"]
+                                              ["transaction_history"][index],
+                                          country: model.country!),
+                                    ),
+                                  ),
+                                if (model
+                                    .earningsWallet!["content"]
+                                        ["transaction_history"]
+                                    .isEmpty)
+                                  Text("No transactions have been made"),
                               ],
                             ),
-                            Gap(18),
-                            Text(
-                              "Preferred Method",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.copyWith(color: Colors.grey, fontSize: 15),
-                            ),
-                            Gap(20),
-                            PaymentMethodBox(),
-                            Gap(45),
-                            Divider(
-                              color: Colors.grey,
-                            ),
-                            Gap(32),
-                            Text(
-                              "Transaction History",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.copyWith(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w600),
-                            ),
-                            Gap(24),
-                            Column(
-                              children: List.generate(
-                                  3, (index) => TransactionHistoryTile()),
-                            )
-                          ],
-                        ),
-                      if (model.wallet == null)
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Gap(200),
-                            SvgPicture.asset(AppSvgs.emptyRental),
-                            Gap(20),
-                            Text("No information available")
-                          ],
-                        )
+                          // if (model.wallet == null)
+                        ],
+                      ),
+                    ),
+                  );
+                } else if (model.busy("Earnings")) {
+                  return Center(
+                    child: SizedBox(
+                        height: 40,
+                        width: 40,
+                        child: CircularProgressIndicator(
+                          color: AppColors.primaryColor,
+                        )),
+                  );
+                } else {
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Gap(200),
+                      SvgPicture.asset(AppSvgs.emptyRental),
+                      Gap(20),
+                      Text("No information available")
                     ],
-                  ),
-                ),
-              ));
+                  );
+                }
+              }));
         });
   }
 }
@@ -256,7 +262,11 @@ class PaymentMethodBox extends StatelessWidget {
 }
 
 class TransactionHistoryTile extends StatelessWidget {
-  const TransactionHistoryTile({Key? key}) : super(key: key);
+  final Map<String, dynamic> transactions;
+  final String country;
+  const TransactionHistoryTile(
+      {Key? key, required this.transactions, required this.country})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -266,38 +276,20 @@ class TransactionHistoryTile extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "30 Oct 2021",
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodySmall
-                      ?.copyWith(color: Colors.grey, fontSize: 10),
-                ),
-                Gap(6),
-                Text(
-                  "Receipt: #27384595",
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
-                Gap(7),
-                Text(
-                  "Withdrawal",
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodySmall
-                      ?.copyWith(color: AppColors.primaryColor, fontSize: 10),
-                ),
-              ],
+            child: Text(
+              DateTime.parse(transactions["date_created"]).toDate(),
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyLarge
+                  ?.copyWith(color: Colors.grey, fontSize: 10),
             ),
           ),
           Text(
-            "N2000",
+            "${getCurrency(country)} ${transactions["amount"]}",
             style: Theme.of(context)
                 .textTheme
-                .bodySmall
-                ?.copyWith(color: Colors.grey, fontWeight: FontWeight.w600),
+                .bodyLarge
+                ?.copyWith(color: Colors.grey, fontWeight: FontWeight.w700),
           )
         ],
       ),

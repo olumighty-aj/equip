@@ -1,3 +1,4 @@
+import 'package:equipro/app/app_setup.logger.dart';
 import 'package:equipro/core/model/ChatListModel.dart';
 import 'package:equipro/core/model/base_model.dart';
 import 'package:equipro/core/model/error_model.dart';
@@ -41,6 +42,7 @@ class ChatViewModel extends BaseViewModel {
         await runBusyFuture(_activities.getChatList(), busyObject: "Chats");
     if (data != null) {
       if (data.status == true) {
+        getLogger("ChatViewModel").i(data.toJson());
         for (var i in data.payload) {
           ChatListModel model = ChatListModel.fromJson(i);
           _chatList?.add(model);

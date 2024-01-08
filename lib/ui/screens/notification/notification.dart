@@ -4,6 +4,7 @@ import 'package:equipro/ui/screens/owner/home_owner/home_view_model.dart';
 import 'package:equipro/ui/widget/chat_widget.dart';
 import 'package:equipro/ui/widget/input_fields/custom_text_field.dart';
 import 'package:equipro/ui/widget/noti_widget.dart';
+import 'package:equipro/utils/app_svgs.dart';
 import 'package:equipro/utils/colors.dart';
 import 'package:equipro/utils/locator.dart';
 import 'package:equipro/utils/router/navigation_service.dart';
@@ -211,6 +212,7 @@ class LoginState extends State<NotificationPage> {
                                       child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
+                                      SvgPicture.asset(AppSvgs.emptyNotif),
                                       Text(
                                         "No Notifications available",
                                         style: TextStyle(

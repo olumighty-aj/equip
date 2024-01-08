@@ -26,6 +26,7 @@ import 'package:equipro/utils/colors.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 import '../../../../app/app_setup.locator.dart';
+import '../../../../app/app_setup.logger.dart';
 import '../../../../app/app_setup.router.dart';
 import '../../../../utils/text_styles.dart';
 
@@ -257,50 +258,50 @@ class PlaceBookingState extends State<PlaceBooking>
                                             fontWeight: FontWeight.w500),
                                         bgColor: AppColors.primaryColor
                                             .withOpacity(0.2),
-                                        onPressed: () => Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    ChatDetailsPage(
-                                                        feed: ChatListModel(
-                                                            id: widget
-                                                                .model.ownersId,
-                                                            userId: "",
-                                                            chatWithId: "",
-                                                            messageCount: "",
-                                                            lastMessage: "",
-                                                            dateCreated: "",
-                                                            dateModified: "",
-                                                            chatWith: ChatWith(
-                                                              id: widget.model
-                                                                  .ownersId,
-                                                              fullname: widget
+                                        onPressed: () {
+                                          getLogger("BookingPlace").i(
+                                              "PlaceBooking: ${widget.model.toJson()}");
+                                          Navigator.push(context,
+                                              MaterialPageRoute(
+                                                  builder: (context) {
+                                            return ChatDetailsPage(
+                                                feed: ChatListModel(
+                                                    id: widget.model.userId,
+                                                    userId:
+                                                        widget.model.ownersId,
+                                                    chatWithId:
+                                                        widget.model.userId,
+                                                    messageCount: "",
+                                                    lastMessage: "",
+                                                    dateCreated: "",
+                                                    dateModified: "",
+                                                    chatWith: ChatWith(
+                                                      id: widget.model.ownersId,
+                                                      fullname: widget.model
+                                                          .owners!.fullname!,
+                                                      email: "",
+                                                      phoneNumber: "",
+                                                      gender: "",
+                                                      address: "",
+                                                      addressOpt: "",
+                                                      localState: "",
+                                                      country: "",
+                                                      latitude: "",
+                                                      longitude: "",
+                                                      hirersPath: widget
                                                                   .model
                                                                   .owners!
-                                                                  .fullname!,
-                                                              email: "",
-                                                              phoneNumber: "",
-                                                              gender: "",
-                                                              address: "",
-                                                              addressOpt: "",
-                                                              localState: "",
-                                                              country: "",
-                                                              latitude: "",
-                                                              longitude: "",
-                                                              hirersPath: widget
-                                                                          .model
-                                                                          .owners!
-                                                                          .hirersPath !=
-                                                                      null
-                                                                  ? widget
-                                                                      .model
-                                                                      .owners!
-                                                                      .hirersPath!
-                                                                  : "",
-                                                              status: "",
-                                                              dateModified: "",
-                                                              dateCreated: "",
-                                                            ))))),
+                                                                  .hirersPath !=
+                                                              null
+                                                          ? widget.model.owners!
+                                                              .hirersPath!
+                                                          : "",
+                                                      status: "",
+                                                      dateModified: "",
+                                                      dateCreated: "",
+                                                    )));
+                                          }));
+                                        },
                                       ),
                                     ),
                                   SizedBox(
@@ -355,7 +356,7 @@ class PlaceBookingState extends State<PlaceBooking>
                                   SizedBox(
                                     height: 20,
                                   ),
-                                  InkWell(
+                                  GestureDetector(
                                       onTap: () {
                                         // YearPicker(firstDate: firstDate, lastDate: lastDate, selectedDate: selectedDate, onChanged: onChanged)
                                         DatePickerBdaya.showDatePicker(context,
@@ -414,7 +415,7 @@ class PlaceBookingState extends State<PlaceBooking>
                                   SizedBox(
                                     height: 20,
                                   ),
-                                  InkWell(
+                                  GestureDetector(
                                       onTap: () {
                                         // YearPicker(firstDate: firstDate, lastDate: lastDate, selectedDate: selectedDate, onChanged: onChanged)
                                         DatePickerBdaya.showDatePicker(context,
@@ -511,7 +512,7 @@ class PlaceBookingState extends State<PlaceBooking>
                                   SizedBox(
                                     height: 30,
                                   ),
-                                  InkWell(
+                                  GestureDetector(
                                       onTap: () {
                                         showPlacePicker();
                                       },

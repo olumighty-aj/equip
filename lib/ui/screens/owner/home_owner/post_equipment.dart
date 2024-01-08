@@ -70,7 +70,9 @@ class PostEquipmentState extends State<PostEquipment>
           // imageQuality: quality,
           );
       setState(() {
-        listImages = pickedFileList;
+        for (var i in pickedFileList) {
+          listImages.add(i);
+        }
       });
     } catch (e) {
       print(e);
@@ -121,7 +123,7 @@ class PostEquipmentState extends State<PostEquipment>
                                                 BorderRadius.circular(12),
                                             color: AppColors.white,
                                           ),
-                                          child: InkWell(
+                                          child: GestureDetector(
                                               onTap: () {
                                                 Navigator.pop(context);
                                               },
@@ -236,39 +238,37 @@ class PostEquipmentState extends State<PostEquipment>
                                                     child: Row(
                                                       children: [
                                                         Container(
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          10),
-                                                              color: AppColors
-                                                                  .primaryColor,
-                                                            ),
-                                                            height: 100,
-                                                            width: 100,
-                                                            child: Container(
-                                                                padding:
-                                                                    EdgeInsets
-                                                                        .all(5),
-                                                                height: 95,
-                                                                width: 95,
+                                                            decoration: BoxDecoration(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            10),
+                                                                border: Border.all(
+                                                                    color: AppColors
+                                                                        .primaryColor,
+                                                                    width: 3)),
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    3),
+                                                            height: 95,
+                                                            width: 95,
+                                                            child: ClipRRect(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            10.0),
                                                                 child:
-                                                                    ClipRRect(
-                                                                        borderRadius:
-                                                                            BorderRadius.circular(
-                                                                                10.0),
-                                                                        child: Image
-                                                                            .file(
-                                                                          File(listImages[index]
-                                                                              .path),
-                                                                          fit: BoxFit
-                                                                              .fill,
-                                                                        )))),
+                                                                    Image.file(
+                                                                  File(listImages[
+                                                                          index]
+                                                                      .path),
+                                                                  fit: BoxFit
+                                                                      .fill,
+                                                                ))),
                                                         SizedBox(
                                                           width: 20,
                                                         ),
-                                                        InkWell(
+                                                        GestureDetector(
                                                             onTap: () {
                                                               setState(() {
                                                                 listImages
@@ -277,16 +277,16 @@ class PostEquipmentState extends State<PostEquipment>
                                                               });
                                                             },
                                                             child: Text(
-                                                              "Remove",
-                                                              style: TextStyle(
-                                                                  color:
-                                                                      AppColors
-                                                                          .red,
-                                                                  fontSize: 20,
-                                                                  decoration:
-                                                                      TextDecoration
-                                                                          .underline),
-                                                            )),
+                                                                "Remove",
+                                                                style: Theme.of(
+                                                                        context)
+                                                                    .textTheme
+                                                                    .bodyMedium
+                                                                    ?.copyWith(
+                                                                        color: AppColors
+                                                                            .red,
+                                                                        decoration:
+                                                                            TextDecoration.underline))),
                                                       ],
                                                     ),
                                                   ))),

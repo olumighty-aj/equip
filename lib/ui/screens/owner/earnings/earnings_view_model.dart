@@ -28,12 +28,17 @@ class EarningsViewModel extends BaseViewModel {
 
   TransactionModel? wallet;
 
+  String? get country => _authentication.currentUser.country;
+
+  Map<String, dynamic>? earningsWallet;
+
   void getEarnings() async {
-    BaseDataModel? data = await runBusyFuture(_activities.getNewEarnings());
+    BaseDataModel? data = await runBusyFuture(_activities.getNewEarnings(),
+        busyObject: "Earnings");
     if (data != null) {
       if (data.status == true) {
         _log.i(data.payload);
-        wallet = data.payload;
+        earningsWallet = data.payload;
         notifyListeners();
       } else {
         _log.i(data.toJson());

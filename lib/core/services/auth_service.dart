@@ -199,6 +199,34 @@ class Authentication {
     }
   }
 
+  Future<BaseDataModel?> updateProfileVisibility(String visibility) async {
+    try {
+      Response res = await _apiService.postRequest(
+          {"owner_id": _currentUser.id, "visibility": visibility},
+          Paths.profileVisibility);
+      if (res.statusCode == 200) {
+        _log.i("Visibility Data: ${res.data}");
+        return BaseDataModel.fromJson(res.data);
+      }
+    } on DioException catch (e) {
+      _log.e(e.message);
+    }
+  }
+
+  Future<BaseDataModel?> updateNotificationSettings(String notification) async {
+    try {
+      Response res = await _apiService.postRequest(
+          {"owner_id": _currentUser.id, "notification": notification},
+          Paths.notificationSettings);
+      if (res.statusCode == 200) {
+        _log.i("Visibility Data: ${res.data}");
+        return BaseDataModel.fromJson(res.data);
+      }
+    } on DioException catch (e) {
+      _log.e(e.message);
+    }
+  }
+
   //
   // editProfile(Map<dynamic, dynamic> payload) async {
   //   try {

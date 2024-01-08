@@ -5,9 +5,11 @@ import 'package:equipro/ui/screens/hirer/active_rentals/active_rentals.dart';
 import 'package:equipro/ui/screens/hirer/home/home_view_model.dart';
 import 'package:equipro/ui/screens/profile/edit_profile.dart';
 import 'package:equipro/ui/screens/profile/profile.dart';
+import 'package:equipro/ui/screens/settings/settings_screen.dart';
 import 'package:equipro/ui/screens/terms_and_condition/terms_condition_screen.dart';
 import 'package:equipro/ui/widget/base_button.dart';
 import 'package:equipro/ui/widget/general_button.dart';
+import 'package:equipro/utils/app_svgs.dart';
 import 'package:equipro/utils/colors.dart';
 import 'package:equipro/utils/helpers.dart';
 // import 'package:equipro/utils/locator.dart';
@@ -16,6 +18,7 @@ import 'package:equipro/utils/router/route_names.dart';
 import 'package:equipro/utils/tiny_db.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -130,28 +133,26 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
           child: Padding(
             padding: const EdgeInsets.all(18.0),
             child: ListView(children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(""),
-                  Container(
-                      height: 40,
-                      width: 40,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        color: AppColors.white,
-                      ),
-                      child: InkWell(
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                          child: const Icon(
-                            Icons.clear,
-                            color: AppColors.primaryColor,
-                          )))
-                ],
+              Align(
+                alignment: Alignment.topRight,
+                child: Container(
+                    height: 40,
+                    width: 40,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: Colors.grey.shade300),
+                      color: AppColors.white,
+                    ),
+                    child: GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Icon(
+                          Icons.clear,
+                          color: AppColors.primaryColor,
+                        ))),
               ),
-              InkWell(
+              GestureDetector(
                   onTap: () {
                     _navigationService.navigateTo(homeRoute);
                   },
@@ -162,19 +163,19 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
                           // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             CachedNetworkImage(
+                              fit: BoxFit.cover,
                               imageUrl:
                                   _authentication.currentUser.hirersPath != null
                                       ? _authentication.currentUser.hirersPath!
                                       : "",
                               imageBuilder: (context, imageProvider) =>
                                   Container(
-                                width: 70.0,
-                                height: 70.0,
+                                width: 50.0,
+                                height: 50.0,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   image: DecorationImage(
-                                      image: imageProvider,
-                                      fit: BoxFit.contain),
+                                      image: imageProvider, fit: BoxFit.cover),
                                 ),
                               ),
                               placeholder: (context, url) =>
@@ -183,10 +184,7 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
                                   CircleAvatar(
                                 radius: 40,
                                 backgroundColor: AppColors.grey,
-                                child: Image.asset(
-                                  "assets/images/icon.png",
-                                  scale: 2,
-                                ),
+                                child: SvgPicture.asset(AppSvgs.svgLogo),
                               ),
                             ),
                             const SizedBox(
@@ -195,14 +193,11 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  _authentication.currentUser.fullname!,
-                                  //  _authentication.currentUser.firstName! + " " + _authentication.currentUser.lastName!,
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 15,
-                                  ),
-                                )
+                                Text(_authentication.currentUser.fullname!,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyLarge
+                                        ?.copyWith(fontWeight: FontWeight.w800))
                               ],
                             ),
                           ]),
@@ -266,24 +261,24 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
               //     'Settings',
               //     style: TextStyle(fontSize: 16),
               //   ),
-              //   onTap: () {
-              //     TinyDb.removeAll();
-              //     _navigationService.navigateTo(loginRoute);
-              //   },
+              //   onTap: () => Navigator.push(context,
+              //       MaterialPageRoute(builder: (context) => SettingScreen())),
               // ),
-              SizedBox(
-                height: 10,
-              ),
               Divider(
                 thickness: 1,
               ),
-              SizedBox(
-                height: 30,
-              ),
-              Text(
-                "Post your equipments for hire and generate instant revenue",
-                textAlign: TextAlign.center,
-              ),
+              if (_authentication.currentUser.kycApproved! != "approved")
+                Column(
+                  children: [
+                    SizedBox(
+                      height: 30,
+                    ),
+                    Text(
+                      "Post your equipments for hire and generate instant revenue",
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
               SizedBox(
                 height: 20,
               ),
@@ -309,9 +304,10 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
                   }
                 },
               ),
-              SizedBox(
-                height: 50,
-              ),
+              if (_authentication.currentUser.kycApproved! != "approved")
+                SizedBox(
+                  height: 50,
+                ),
               ListTile(
                 title: const Text(
                   'Terms & Conditions',

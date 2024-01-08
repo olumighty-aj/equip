@@ -41,6 +41,52 @@ class Activities {
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
+  Future<BaseDataModel> initPayment(String orderID) async {
+    Response res =
+        await _api.postRequest({"equip_order_id": orderID}, Paths.initPayment);
+    _log.i("Response Data${res.data}");
+    return BaseDataModel.fromJson(res.data);
+  }
+
+  Future<BaseDataModel> updateDeliveryStatus(
+      String equipOrderId, String deliveryStatus) async {
+    Response res = await _api.postRequest(
+        {"equip_order_id": equipOrderId, "delivery_status": deliveryStatus},
+        Paths.deliveryStatus);
+    _log.i("Response ${res.data}");
+    return BaseDataModel.fromJson(res.data);
+  }
+
+  Future<Map<String, dynamic>> createPayment(String orderID, String receiptRef,
+      String amount, String paymentType, String currency) async {
+    Response res = await _api.postRequest({
+      "equip_order_id": orderID,
+      "receipt_ref": receiptRef,
+      "amount": amount,
+      "payment_type": paymentType,
+      "currency": currency
+    }, Paths.createPayment);
+    _log.i("Response Data${res.data}");
+    return res.data;
+  }
+
+  Future<BaseDataModel> giveFeedback(Map<String, dynamic> feedback) async {
+    Response res = await _api.postRequest(feedback, Paths.review);
+    return BaseDataModel.fromJson(res.data);
+  }
+
+  Future<BaseDataModel?> getSettings() async {
+    try {
+      Response res = await _api.getRequest(null,
+          Paths.getSettings + "?owner_id=" + _authentication.currentUser.id!);
+      if (res.statusCode == 200) {
+        return BaseDataModel.fromJson(res.data);
+      }
+    } on DioException catch (e) {
+      _log.e(e.message);
+    }
+  }
+
   postEquip(
     List images,
     String equipName,
@@ -211,6 +257,23 @@ class Activities {
     }
   }
 
+  // Future<BaseDataModel?> newUpdateMyEquipments(
+  //     List images,
+  //     String equipName,
+  //     String costHire,
+  //     String costHireInterval,
+  //     String availFrom,
+  //     String availTo,
+  //     String quantity,
+  //     String description,
+  //     String id,
+  //     String latitude,
+  //     String longitude,
+  //     String address,
+  //     ){
+  //
+  // }
+
   Future<BaseDataModel> newGetMyEquipments() async {
     Response res = await _api.getRequest(null, Paths.ownerEquipment);
     return BaseDataModel.fromJson(res.data);
@@ -342,9 +405,8 @@ class Activities {
 
   Future<BaseDataModel?> newGetEquipments(String? lat, String? lng) async {
     try {
-      Response res = await _api.getRequest(null, Paths.equipments
-          // + "/lat=$lat&lng=$lng"
-          );
+      Response res =
+          await _api.getRequest(null, Paths.equipments + "?lat=$lat&lng=$lng");
       _log.i("Response: ${res.data}");
       if (res.statusCode == 200) {
         return BaseDataModel.fromJson(res.data);
@@ -491,6 +553,11 @@ class Activities {
     return BaseDataModel.fromJson(res.data);
   }
 
+  Future<BaseDataModel> newEditBooking(Map<String, dynamic> data) async {
+    Response res = await _api.postRequest(data, Paths.editBookings);
+    return BaseDataModel.fromJson(res.data);
+  }
+
   updateBooking(String id, String status) async {
     try {
       final result = await http.post(Paths.updateBookings, {
@@ -556,11 +623,20 @@ class Activities {
   }
 
   Future<BaseDataModel?> getNewEarnings() async {
-    Response res = await _api.getRequest(null, Paths.ownersEarnings);
-    if (res.data != null) {
-      return BaseDataModel.fromJson(res.data);
-    } else {
-      return null;
+    _log.i("Here in Earnings");
+    try {
+      Response res = await _api.getRequest(null, Paths.ownersEarnings);
+      _log.i("Response from Earnings: ${res.data}");
+      _log.i("Response from Earnings: ${res.statusCode}");
+      if (res.data != null) {
+        return BaseDataModel.fromJson(res.data);
+      } else {
+        return null;
+      }
+    } on DioException catch (e) {
+      _log.e(e.message);
+      _log.e(e.response?.data);
+      _log.e(e.response?.statusMessage);
     }
   }
 
@@ -719,6 +795,29 @@ class Activities {
                   "TimeoutException after 0:00:40.000000: Future not completed"
               ? "Your internet is not stable kindly reconnect and try again"
               : e.toString());
+    }
+  }
+
+  newFetchChatDetails({String? senderId, String? receiverId}) async {
+    _log.i("Before Chat Details");
+    Response res = await _api.getRequest(
+        null, (Paths.chatDetails + "$senderId&receiver=$receiverId"));
+    _log.i("Response Chat Details: ${res.data}");
+    if (res.statusCode == 200) {
+      BaseDataModel data = BaseDataModel.fromJson(res.data);
+      if (data.status == true) {
+        List<ChatMessages> chats = [];
+        for (var i in data.payload) {
+          ChatMessages chat = ChatMessages.fromJson(i);
+          print(chat.toJson());
+          chats.add(chat);
+        }
+        return chats;
+      } else {
+        _log.e(data.toJson());
+      }
+    } else {
+      _log.e(res.data);
     }
   }
 

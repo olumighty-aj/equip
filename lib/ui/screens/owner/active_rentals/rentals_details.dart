@@ -1,6 +1,7 @@
 import 'package:equipro/core/model/ActiveRentalsModel.dart';
 import 'package:equipro/core/model/success_model.dart';
 import 'package:equipro/ui/screens/owner/active_rentals/rentals_view_model.dart';
+import 'package:equipro/ui/widget/base_button.dart';
 import 'package:equipro/ui/widget/general_button.dart';
 import 'package:equipro/utils/locator.dart';
 import 'package:equipro/utils/router/navigation_service.dart';
@@ -9,6 +10,7 @@ import 'package:equipro/utils/screensize.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker_bdaya/flutter_datetime_picker_bdaya.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 import 'package:equipro/utils/colors.dart';
@@ -213,33 +215,73 @@ class LoginState extends State<OwnerRentalDetails>
                                               fontSize: 25),
                                         ),
                                         Container(
-                                          width: 100,
-                                          height: 30,
-                                          child: GeneralButton(
-                                            onPressed: () {},
-                                            buttonText:
-                                                toBeginningOfSentenceCase(widget
-                                                    .feed.requestStatus!)!,
-                                            buttonTextColor: AppColors.white,
-                                            splashColor: widget
-                                                        .feed.requestStatus! ==
-                                                    "pending"
-                                                ? Colors.blue
-                                                : widget.feed.requestStatus! ==
-                                                        "rejected"
-                                                    ? AppColors.red
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 5, horizontal: 10),
+                                            decoration: BoxDecoration(
+                                                color: widget.feed
+                                                            .requestStatus! ==
+                                                        "pending"
+                                                    ? Colors.blue
                                                     : widget.feed
                                                                 .requestStatus! ==
-                                                            "returned"
-                                                        ? AppColors.green
+                                                            "rejected"
+                                                        ? AppColors.red
                                                         : widget.feed
                                                                     .requestStatus! ==
-                                                                "received"
-                                                            ? AppColors.blue
-                                                            : AppColors
-                                                                .primaryColor,
-                                          ),
-                                        )
+                                                                "returned"
+                                                            ? AppColors.green
+                                                            : widget.feed
+                                                                        .requestStatus! ==
+                                                                    "received"
+                                                                ? AppColors.blue
+                                                                : AppColors
+                                                                    .primaryColor,
+                                                borderRadius:
+                                                    BorderRadius.circular(10)),
+                                            child: Text(
+                                              toBeginningOfSentenceCase(
+                                                  widget.feed.requestStatus!)!,
+                                              // ! ==
+                                              //     "pending" ||
+                                              //     widget.feed
+                                              //         .requestStatus! ==
+                                              //         "accepted"
+                                              //     ? "Booked"
+                                              //     : "Received",
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodySmall
+                                                  ?.copyWith(
+                                                      color: Colors.white),
+                                            )),
+                                        // Container(
+                                        //   width: 100,
+                                        //   height: 30,
+                                        //   child: GeneralButton(
+                                        //     onPressed: () {},
+                                        //     buttonText:
+                                        //         toBeginningOfSentenceCase(widget
+                                        //             .feed.requestStatus!)!,
+                                        //     buttonTextColor: AppColors.white,
+                                        //     splashColor: widget
+                                        //                 .feed.requestStatus! ==
+                                        //             "pending"
+                                        //         ? Colors.blue
+                                        //         : widget.feed.requestStatus! ==
+                                        //                 "rejected"
+                                        //             ? AppColors.red
+                                        //             : widget.feed
+                                        //                         .requestStatus! ==
+                                        //                     "returned"
+                                        //                 ? AppColors.green
+                                        //                 : widget.feed
+                                        //                             .requestStatus! ==
+                                        //                         "received"
+                                        //                     ? AppColors.blue
+                                        //                     : AppColors
+                                        //                         .primaryColor,
+                                        //   ),
+                                        // )
                                       ]),
                                   SizedBox(
                                     height: 20,
@@ -247,38 +289,38 @@ class LoginState extends State<OwnerRentalDetails>
                                   Divider(
                                     thickness: 4,
                                   ),
-                                  SizedBox(
-                                    height: 30,
-                                  ),
-                                  Text(
-                                    "View rental agreement",
-                                    style: TextStyle(
-                                        decoration: TextDecoration.underline,
-                                        color: AppColors.primaryColor,
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 15),
-                                  ),
+                                  // SizedBox(
+                                  //   height: 30,
+                                  // ),
+                                  // // Text(
+                                  // //   "View rental agreement",
+                                  // //   style: TextStyle(
+                                  // //       decoration: TextDecoration.underline,
+                                  // //       color: AppColors.primaryColor,
+                                  // //       fontWeight: FontWeight.w400,
+                                  // //       fontSize: 15),
+                                  // // ),
                                   SizedBox(
                                     height: 30,
                                   ),
                                   Row(
+                                    // mainAxisAlignment:
+                                    //     MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
                                         "Amount Paid:",
-                                        style: TextStyle(
-                                            color: Colors.grey,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 18),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium,
+                                        // textAlign: TextAlign.end,
                                       ),
-                                      SizedBox(
-                                        width: 40,
-                                      ),
+                                      Gap(50),
                                       Text(
                                         widget.feed.equipOrder!.totalAmount!,
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 18),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium,
+                                        textAlign: TextAlign.end,
                                       ),
                                     ],
                                   ),
@@ -289,20 +331,20 @@ class LoginState extends State<OwnerRentalDetails>
                                     children: [
                                       Text(
                                         "QTY Hired:",
-                                        style: TextStyle(
-                                            color: Colors.grey,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 18),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium,
+                                        // textAlign: TextAlign.end,
                                       ),
                                       SizedBox(
-                                        width: 40,
+                                        width: 70,
                                       ),
                                       Text(
                                         widget.feed.equipOrder!.quantity!,
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 18),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium,
+                                        textAlign: TextAlign.end,
                                       ),
                                     ],
                                   ),
@@ -313,13 +355,13 @@ class LoginState extends State<OwnerRentalDetails>
                                     children: [
                                       Text(
                                         "Rental Start Date:",
-                                        style: TextStyle(
-                                            color: Colors.grey,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 18),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium,
+                                        // textAlign: TextAlign.end,
                                       ),
                                       SizedBox(
-                                        width: 40,
+                                        width: 28,
                                       ),
                                       Text(
                                         widget.feed.rentalFrom != null
@@ -330,10 +372,10 @@ class LoginState extends State<OwnerRentalDetails>
                                                     widget.feed.rentalFrom!))
                                                 .toString()
                                             : "Unknown",
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 18),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium,
+                                        textAlign: TextAlign.end,
                                       ),
                                     ],
                                   ),
@@ -344,10 +386,10 @@ class LoginState extends State<OwnerRentalDetails>
                                     children: [
                                       Text(
                                         "Rental End Date",
-                                        style: TextStyle(
-                                            color: Colors.grey,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 18),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium,
+                                        textAlign: TextAlign.end,
                                       ),
                                       SizedBox(
                                         width: 40,
@@ -361,10 +403,10 @@ class LoginState extends State<OwnerRentalDetails>
                                                     widget.feed.rentalTo!))
                                                 .toString()
                                             : "Unknown",
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 18),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium,
+                                        textAlign: TextAlign.end,
                                       ),
                                     ],
                                   ),
@@ -375,21 +417,21 @@ class LoginState extends State<OwnerRentalDetails>
                                     children: [
                                       Text(
                                         "Return Location:",
-                                        style: TextStyle(
-                                            color: Colors.grey,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 18),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium,
+                                        textAlign: TextAlign.end,
                                       ),
                                       SizedBox(
-                                        width: 40,
+                                        width: 25,
                                       ),
                                       Expanded(
                                         child: Text(
                                           widget.feed.deliveryLocation!,
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 18),
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium,
+                                          textAlign: TextAlign.end,
                                         ),
                                       )
                                     ],
@@ -397,30 +439,34 @@ class LoginState extends State<OwnerRentalDetails>
                                   SizedBox(
                                     height: 40,
                                   ),
-                                  Text(
-                                    "Equipment Delivery Status",
-                                    style: TextStyle(
-                                        color: Colors.grey,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 18),
-                                  ),
+                                  Text("Equipment Delivery Status",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge
+                                          ?.copyWith(color: Colors.grey)),
                                   widget.feed.equipDeliveryStatus != null
-                                      ? Container(
-                                          height:
-                                              Responsive.height(context) / 2.8,
-                                          child: ListView.builder(
-                                              itemCount: widget
-                                                  .feed
-                                                  .equipDeliveryStatus!
-                                                  .deliveryStatusLists!
-                                                  .length,
-                                              itemBuilder: (context, i) {
-                                                return Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Row(children: [
+                                      ? ListView.builder(
+                                          shrinkWrap: true,
+                                          physics:
+                                              NeverScrollableScrollPhysics(),
+                                          itemCount: widget
+                                              .feed
+                                              .equipDeliveryStatus!
+                                              .deliveryStatusLists!
+                                              .length,
+                                          itemBuilder: (context, i) {
+                                            return Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Row(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
                                                       Column(
                                                         children: [
                                                           CircleAvatar(
@@ -441,101 +487,96 @@ class LoginState extends State<OwnerRentalDetails>
                                                         width: 15,
                                                       ),
                                                       Text(
-                                                        widget
-                                                                    .feed
-                                                                    .equipDeliveryStatus!
-                                                                    .deliveryStatusLists![
-                                                                        i]
-                                                                    .deliveryStatus! ==
-                                                                "pending"
-                                                            ? "Pending"
-                                                            : widget
-                                                                        .feed
-                                                                        .equipDeliveryStatus!
-                                                                        .deliveryStatusLists![
-                                                                            i]
-                                                                        .deliveryStatus! ==
-                                                                    "picked_from_owner"
-                                                                ? "Equipment Picked Up"
-                                                                : widget
-                                                                            .feed
-                                                                            .equipDeliveryStatus!
-                                                                            .deliveryStatusLists![
-                                                                                i]
-                                                                            .deliveryStatus! ==
-                                                                        "delivered_hirer"
-                                                                    ? "Owner confirmed Pick-Up"
-                                                                    : widget.feed.equipDeliveryStatus!.deliveryStatusLists![i].deliveryStatus! ==
-                                                                            "picked_from_hirer"
-                                                                        ? "Equipment Returned"
-                                                                        : "Confirmed Returned",
-                                                        //   "Pending",
-                                                        style: TextStyle(
-                                                            color: Colors.black,
-                                                            fontWeight:
-                                                                FontWeight.w500,
-                                                            fontSize: 15),
-                                                      ),
+                                                          widget
+                                                                      .feed
+                                                                      .equipDeliveryStatus!
+                                                                      .deliveryStatusLists![
+                                                                          i]
+                                                                      .deliveryStatus! ==
+                                                                  "pending"
+                                                              ? "Pending"
+                                                              : widget
+                                                                          .feed
+                                                                          .equipDeliveryStatus!
+                                                                          .deliveryStatusLists![
+                                                                              i]
+                                                                          .deliveryStatus! ==
+                                                                      "picked_from_owner"
+                                                                  ? "Equipment Picked Up"
+                                                                  : widget.feed.equipDeliveryStatus!.deliveryStatusLists![i].deliveryStatus! ==
+                                                                          "delivered_hirer"
+                                                                      ? "Owner confirmed Pick-Up"
+                                                                      : widget.feed.equipDeliveryStatus!.deliveryStatusLists![i].deliveryStatus! ==
+                                                                              "picked_from_hirer"
+                                                                          ? "Equipment Returned"
+                                                                          : "Confirmed Returned",
+                                                          //   "Pending",
+                                                          style:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .bodyMedium),
                                                     ]),
-                                                    Text(
-                                                      DateFormat(
-                                                        "dd MMM, yyyy, hh:mm aa",
-                                                      ).format(DateTime.parse(widget
-                                                          .feed
-                                                          .equipDeliveryStatus!
-                                                          .deliveryStatusLists![
-                                                              i]
-                                                          .dateCreated!
-                                                          .toString())),
-                                                      style: TextStyle(
-                                                          color: Colors.grey,
-                                                          fontWeight:
-                                                              FontWeight.w500,
-                                                          fontSize: 12),
-                                                    ),
-                                                  ],
-                                                );
-                                              }),
-                                        )
+                                                Gap(30),
+                                                Expanded(
+                                                  child: Text(
+                                                    DateFormat(
+                                                      "dd MMM, yyyy, hh:mm aa",
+                                                    ).format(DateTime.parse(widget
+                                                        .feed
+                                                        .equipDeliveryStatus!
+                                                        .deliveryStatusLists![i]
+                                                        .dateCreated!
+                                                        .toString())),
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .bodySmall
+                                                        ?.copyWith(
+                                                            color: Colors.grey),
+                                                    textAlign: TextAlign.end,
+                                                  ),
+                                                ),
+                                              ],
+                                            );
+                                          })
                                       : Container(
                                           child: Text(
                                             "Not available",
                                           ),
                                         ),
-                                  widget.feed.equipDeliveryStatus!
-                                              .deliveryStatus ==
-                                          "pending"
-                                      ? GeneralButton(
-                                          onPressed: () {
-                                            model.updateBooking(
-                                                widget.feed.equipOrderId
-                                                    .toString(),
-                                                "delivered_hirer");
-                                          },
-                                          buttonText:
-                                              "Confirm equipment Picked Up")
-                                      : widget.feed.equipDeliveryStatus!
-                                                  .deliveryStatus ==
-                                              "picked_from_hirer"
-                                          ? GeneralButton(
-                                              onPressed: () {
-                                                model.updateBooking(
-                                                    widget.feed.equipOrderId
-                                                        .toString(),
-                                                    "returned");
-                                              },
-                                              buttonText:
-                                                  "Confirm equipment is returned ")
-                                          : Container(),
-                                  widget.feed.requestStatus! == "returned"
-                                      ? GeneralButton(
-                                          onPressed: () {
-                                            _navigationService.navigateTo(
-                                                RatingRoute,
-                                                arguments: widget.feed.id);
-                                          },
-                                          buttonText: "Give Feedback")
-                                      : Container()
+                                  Gap(30),
+                                  // widget.feed.equipDeliveryStatus!
+                                  //             .deliveryStatus ==
+                                  //         "pending"
+                                  //     ? BaseButton(
+                                  //         onPressed: () {
+                                  //           model.updateBooking(
+                                  //               widget.feed.equipOrderId
+                                  //                   .toString(),
+                                  //               "delivered_hirer");
+                                  //         },
+                                  //         label: "Confirm equipment Picked Up")
+                                  //     : widget.feed.equipDeliveryStatus!
+                                  //                 .deliveryStatus ==
+                                  //             "picked_from_hirer"
+                                  //         ? BaseButton(
+                                  //             onPressed: () {
+                                  //               model.updateBooking(
+                                  //                   widget.feed.equipOrderId
+                                  //                       .toString(),
+                                  //                   "returned");
+                                  //             },
+                                  //             label:
+                                  //                 "Confirm equipment is returned ")
+                                  //         : Container(),
+                                  // widget.feed.requestStatus! == "returned"
+                                  //     ? BaseButton(
+                                  //         onPressed: () {
+                                  //           _navigationService.navigateTo(
+                                  //               RatingRoute,
+                                  //               arguments: widget.feed.id);
+                                  //         },
+                                  //         label: "Give Feedback")
+                                  //     : Container()
                                 ]))))),
           );
         });

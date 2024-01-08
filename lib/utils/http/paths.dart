@@ -20,6 +20,7 @@ class Paths {
   static const String rate_owner = 'owners/reviews';
   static const String equipApproval = 'owners/equip_approval/';
   static const String updateBookings = 'delivery_status';
+  static const String editBookings = 'equip_booking/25';
   static const String ownersEarnings = 'owners/earnings';
   static const String ownersProfile = 'owners/profile';
   static const String profile = 'profile';
@@ -27,9 +28,16 @@ class Paths {
   static const String pickDate = 'owners/pickup_date/';
   static const String earnings = 'owners/earnings';
   static const String chatList = 'get_user_inbox';
-  static const String chatDetails = 'get_chat_details?user_1=';
+  static const String chatDetails = 'get_chat_details?sender=';
   static const String sendChat = 'send_chat';
   static const String getNotification = 'notification';
   static const String verifyKYC = 'verify_document?hirers_id=';
   static const String logout = 'logout';
+  static const String initPayment = 'init_payment';
+  static const String createPayment = 'payment/create';
+  static const String deliveryStatus = 'delivery_status';
+  static const String review = 'reviews';
+  static const String profileVisibility = 'profile_visibility';
+  static const String notificationSettings = 'notification_setting';
+  static const String getSettings = 'get_setting';
 }

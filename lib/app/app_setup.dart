@@ -13,6 +13,7 @@ import 'package:stacked/stacked_annotations.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 import '../core/api/dio_service.dart';
+import '../ui/screens/hirer/active_rentals/payment_webview.dart';
 import '../ui/screens/hirer/book/equip_details.dart';
 import '../ui/screens/login/forgt_password/forgot_password.dart';
 import '../ui/screens/login/forgt_password/verify_forgot_otp.dart';
@@ -61,6 +62,12 @@ import '../ui/screens/splashscreen.dart';
     MaterialRoute(
       page: EquipOwnerDetails,
     ),
+    MaterialRoute(
+      page: PaymentWebView,
+    ),
+    // MaterialRoute(
+    //   page: ActiveR,
+    // ),
   ],
   dependencies: [
     LazySingleton(classType: NavigationService),

@@ -147,7 +147,10 @@ class LoginState extends State<EditEquipment> with TickerProviderStateMixin {
           // imageQuality: quality,
           );
       setState(() {
-        listImages = pickedFileList;
+        for (var i in pickedFileList) {
+          listImages.add(i);
+        }
+        // listImages.add(pickedFileList) ;
       });
     } catch (e) {
       print(e);
@@ -170,7 +173,8 @@ class LoginState extends State<EditEquipment> with TickerProviderStateMixin {
         widget.model.id!,
         pickLat.toString(),
         pickLng.toString(),
-        deliveryController.text);
+        deliveryController.text,
+        context);
     print(response);
     if (response == null) {
       print('error');
@@ -304,82 +308,71 @@ class LoginState extends State<EditEquipment> with TickerProviderStateMixin {
                                         fontSize: 15,
                                         fontWeight: FontWeight.w500),
                                   ),
-                                  SizedBox(
-                                    height: 20,
-                                  ),
                                   listImages.isNotEmpty
-                                      ? Container(
-                                          height: 200,
-                                          child: ListView.builder(
-                                              shrinkWrap: true,
-                                              physics:
-                                                  NeverScrollableScrollPhysics(),
-                                              itemCount: listImages.length,
-                                              scrollDirection: Axis.vertical,
-                                              itemBuilder:
-                                                  (BuildContext context,
-                                                      int index) {
-                                                return Padding(
-                                                    padding: EdgeInsets.all(5),
-                                                    child: Container(
-                                                      //padding: EdgeInsets.all(20),
-                                                      height: 120,
-                                                      child: Row(
-                                                        children: [
-                                                          Container(
-                                                              decoration:
-                                                                  BoxDecoration(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            10),
-                                                                color: AppColors
-                                                                    .primaryColor,
-                                                              ),
-                                                              height: 100,
-                                                              width: 100,
-                                                              child: Container(
-                                                                  padding:
-                                                                      EdgeInsets
-                                                                          .all(
-                                                                              5),
-                                                                  height: 95,
-                                                                  width: 95,
-                                                                  child: ClipRRect(
-                                                                      borderRadius: BorderRadius.circular(10.0),
-                                                                      child: Image.file(
-                                                                        File(listImages[index]
-                                                                            .path),
-                                                                        fit: BoxFit
-                                                                            .fill,
-                                                                      )))),
-                                                          SizedBox(
-                                                            width: 20,
-                                                          ),
-                                                          InkWell(
-                                                              onTap: () {
-                                                                setState(() {
-                                                                  listImages
-                                                                      .removeAt(
-                                                                          index);
-                                                                });
-                                                              },
-                                                              child: Text(
-                                                                "Remove",
-                                                                style: TextStyle(
-                                                                    color:
-                                                                        AppColors
-                                                                            .red,
-                                                                    fontSize:
-                                                                        20,
-                                                                    decoration:
-                                                                        TextDecoration
-                                                                            .underline),
-                                                              )),
-                                                        ],
-                                                      ),
-                                                    ));
-                                              }))
+                                      ? ListView.builder(
+                                          shrinkWrap: true,
+                                          physics:
+                                              NeverScrollableScrollPhysics(),
+                                          itemCount: listImages.length,
+                                          scrollDirection: Axis.vertical,
+                                          itemBuilder: (BuildContext context,
+                                              int index) {
+                                            return Container(
+                                              margin:
+                                                  EdgeInsets.only(bottom: 10),
+                                              child: Row(
+                                                children: [
+                                                  Container(
+                                                      padding:
+                                                          EdgeInsets.all(3),
+                                                      height: 95,
+                                                      width: 95,
+                                                      decoration: BoxDecoration(
+                                                          border: Border.all(
+                                                              color: AppColors
+                                                                  .primaryColor,
+                                                              width: 3),
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      10)),
+                                                      child: ClipRRect(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      10.0),
+                                                          child: Image.file(
+                                                            File(listImages[
+                                                                    index]
+                                                                .path),
+                                                            fit: BoxFit.fill,
+                                                          ))),
+                                                  SizedBox(
+                                                    width: 20,
+                                                  ),
+                                                  GestureDetector(
+                                                      onTap: () {
+                                                        setState(() {
+                                                          listImages
+                                                              .removeAt(index);
+                                                        });
+                                                      },
+                                                      child: Text(
+                                                        "Remove",
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .bodyMedium
+                                                            ?.copyWith(
+                                                                color:
+                                                                    Colors.red,
+                                                                decoration:
+                                                                    TextDecoration
+                                                                        .underline),
+                                                      )),
+                                                ],
+                                              ),
+                                            );
+                                          })
                                       : Container(),
                                   GestureDetector(
                                       onTap: () {
@@ -784,6 +777,8 @@ class LoginState extends State<EditEquipment> with TickerProviderStateMixin {
                                           position: _navAnimation!,
                                           //  textDirection: TextDirection.rtl,
                                           child: BaseButton(
+                                              isBusy:
+                                                  model.busy("UpdateMyEquip"),
                                               onPressed: () {
                                                 if (nameController.text.isNotEmpty &&
                                                     listImages.isNotEmpty &&

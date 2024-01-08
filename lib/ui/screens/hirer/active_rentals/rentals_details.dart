@@ -1,12 +1,19 @@
 import 'package:equipro/app/app_setup.logger.dart';
+import 'package:equipro/app/app_setup.router.dart';
 import 'package:equipro/core/model/ActiveRentalsModel.dart';
 import 'package:equipro/ui/screens/chat/chat.dart';
 import 'package:equipro/ui/screens/chat/chats_widget/chat_details.dart';
+import 'package:equipro/ui/screens/hirer/active_rentals/rating.dart';
+// import 'package:equipro/ui/screens/hirer/active_rentals/edit_booking/edit_bookings_screen.dart';
+// import 'package:equipro/ui/screens/hirer/active_rentals/payment/payment.dart';
+// import 'package:equipro/ui/screens/hirer/active_rentals/payment/payment_option_screen.dart';
 import 'package:equipro/ui/screens/hirer/active_rentals/rentals_view_model.dart';
 import 'package:equipro/ui/screens/hirer/book/details_view_model.dart';
 import 'package:equipro/ui/widget/base_button.dart';
 import 'package:equipro/ui/widget/general_button.dart';
-import 'package:equipro/utils/locator.dart';
+import 'package:equipro/ui/widget/noti_widget.dart';
+import 'package:equipro/utils/extensions.dart';
+// import 'package:equipro/utils/locator.dart';
 import 'package:equipro/utils/router/navigation_service.dart';
 import 'package:equipro/utils/screensize.dart';
 import 'package:flutter/material.dart';
@@ -15,10 +22,14 @@ import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 import 'package:equipro/utils/colors.dart';
+import 'package:stacked_services/stacked_services.dart';
 
+import '../../../../app/app_setup.locator.dart';
 import '../../../../core/model/ChatListModel.dart';
 import '../../../widget/equip_tiles.dart';
+import '../../owner/active_rentals/payment_option.dart';
 import '../../profile/edit_profile.dart';
+import 'edit_booking/edit_booking_screen.dart';
 
 class RentalDetails extends StatefulWidget {
   final ActiveRentalsModel feed;
@@ -160,22 +171,51 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                   SizedBox(
                                     height: 10,
                                   ),
-                                  Text(
-                                      widget.feed.requestStatus! == "pending"
-                                          ? "Booking approval pending"
-                                          : widget.feed.requestStatus! ==
-                                                  "accepted"
-                                              ? "Your booking has been approved"
-                                              : "null",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.copyWith(
-                                              color:
-                                                  widget.feed.requestStatus! ==
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                          widget.feed.requestStatus! ==
+                                                  "pending"
+                                              ? "Booking approval pending"
+                                              : widget.feed.requestStatus! ==
+                                                      "accepted"
+                                                  ? "Your booking has been approved"
+                                                  : "null",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium
+                                              ?.copyWith(
+                                                  color: widget.feed
+                                                              .requestStatus! ==
                                                           "pending"
                                                       ? Colors.red
                                                       : Colors.green)),
+                                      if (widget.feed.requestStatus! ==
+                                          "pending")
+                                        GestureDetector(
+                                          onTap: () => Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      EditBookings(
+                                                        model: widget.feed,
+                                                      ))),
+                                          child: Text(
+                                            "Edit booking",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodySmall
+                                                ?.copyWith(
+                                                    color:
+                                                        AppColors.primaryColor,
+                                                    decoration: TextDecoration
+                                                        .underline),
+                                          ),
+                                        )
+                                    ],
+                                  ),
                                   SizedBox(
                                     height: 30,
                                   ),
@@ -381,7 +421,33 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                             Gap(20),
                                             Expanded(
                                               child: Text(
-                                                "${getCurrency(widget.feed.equipments!.address!.contains("Nigeria") ? "NGN" : "GBP")}${widget.feed.equipOrder!.deliveryCharge ?? "0"}",
+                                                "${getCurrency(widget.feed.equipments!.address)} ${widget.feed.equipOrder!.deliveryCharge ?? "0"}",
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyLarge
+                                                    ?.copyWith(
+                                                        fontWeight:
+                                                            FontWeight.w700),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Gap(27),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              "Service Charges:",
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyLarge
+                                                  ?.copyWith(
+                                                      fontWeight:
+                                                          FontWeight.w600),
+                                            ),
+                                            Gap(20),
+                                            Expanded(
+                                              child: Text(
+                                                "${getCurrency(widget.feed.equipments!.address)} ${widget.feed.equipOrder!.serviceCharge ?? "0"}",
                                                 style: Theme.of(context)
                                                     .textTheme
                                                     .bodyLarge
@@ -407,7 +473,7 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                             Gap(80),
                                             Expanded(
                                               child: Text(
-                                                "${getCurrency(widget.feed.equipments!.address!.contains("Nigeria") ? "NGN" : "GBP")}${widget.feed.equipOrder!.discount ?? "0"}",
+                                                "${getCurrency(widget.feed.equipments!.address)} ${widget.feed.equipOrder!.discount ?? "0"}",
                                                 style: Theme.of(context)
                                                     .textTheme
                                                     .bodyLarge
@@ -433,7 +499,7 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                             Gap(45),
                                             Expanded(
                                               child: Text(
-                                                "${getCurrency(widget.feed.equipments!.address!.contains("Nigeria") ? "NGN" : "GBP")}${widget.feed.equipOrder!.totalAmount!.withCommas ?? "0"}",
+                                                "${getCurrency(widget.feed.equipments!.address)} ${widget.feed.equipOrder!.totalAmount!.withCommas ?? "0"}",
                                                 style: Theme.of(context)
                                                     .textTheme
                                                     .bodyLarge
@@ -454,7 +520,7 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                       null)
                                     Column(
                                       children: [
-                                        Gap(10),
+                                        Gap(20),
                                         Text(
                                           "Equipment Delivery Status",
                                           style: Theme.of(context)
@@ -471,29 +537,32 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                   widget.feed.equipDeliveryStatus!
                                               .deliveryStatus !=
                                           null
-                                      ? Container(
-                                          // height:
-                                          //     Responsive.height(context) / 2.8,
-                                          child: ListView.builder(
-                                              shrinkWrap: true,
-                                              physics:
-                                                  NeverScrollableScrollPhysics(),
-                                              itemCount: widget
-                                                  .feed
-                                                  .equipDeliveryStatus!
-                                                  .deliveryStatusLists!
-                                                  .length,
-                                              itemBuilder: (context, i) {
-                                                return Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Row(children: [
+                                      ? ListView.builder(
+                                          shrinkWrap: true,
+                                          physics:
+                                              NeverScrollableScrollPhysics(),
+                                          itemCount: widget
+                                              .feed
+                                              .equipDeliveryStatus!
+                                              .deliveryStatusLists!
+                                              .length,
+                                          itemBuilder: (context, i) {
+                                            return Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Row(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
                                                       Column(
                                                         children: [
                                                           CircleAvatar(
-                                                            radius: 4,
+                                                            radius: 8,
                                                             backgroundColor:
                                                                 AppColors
                                                                     .primaryColor,
@@ -525,54 +594,145 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                                                               i]
                                                                           .deliveryStatus! ==
                                                                       "picked_from_owner"
-                                                                  ? "Equipment Picked Up"
+                                                                  ? "Picked up from owner"
                                                                   : widget.feed.equipDeliveryStatus!.deliveryStatusLists![i].deliveryStatus! ==
                                                                           "delivered_hirer"
-                                                                      ? "Owner confirmed Pick-Up"
+                                                                      ? "Delivered to hirer"
                                                                       : widget.feed.equipDeliveryStatus!.deliveryStatusLists![i].deliveryStatus! ==
                                                                               "picked_from_hirer"
-                                                                          ? "Equipment Returned"
-                                                                          : "Confirmed Returned",
+                                                                          ? "Picked up from hirer"
+                                                                          : widget.feed.equipDeliveryStatus!.deliveryStatusLists![i].deliveryStatus! ==
+                                                                                  "in_use"
+                                                                              ? "Equipment in use"
+                                                                              : widget.feed.equipDeliveryStatus!.deliveryStatusLists![i].deliveryStatus! ==
+                                                                                      "picked_from_owner"
+                                                                                  ? "Picked up from hirer"
+                                                                                  : "Returned to owner",
                                                           //   "Pending",
                                                           style:
                                                               Theme.of(context)
                                                                   .textTheme
-                                                                  .bodyMedium
-                                                                  ?.copyWith(
-                                                                      fontSize:
-                                                                          15)),
+                                                                  .bodyMedium),
                                                     ]),
-                                                    Text(
-                                                      DateFormat(
-                                                        "dd MMM, yyyy, hh:mm aa",
-                                                      ).format(DateTime.parse(widget
-                                                          .feed
-                                                          .equipDeliveryStatus!
-                                                          .deliveryStatusLists![
-                                                              i]
-                                                          .dateCreated!
-                                                          .toString())),
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .bodyMedium
-                                                          ?.copyWith(
-                                                              fontSize: 15),
-                                                    ),
-                                                  ],
-                                                );
-                                              }),
-                                        )
+                                                Gap(20),
+                                                Expanded(
+                                                  child: Text(
+                                                    DateTime.parse(widget
+                                                            .feed
+                                                            .equipDeliveryStatus!
+                                                            .deliveryStatusLists![
+                                                                i]
+                                                            .dateCreated!)
+                                                        .toDate(),
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .bodyMedium
+                                                        ?.copyWith(
+                                                            color: Colors.grey),
+                                                    textAlign: TextAlign.end,
+                                                  ),
+                                                ),
+                                              ],
+                                            );
+                                          })
                                       : Container(
                                           child: Text(
                                             "Process pending",
                                           ),
                                         ),
                                   Gap(30),
-                                  if (widget.feed.requestStatus == "accepted")
+                                  if (widget.feed.requestStatus == "declined")
                                     BaseButton(
-                                      label: "Make Payment",
-                                      onPressed: () {},
+                                      // isBusy: model.busy("InitPayment"),
+                                      label: "Search other related equipments",
+                                      onPressed: () =>
+                                          locator<NavigationService>()
+                                              .clearStackAndShow(Routes.home),
                                     ),
+                                  if (widget.feed.requestStatus == "accepted" &&
+                                      widget.feed.equipPayment == null &&
+                                      widget.feed.equipOrder?.paymentStatus ==
+                                          "0")
+                                    BaseButton(
+                                        isBusy: model.busy("InitPayment"),
+                                        label: "Make Payment",
+                                        onPressed: () => Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    PaymentOptionScreen(
+                                                      feed: widget.feed,
+                                                    )))),
+                                  if (widget.feed.equipPayment != null)
+                                    if (widget.feed.requestStatus ==
+                                            "accepted" &&
+                                        widget.feed.equipPayment[
+                                                "payment_status"] ==
+                                            "1")
+                                      Column(
+                                        children: [
+                                          Gap(10),
+                                          BaseButton(
+                                              isBusy: model.busy("pickedOwner"),
+                                              label:
+                                                  "I Have Received The Equipment ",
+                                              onPressed: () =>
+                                                  model.pickedUpFromOwner(
+                                                      widget.feed.equipOrderId!,
+                                                      context)),
+                                        ],
+                                      ),
+
+                                  if (widget.feed.requestStatus == "received" &&
+                                      widget.feed.equipDeliveryStatus!
+                                              .deliveryStatus ==
+                                          "delivered_hirer")
+                                    Column(
+                                      children: [
+                                        Gap(10),
+                                        BaseButton(
+                                            isBusy: model.busy("pickedOwner"),
+                                            label: "Equipment in use ",
+                                            onPressed: () => model.inUse(
+                                                widget.feed.equipOrderId!,
+                                                context)),
+                                      ],
+                                    ),
+                                  if (widget.feed.equipDeliveryStatus
+                                          ?.deliveryStatus ==
+                                      "in_use")
+                                    BaseButton(
+                                      isBusy: model.busy("returned"),
+                                      label: "Return Equipment",
+                                      onPressed: () => model.pickedFromHirer(
+                                          widget.feed.equipOrderId!, context),
+                                    ),
+
+                                  if (widget.feed.equipDeliveryStatus
+                                              ?.deliveryStatus ==
+                                          "returned" ||
+                                      widget.feed.equipDeliveryStatus
+                                              ?.deliveryStatus ==
+                                          "picked_from_hirer")
+                                    BaseButton(
+                                      // isBusy: model.busy("returned"),
+                                      label: "Give Feedback",
+                                      onPressed: () => Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => Rating(
+                                                    id: widget
+                                                        .feed.equipmentsId!,
+                                                  ))),
+                                    ),
+                                  // if (widget.feed.equipDeliveryStatus
+                                  //         ?.deliveryStatus ==
+                                  //     "delivered_hirer")
+                                  //   BaseButton(
+                                  //     // isBusy: model.busy("InitPayment"),
+                                  //     label: "Return Equipment",
+                                  //     onPressed: () {},
+                                  //   ),
                                   Gap(10),
                                   // GestureDetector(
                                   //   onTap: () => Navigator.push(
