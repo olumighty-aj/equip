@@ -1,3 +1,4 @@
+import 'package:equipro/ui/screens/hirer/book/details_view_model.dart';
 import 'package:equipro/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -51,7 +52,7 @@ class PaymentSuccessfulDialog extends StatelessWidget {
                     ),
                     Gap(37),
                     Text(
-                      "Payment of ${request.data["amount"]} for hiring wheelbarrow has been completed successfully ",
+                      "Payment of ${request.data["amount"].toString().withCommas} for hiring wheelbarrow has been completed successfully ",
                       style: Theme.of(context)
                           .textTheme
                           .bodyMedium

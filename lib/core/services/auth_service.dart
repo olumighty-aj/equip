@@ -199,6 +199,17 @@ class Authentication {
     }
   }
 
+  Future<BaseDataModel?> getHirersProfile() async {
+    try {
+      Response res = await _apiService.getRequest(null, Paths.profile);
+      if (res.statusCode == 200) {
+        return BaseDataModel.fromJson(res.data);
+      }
+    } on DioException catch (e) {
+      _log.e(e.message);
+    }
+  }
+
   Future<BaseDataModel?> updateProfileVisibility(String visibility) async {
     try {
       Response res = await _apiService.postRequest(
@@ -379,6 +390,7 @@ class Authentication {
   }
 
   void updateUser(user) {
+    _log.i("Updating Profile...${user.toJson()}");
     _currentUser = user;
   }
 

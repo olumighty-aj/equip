@@ -97,7 +97,7 @@ class LoginState extends State<Home> {
       }
       print(_permissionGranted);
     }
-
+    print("Getting location");
     var locationData2 = await location.getLocation();
     print("Location");
     print(locationData);
@@ -213,8 +213,9 @@ class LoginState extends State<Home> {
   Widget build(BuildContext context) {
     return ViewModelBuilder<HomeViewModel>.reactive(
         onViewModelReady: (v) async {
-          getUserLocation();
-          v.init();
+          await getUserLocation();
+          v.init(locationData!.latitude.toString(),
+              locationData!.longitude.toString());
         },
         viewModelBuilder: () => HomeViewModel(),
         builder: (context, model, child) {
@@ -243,396 +244,364 @@ class LoginState extends State<Home> {
                   ),
                 ),
               ),
-              body: CustomRefreshIndicator(
-                onRefresh: () => model.newGetEquipments(
-                    locationData != null
-                        ? locationData!.latitude.toString()
-                        : "6.4478",
-                    locationData != null
-                        ? locationData!.longitude.toString()
-                        : "3.4723"),
-                builder: (BuildContext context, Widget child,
-                    IndicatorController controller) {
-                  return Stack(
-                    alignment: Alignment.topCenter,
-                    children: <Widget>[
-                      if (!controller.isIdle)
-                        Positioned(
-                          top: 35.0 * controller.value,
-                          child: SizedBox(
-                            height: 30,
-                            width: 30,
-                            child: CircularProgressIndicator(
-                              color: AppColors.primaryColor,
-                              value: !controller.isLoading
-                                  ? controller.value.clamp(0.0, 1.0)
-                                  : null,
-                            ),
-                          ),
-                        ),
-                      Transform.translate(
-                        offset: Offset(0, 100.0 * controller.value),
-                        child: child,
-                      ),
-                    ],
-                  );
-                  ;
-                },
-                child: Padding(
-                  padding: EdgeInsets.all(20),
+              body: Padding(
+                padding: EdgeInsets.all(14),
+                child: RefreshIndicator(
+                  color: AppColors.primaryColor,
+                  onRefresh: () async {
+                    try {
+                      await model.refresh(
+                          locationData != null
+                              ? locationData!.latitude.toString()
+                              : "6.4478",
+                          locationData != null
+                              ? locationData!.longitude.toString()
+                              : "3.4723");
+                    } catch (e) {
+                      print(e);
+                    }
+                  },
                   child: SingleChildScrollView(
-                    child: AnimationLimiter(
-                      child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: AnimationConfiguration.toStaggeredList(
-                              duration: const Duration(milliseconds: 200),
-                              childAnimationBuilder: (widget) => SlideAnimation(
-                                    horizontalOffset:
-                                        -MediaQuery.of(context).size.width / 4,
-                                    child: FadeInAnimation(
-                                        curve: Curves.fastOutSlowIn,
-                                        child: widget),
+                    physics: AlwaysScrollableScrollPhysics(),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: AnimationConfiguration.toStaggeredList(
+                            duration: const Duration(milliseconds: 200),
+                            childAnimationBuilder: (widget) => SlideAnimation(
+                                  horizontalOffset:
+                                      -MediaQuery.of(context).size.width / 4,
+                                  child: FadeInAnimation(
+                                      curve: Curves.fastOutSlowIn,
+                                      child: widget),
+                                ),
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    "Find an ",
+                                    style: TextStyle(
+                                        fontSize: 30,
+                                        fontWeight: FontWeight.bold),
                                   ),
-                              children: [
-                                Row(
+                                  Text(
+                                    "equipment",
+                                    style: TextStyle(
+                                        color: AppColors.primaryColor,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 30),
+                                  )
+                                ],
+                              ),
+                              Text(
+                                "quickly!",
+                                style: TextStyle(
+                                    fontSize: 30, fontWeight: FontWeight.bold),
+                              ),
+                              Gap(
+                                30,
+                              ),
+                              Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      "Find an ",
-                                      style: TextStyle(
-                                          fontSize: 30,
-                                          fontWeight: FontWeight.bold),
+                                    Expanded(
+                                      child: CustomSearchField(
+                                        hintText:
+                                            "Search by location, name of...",
+                                      ),
                                     ),
-                                    Text(
-                                      "equipment",
-                                      style: TextStyle(
-                                          color: AppColors.primaryColor,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 30),
-                                    )
-                                  ],
-                                ),
-                                Text(
-                                  "quickly!",
-                                  style: TextStyle(
-                                      fontSize: 30,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                SizedBox(
-                                  height: 30,
-                                ),
-                                Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Expanded(
-                                        child: CustomSearchField(
-                                          hintText:
-                                              "Search by location, name of...",
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        width: 10,
-                                      ),
-                                      InkWell(
-                                          onTap: () => Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      NotificationPage())),
-                                          child: Badge(
-                                            label: Text(
-                                              "0",
-                                              style: TextStyle(
-                                                  color: Colors.white),
-                                            ),
-                                            child: SvgPicture.asset(
-                                                "assets/images/notification.svg"),
-                                          ))
-                                    ]),
-                                SizedBox(
-                                  height: 30,
-                                ),
-                                Text(
-                                  "EQUIPMENTS LISTING NEAR YOU",
-                                  style: TextStyle(
-                                      color: Colors.grey,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 15),
-                                ),
-                                SizedBox(
-                                  height: 30,
-                                ),
-                                searchWord.isEmpty
-                                    ? Container(
-                                        height:
-                                            MediaQuery.of(context).size.height *
-                                                0.6,
-                                        child: ViewModelBuilder<
-                                                HomeViewModel>.reactive(
-                                            viewModelBuilder: () =>
-                                                HomeViewModel(),
-                                            onViewModelReady: (vm) {
-                                              vm.newGetEquipments(
-                                                  locationData != null
-                                                      ? locationData!.latitude
-                                                          .toString()
-                                                      : "6.4478",
-                                                  locationData != null
-                                                      ? locationData!.longitude
-                                                          .toString()
-                                                      : "3.4723");
-                                              vm.controller =
-                                                  new ScrollController()
-                                                    ..addListener(() {
-                                                      vm.getEquipmentMore(
-                                                          //  "6.4478", "3.4723"
-                                                          locationData!.latitude
-                                                              .toString(),
-                                                          locationData!
-                                                              .longitude
-                                                              .toString());
-                                                    });
-                                            },
-                                            builder: (context, v, child) {
-                                              if (v.fetchState ==
-                                                  LoadingState.loading) {
-                                                return Container(
-                                                    height: 400,
-                                                    padding:
-                                                        EdgeInsets.all(20.0),
-                                                    child: Center(
-                                                      child: Shimmer.fromColors(
-                                                          direction:
-                                                              ShimmerDirection
-                                                                  .ltr,
-                                                          period: Duration(
-                                                              seconds: 2),
-                                                          child: ListView(
-                                                            scrollDirection:
-                                                                Axis.vertical,
-                                                            // shrinkWrap: true,
-                                                            children: [
-                                                              0,
-                                                              1,
-                                                              2,
-                                                              3
-                                                            ]
-                                                                .map((_) =>
-                                                                    LoaderWidget())
-                                                                .toList(),
-                                                          ),
-                                                          baseColor:
-                                                              AppColors.white,
-                                                          highlightColor:
-                                                              AppColors.grey),
-                                                    ));
-                                              } else if (v.fetchState ==
-                                                  LoadingState.done) {
-                                                if (v.packageList.isNotEmpty) {
-                                                  return SingleChildScrollView(
-                                                      scrollDirection:
-                                                          Axis.vertical,
-                                                      controller: v.controller,
-                                                      physics:
-                                                          BouncingScrollPhysics(),
-                                                      // shrinkWrap: true,
-                                                      child: Column(
-                                                        children: [
-                                                          Column(
-                                                              children: v
-                                                                  .packageList
-                                                                  .map((feed) =>
-                                                                      EquipTiles(
-                                                                          model:
-                                                                              feed))
-                                                                  .toList()),
-                                                          SizedBox(height: 20),
-                                                          v.loadingState ==
-                                                                  LoadingState
-                                                                      .loading
-                                                              ? Container(
-                                                                  height: 400,
-                                                                  padding:
-                                                                      EdgeInsets
-                                                                          .all(
-                                                                              20.0),
-                                                                  child: Center(
-                                                                    child: Shimmer.fromColors(
-                                                                        direction: ShimmerDirection.ltr,
-                                                                        period: Duration(seconds: 2),
-                                                                        child: ListView(
-                                                                          scrollDirection:
-                                                                              Axis.vertical,
-                                                                          // shrinkWrap: true,
-                                                                          children:
-                                                                              [
-                                                                            0,
-                                                                            1,
-                                                                          ].map((_) => LoaderWidget()).toList(),
-                                                                        ),
-                                                                        baseColor: AppColors.white,
-                                                                        highlightColor: AppColors.grey),
-                                                                  ))
-                                                              : SizedBox(
-                                                                  height: 1)
-                                                        ],
-                                                      ));
-                                                } else {
-                                                  return Center(
-                                                      child: Column(
-                                                    // mainAxisAlignment:
-                                                    //     MainAxisAlignment
-                                                    //         .center,
-                                                    children: [
-                                                      Gap(100),
-                                                      SvgPicture.asset(
-                                                          AppSvgs.emptyRental),
-                                                      Gap(30),
-                                                      Text(
-                                                        "No available equipments near you",
-                                                        style: Theme.of(context)
-                                                            .textTheme
-                                                            .bodyMedium
-                                                            ?.copyWith(
-                                                                fontSize: 15,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w600,
-                                                                color: Colors
-                                                                    .grey),
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                      ),
-                                                      // SizedBox(
-                                                      //   height: 30,
-                                                      // ),
-                                                    ],
-                                                  ));
-                                                }
-                                              } else {
-                                                return Center(
-                                                    child: Column(
-                                                  children: <Widget>[
-                                                    SizedBox(
-                                                      height: 100,
-                                                    ),
-                                                    Text(
-                                                      'Network error',
-                                                      style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 20,
-                                                      ),
-                                                    ),
-                                                    SizedBox(
-                                                      height: 10,
-                                                    ),
-                                                    Text('Network error'),
-                                                    SizedBox(
-                                                      height: 100,
-                                                    ),
-                                                  ],
-                                                ));
-                                              }
-                                            }),
-                                      )
-                                    : Container(
-                                        height: Responsive.height(context) / 2,
-                                        child: FutureBuilder<
-                                                List<EquipmentModel>>(
-                                            future: model
-                                                .searchEquipments(searchWord),
-                                            builder: (context, snapshot) {
-                                              if (!snapshot.hasData) {
-                                                return Container(
-                                                    height: 400,
-                                                    padding:
-                                                        EdgeInsets.all(20.0),
-                                                    child: Center(
-                                                      child: Shimmer.fromColors(
-                                                          direction:
-                                                              ShimmerDirection
-                                                                  .ltr,
-                                                          period: Duration(
-                                                              seconds: 2),
-                                                          child: ListView(
-                                                            scrollDirection:
-                                                                Axis.vertical,
-                                                            // shrinkWrap: true,
-                                                            children: [
-                                                              0,
-                                                              1,
-                                                              2,
-                                                              3
-                                                            ]
-                                                                .map((_) =>
-                                                                    LoaderWidget())
-                                                                .toList(),
-                                                          ),
-                                                          baseColor:
-                                                              AppColors.white,
-                                                          highlightColor:
-                                                              AppColors.grey),
-                                                    ));
-                                              } else if (snapshot
-                                                  .data!.isNotEmpty) {
-                                                return ListView(
-                                                    children: snapshot.data!
-                                                        .map((feed) => Padding(
-                                                            padding:
-                                                                EdgeInsets.all(
-                                                                    10),
-                                                            child: EquipTiles(
-                                                                model: feed)))
-                                                        .toList());
-                                              } else if (snapshot.hasError) {
-                                                return Center(
-                                                    child: Column(
-                                                  children: <Widget>[
-                                                    SizedBox(
-                                                      height: 10,
-                                                    ),
-                                                    Text(
-                                                      'Network error',
-                                                      style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 20,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ));
-                                              } else {
-                                                return Center(
-                                                    child: Column(
-                                                  children: <Widget>[
-                                                    SizedBox(
-                                                      height: 10,
-                                                    ),
-                                                    Text(
-                                                      'Equipment not found',
-                                                      style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 20,
-                                                      ),
-                                                    ),
-                                                    SizedBox(
-                                                      height: 10,
-                                                    ),
-                                                    Text(
-                                                      'Equipment not found',
-                                                    ),
-                                                    SizedBox(
-                                                      height: 10,
-                                                    ),
-                                                  ],
-                                                ));
-                                              }
-                                            }),
-                                      ),
-                              ])),
-                    ),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    GestureDetector(
+                                        onTap: () => Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    NotificationPage())),
+                                        child: SvgPicture.asset(
+                                            "assets/images/notification.svg"))
+                                  ]),
+                              SizedBox(
+                                height: 30,
+                              ),
+                              Text(
+                                "EQUIPMENTS LISTING NEAR YOU",
+                                style: TextStyle(
+                                    color: Colors.grey,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15),
+                              ),
+                              Gap(
+                                30,
+                              ),
+                              NewEquipListBuilderHirer(
+                                model: model,
+                                locationData: locationData,
+                              )
+                              // searchWord.isEmpty
+                              //     ? Container(
+                              //         height:
+                              //             MediaQuery.of(context).size.height *
+                              //                 0.6,
+                              //         child: ViewModelBuilder<
+                              //                 HomeViewModel>.reactive(
+                              //             viewModelBuilder: () =>
+                              //                 HomeViewModel(),
+                              //             onViewModelReady: (vm) {
+                              //               vm.newGetEquipments(
+                              //                   locationData != null
+                              //                       ? locationData!.latitude
+                              //                           .toString()
+                              //                       : "6.4478",
+                              //                   locationData != null
+                              //                       ? locationData!.longitude
+                              //                           .toString()
+                              //                       : "3.4723");
+                              //               vm.controller =
+                              //                   new ScrollController()
+                              //                     ..addListener(() {
+                              //                       vm.getEquipmentMore(
+                              //                           //  "6.4478", "3.4723"
+                              //                           locationData!.latitude
+                              //                               .toString(),
+                              //                           locationData!.longitude
+                              //                               .toString());
+                              //                     });
+                              //             },
+                              //             builder: (context, v, child) {
+                              //               if (v.fetchState ==
+                              //                   LoadingState.loading) {
+                              //                 return Container(
+                              //                     height: 400,
+                              //                     padding: EdgeInsets.all(20.0),
+                              //                     child: Center(
+                              //                       child: Shimmer.fromColors(
+                              //                           direction:
+                              //                               ShimmerDirection
+                              //                                   .ltr,
+                              //                           period: Duration(
+                              //                               seconds: 2),
+                              //                           child: ListView(
+                              //                             scrollDirection:
+                              //                                 Axis.vertical,
+                              //                             // shrinkWrap: true,
+                              //                             children: [0, 1, 2, 3]
+                              //                                 .map((_) =>
+                              //                                     LoaderWidget())
+                              //                                 .toList(),
+                              //                           ),
+                              //                           baseColor:
+                              //                               AppColors.white,
+                              //                           highlightColor:
+                              //                               AppColors.grey),
+                              //                     ));
+                              //               } else if (v.fetchState ==
+                              //                   LoadingState.done) {
+                              //                 if (v.packageList.isNotEmpty) {
+                              //                   return SingleChildScrollView(
+                              //                       scrollDirection:
+                              //                           Axis.vertical,
+                              //                       controller: v.controller,
+                              //                       physics:
+                              //                           BouncingScrollPhysics(),
+                              //                       // shrinkWrap: true,
+                              //                       child: Column(
+                              //                         children: [
+                              //                           Column(
+                              //                               children: v
+                              //                                   .packageList
+                              //                                   .map((feed) =>
+                              //                                       EquipTiles(
+                              //                                           model:
+                              //                                               feed))
+                              //                                   .toList()),
+                              //                           SizedBox(height: 20),
+                              //                           v.loadingState ==
+                              //                                   LoadingState
+                              //                                       .loading
+                              //                               ? Container(
+                              //                                   height: 400,
+                              //                                   padding:
+                              //                                       EdgeInsets
+                              //                                           .all(
+                              //                                               20.0),
+                              //                                   child: Center(
+                              //                                     child: Shimmer
+                              //                                         .fromColors(
+                              //                                             direction: ShimmerDirection
+                              //                                                 .ltr,
+                              //                                             period: Duration(
+                              //                                                 seconds:
+                              //                                                     2),
+                              //                                             child:
+                              //                                                 ListView(
+                              //                                               scrollDirection:
+                              //                                                   Axis.vertical,
+                              //                                               // shrinkWrap: true,
+                              //                                               children:
+                              //                                                   [
+                              //                                                 0,
+                              //                                                 1,
+                              //                                               ].map((_) => LoaderWidget()).toList(),
+                              //                                             ),
+                              //                                             baseColor: AppColors
+                              //                                                 .white,
+                              //                                             highlightColor:
+                              //                                                 AppColors.grey),
+                              //                                   ))
+                              //                               : SizedBox(
+                              //                                   height: 1)
+                              //                         ],
+                              //                       ));
+                              //                 } else {
+                              //                   return Center(
+                              //                       child: Column(
+                              //                     // mainAxisAlignment:
+                              //                     //     MainAxisAlignment
+                              //                     //         .center,
+                              //                     children: [
+                              //                       Gap(100),
+                              //                       SvgPicture.asset(
+                              //                           AppSvgs.emptyRental),
+                              //                       Gap(30),
+                              //                       Text(
+                              //                         "No available equipments near you",
+                              //                         style: Theme.of(context)
+                              //                             .textTheme
+                              //                             .bodyMedium
+                              //                             ?.copyWith(
+                              //                                 fontSize: 15,
+                              //                                 fontWeight:
+                              //                                     FontWeight
+                              //                                         .w600,
+                              //                                 color:
+                              //                                     Colors.grey),
+                              //                         textAlign:
+                              //                             TextAlign.center,
+                              //                       ),
+                              //                       // SizedBox(
+                              //                       //   height: 30,
+                              //                       // ),
+                              //                     ],
+                              //                   ));
+                              //                 }
+                              //               } else {
+                              //                 return Center(
+                              //                     child: Column(
+                              //                   children: <Widget>[
+                              //                     SizedBox(
+                              //                       height: 100,
+                              //                     ),
+                              //                     Text(
+                              //                       'Network error',
+                              //                       style: TextStyle(
+                              //                         fontWeight:
+                              //                             FontWeight.bold,
+                              //                         fontSize: 20,
+                              //                       ),
+                              //                     ),
+                              //                     SizedBox(
+                              //                       height: 10,
+                              //                     ),
+                              //                     Text('Network error'),
+                              //                     SizedBox(
+                              //                       height: 100,
+                              //                     ),
+                              //                   ],
+                              //                 ));
+                              //               }
+                              //             }),
+                              //       )
+                              //     : Container(
+                              //         height: Responsive.height(context) / 2,
+                              //         child: FutureBuilder<
+                              //                 List<EquipmentModel>>(
+                              //             future: model
+                              //                 .searchEquipments(searchWord),
+                              //             builder: (context, snapshot) {
+                              //               if (model.packageList.isEmpty) {
+                              //                 return Container(
+                              //                     height: 400,
+                              //                     padding: EdgeInsets.all(20.0),
+                              //                     child: Center(
+                              //                       child: Shimmer.fromColors(
+                              //                           direction:
+                              //                               ShimmerDirection
+                              //                                   .ltr,
+                              //                           period: Duration(
+                              //                               seconds: 2),
+                              //                           child: ListView(
+                              //                             scrollDirection:
+                              //                                 Axis.vertical,
+                              //                             // shrinkWrap: true,
+                              //                             children: [0, 1, 2, 3]
+                              //                                 .map((_) =>
+                              //                                     LoaderWidget())
+                              //                                 .toList(),
+                              //                           ),
+                              //                           baseColor:
+                              //                               AppColors.white,
+                              //                           highlightColor:
+                              //                               AppColors.grey),
+                              //                     ));
+                              //               } else if (model
+                              //                   .packageList.isNotEmpty) {
+                              //                 return ListView(
+                              //                     children: model.packageList
+                              //                         .map((feed) => Padding(
+                              //                             padding:
+                              //                                 EdgeInsets.all(
+                              //                                     10),
+                              //                             child: EquipTiles(
+                              //                                 model: feed)))
+                              //                         .toList());
+                              //               } else if (snapshot.hasError) {
+                              //                 return Center(
+                              //                     child: Column(
+                              //                   children: <Widget>[
+                              //                     SizedBox(
+                              //                       height: 10,
+                              //                     ),
+                              //                     Text(
+                              //                       'Network error',
+                              //                       style: TextStyle(
+                              //                         fontWeight:
+                              //                             FontWeight.bold,
+                              //                         fontSize: 20,
+                              //                       ),
+                              //                     ),
+                              //                   ],
+                              //                 ));
+                              //               } else {
+                              //                 return Center(
+                              //                     child: Column(
+                              //                   children: <Widget>[
+                              //                     SizedBox(
+                              //                       height: 10,
+                              //                     ),
+                              //                     Text(
+                              //                       'Equipment not found',
+                              //                       style: TextStyle(
+                              //                         fontWeight:
+                              //                             FontWeight.bold,
+                              //                         fontSize: 20,
+                              //                       ),
+                              //                     ),
+                              //                     SizedBox(
+                              //                       height: 10,
+                              //                     ),
+                              //                     Text(
+                              //                       'Equipment not found',
+                              //                     ),
+                              //                     SizedBox(
+                              //                       height: 10,
+                              //                     ),
+                              //                   ],
+                              //                 ));
+                              //               }
+                              //             }),
+                              //       ),
+                            ])),
                   ),
                 ),
               ),
@@ -640,5 +609,82 @@ class LoginState extends State<Home> {
             ),
           );
         });
+  }
+}
+
+class NewEquipListBuilderHirer extends StatelessWidget {
+  final HomeViewModel model;
+  final dynamic locationData;
+  const NewEquipListBuilderHirer(
+      {Key? key, required this.model, this.locationData})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Builder(builder: (context) {
+      if (model.fetchState == LoadingState.loading) {
+        return Container(
+            height: 400,
+            padding: EdgeInsets.all(20.0),
+            child: Center(
+              child: Shimmer.fromColors(
+                  direction: ShimmerDirection.ltr,
+                  period: Duration(seconds: 2),
+                  child: ListView(
+                    scrollDirection: Axis.vertical,
+                    // shrinkWrap: true,
+                    children: [0, 1, 2, 3].map((_) => LoaderWidget()).toList(),
+                  ),
+                  baseColor: AppColors.white,
+                  highlightColor: AppColors.grey),
+            ));
+      } else if (model.fetchState == LoadingState.done &&
+          model.packageList.isNotEmpty) {
+        return Column(
+            children: List.generate(model.packageList.length,
+                (index) => EquipTiles(model: model.packageList[index])));
+
+        // model.packageList
+        //     .map((feed) => OwnerEquipTiles(model: feed))
+        //     .toList()),
+        // ;
+      } else if (model.fetchState == LoadingState.done &&
+          model.packageList.isEmpty) {
+        return Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Gap(100),
+              SvgPicture.asset(AppSvgs.emptyRental),
+              Gap(5),
+              Text("No available equipments near you")
+            ],
+          ),
+        );
+      } else if (locationData == null) {
+        return Center(
+            child: Column(
+          children: [
+            Gap(100),
+            SizedBox(
+              height: 20,
+              width: 20,
+              child: CircularProgressIndicator(
+                color: AppColors.primaryColor,
+                strokeWidth: 3,
+              ),
+            ),
+          ],
+        ));
+      } else {
+        return Center(
+            child: Column(
+          children: [
+            Gap(100),
+            Text("Network Error"),
+          ],
+        ));
+      }
+    });
   }
 }

@@ -15,8 +15,8 @@ class SettingsViewModel extends BaseViewModel {
   bool isProfileVisible = true;
 
   void changeNotificationState(val, context) async {
-    BaseDataModel? model = await _user
-        .updateNotificationSettings(isNotificationEnabled ? "1" : "0");
+    BaseDataModel? model =
+        await _user.updateNotificationSettings(val ? "1" : "0");
     if (model?.status == true) {
       isNotificationEnabled = val;
       notifyListeners();
@@ -29,17 +29,20 @@ class SettingsViewModel extends BaseViewModel {
   }
 
   void getSettings() async {
-    BaseDataModel? res = await _activities.getSettings();
+    BaseDataModel? res =
+        await runBusyFuture(_activities.getSettings(), busyObject: "settings");
     if (res?.status == true) {
       _log.i(res?.toJson());
+      isProfileVisible = setTrueFalse(res!.payload["profile_visibility"]);
+      isNotificationEnabled = setTrueFalse(res.payload["notification"]);
+      notifyListeners();
     } else {
       _log.e(res?.toJson());
     }
   }
 
   void changeProfileVisibilityState(val, context) async {
-    BaseDataModel? model =
-        await _user.updateProfileVisibility(isProfileVisible ? "1" : "0");
+    BaseDataModel? model = await _user.updateProfileVisibility(val ? "1" : "0");
     if (model?.status == true) {
       isProfileVisible = val;
       notifyListeners();
@@ -48,6 +51,17 @@ class SettingsViewModel extends BaseViewModel {
     } else {
       showErrorToast(model?.message ?? "Profile update failed",
           context: context);
+    }
+  }
+
+  setTrueFalse(String num) {
+    switch (num) {
+      case "0":
+        return false;
+      case "1":
+        return true;
+      default:
+        return false;
     }
   }
 }

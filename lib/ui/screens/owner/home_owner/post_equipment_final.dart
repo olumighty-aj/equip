@@ -359,8 +359,7 @@ class LoginState extends State<PostEquipmentFinal>
                                             newValue == "Day 1"
                                                 ? selectedPerNumber = "1"
                                                 : newValue == "Week 7"
-                                                    ? selectedPerNumber =
-                                                        "Month 30"
+                                                    ? selectedPerNumber = "7"
                                                     : selectedPerNumber = "30";
                                           });
                                         },

@@ -4,6 +4,7 @@ import 'package:equipro/core/model/TransactionModel.dart';
 import 'package:equipro/core/model/success_model.dart';
 import 'package:equipro/core/services/auth_service.dart';
 import 'package:equipro/ui/screens/drawer.dart';
+import 'package:equipro/ui/screens/hirer/book/details_view_model.dart';
 import 'package:equipro/ui/screens/owner/earnings/earnings_view_model.dart';
 import 'package:equipro/ui/screens/profile/edit_profile.dart';
 import 'package:equipro/ui/widget/bank_tiles.dart';
@@ -133,7 +134,7 @@ class LoginState extends State<EarningPage> with TickerProviderStateMixin {
                                           ?.copyWith(fontSize: 15)),
                                   TextSpan(
                                       text:
-                                          "${getCurrency(locator<Authentication>().currentUser.country)}${model.earningsWallet!["content"]["balance_amount"].toString()}",
+                                          "${getCurrency(locator<Authentication>().currentUser.country)}${model.earningsWallet!["content"]["balance_amount"].toString().withCommas}",
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodyMedium
@@ -141,23 +142,58 @@ class LoginState extends State<EarningPage> with TickerProviderStateMixin {
                                               fontSize: 18,
                                               color: AppColors.primaryColor))
                                 ])),
-                                Gap(29),
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: BaseButton(
-                                        label: "Withdraw",
-                                        hasBorder: true,
-                                        onPressed: null,
-                                      ),
-                                    ),
-                                    Expanded(child: SizedBox()),
-                                  ],
-                                ),
-                                Gap(32),
+                                // Gap(29),
+                                // Row(
+                                //   children: [
+                                //     Expanded(
+                                //       child: BaseButton(
+                                //         label: "Withdraw",
+                                //         hasBorder: true,
+                                //         onPressed: null,
+                                //       ),
+                                //     ),
+                                //     Expanded(child: SizedBox()),
+                                //   ],
+                                // ),
+                                Gap(12),
                                 Divider(
                                   color: Colors.grey,
                                 ),
+                                Gap(32),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      "Payment Method",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium
+                                          ?.copyWith(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w600),
+                                    ),
+                                    Visibility(
+                                      visible: model.paymentMethodEmpty,
+                                      child: GestureDetector(
+                                        onTap: model.addPaymentMethod,
+                                        child: Icon(
+                                          Icons.add,
+                                          color: AppColors.primaryColor,
+                                        ),
+                                      ),
+                                      replacement: GestureDetector(
+                                        onTap: () {},
+                                        child: Icon(
+                                          Icons.delete_outline,
+                                          color: AppColors.primaryColor,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Gap(12),
+                                Divider(),
                                 Gap(32),
                                 Text(
                                   "Transaction History",
@@ -190,7 +226,14 @@ class LoginState extends State<EarningPage> with TickerProviderStateMixin {
                                     .earningsWallet!["content"]
                                         ["transaction_history"]
                                     .isEmpty)
-                                  Text("No transactions have been made"),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      SvgPicture.asset(AppSvgs.emptyChat),
+                                      Gap(5),
+                                      Text("No transactions have been made"),
+                                    ],
+                                  ),
                               ],
                             ),
                           // if (model.wallet == null)
@@ -285,7 +328,7 @@ class TransactionHistoryTile extends StatelessWidget {
             ),
           ),
           Text(
-            "${getCurrency(country)} ${transactions["amount"]}",
+            "${getCurrency(country)} ${transactions["amount"].toString().withCommas}",
             style: Theme.of(context)
                 .textTheme
                 .bodyLarge

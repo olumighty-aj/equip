@@ -159,12 +159,9 @@ class EquipTiles extends StatelessWidget {
 }
 
 String getCurrency(country) {
-  switch (country) {
-    case "Nigeria":
-      return "NGN";
-    case "London":
-      return "GBP";
-    default:
-      return "NGN";
+  if (country == "Nigeria") {
+    return "NGN";
+  } else {
+    return "GBP";
   }
 }

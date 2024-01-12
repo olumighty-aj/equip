@@ -57,6 +57,17 @@ class Activities {
     return BaseDataModel.fromJson(res.data);
   }
 
+  Future<BaseDataModel?> extendEquipmentBook(data) async {
+    try {
+      Response res = await _api.postRequest(data, Paths.extendBooking);
+      if (res.statusCode == 200) {
+        return BaseDataModel.fromJson(res.data);
+      }
+    } on DioException catch (e) {
+      _log.e(e.message);
+    }
+  }
+
   Future<Map<String, dynamic>> createPayment(String orderID, String receiptRef,
       String amount, String paymentType, String currency) async {
     Response res = await _api.postRequest({
@@ -695,6 +706,17 @@ class Activities {
                   "TimeoutException after 0:00:40.000000: Future not completed"
               ? "Your internet is not stable kindly reconnect and try again"
               : e.toString());
+    }
+  }
+
+  Future<BaseDataModel?> getActiveRentals(String type) async {
+    try {
+      Response res = await _api.getRequest(null, Paths.active_rentals + type);
+      if (res.statusCode == 200) {
+        return BaseDataModel.fromJson(res.data);
+      }
+    } on DioException catch (e) {
+      _log.e("Active Rentals DioException Message: ${e.message}");
     }
   }
 

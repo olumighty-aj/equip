@@ -33,6 +33,7 @@ class EquipmentModel {
     String? availFrom,
     String? availTo,
     String? quantity,
+    String? hirersId,
     String? description,
     dynamic latitude,
     dynamic longitude,
@@ -49,6 +50,7 @@ class EquipmentModel {
     _id = id;
     _userId = userId;
     _ownersId = ownersId;
+    _hirersId = hirersId;
     _equipName = equipName;
     _equipImagesId = equipImagesId;
     _costOfHire = costOfHire;
@@ -72,6 +74,7 @@ class EquipmentModel {
 
   EquipmentModel.fromJson(dynamic json) {
     _id = json['ID'];
+    _hirersId = json["hirers_id"];
     _userId = json['user_id'];
     _ownersId = json['owners_id'];
     _equipName = json['equip_name'];
@@ -111,6 +114,7 @@ class EquipmentModel {
     _averageRating = json['average_rating'];
   }
   String? _id;
+  String? _hirersId;
   String? _userId;
   String? _ownersId;
   String? _equipName;
@@ -135,6 +139,7 @@ class EquipmentModel {
   String? _averageRating;
   EquipmentModel copyWith({
     String? id,
+    String? hirersId,
     String? userId,
     String? ownersId,
     String? equipName,
@@ -160,6 +165,7 @@ class EquipmentModel {
   }) =>
       EquipmentModel(
         id: id ?? _id,
+        hirersId: hirersId ?? _hirersId,
         userId: userId ?? _userId,
         ownersId: ownersId ?? _ownersId,
         equipName: equipName ?? _equipName,
@@ -185,6 +191,7 @@ class EquipmentModel {
   String? get id => _id;
   String? get userId => _userId;
   String? get ownersId => _ownersId;
+  String? get hirersId => _hirersId;
   String? get equipName => _equipName;
   String? get equipImagesId => _equipImagesId;
   String? get local_state => _local_state;
@@ -211,6 +218,7 @@ class EquipmentModel {
     map['ID'] = _id;
     map['user_id'] = _userId;
     map['owners_id'] = _ownersId;
+    map['hirers_id'] = _hirersId;
     map['equip_name'] = _equipName;
     map['equip_images_id'] = _equipImagesId;
     map['cost_of_hire'] = _costOfHire;

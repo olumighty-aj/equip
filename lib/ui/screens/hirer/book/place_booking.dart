@@ -28,6 +28,7 @@ import 'package:stacked_services/stacked_services.dart';
 import '../../../../app/app_setup.locator.dart';
 import '../../../../app/app_setup.logger.dart';
 import '../../../../app/app_setup.router.dart';
+import '../../../../core/services/auth_service.dart';
 import '../../../../utils/text_styles.dart';
 
 class PlaceBooking extends StatefulWidget {
@@ -267,10 +268,12 @@ class PlaceBookingState extends State<PlaceBooking>
                                             return ChatDetailsPage(
                                                 feed: ChatListModel(
                                                     id: widget.model.userId,
-                                                    userId:
-                                                        widget.model.ownersId,
+                                                    userId: locator<
+                                                            Authentication>()
+                                                        .currentUser
+                                                        .id,
                                                     chatWithId:
-                                                        widget.model.userId,
+                                                        widget.model.hirersId,
                                                     messageCount: "",
                                                     lastMessage: "",
                                                     dateCreated: "",

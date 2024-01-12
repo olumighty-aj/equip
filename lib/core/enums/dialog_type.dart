@@ -5,5 +5,6 @@ enum DialogType {
   notification,
   bookingRequest,
   returnEquip,
-  paymentSuccessful
+  paymentSuccessful,
+  paymentMethod
 }

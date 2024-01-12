@@ -239,6 +239,10 @@ class ProfileViewModel extends BaseViewModel {
     }
   }
 
+  void getHirersProfile() async {
+    BaseDataModel? res = await _authentication.getHirersProfile();
+  }
+
   void verifyKYC() async {
     BaseDataModel res =
         await runBusyFuture(_authentication.getKYC(), busyObject: "verify");

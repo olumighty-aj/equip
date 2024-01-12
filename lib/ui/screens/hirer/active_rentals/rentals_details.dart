@@ -73,7 +73,7 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
     return ViewModelBuilder<RentalsViewModel>.reactive(
         viewModelBuilder: () => RentalsViewModel(),
         builder: (context, model, child) {
-          getLogger("className").i(widget.feed.toJson());
+          // getLogger("className").i(widget.feed.toJson());
           return Scaffold(
             key: _scaffoldKey,
             appBar: AppBar(
@@ -447,7 +447,7 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                             Gap(20),
                                             Expanded(
                                               child: Text(
-                                                "${getCurrency(widget.feed.equipments!.address)} ${widget.feed.equipOrder!.serviceCharge ?? "0"}",
+                                                "${getCurrency(widget.feed.equipments!.address)} ${widget.feed.equipOrder!.serviceCharge!.withCommas ?? "0"}",
                                                 style: Theme.of(context)
                                                     .textTheme
                                                     .bodyLarge
@@ -640,7 +640,41 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                             "Process pending",
                                           ),
                                         ),
+                                  // if (widget.feed.equipDeliveryStatus != null &&
+                                  //     widget.feed.equipDeliveryStatus!
+                                  //             .deliveryStatus ==
+                                  //         "in_use")
+                                  //   Column(
+                                  //     children: [
+                                  //       Gap(10),
+                                  //       GestureDetector(
+                                  //           onTap: () {},
+                                  //           child: Text(
+                                  //             "Extend booking",
+                                  //             style: Theme.of(context)
+                                  //                 .textTheme
+                                  //                 .bodyLarge
+                                  //                 ?.copyWith(
+                                  //                     color: AppColors
+                                  //                         .primaryColor),
+                                  //           )),
+                                  //     ],
+                                  //   ),
                                   Gap(30),
+                                  if (widget.feed.requestStatus == "in_use")
+                                    GestureDetector(
+                                      child: Text(
+                                        "Extend Booking",
+                                        textAlign: TextAlign.center,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyLarge
+                                            ?.copyWith(
+                                                color: AppColors.primaryColor,
+                                                decoration:
+                                                    TextDecoration.underline),
+                                      ),
+                                    ),
                                   if (widget.feed.requestStatus == "declined")
                                     BaseButton(
                                       // isBusy: model.busy("InitPayment"),
@@ -650,19 +684,24 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                               .clearStackAndShow(Routes.home),
                                     ),
                                   if (widget.feed.requestStatus == "accepted" &&
-                                      widget.feed.equipPayment == null &&
+                                      // widget.feed.equipPayment == null &&
                                       widget.feed.equipOrder?.paymentStatus ==
                                           "0")
-                                    BaseButton(
-                                        isBusy: model.busy("InitPayment"),
-                                        label: "Make Payment",
-                                        onPressed: () => Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    PaymentOptionScreen(
-                                                      feed: widget.feed,
-                                                    )))),
+                                    Column(
+                                      children: [
+                                        Gap(10),
+                                        BaseButton(
+                                            isBusy: model.busy("InitPayment"),
+                                            label: "Make Payment",
+                                            onPressed: () => Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        PaymentOptionScreen(
+                                                          feed: widget.feed,
+                                                        )))),
+                                      ],
+                                    ),
                                   if (widget.feed.equipPayment != null)
                                     if (widget.feed.requestStatus ==
                                             "accepted" &&
@@ -701,11 +740,18 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                   if (widget.feed.equipDeliveryStatus
                                           ?.deliveryStatus ==
                                       "in_use")
-                                    BaseButton(
-                                      isBusy: model.busy("returned"),
-                                      label: "Return Equipment",
-                                      onPressed: () => model.pickedFromHirer(
-                                          widget.feed.equipOrderId!, context),
+                                    Column(
+                                      children: [
+                                        Gap(10),
+                                        BaseButton(
+                                          isBusy: model.busy("returned"),
+                                          label: "Return Equipment",
+                                          onPressed: () =>
+                                              model.pickedFromHirer(
+                                                  widget.feed.equipOrderId!,
+                                                  context),
+                                        ),
+                                      ],
                                     ),
 
                                   if (widget.feed.equipDeliveryStatus
@@ -797,7 +843,6 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                   //                 TextDecoration.underline),
                                   //   ),
                                   // )
-
                                   // widget.feed.requestStatus! == "returned"
                                   //     ? GeneralButton(
                                   //         onPressed: () {

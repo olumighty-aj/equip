@@ -74,9 +74,9 @@ class _LoginState extends State<Login> {
   }
 
   @override
-  void initState() {
+  void initState() async {
+    await getUserLocation();
     _progressService.registerProgressListener(_showDialog);
-    getUserLocation();
     super.initState();
   }
 

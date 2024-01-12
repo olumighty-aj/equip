@@ -1,4 +1,5 @@
 import 'package:equipro/app/app_setup.logger.dart';
+import 'package:equipro/core/enums/dialog_type.dart';
 import 'package:equipro/core/model/ActiveRentalsModel.dart';
 import 'package:equipro/core/model/base_model.dart';
 import 'package:equipro/core/model/error_model.dart';
@@ -23,10 +24,13 @@ class EarningsViewModel extends BaseViewModel {
   final _log = getLogger("EarningsViewModel");
   final Authentication _authentication = locator<Authentication>();
   final _navigationService = locator<NavigationService>();
+  final _dialogService = locator<DialogService>();
   final Activities _activities = locator<Activities>();
   final PaymentService _paymentService = locator<PaymentService>();
 
   TransactionModel? wallet;
+
+  bool paymentMethodEmpty = true;
 
   String? get country => _authentication.currentUser.country;
 
@@ -66,6 +70,11 @@ class EarningsViewModel extends BaseViewModel {
       notifyListeners();
       return SuccessModel(result.data);
     }
+  }
+
+  void addPaymentMethod() async {
+    DialogResponse? res = await _dialogService.showCustomDialog(
+        variant: DialogType.paymentMethod, barrierDismissible: false);
   }
 
   getWalletBalance(context) async {

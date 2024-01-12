@@ -265,19 +265,19 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final deviceHeight = MediaQuery.of(context).size.height;
-    final deviceWidth = MediaQuery.of(context).size.width;
-    final messageList = ListView.builder(
-      controller: scrollController,
-      scrollDirection: Axis.vertical,
-      itemCount: chatResponse.length,
-      itemBuilder: (BuildContext context, int index) {
-        return ChatBubble(
-          message: chatResponse[index],
-          authentication: _authentication,
-        );
-      },
-    );
+    // final deviceHeight = MediaQuery.of(context).size.height;
+    // final deviceWidth = MediaQuery.of(context).size.width;
+    // final messageList = ListView.builder(
+    //   controller: scrollController,
+    //   scrollDirection: Axis.vertical,
+    //   itemCount: chatResponse.length,
+    //   itemBuilder: (BuildContext context, int index) {
+    //     return ChatBubble(
+    //       message: chatResponse[index],
+    //       authentication: _authentication,
+    //     );
+    //   },
+    // );
 
     final newMessageList = GroupedListView<ChatMessages, String>(
         controller: scrollController,

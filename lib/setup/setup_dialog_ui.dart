@@ -9,6 +9,7 @@ import '../ui/dialogs/exit_app.dart';
 import '../ui/dialogs/loading_dialog.dart';
 import '../ui/dialogs/logout_dialog.dart';
 import '../ui/dialogs/notification_details.dart';
+import '../ui/dialogs/payment_method_dialog.dart';
 import '../ui/dialogs/payment_successful.dart';
 import '../ui/dialogs/return_equip_dialog.dart';
 
@@ -47,6 +48,11 @@ void setupDialogUi() {
         ),
     DialogType.bookingRequest: (context, sheetRequest, completer) =>
         BookingRequestDialog(
+          request: sheetRequest,
+          completer: completer,
+        ),
+    DialogType.paymentMethod: (context, sheetRequest, completer) =>
+        PaymentMethodDialog(
           request: sheetRequest,
           completer: completer,
         ),

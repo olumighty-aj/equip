@@ -49,13 +49,19 @@ class HomeViewModel extends BaseViewModel {
   int _nextPage = 2;
   int get nextPage => _nextPage;
 
-  void init() async {
+  init(lat, lng) async {
     BaseDataModel data = await _authentication.getUserProfile();
     _authentication.updateUser(Details.fromJson(data.payload));
+    await newGetEquipments(lat, lng);
     notifyListeners();
   }
 
+  Future<void> refresh(lat, lng) async {
+    await init(lat, lng);
+  }
+
   List<EquipmentModel> _packageList = [];
+  List<EquipmentModel> _refreshedList = [];
   List<EquipmentModel> get packageList => _packageList;
 
   void newSwitchRole(context) async {
@@ -122,16 +128,20 @@ class HomeViewModel extends BaseViewModel {
   Future<List<EquipmentModel>> newGetEquipments(
       String? lat, String? lng) async {
     setFetchState(LoadingState.loading);
+    notifyListeners();
     BaseDataModel? res = await _activities.newGetEquipments(lat, lng);
     if (res!.status == true) {
+      _refreshedList.clear();
       for (var i in res.payload["content"]) {
         EquipmentModel equip = EquipmentModel.fromJson(i);
-        _packageList.add(equip);
+        _refreshedList.add(equip);
+        notifyListeners();
       }
+      _packageList = _refreshedList;
       _count = _activities.count;
       notifyListeners();
       setFetchState(LoadingState.done);
-      _log.i("Package: ${_packageList[0].toJson()}");
+      // _log.i("Package: ${_packageList[0].toJson()}");
     }
     return _packageList;
   }

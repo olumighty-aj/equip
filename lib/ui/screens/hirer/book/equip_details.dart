@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:equipro/core/model/ChatListModel.dart';
 import 'package:equipro/core/model/EquipmentModel.dart';
+import 'package:equipro/core/services/auth_service.dart';
 // import 'package:equipro/core/services/stripe_payment_service.dart';
 import 'package:equipro/ui/screens/chat/chats_widget/chat_details.dart';
 import 'package:equipro/ui/screens/hirer/active_rentals/active_rentals.dart';
@@ -20,6 +21,7 @@ import 'package:intl/intl.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 import 'package:stacked/stacked.dart';
 import 'package:equipro/utils/colors.dart';
+import '../../../../app/app_setup.locator.dart';
 import '../../../../app/app_setup.logger.dart';
 import '../../../../utils/text_styles.dart';
 
@@ -574,10 +576,12 @@ class LoginState extends State<EquipDetails> with TickerProviderStateMixin {
                                               return ChatDetailsPage(
                                                   feed: ChatListModel(
                                                       id: widget.model.userId,
-                                                      userId:
-                                                          widget.model.ownersId,
+                                                      userId: locator<
+                                                              Authentication>()
+                                                          .currentUser
+                                                          .id,
                                                       chatWithId:
-                                                          widget.model.userId,
+                                                          widget.model.hirersId,
                                                       messageCount: "",
                                                       lastMessage: "",
                                                       dateCreated: "",

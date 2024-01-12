@@ -232,6 +232,7 @@ class HomeOwnerViewModel extends BaseViewModel {
     setFetchState(LoadingState.loading);
     BaseDataModel res = await _activities.newGetMyEquipments();
     if (res.status == true) {
+      _packageList = [];
       for (var i in res.payload["content"]) {
         EquipmentModel model = EquipmentModel.fromJson(i);
         _packageList.add(model);
@@ -276,10 +277,15 @@ class HomeOwnerViewModel extends BaseViewModel {
   }
 
   Future<void> init(context) async {
+    _log.i("Refresh");
     await getMyEquipment().then((value) => controller = new ScrollController()
       ..addListener(() {
         getMyEquipmentMore();
       }));
+  }
+
+  Future<void> refresh(context) async {
+    await init(context);
   }
 
   getMyEquipmentMore() async {

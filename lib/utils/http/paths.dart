@@ -23,6 +23,7 @@ class Paths {
   static const String editBookings = 'equip_booking/25';
   static const String ownersEarnings = 'owners/earnings';
   static const String ownersProfile = 'owners/profile';
+  static const String hirersProfile = 'profile';
   static const String profile = 'profile';
   static const String reviews = 'reviews?hirers_id=';
   static const String pickDate = 'owners/pickup_date/';
@@ -40,4 +41,5 @@ class Paths {
   static const String profileVisibility = 'profile_visibility';
   static const String notificationSettings = 'notification_setting';
   static const String getSettings = 'get_setting';
+  static const String extendBooking = 'extend_booking';
 }
