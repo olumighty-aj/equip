@@ -1,8 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:equipro/core/model/ReviewsModel.dart';
+import 'package:equipro/utils/app_svgs.dart';
 import 'package:equipro/utils/colors.dart';
-import 'package:equipro/utils/screensize.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:gap/gap.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 class ReviewItem extends StatelessWidget {
@@ -35,17 +37,14 @@ class ReviewItem extends StatelessWidget {
                 ),
                 placeholder: (context, url) => CircularProgressIndicator(),
                 errorWidget: (context, url, error) => CircleAvatar(
-                  radius: 40,
+                  radius: 20,
                   backgroundColor: AppColors.grey,
-                  child: Image.asset(
-                    "assets/images/logo.png",
-                    scale: 2,
+                  child: SvgPicture.asset(
+                    AppSvgs.svgLogo,
                   ),
                 ),
               ),
-              SizedBox(
-                width: 20,
-              ),
+              Gap(10),
               Expanded(
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -53,24 +52,20 @@ class ReviewItem extends StatelessWidget {
                     Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            feed.hirers!.fullname!,
-                            //  _authentication.currentUser.firstName! + " " + _authentication.currentUser.lastName!,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 15,
-                            ),
-                          ),
-                          SizedBox(
-                            width: 5,
-                          ),
+                          Text(feed.hirers!.fullname!,
+                              //  _authentication.currentUser.firstName! + " " + _authentication.currentUser.lastName!,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(fontWeight: FontWeight.w700)),
+                          Gap(5),
                           SmoothStarRating(
                               defaultIconData: Icons.star_outline_rounded,
                               allowHalfRating: true,
                               onRated: (v) {},
                               starCount: 5,
                               rating: double.parse(feed.rating!),
-                              size: 20,
+                              size: 14,
                               isReadOnly: true,
                               filledIconData: Icons.star_rounded,
                               halfFilledIconData: Icons.star_half_rounded,

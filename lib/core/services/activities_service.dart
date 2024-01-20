@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:ffi';
+
 import 'package:dio/dio.dart';
 import 'package:equipro/app/app_setup.logger.dart';
 import 'package:equipro/core/api/api_constants.dart';
@@ -9,19 +9,17 @@ import 'package:equipro/core/model/ChatListModel.dart';
 import 'package:equipro/core/model/ChatMessages.dart';
 import 'package:equipro/core/model/EquipmentModel.dart';
 import 'package:equipro/core/model/NotificationModel.dart';
-import 'package:equipro/core/model/ReviewsModel.dart';
 import 'package:equipro/core/model/base_model.dart';
 import 'package:equipro/core/model/error_model.dart';
 import 'package:equipro/core/model/success_model.dart';
-import 'package:equipro/utils/helpers.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:http/http.dart' as htp;
 import 'package:equipro/core/services/auth_service.dart';
 import 'package:equipro/core/services/index.dart';
 import 'package:equipro/utils/http/paths.dart';
 import 'package:equipro/utils/router/navigation_service.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as htp;
+import 'package:image_picker/image_picker.dart';
 
 import '../../app/app_setup.locator.dart';
 
@@ -60,6 +58,7 @@ class Activities {
   Future<BaseDataModel?> extendEquipmentBook(data) async {
     try {
       Response res = await _api.postRequest(data, Paths.extendBooking);
+      _log.i("Response Extend Activities:　${res.data}");
       if (res.statusCode == 200) {
         return BaseDataModel.fromJson(res.data);
       }
@@ -713,6 +712,7 @@ class Activities {
     try {
       Response res = await _api.getRequest(null, Paths.active_rentals + type);
       if (res.statusCode == 200) {
+        _log.i("From Service: ${res.data}");
         return BaseDataModel.fromJson(res.data);
       }
     } on DioException catch (e) {
@@ -959,5 +959,51 @@ class Activities {
   Future<BaseDataModel> newGetNotification() async {
     Response res = await _api.getRequest(null, Paths.getNotification);
     return BaseDataModel.fromJson(res.data);
+  }
+
+  Future<BaseDataModel?> addPaymentMethod(data) async {
+    try {
+      Response res = await _api.postRequest(data, Paths.addBank);
+      _log.i(res.data);
+      if (res.statusCode == 200) {
+        _log.i(res.data);
+        return BaseDataModel.fromJson(res.data);
+      }
+    } on DioException catch (e) {
+      _log.e(e.message);
+    } catch (e) {
+      _log.e(e);
+    }
+  }
+
+  Future<BaseDataModel?> getPaymentBanks() async {
+    try {
+      Response res = await _api.getRequest(null, Paths.addBank);
+      _log.i(res.data);
+      if (res.statusCode == 200) {
+        _log.i(res.data);
+        return BaseDataModel.fromJson(res.data);
+      }
+    } on DioException catch (e) {
+      _log.e(e.message);
+    } catch (e) {
+      _log.e(e);
+    }
+  }
+
+  Future<BaseDataModel?> withdrawEarnings(String amount) async {
+    try {
+      Response res =
+          await _api.postRequest({"amount": amount}, Paths.withdrawal);
+      _log.i(res.data);
+      if (res.statusCode == 200) {
+        _log.i(res.data);
+        return BaseDataModel.fromJson(res.data);
+      }
+    } on DioException catch (e) {
+      _log.e(e.message);
+    } catch (e) {
+      _log.e(e);
+    }
   }
 }

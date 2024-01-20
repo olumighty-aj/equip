@@ -14,5 +14,5 @@ class AppSvgs {
   // static const profile = "assets/images/user.svg";
   static const paypal = "assets/images/paypal.svg";
   static const stripe = "assets/images/stripe.svg";
-// static const more = "assets/images/more.svg";
+  static const dnager = "assets/images/danger.svg";
 }

@@ -11,7 +11,7 @@ import 'package:equipro/ui/widget/base_button.dart';
 import 'package:equipro/ui/widget/dash_painter.dart';
 import 'package:equipro/ui/widget/equip_tiles.dart';
 import 'package:equipro/utils/app_svgs.dart';
-import 'package:equipro/utils/extensions.dart';
+import 'package:equipro/utils/colors.dart';
 import 'package:equipro/utils/screensize.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
@@ -20,7 +20,7 @@ import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 import 'package:stacked/stacked.dart';
-import 'package:equipro/utils/colors.dart';
+
 import '../../../../app/app_setup.locator.dart';
 import '../../../../app/app_setup.logger.dart';
 import '../../../../utils/text_styles.dart';

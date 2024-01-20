@@ -1,7 +1,7 @@
-import 'package:flutter/widgets.dart';
 // import 'package:equipro/utils/locator.dart';
 import 'package:equipro/utils/progressBarManager/dialog_models.dart';
 import 'package:equipro/utils/progressBarManager/dialog_service.dart';
+import 'package:flutter/widgets.dart';
 
 import '../app/app_setup.locator.dart';
 

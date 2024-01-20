@@ -1,7 +1,5 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:equipro/core/model/NotificationModel.dart';
 import 'package:equipro/utils/colors.dart';
-import 'package:equipro/utils/screensize.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:stacked_services/stacked_services.dart';

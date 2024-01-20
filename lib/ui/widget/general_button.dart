@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:equipro/utils/colors.dart';
+import 'package:flutter/material.dart';
 
 class GeneralButton extends StatelessWidget {
   final Function onPressed;
@@ -30,7 +30,6 @@ class GeneralButton extends StatelessWidget {
                 borderRadius: borderRadius,
                 side: BorderSide(color: borderColor),
               )),
-
           onPressed: () {
             onPressed();
           },

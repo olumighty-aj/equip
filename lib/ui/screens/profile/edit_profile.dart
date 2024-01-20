@@ -1,19 +1,17 @@
 import 'dart:io';
 
-import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dotted_border/dotted_border.dart';
-import 'package:equipro/core/services/auth_service.dart';
 import 'package:equipro/core/services/index.dart';
 import 'package:equipro/ui/screens/drawer.dart';
 import 'package:equipro/ui/screens/profile/profile_view_model.dart';
 import 'package:equipro/ui/widget/base_button.dart';
+import 'package:equipro/utils/colors.dart';
 import 'package:equipro/utils/screensize.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:stacked/stacked.dart';
-import 'package:equipro/utils/colors.dart';
 
 import '../../../utils/app_svgs.dart';
 

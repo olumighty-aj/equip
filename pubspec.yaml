@@ -39,7 +39,7 @@ dependencies:
   pin_input_text_field:
   flutter_svg:
   badges: ^2.0.2
-  cached_network_image:
+  cached_network_image: ^3.3.1
   top_snackbar_flutter: ^1.0.2
   country_pickers:
   country_picker:
@@ -57,7 +57,7 @@ dependencies:
   location: ^4.4.0
   pusher_channels_flutter: ^2.2.0
 #  flutter_paystack: ^1.0.7
-  flutter_stripe: ^9.2.1
+#  flutter_stripe: ^9.2.1
   file: ^6.1.4
 
   # The following adds the Cupertino Icons font to your application.

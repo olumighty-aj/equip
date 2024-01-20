@@ -42,4 +42,6 @@ class Paths {
   static const String notificationSettings = 'notification_setting';
   static const String getSettings = 'get_setting';
   static const String extendBooking = 'extend_booking';
+  static const String addBank = 'users_payment_details';
+  static const String withdrawal = 'owners/withdrawal_request';
 }

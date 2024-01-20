@@ -1,11 +1,7 @@
-import 'dart:ui';
-
 import 'package:dio/dio.dart';
 import 'package:logger/logger.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../utils/http/paths.dart';
-import 'api_constants.dart';
 
 class ApiService {
   final _log = Logger();

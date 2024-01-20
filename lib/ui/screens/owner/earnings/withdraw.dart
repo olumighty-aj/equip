@@ -1,20 +1,14 @@
 import 'dart:io';
+
 import 'package:equipro/ui/screens/drawer.dart';
 import 'package:equipro/ui/screens/owner/earnings/earnings_view_model.dart';
 import 'package:equipro/ui/widget/general_button.dart';
+import 'package:equipro/utils/colors.dart';
 import 'package:equipro/utils/helpers.dart';
-import 'package:equipro/utils/locator.dart';
-import 'package:equipro/utils/router/navigation_service.dart';
-import 'package:equipro/utils/router/route_names.dart';
-import 'package:equipro/utils/screensize.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:progress_indicator/progress_indicator.dart';
 import 'package:stacked/stacked.dart';
-import 'package:equipro/ui/screens/login/login_view_model.dart';
-import 'package:equipro/utils/colors.dart';
 
 class Withdraw extends StatefulWidget {
   const Withdraw({Key? key}) : super(key: key);
@@ -24,7 +18,6 @@ class Withdraw extends StatefulWidget {
 }
 
 class LoginState extends State<Withdraw> with TickerProviderStateMixin {
-  final NavService _navigationService = locator<NavService>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   File? image;
   File? video;
@@ -65,7 +58,7 @@ class LoginState extends State<Withdraw> with TickerProviderStateMixin {
           // imageQuality: quality,
           );
       setState(() {
-        listImages = pickedFileList!;
+        listImages = pickedFileList;
         imageType = "listImage";
       });
     } catch (e) {

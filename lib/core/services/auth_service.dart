@@ -14,12 +14,11 @@ import 'package:equipro/utils/http/paths.dart';
 import 'package:equipro/utils/router/navigation_service.dart';
 import 'package:equipro/utils/router/route_names.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as htp;
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../app/app_setup.locator.dart';
 import '../../app/app_setup.logger.dart';
-import '../../utils/base_model.dart';
 
 class Authentication {
   final _log = getLogger("Authentication");

@@ -1,6 +1,7 @@
-import 'package:custom_refresh_indicator/custom_refresh_indicator.dart';
+import 'dart:async';
+import 'dart:io';
+
 import 'package:equipro/core/enums/dialog_type.dart';
-import 'package:equipro/core/model/EquipmentModel.dart';
 import 'package:equipro/core/model/enums.dart';
 import 'package:equipro/ui/screens/drawer.dart';
 import 'package:equipro/ui/screens/hirer/home/home_view_model.dart';
@@ -8,10 +9,8 @@ import 'package:equipro/ui/screens/notification/notification.dart';
 import 'package:equipro/ui/widget/equip_tiles.dart';
 import 'package:equipro/ui/widget/input_fields/custom_text_field.dart';
 import 'package:equipro/ui/widget/loader_widget.dart';
+import 'package:equipro/utils/colors.dart';
 import 'package:equipro/utils/locator.dart';
-import 'package:equipro/utils/router/navigation_service.dart';
-import 'package:equipro/utils/router/route_names.dart';
-import 'package:equipro/utils/screensize.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -21,8 +20,6 @@ import 'package:gap/gap.dart';
 import 'package:location/location.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:stacked/stacked.dart';
-import 'package:equipro/ui/screens/login/login_view_model.dart';
-import 'package:equipro/utils/colors.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
@@ -30,9 +27,6 @@ import 'package:top_snackbar_flutter/top_snack_bar.dart';
 import '../../../../core/enums/bottom_sheet_type.dart';
 import '../../../../main.dart';
 import '../../../../utils/app_svgs.dart';
-import 'dart:async';
-import 'dart:developer';
-import 'dart:io';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -122,84 +116,84 @@ class LoginState extends State<Home> {
     );
   }
 
-  void registerNotification() async {
-    flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-// initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
-    const AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings('app_icon');
-    final IOSInitializationSettings initializationSettingsIOS =
-        IOSInitializationSettings();
-    final MacOSInitializationSettings initializationSettingsMacOS =
-        MacOSInitializationSettings();
-    final InitializationSettings initializationSettings =
-        InitializationSettings(
-            android: initializationSettingsAndroid,
-            iOS: initializationSettingsIOS,
-            macOS: initializationSettingsMacOS);
-    await flutterLocalNotificationsPlugin.initialize(initializationSettings,
-        onSelectNotification: selectNotification);
-    // var initializationSettings = InitializationSettings();
-    // channel = const AndroidNotificationChannel(
-    //   'high_importance_channel', // id
-    //   'High Importance Notifications', // title
-    //   //'This channel is used for important notifications.', // description
-    //   importance: Importance.high,
-    // );
-    //
-    // flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-    // flutterLocalNotificationsPlugin.initialize(initializationSettings);
-    // await flutterLocalNotificationsPlugin
-    //     .resolvePlatformSpecificImplementation<
-    //         AndroidFlutterLocalNotificationsPlugin>()
-    //     ?.createNotificationChannel(channel);
+//   void registerNotification() async {
+//     flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+// // initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
+//     const AndroidInitializationSettings initializationSettingsAndroid =
+//         AndroidInitializationSettings('app_icon');
+//     final IOSInitializationSettings initializationSettingsIOS =
+//         IOSInitializationSettings();
+//     final MacOSInitializationSettings initializationSettingsMacOS =
+//         MacOSInitializationSettings();
+//     final InitializationSettings initializationSettings =
+//         InitializationSettings(
+//             android: initializationSettingsAndroid,
+//             iOS: initializationSettingsIOS,
+//             macOS: initializationSettingsMacOS);
+//     await flutterLocalNotificationsPlugin.initialize(initializationSettings,
+//         onSelectNotification: selectNotification);
+//     // var initializationSettings = InitializationSettings();
+//     // channel = const AndroidNotificationChannel(
+//     //   'high_importance_channel', // id
+//     //   'High Importance Notifications', // title
+//     //   //'This channel is used for important notifications.', // description
+//     //   importance: Importance.high,
+//     // );
+//     //
+//     // flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+//     // flutterLocalNotificationsPlugin.initialize(initializationSettings);
+//     // await flutterLocalNotificationsPlugin
+//     //     .resolvePlatformSpecificImplementation<
+//     //         AndroidFlutterLocalNotificationsPlugin>()
+//     //     ?.createNotificationChannel(channel);
+//
+//     /// Update the iOS foreground notification presentation options to allow
+//     /// heads up notifications.
+//     await FirebaseMessaging.instance
+//         .setForegroundNotificationPresentationOptions(
+//       alert: true,
+//       badge: true,
+//       sound: true,
+//     );
+//     displayDialog(String title, String body) {
+//       print("Notification from display: $title, $body");
+//       return showTopSnackBar(
+//         context,
+//         CustomSnackBar.info(
+//           backgroundColor: AppColors.primaryColor,
+//           message: "$title\n$body",
+//         ),
+//       );
+//     }
+//
+//     // FirebaseMessaging.onMessage.listen((RemoteMessage event) {
+//     //   print("message recieved");
+//     //   print("I am message");
+//     //   print("Notif: ${event.data}");
+//     //   // print("Notification: ${event.data}");
+//     //   // displayDialog('${event.notification?.title}', '${event.data}');
+//     //   pushNotification(
+//     //       event.notification?.title ?? "", event.notification?.body ?? "");
+//     //
+//     //   // Get.snackbar('${event.notification.body}', '${event.notification.title}',
+//     //   //     backgroundColor: AppColors.secondaryColor);
+//     // });
+//     FirebaseMessaging.onMessageOpenedApp.listen((message) {});
+//   }
 
-    /// Update the iOS foreground notification presentation options to allow
-    /// heads up notifications.
-    await FirebaseMessaging.instance
-        .setForegroundNotificationPresentationOptions(
-      alert: true,
-      badge: true,
-      sound: true,
-    );
-    displayDialog(String title, String body) {
-      print("Notification from display: $title, $body");
-      return showTopSnackBar(
-        context,
-        CustomSnackBar.info(
-          backgroundColor: AppColors.primaryColor,
-          message: "$title\n$body",
-        ),
-      );
-    }
-
-    // FirebaseMessaging.onMessage.listen((RemoteMessage event) {
-    //   print("message recieved");
-    //   print("I am message");
-    //   print("Notif: ${event.data}");
-    //   // print("Notification: ${event.data}");
-    //   // displayDialog('${event.notification?.title}', '${event.data}');
-    //   pushNotification(
-    //       event.notification?.title ?? "", event.notification?.body ?? "");
-    //
-    //   // Get.snackbar('${event.notification.body}', '${event.notification.title}',
-    //   //     backgroundColor: AppColors.secondaryColor);
-    // });
-    FirebaseMessaging.onMessageOpenedApp.listen((message) {});
-  }
-
-  var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
-      "Equippro", 'Notification',
-      channelDescription: 'This is Equippro notification center',
-      importance: Importance.max,
-      priority: Priority.high,
-      playSound: false,
-      enableVibration: true);
-  var iOSPlatformChannelSpecifics =
-      new IOSNotificationDetails(presentBadge: true, presentSound: true);
-
-  get platformChannelSpecifics => new NotificationDetails(
-      android: androidPlatformChannelSpecifics,
-      iOS: iOSPlatformChannelSpecifics);
+  // var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
+  //     "Equippro", 'Notification',
+  //     channelDescription: 'This is Equippro notification center',
+  //     importance: Importance.max,
+  //     priority: Priority.high,
+  //     playSound: false,
+  //     enableVibration: true);
+  // var iOSPlatformChannelSpecifics =
+  //     new IOSNotificationDetails(presentBadge: true, presentSound: true);
+  //
+  // get platformChannelSpecifics => new NotificationDetails(
+  //     android: androidPlatformChannelSpecifics,
+  //     iOS: iOSPlatformChannelSpecifics);
 
   @override
   void initState() {

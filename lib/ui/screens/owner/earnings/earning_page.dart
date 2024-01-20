@@ -1,36 +1,20 @@
-import 'package:badges/badges.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:equipro/core/model/TransactionModel.dart';
-import 'package:equipro/core/model/success_model.dart';
 import 'package:equipro/core/services/auth_service.dart';
-import 'package:equipro/ui/screens/drawer.dart';
 import 'package:equipro/ui/screens/hirer/book/details_view_model.dart';
 import 'package:equipro/ui/screens/owner/earnings/earnings_view_model.dart';
 import 'package:equipro/ui/screens/profile/edit_profile.dart';
-import 'package:equipro/ui/widget/bank_tiles.dart';
-import 'package:equipro/ui/widget/base_button.dart';
-import 'package:equipro/ui/widget/booking_request.dart';
-import 'package:equipro/ui/widget/dash_painter.dart';
 import 'package:equipro/ui/widget/equip_tiles.dart';
-import 'package:equipro/ui/widget/general_button.dart';
-import 'package:equipro/ui/widget/loader_widget.dart';
-import 'package:equipro/ui/widget/transaction_tile.dart';
+import 'package:equipro/utils/colors.dart';
 import 'package:equipro/utils/extensions.dart';
-import 'package:equipro/utils/helpers.dart';
 import 'package:equipro/utils/locator.dart';
-import 'package:equipro/utils/router/navigation_service.dart';
-import 'package:equipro/utils/router/route_names.dart';
-import 'package:equipro/utils/screensize.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
-import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
-import 'package:equipro/ui/screens/login/login_view_model.dart';
-import 'package:equipro/utils/colors.dart';
 
 import '../../../../utils/app_svgs.dart';
+import '../../../widget/base_button.dart';
 
 class EarningPage extends StatefulWidget {
   const EarningPage({Key? key}) : super(key: key);
@@ -40,7 +24,6 @@ class EarningPage extends StatefulWidget {
 }
 
 class LoginState extends State<EarningPage> with TickerProviderStateMixin {
-  final NavService _navigationService = locator<NavService>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   int? selectedQuantity;
   String? pickupTime = DateTime.now().toString();
@@ -48,7 +31,6 @@ class LoginState extends State<EarningPage> with TickerProviderStateMixin {
   String? selectedWeek;
   TextEditingController emailController = TextEditingController();
   AnimationController? _navController;
-  Animation<Offset>? _navAnimation;
   @override
   void initState() {
     super.initState();
@@ -56,13 +38,6 @@ class LoginState extends State<EarningPage> with TickerProviderStateMixin {
       duration: const Duration(milliseconds: 2000),
       vsync: this,
     )..forward();
-    _navAnimation = Tween<Offset>(
-      begin: const Offset(0.0, 0.99),
-      end: const Offset(0.0, 0.0),
-    ).animate(CurvedAnimation(
-      parent: _navController!,
-      curve: Curves.easeIn,
-    ));
   }
 
   @override
@@ -86,7 +61,7 @@ class LoginState extends State<EarningPage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return ViewModelBuilder<EarningsViewModel>.reactive(
         onViewModelReady: (v) {
-          v.getEarnings();
+          v.init();
         },
         viewModelBuilder: () => EarningsViewModel(),
         builder: (context, model, child) {
@@ -142,19 +117,21 @@ class LoginState extends State<EarningPage> with TickerProviderStateMixin {
                                               fontSize: 18,
                                               color: AppColors.primaryColor))
                                 ])),
-                                // Gap(29),
-                                // Row(
-                                //   children: [
-                                //     Expanded(
-                                //       child: BaseButton(
-                                //         label: "Withdraw",
-                                //         hasBorder: true,
-                                //         onPressed: null,
-                                //       ),
-                                //     ),
-                                //     Expanded(child: SizedBox()),
-                                //   ],
-                                // ),
+                                Gap(29),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: BaseButton(
+                                        isBusy: model.busy("withdraw"),
+                                        label: "Withdraw",
+                                        hasBorder: true,
+                                        onPressed: () =>
+                                            model.newWithdraw(context),
+                                      ),
+                                    ),
+                                    Expanded(child: SizedBox()),
+                                  ],
+                                ),
                                 Gap(12),
                                 Divider(
                                   color: Colors.grey,
@@ -174,7 +151,7 @@ class LoginState extends State<EarningPage> with TickerProviderStateMixin {
                                               fontWeight: FontWeight.w600),
                                     ),
                                     Visibility(
-                                      visible: model.paymentMethodEmpty,
+                                      visible: model.banks.isEmpty,
                                       child: GestureDetector(
                                         onTap: model.addPaymentMethod,
                                         child: Icon(
@@ -192,8 +169,18 @@ class LoginState extends State<EarningPage> with TickerProviderStateMixin {
                                     ),
                                   ],
                                 ),
+                                if (model.banks["content"] != null &&
+                                    model.banks["content"].isNotEmpty)
+                                  Column(
+                                    children: [
+                                      Gap(20),
+                                      PaymentMethodBox(
+                                          bankDetails: model.banks["content"]
+                                              [0]),
+                                    ],
+                                  ),
                                 Gap(12),
-                                Divider(),
+                                Divider(color: Colors.grey),
                                 Gap(32),
                                 Text(
                                   "Transaction History",
@@ -267,7 +254,9 @@ class LoginState extends State<EarningPage> with TickerProviderStateMixin {
 }
 
 class PaymentMethodBox extends StatelessWidget {
+  final Map<String, dynamic> bankDetails;
   const PaymentMethodBox({
+    required this.bankDetails,
     Key? key,
   }) : super(key: key);
 
@@ -289,7 +278,7 @@ class PaymentMethodBox extends StatelessWidget {
               ),
               Gap(10),
               Text(
-                "Access Bank",
+                bankDetails["bank_name"],
                 style: Theme.of(context)
                     .textTheme
                     .bodyMedium
@@ -297,7 +286,7 @@ class PaymentMethodBox extends StatelessWidget {
               ),
             ],
           ),
-          SvgPicture.asset(AppSvgs.more)
+          // SvgPicture.asset(AppSvgs.more)
         ],
       ),
     );

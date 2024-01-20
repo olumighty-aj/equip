@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-
 import 'package:stacked_services/stacked_services.dart';
 
 import '../../app/app_setup.locator.dart';
 import '../core/enums/bottom_sheet_type.dart';
-import '../ui/bottomsheets/generic_bottom_sheet_data_holders.dart';
 import '../ui/bottomsheets/location_sheet.dart';
 
 void setupBottomSheetUi() {

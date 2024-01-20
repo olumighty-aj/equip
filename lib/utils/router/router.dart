@@ -1,7 +1,7 @@
 import 'package:equipro/core/model/ActiveRentalsModel.dart';
 import 'package:equipro/core/model/ChatListModel.dart';
-import 'package:equipro/core/model/EquipmentModel.dart';
 import 'package:equipro/core/model/EquipmentModel.dart' as eq;
+import 'package:equipro/core/model/EquipmentModel.dart';
 import 'package:equipro/ui/screens/chat/chat.dart';
 import 'package:equipro/ui/screens/chat/chats_widget/chat_details.dart';
 import 'package:equipro/ui/screens/hirer/active_rentals/active_rentals.dart';
@@ -10,13 +10,14 @@ import 'package:equipro/ui/screens/hirer/active_rentals/rentals_details.dart';
 import 'package:equipro/ui/screens/hirer/book/equip_details.dart';
 import 'package:equipro/ui/screens/hirer/book/place_booking.dart';
 import 'package:equipro/ui/screens/hirer/home/home_view.dart';
+import 'package:equipro/ui/screens/login/login_view.dart';
 // import 'package:equipro/ui/screens/login/verify_forgot_otp.dart';
 import 'package:equipro/ui/screens/notification/notification.dart';
+import 'package:equipro/ui/screens/onboarding/onboardingscreen_view.dart';
 import 'package:equipro/ui/screens/owner/active_rentals/owner_active_rentals.dart';
 import 'package:equipro/ui/screens/owner/active_rentals/rentals_details.dart';
 import 'package:equipro/ui/screens/owner/earnings/earning_page.dart';
 import 'package:equipro/ui/screens/owner/earnings/withdraw.dart';
-import 'package:equipro/ui/screens/owner/home_owner/booking_details.dart';
 import 'package:equipro/ui/screens/owner/home_owner/edit_equipment.dart';
 import 'package:equipro/ui/screens/owner/home_owner/equip_owner_details.dart';
 import 'package:equipro/ui/screens/owner/home_owner/hirer_profile.dart';
@@ -26,13 +27,10 @@ import 'package:equipro/ui/screens/owner/home_owner/post_equipment_final.dart';
 import 'package:equipro/ui/screens/owner/setup_owner.dart';
 import 'package:equipro/ui/screens/profile/edit_profile.dart';
 import 'package:equipro/ui/screens/profile/profile.dart';
-import 'package:flutter/material.dart';
-import 'package:equipro/ui/screens/login/login_view.dart';
-import 'package:equipro/ui/screens/login/forgt_password/forgot_password.dart';
-import 'package:equipro/ui/screens/onboarding/onboardingscreen_view.dart';
 import 'package:equipro/ui/screens/register/register_view.dart';
 import 'package:equipro/ui/screens/register/verification_view.dart';
 import 'package:equipro/utils/router/route_names.dart';
+import 'package:flutter/material.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {

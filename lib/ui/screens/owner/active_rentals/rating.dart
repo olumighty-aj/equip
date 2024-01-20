@@ -1,15 +1,12 @@
 import 'package:equipro/core/services/auth_service.dart';
 import 'package:equipro/ui/screens/hirer/active_rentals/rentals_view_model.dart';
-import 'package:equipro/ui/screens/profile/profile_view_model.dart';
 import 'package:equipro/ui/widget/general_button.dart';
+import 'package:equipro/utils/colors.dart';
 import 'package:equipro/utils/locator.dart';
-import 'package:equipro/utils/router/navigation_service.dart';
-import 'package:equipro/utils/router/route_names.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 import 'package:stacked/stacked.dart';
-import 'package:equipro/utils/colors.dart';
 
 class Rating extends StatefulWidget {
   final String id;
@@ -20,13 +17,12 @@ class Rating extends StatefulWidget {
 }
 
 class LoginState extends State<Rating> with TickerProviderStateMixin {
-  final NavService _navigationService = locator<NavService>();
   final Authentication _authentication = locator<Authentication>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   double? rate = 5;
   TextEditingController commentController = TextEditingController();
   AnimationController? _navController;
-  Animation<Offset>? _navAnimation;
+
   @override
   void initState() {
     super.initState();
@@ -34,13 +30,6 @@ class LoginState extends State<Rating> with TickerProviderStateMixin {
       duration: const Duration(milliseconds: 2000),
       vsync: this,
     )..forward();
-    _navAnimation = Tween<Offset>(
-      begin: const Offset(0.0, 0.99),
-      end: const Offset(0.0, 0.0),
-    ).animate(CurvedAnimation(
-      parent: _navController!,
-      curve: Curves.easeIn,
-    ));
   }
 
   @override

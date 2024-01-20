@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:equipro/core/api/dio_service.dart';
 import 'package:equipro/main.dart';
@@ -7,6 +6,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+
 // import 'package:flutter_stripe/flutter_stripe.dart';
 
 import '../core/services/auth_service.dart';
@@ -15,7 +15,6 @@ import '../setup/setup_bottomsheet_ui.dart';
 import '../setup/setup_dialog_ui.dart';
 import '../setup/setup_snackbar_ui.dart';
 import 'app_setup.locator.dart';
-import 'app_setup.router.dart';
 
 class App {
   static Future initialize() async {
@@ -53,17 +52,32 @@ class App {
     }
   }
 
+  static Future<bool> checkIfTokenExists() async {
+    bool tokenExists = await SharedPrefsClient.checkData("token");
+    if (tokenExists) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   static checkIfIsHirer() async {
     bool isDetails = await SharedPrefsClient.checkData("currentUser");
     if (isDetails) {
       var details = jsonDecode(await SharedPrefsClient.readData("currentUser"));
-      String token = await SharedPrefsClient.readData("token");
-      locator<ApiService>().setAccessToken(token);
-      if (details["user_type"] == "hirers") {
-        return true;
-      } else {
-        return false;
+      if (await checkIfTokenExists()) {
+        String? token = await SharedPrefsClient.readData("token");
+        locator<ApiService>().setAccessToken(token);
+        if (details["user_type"] == "hirers") {
+          return true;
+        } else {
+          return false;
+        }
       }
+      // if (token == null) {
+      //   print("Token: $token");
+      //   return false;
+      // }
     }
   }
 }

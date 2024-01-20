@@ -1,6 +1,7 @@
 import 'dart:async';
-import 'package:flutter/cupertino.dart';
+
 import 'package:equipro/utils/progressBarManager/dialog_models.dart';
+import 'package:flutter/cupertino.dart';
 
 class ProgressService {
   final GlobalKey<NavigatorState> _progressNavigationKey =

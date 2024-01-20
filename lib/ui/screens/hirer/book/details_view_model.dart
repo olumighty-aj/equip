@@ -1,4 +1,3 @@
-import 'package:equipro/app/app_setup.router.dart';
 import 'package:equipro/core/enums/dialog_type.dart';
 import 'package:equipro/core/model/BookModel.dart';
 import 'package:equipro/core/model/base_model.dart';
@@ -6,11 +5,8 @@ import 'package:equipro/core/model/error_model.dart';
 import 'package:equipro/core/model/success_model.dart';
 import 'package:equipro/core/services/activities_service.dart';
 import 'package:equipro/core/services/auth_service.dart';
-import 'package:equipro/utils/base_model.dart';
 import 'package:equipro/utils/helpers.dart';
 // import 'package:equipro/utils/locator.dart';
-import 'package:equipro/utils/router/navigation_service.dart';
-import 'package:equipro/utils/router/route_names.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -18,7 +14,6 @@ import '../../../../app/app_setup.locator.dart';
 
 class DetailsViewModel extends BaseViewModel {
   final Authentication authentication = locator<Authentication>();
-  final _navigationService = locator<NavigationService>();
   final _dialogService = locator<DialogService>();
   final Activities _activities = locator<Activities>();
 

@@ -1,13 +1,11 @@
 import 'package:equipro/ui/screens/login/login_view.dart';
 import 'package:equipro/ui/screens/login/view_model.dart';
-import 'package:equipro/utils/screensize.dart';
-import 'package:flutter/material.dart';
-import 'package:stacked/stacked.dart';
-import 'package:equipro/ui/screens/login/login_view_model.dart';
-import 'package:equipro/ui/widget/general_button.dart';
 import 'package:equipro/utils/colors.dart';
 import 'package:equipro/utils/helpers.dart';
 import 'package:equipro/utils/notification_helper.dart';
+import 'package:equipro/utils/screensize.dart';
+import 'package:flutter/material.dart';
+import 'package:stacked/stacked.dart';
 
 import '../../../widget/base_button.dart';
 

@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:equipro/utils/busy_dialog.dart';
 import 'package:equipro/utils/locator.dart';
 import 'package:equipro/utils/progressBarManager/dialog_models.dart';
 import 'package:equipro/utils/progressBarManager/dialog_service.dart';
+import 'package:flutter/material.dart';
 
 class ProgressManager extends StatefulWidget {
   final Widget child;

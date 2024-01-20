@@ -1,8 +1,5 @@
-import 'package:equipro/app/app_setup.logger.dart';
 import 'package:equipro/app/app_setup.router.dart';
 import 'package:equipro/core/model/ActiveRentalsModel.dart';
-import 'package:equipro/ui/screens/chat/chat.dart';
-import 'package:equipro/ui/screens/chat/chats_widget/chat_details.dart';
 import 'package:equipro/ui/screens/hirer/active_rentals/rating.dart';
 // import 'package:equipro/ui/screens/hirer/active_rentals/edit_booking/edit_bookings_screen.dart';
 // import 'package:equipro/ui/screens/hirer/active_rentals/payment/payment.dart';
@@ -10,26 +7,26 @@ import 'package:equipro/ui/screens/hirer/active_rentals/rating.dart';
 import 'package:equipro/ui/screens/hirer/active_rentals/rentals_view_model.dart';
 import 'package:equipro/ui/screens/hirer/book/details_view_model.dart';
 import 'package:equipro/ui/widget/base_button.dart';
-import 'package:equipro/ui/widget/general_button.dart';
-import 'package:equipro/ui/widget/noti_widget.dart';
+import 'package:equipro/utils/app_svgs.dart';
+import 'package:equipro/utils/colors.dart';
 import 'package:equipro/utils/extensions.dart';
 // import 'package:equipro/utils/locator.dart';
-import 'package:equipro/utils/router/navigation_service.dart';
-import 'package:equipro/utils/screensize.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
-import 'package:equipro/utils/colors.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 import '../../../../app/app_setup.locator.dart';
-import '../../../../core/model/ChatListModel.dart';
+import '../../../../app/app_setup.logger.dart';
 import '../../../widget/equip_tiles.dart';
 import '../../owner/active_rentals/payment_option.dart';
 import '../../profile/edit_profile.dart';
 import 'edit_booking/edit_booking_screen.dart';
+import 'extend_booking.dart';
 
 class RentalDetails extends StatefulWidget {
   final ActiveRentalsModel feed;
@@ -40,12 +37,10 @@ class RentalDetails extends StatefulWidget {
 }
 
 class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
-  final NavService _navigationService = locator<NavService>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   TextEditingController emailController = TextEditingController();
   AnimationController? _navController;
-  Animation<Offset>? _navAnimation;
   @override
   void initState() {
     super.initState();
@@ -53,13 +48,6 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
       duration: const Duration(milliseconds: 2000),
       vsync: this,
     )..forward();
-    _navAnimation = Tween<Offset>(
-      begin: const Offset(0.0, 0.99),
-      end: const Offset(0.0, 0.0),
-    ).animate(CurvedAnimation(
-      parent: _navController!,
-      curve: Curves.easeIn,
-    ));
   }
 
   @override
@@ -73,7 +61,7 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
     return ViewModelBuilder<RentalsViewModel>.reactive(
         viewModelBuilder: () => RentalsViewModel(),
         builder: (context, model, child) {
-          // getLogger("className").i(widget.feed.toJson());
+          getLogger("className").i("Feed: ${widget.feed.toJson()}");
           return Scaffold(
             key: _scaffoldKey,
             appBar: AppBar(
@@ -98,34 +86,6 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                           child: widget),
                                     ),
                                 children: [
-                                  // const SizedBox(
-                                  //   height: 40,
-                                  // ),
-                                  // Row(
-                                  //   children: [
-                                  //     Container(
-                                  //         //  margin: EdgeInsets.all(20),
-                                  //         padding: EdgeInsets.only(left: 8),
-                                  //         height: 40,
-                                  //         width: 40,
-                                  //         decoration: BoxDecoration(
-                                  //           borderRadius:
-                                  //               BorderRadius.circular(12),
-                                  //           color: AppColors.white,
-                                  //         ),
-                                  //         child: InkWell(
-                                  //             onTap: () {
-                                  //               Navigator.pop(context);
-                                  //             },
-                                  //             child: const Icon(
-                                  //               Icons.arrow_back_ios,
-                                  //               color: AppColors.primaryColor,
-                                  //             )))
-                                  //   ],
-                                  // ),
-                                  // SizedBox(
-                                  //   height: 30,
-                                  // ),
                                   Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
@@ -167,98 +127,125 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                   ),
                                   Divider(
                                     thickness: 4,
+                                    color: Colors.grey.shade200,
                                   ),
                                   SizedBox(
                                     height: 10,
                                   ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                          widget.feed.requestStatus! ==
-                                                  "pending"
-                                              ? "Booking approval pending"
-                                              : widget.feed.requestStatus! ==
-                                                      "accepted"
-                                                  ? "Your booking has been approved"
-                                                  : "null",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium
-                                              ?.copyWith(
-                                                  color: widget.feed
-                                                              .requestStatus! ==
-                                                          "pending"
-                                                      ? Colors.red
-                                                      : Colors.green)),
-                                      if (widget.feed.requestStatus! ==
-                                          "pending")
-                                        GestureDetector(
-                                          onTap: () => Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      EditBookings(
-                                                        model: widget.feed,
-                                                      ))),
-                                          child: Text(
-                                            "Edit booking",
+                                  if (widget.feed.equipOrder?.paymentStatus !=
+                                      "1")
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                            widget.feed.requestStatus! ==
+                                                    "pending"
+                                                ? "Booking approval pending"
+                                                : widget.feed.requestStatus! ==
+                                                        "accepted"
+                                                    ? "Your booking has been approved"
+                                                    : "null",
                                             style: Theme.of(context)
                                                 .textTheme
-                                                .bodySmall
+                                                .bodyMedium
                                                 ?.copyWith(
-                                                    color:
-                                                        AppColors.primaryColor,
-                                                    decoration: TextDecoration
-                                                        .underline),
-                                          ),
-                                        )
-                                    ],
-                                  ),
+                                                    color: widget.feed
+                                                                .requestStatus! ==
+                                                            "pending"
+                                                        ? Colors.red
+                                                        : Colors.green)),
+                                        if (widget.feed.requestStatus! ==
+                                            "pending")
+                                          GestureDetector(
+                                            onTap: () => Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        EditBookings(
+                                                          model: widget.feed,
+                                                        ))),
+                                            child: Text(
+                                              "Edit booking",
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodySmall
+                                                  ?.copyWith(
+                                                      color: AppColors
+                                                          .primaryColor,
+                                                      decoration: TextDecoration
+                                                          .underline),
+                                            ),
+                                          )
+                                      ],
+                                    ),
                                   SizedBox(
                                     height: 30,
                                   ),
-                                  Text(
-                                    "Booking",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyLarge
-                                        ?.copyWith(
-                                            color: Colors.grey,
-                                            fontWeight: FontWeight.w600),
-                                  ),
-                                  Divider(),
+                                  if (widget.feed.equipOrder?.paymentStatus !=
+                                      "1")
+                                    Column(
+                                      children: [
+                                        Text(
+                                          "Booking",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyLarge
+                                              ?.copyWith(
+                                                  color: Colors.grey,
+                                                  fontWeight: FontWeight.w600),
+                                        ),
+                                        Divider(
+                                          color: Colors.grey,
+                                        ),
+                                      ],
+                                    ),
                                   Gap(10),
-                                  // Row(
-                                  //   mainAxisAlignment:
-                                  //       MainAxisAlignment.spaceBetween,
-                                  //   children: [
-                                  //     Text("Amount Paid:",
-                                  //         style: Theme.of(context)
-                                  //             .textTheme
-                                  //             .bodyMedium
-                                  //             ?.copyWith(
-                                  //                 color: Colors.grey,
-                                  //                 fontSize: 15,
-                                  //                 fontWeight: FontWeight.w700)),
-                                  //     SizedBox(
-                                  //       width: 60,
-                                  //     ),
-                                  //     Expanded(
-                                  //       child: Text(
-                                  //           widget.feed.equipOrder!.totalAmount!
-                                  //               .withCommas,
-                                  //           style: Theme.of(context)
-                                  //               .textTheme
-                                  //               .bodyMedium
-                                  //               ?.copyWith(fontSize: 15)),
-                                  //     ),
-                                  //   ],
-                                  // ),
-                                  // SizedBox(
-                                  //   height: 30,
-                                  // ),
+                                  if (widget.feed.equipOrder?.paymentStatus ==
+                                      "1")
+                                    Column(
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text("Amount Paid:",
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyMedium
+                                                    ?.copyWith(
+                                                        color: Colors.grey,
+                                                        fontSize: 15,
+                                                        fontWeight:
+                                                            FontWeight.w700)),
+                                            SizedBox(
+                                              width: 60,
+                                            ),
+                                            Expanded(
+                                              child: Text(
+                                                  widget.feed.equipOrder!
+                                                      .totalAmount!.withCommas,
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyMedium
+                                                      ?.copyWith(fontSize: 15)),
+                                            ),
+                                            Gap(30),
+                                            Text(
+                                              "Funded",
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodySmall
+                                                  ?.copyWith(
+                                                      color: Colors.grey),
+                                            )
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: 30,
+                                        ),
+                                      ],
+                                    ),
                                   Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
@@ -390,7 +377,9 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                   SizedBox(
                                     height: 40,
                                   ),
-                                  if (widget.feed.equipOrder != null)
+                                  if (widget.feed.equipOrder != null &&
+                                      widget.feed.equipOrder?.paymentStatus ==
+                                          "0")
                                     Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -405,7 +394,7 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                                   color: Colors.grey),
                                         ),
                                         Gap(6),
-                                        Divider(),
+                                        Divider(color: Colors.grey),
                                         Gap(26),
                                         Row(
                                           children: [
@@ -447,7 +436,7 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                             Gap(20),
                                             Expanded(
                                               child: Text(
-                                                "${getCurrency(widget.feed.equipments!.address)} ${widget.feed.equipOrder!.serviceCharge!.withCommas ?? "0"}",
+                                                "${getCurrency(widget.feed.equipments!.address)} ${widget.feed.equipOrder!.serviceCharge!.withCommas}",
                                                 style: Theme.of(context)
                                                     .textTheme
                                                     .bodyLarge
@@ -499,7 +488,7 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                             Gap(45),
                                             Expanded(
                                               child: Text(
-                                                "${getCurrency(widget.feed.equipments!.address)} ${widget.feed.equipOrder!.totalAmount!.withCommas ?? "0"}",
+                                                "${getCurrency(widget.feed.equipments!.address)} ${widget.feed.equipOrder!.totalAmount!.withCommas}",
                                                 style: Theme.of(context)
                                                     .textTheme
                                                     .bodyLarge
@@ -519,6 +508,8 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                           .deliveryStatus !=
                                       null)
                                     Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Gap(20),
                                         Text(
@@ -532,7 +523,9 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                       ],
                                     ),
                                   Gap(10),
-                                  Divider(),
+                                  Divider(
+                                    color: Colors.grey,
+                                  ),
                                   Gap(10),
                                   widget.feed.equipDeliveryStatus!
                                               .deliveryStatus !=
@@ -661,19 +654,67 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                   //     ],
                                   //   ),
                                   Gap(30),
-                                  if (widget.feed.requestStatus == "in_use")
-                                    GestureDetector(
-                                      child: Text(
-                                        "Extend Booking",
-                                        textAlign: TextAlign.center,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyLarge
-                                            ?.copyWith(
-                                                color: AppColors.primaryColor,
-                                                decoration:
-                                                    TextDecoration.underline),
-                                      ),
+                                  if (widget.feed.equipDeliveryStatus != null &&
+                                      widget.feed.equipDeliveryStatus!
+                                              .deliveryStatus ==
+                                          "in_use" &&
+                                      model.getDateDifference(
+                                              widget.feed.rentalTo!) ==
+                                          2)
+                                    Column(
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            SvgPicture.asset(AppSvgs.dnager),
+                                            Gap(3),
+                                            RichText(
+                                                text: TextSpan(children: [
+                                              TextSpan(
+                                                  text:
+                                                      "You have 2 days left to return this equipment.\n",
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodySmall),
+                                              TextSpan(
+                                                text: "Extend hiring",
+                                                recognizer:
+                                                    TapGestureRecognizer()
+                                                      ..onTap = () =>
+                                                          Navigator.push(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                  builder:
+                                                                      (context) =>
+                                                                          ExtendBookingScreen(
+                                                                            feed:
+                                                                                widget.feed,
+                                                                          ))),
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyLarge
+                                                    ?.copyWith(
+                                                        color: AppColors
+                                                            .primaryColor,
+                                                        decorationColor:
+                                                            AppColors
+                                                                .primaryColor,
+                                                        decoration:
+                                                            TextDecoration
+                                                                .underline),
+                                              ),
+                                              TextSpan(
+                                                  text:
+                                                      " period attracts extra charges",
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodySmall),
+                                            ])),
+                                          ],
+                                        ),
+                                        Gap(20),
+                                      ],
                                     ),
                                   if (widget.feed.requestStatus == "declined")
                                     BaseButton(

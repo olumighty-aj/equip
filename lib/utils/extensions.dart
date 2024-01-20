@@ -58,6 +58,11 @@ extension DateHelpers on DateTime {
     return date;
   }
 
+  String toDashDate() {
+    String date = DateFormat("yyyy-MM-dd").format(this);
+    return date;
+  }
+
   String toDay() {
     String day = DateFormat.EEEE().format(this);
     return day;

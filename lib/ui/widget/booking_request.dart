@@ -1,13 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:equipro/core/model/EquipmentModel.dart';
 import 'package:equipro/ui/screens/owner/home_owner/booking_details.dart';
-// import 'package:equipro/core/model/equip_booking_model.dart' as equip;
-import 'package:equipro/ui/widget/general_button.dart';
+import 'package:equipro/utils/colors.dart';
 import 'package:equipro/utils/locator.dart';
 import 'package:equipro/utils/router/navigation_service.dart';
-import 'package:equipro/utils/router/route_names.dart';
 import 'package:flutter/material.dart';
-import 'package:equipro/utils/colors.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../app/app_setup.logger.dart';

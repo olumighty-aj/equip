@@ -6,5 +6,6 @@ enum DialogType {
   bookingRequest,
   returnEquip,
   paymentSuccessful,
-  paymentMethod
+  paymentMethod,
+  amountDialog
 }

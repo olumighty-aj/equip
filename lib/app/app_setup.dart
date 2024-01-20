@@ -1,4 +1,3 @@
-import 'package:equipro/core/model/VerifyForgotPassword.dart';
 import 'package:equipro/core/services/activities_service.dart';
 import 'package:equipro/core/services/auth_service.dart';
 import 'package:equipro/core/services/payment_services.dart';
@@ -6,9 +5,7 @@ import 'package:equipro/ui/screens/hirer/active_rentals/active_rentals.dart';
 import 'package:equipro/ui/screens/hirer/home/home_view.dart';
 import 'package:equipro/utils/progressBarManager/dialog_service.dart';
 import 'package:equipro/utils/router/navigation_service.dart';
-import 'package:equipro/utils/router/route_names.dart';
 import 'package:place_picker/widgets/place_picker.dart';
-import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
 import 'package:stacked_services/stacked_services.dart';
 

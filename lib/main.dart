@@ -60,7 +60,7 @@ class _MyAppState extends State<MyApp> {
     // checkIfUserIsNew();
     var initializationSettingsAndroid =
         new AndroidInitializationSettings('app_icon');
-    var initializationSettingsIOS = new IOSInitializationSettings();
+    var initializationSettingsIOS = new DarwinInitializationSettings();
     var initializationSettings = new InitializationSettings(
         android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
     _flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
@@ -148,7 +148,7 @@ var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
     playSound: true,
     enableVibration: true);
 var iOSPlatformChannelSpecifics =
-    new IOSNotificationDetails(presentBadge: true, presentSound: true);
+    new DarwinNotificationDetails(presentBadge: true, presentAlert: true);
 var platformChannelSpecifics = new NotificationDetails(
     android: androidPlatformChannelSpecifics, iOS: iOSPlatformChannelSpecifics);
 

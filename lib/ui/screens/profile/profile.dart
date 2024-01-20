@@ -8,6 +8,7 @@ import 'package:equipro/ui/screens/profile/edit_profile.dart';
 import 'package:equipro/ui/screens/profile/profile_view_model.dart';
 import 'package:equipro/ui/widget/reviews_widget.dart';
 import 'package:equipro/utils/app_svgs.dart';
+import 'package:equipro/utils/colors.dart';
 import 'package:equipro/utils/locator.dart';
 import 'package:equipro/utils/screensize.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +17,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:stacked/stacked.dart';
-import 'package:equipro/utils/colors.dart';
 
 class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);
@@ -400,9 +400,7 @@ class ProfileState extends State<Profile> with TickerProviderStateMixin {
                                     ],
                                   ),
                                 ),
-                                SizedBox(
-                                  height: 10,
-                                ),
+                                Gap(35),
                                 _authentication.currentUser.userType == "hirers"
                                     ? Container(
                                         height: Responsive.height(context) / 3,
@@ -430,8 +428,9 @@ class ProfileState extends State<Profile> with TickerProviderStateMixin {
                                                                 [0, 1, 2, 3]
                                                                     .map((_) =>
                                                                         Padding(
-                                                                          padding:
-                                                                              const EdgeInsets.all(8.0),
+                                                                          padding: const EdgeInsets
+                                                                              .all(
+                                                                              8.0),
                                                                           child:
                                                                               Row(
                                                                             crossAxisAlignment:
@@ -480,19 +479,44 @@ class ProfileState extends State<Profile> with TickerProviderStateMixin {
                                                     ));
                                               } else if (snapshot
                                                   .data!.isNotEmpty) {
-                                                return ListView(
-                                                    scrollDirection:
-                                                        Axis.vertical,
-                                                    // shrinkWrap: true,
-                                                    children: snapshot.data!
-                                                        .map((feed) => Padding(
-                                                            padding:
-                                                                EdgeInsets.all(
-                                                                    5),
-                                                            child: ReviewItem(
-                                                              feed: feed,
-                                                            )))
-                                                        .toList());
+                                                return Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      "Reviews(${snapshot.data!.length})",
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .bodyLarge
+                                                          ?.copyWith(
+                                                              fontSize: 18,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w700,
+                                                              color:
+                                                                  Colors.grey),
+                                                    ),
+                                                    Gap(18),
+                                                    Column(
+                                                        // shrinkWrap: true,
+                                                        // scrollDirection:
+                                                        //     Axis.vertical,
+                                                        // shrinkWrap: true,
+                                                        children: snapshot.data!
+                                                            .map((feed) =>
+                                                                Padding(
+                                                                    padding:
+                                                                        EdgeInsets
+                                                                            .all(
+                                                                                5),
+                                                                    child:
+                                                                        ReviewItem(
+                                                                      feed:
+                                                                          feed,
+                                                                    )))
+                                                            .toList()),
+                                                  ],
+                                                );
                                               } else if (snapshot.hasError) {
                                                 return Center(
                                                     child: Column(

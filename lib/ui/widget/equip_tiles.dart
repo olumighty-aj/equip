@@ -1,13 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:equipro/core/model/EquipmentModel.dart';
 import 'package:equipro/ui/screens/hirer/book/details_view_model.dart';
-import 'package:equipro/ui/widget/base_button.dart';
-import 'package:equipro/ui/widget/general_button.dart';
-// import 'package:equipro/utils/locator.dart';
-import 'package:equipro/utils/router/navigation_service.dart';
-import 'package:equipro/utils/router/route_names.dart';
-import 'package:flutter/material.dart';
 import 'package:equipro/utils/colors.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -159,7 +154,7 @@ class EquipTiles extends StatelessWidget {
 }
 
 String getCurrency(country) {
-  if (country == "Nigeria") {
+  if (country == "Nigeria" || country.contains("Nigeria")) {
     return "NGN";
   } else {
     return "GBP";

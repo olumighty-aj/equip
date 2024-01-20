@@ -2,18 +2,13 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:equipro/core/model/ChatListModel.dart';
 import 'package:equipro/ui/screens/chat/chat_view_model.dart';
 import 'package:equipro/ui/screens/chat/chats_widget/chat_details.dart';
-import 'package:equipro/ui/widget/chat_widget.dart';
 import 'package:equipro/ui/widget/noti_widget.dart';
 import 'package:equipro/utils/colors.dart';
-import 'package:equipro/utils/locator.dart';
-import 'package:equipro/utils/router/navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:stacked/stacked.dart';
 
-import '../../../app/app_setup.logger.dart';
 import '../../../utils/app_svgs.dart';
 import '../../widget/input_fields/custom_text_field.dart';
 import '../profile/edit_profile.dart';
@@ -26,7 +21,6 @@ class Chat extends StatefulWidget {
 }
 
 class ChatState extends State<Chat> {
-  final NavService _navigationService = locator<NavService>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   late String fcmToken;
 
@@ -195,7 +189,7 @@ class ChatListTile extends StatelessWidget {
           ),
         ),
         Gap(3),
-        Divider(),
+        Divider(color: Colors.grey),
       ],
     );
   }

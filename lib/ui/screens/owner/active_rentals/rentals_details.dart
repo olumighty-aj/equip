@@ -1,11 +1,8 @@
 import 'package:equipro/core/model/ActiveRentalsModel.dart';
 import 'package:equipro/core/model/success_model.dart';
 import 'package:equipro/ui/screens/owner/active_rentals/rentals_view_model.dart';
-import 'package:equipro/ui/widget/base_button.dart';
 import 'package:equipro/ui/widget/general_button.dart';
-import 'package:equipro/utils/locator.dart';
-import 'package:equipro/utils/router/navigation_service.dart';
-import 'package:equipro/utils/router/route_names.dart';
+import 'package:equipro/utils/colors.dart';
 import 'package:equipro/utils/screensize.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker_bdaya/flutter_datetime_picker_bdaya.dart';
@@ -13,7 +10,6 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
-import 'package:equipro/utils/colors.dart';
 
 class OwnerRentalDetails extends StatefulWidget {
   final ActiveRentalsModel feed;
@@ -25,13 +21,11 @@ class OwnerRentalDetails extends StatefulWidget {
 
 class LoginState extends State<OwnerRentalDetails>
     with TickerProviderStateMixin {
-  final NavService _navigationService = locator<NavService>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   String? selectedDate;
   TextEditingController emailController = TextEditingController();
   AnimationController? _navController;
-  Animation<Offset>? _navAnimation;
 
   displayDialog(BuildContext context, OwnerRentalsViewModel model) {
     return showDialog(
@@ -134,13 +128,6 @@ class LoginState extends State<OwnerRentalDetails>
       duration: const Duration(milliseconds: 2000),
       vsync: this,
     )..forward();
-    _navAnimation = Tween<Offset>(
-      begin: const Offset(0.0, 0.99),
-      end: const Offset(0.0, 0.0),
-    ).animate(CurvedAnimation(
-      parent: _navController!,
-      curve: Curves.easeIn,
-    ));
   }
 
   @override

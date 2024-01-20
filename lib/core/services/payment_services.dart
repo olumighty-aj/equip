@@ -1,13 +1,13 @@
 import 'package:dio/dio.dart';
 import 'package:equipro/core/api/dio_service.dart';
-import 'package:equipro/core/services/auth_service.dart';
-import 'package:flutter/material.dart';
 // import 'package:flutter_paystack/flutter_paystack.dart';
 import 'package:equipro/core/model/error_model.dart';
 import 'package:equipro/core/model/success_model.dart';
+import 'package:equipro/core/services/auth_service.dart';
 import 'package:equipro/core/services/index.dart';
 import 'package:equipro/utils/http/paths.dart';
 import 'package:equipro/utils/locator.dart';
+import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
 import '../model/base_model.dart';

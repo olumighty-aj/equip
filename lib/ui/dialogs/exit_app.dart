@@ -1,16 +1,8 @@
-import 'package:equipro/core/services/auth_service.dart';
 import 'package:equipro/ui/widget/base_button.dart';
-import 'package:equipro/utils/helpers.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:stacked_services/stacked_services.dart';
 
-import '../../app/app_setup.locator.dart';
-import '../../app/app_setup.router.dart';
-import '../../utils/app_svgs.dart';
-import '../../utils/colors.dart';
-import '../../utils/tiny_db.dart';
 
 class ExitApp extends StatelessWidget {
   final DialogRequest request;

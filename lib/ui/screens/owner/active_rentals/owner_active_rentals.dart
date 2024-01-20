@@ -1,9 +1,7 @@
 import 'package:equipro/core/model/ActiveRentalsModel.dart';
-import 'package:equipro/ui/screens/hirer/active_rentals/rentals_view_model.dart';
 import 'package:equipro/ui/screens/owner/active_rentals/rentals_view_model.dart';
 import 'package:equipro/ui/widget/rental_tiles.dart';
-import 'package:equipro/utils/locator.dart';
-import 'package:equipro/utils/router/navigation_service.dart';
+import 'package:equipro/utils/colors.dart';
 import 'package:equipro/utils/screensize.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
@@ -11,7 +9,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:stacked/stacked.dart';
-import 'package:equipro/utils/colors.dart';
 
 import '../../../../utils/app_svgs.dart';
 import '../../profile/edit_profile.dart';
@@ -26,7 +23,6 @@ class OwnerRentals extends StatefulWidget {
 class OwnerRentalsState extends State<OwnerRentals>
     with SingleTickerProviderStateMixin {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  final NavService _navigationService = locator<NavService>();
   late final TabController _controller;
 
   @override

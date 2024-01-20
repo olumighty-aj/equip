@@ -7,18 +7,15 @@ import 'package:equipro/ui/screens/profile/edit_profile.dart';
 import 'package:equipro/ui/widget/base_button.dart';
 import 'package:equipro/ui/widget/booking_request.dart';
 import 'package:equipro/ui/widget/dash_painter.dart';
-import 'package:equipro/ui/widget/general_button.dart';
+import 'package:equipro/utils/colors.dart';
 import 'package:equipro/utils/locator.dart';
 import 'package:equipro/utils/router/navigation_service.dart';
-import 'package:equipro/utils/router/route_names.dart';
-import 'package:equipro/utils/screensize.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
-import 'package:equipro/utils/colors.dart';
 
 class EquipOwnerDetails extends StatefulWidget {
   final EquipmentModel model;

@@ -1,29 +1,19 @@
 import 'package:equipro/core/enums/bottom_sheet_type.dart';
-import 'package:equipro/core/model/LoginPayload.dart';
-import 'package:equipro/ui/screens/login/view_model.dart';
 import 'package:equipro/ui/screens/login/view_model.dart';
 import 'package:equipro/ui/widget/base_button.dart';
-import 'package:equipro/utils/screensize.dart';
-import 'package:equipro/utils/theme_manager.dart';
+import 'package:equipro/utils/colors.dart';
+import 'package:equipro/utils/helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:location/location.dart';
 import 'package:stacked/stacked.dart';
-import 'package:equipro/ui/screens/login/login_view_model.dart';
-import 'package:equipro/ui/widget/general_button.dart';
-import 'package:equipro/utils/colors.dart';
-import 'package:equipro/utils/helpers.dart';
 // import 'package:equipro/utils/locator.dart';
-import 'package:equipro/utils/notification_helper.dart';
-import 'package:equipro/utils/router/navigation_service.dart';
-import 'package:equipro/utils/router/route_names.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 import '../../../app/app_setup.locator.dart';
 import '../../../utils/busy_dialog.dart';
 import '../../../utils/progressBarManager/dialog_models.dart';
 import '../../../utils/progressBarManager/dialog_service.dart';
-import '../../../utils/text_styles.dart';
 import '../register/register_view.dart';
 import 'forgt_password/forgot_password.dart';
 
@@ -42,7 +32,6 @@ class _LoginState extends State<Login> {
   Location location = Location();
 
   bool? _serviceEnabled;
-  PermissionStatus? _permissionGranted;
 
   Future<LocationData> getUserLocation() async {
     print("ajdjdj");
@@ -74,8 +63,8 @@ class _LoginState extends State<Login> {
   }
 
   @override
-  void initState() async {
-    await getUserLocation();
+  void initState() {
+    getUserLocation();
     _progressService.registerProgressListener(_showDialog);
     super.initState();
   }

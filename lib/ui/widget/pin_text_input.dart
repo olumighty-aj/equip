@@ -1,6 +1,6 @@
+import 'package:equipro/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:pin_input_text_field/pin_input_text_field.dart';
-import 'package:equipro/utils/colors.dart';
 
 class PinTextInput extends StatelessWidget {
   final Function onChanged;

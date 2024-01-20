@@ -1,3 +1,4 @@
+import 'package:equipro/core/model/ActiveRentalsModel.dart' as active;
 import 'package:equipro/ui/screens/hirer/active_rentals/edit_booking/view_model.dart';
 import 'package:equipro/ui/screens/profile/edit_profile.dart';
 import 'package:equipro/ui/widget/base_button.dart';
@@ -7,9 +8,7 @@ import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:place_picker/entities/location_result.dart';
 import 'package:place_picker/widgets/place_picker.dart';
-import 'package:equipro/core/model/ActiveRentalsModel.dart' as active;
 import 'package:stacked/stacked.dart';
-import '../../../../../../core/model/EquipmentModel.dart';
 
 class EditBookings extends StatefulWidget {
   final active.ActiveRentalsModel model;

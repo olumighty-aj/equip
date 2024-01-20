@@ -3,21 +3,23 @@ import 'package:equipro/core/model/base_model.dart';
 import 'package:equipro/core/model/error_model.dart';
 import 'package:equipro/core/model/success_model.dart';
 import 'package:equipro/core/services/activities_service.dart';
-import 'package:equipro/core/services/auth_service.dart';
+import 'package:equipro/utils/extensions.dart';
 import 'package:equipro/utils/helpers.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
+
 import '../../../../app/app_setup.locator.dart';
 import '../../../../app/app_setup.logger.dart';
 import '../../../../app/app_setup.router.dart';
 import '../../../../core/enums/dialog_type.dart';
 
 class RentalsViewModel extends BaseViewModel {
-  final Authentication _authentication = locator<Authentication>();
   final _navigationService = locator<NavigationService>();
   final _dialog = locator<DialogService>();
   final Activities _activities = locator<Activities>();
   final _log = getLogger("RentalsViewModel");
+
+  int? dateDifference;
 
   List<ActiveRentalsModel>? _allRentals;
   List<ActiveRentalsModel>? get allRentals => _allRentals;
@@ -32,13 +34,15 @@ class RentalsViewModel extends BaseViewModel {
     BaseDataModel? model = await runBusyFuture(
         _activities.getActiveRentals("all"),
         busyObject: "all");
-    if (model?.status == true) {
-      for (var i in model!.payload["content"]) {
+    if (model!.payload!["content"].isNotEmpty) {
+      for (var i in model.payload["content"]) {
         _allRentals = [];
-
         _allRentals!.add(ActiveRentalsModel.fromJson(i));
         notifyListeners();
       }
+    } else {
+      _allRentals = [];
+      notifyListeners();
     }
   }
 
@@ -65,9 +69,14 @@ class RentalsViewModel extends BaseViewModel {
         _activities.getActiveRentals("received"),
         busyObject: "received");
     if (model?.status == true) {
-      for (var i in model!.payload["content"]) {
+      if (model!.payload!["content"].isNotEmpty) {
+        for (var i in model.payload["content"]) {
+          _receivedRentals = [];
+          _receivedRentals!.add(ActiveRentalsModel.fromJson(i));
+          notifyListeners();
+        }
+      } else {
         _receivedRentals = [];
-        _receivedRentals!.add(ActiveRentalsModel.fromJson(i));
         notifyListeners();
       }
     }
@@ -78,9 +87,14 @@ class RentalsViewModel extends BaseViewModel {
         _activities.getActiveRentals("returned"),
         busyObject: "returned");
     if (model?.status == true) {
-      for (var i in model!.payload["content"]) {
+      if (model!.payload!["content"].isNotEmpty) {
+        for (var i in model.payload["content"]) {
+          _returnRentals = [];
+          _returnRentals!.add(ActiveRentalsModel.fromJson(i));
+          notifyListeners();
+        }
+      } else {
         _returnRentals = [];
-        _returnRentals!.add(ActiveRentalsModel.fromJson(i));
         notifyListeners();
       }
     }
@@ -315,7 +329,7 @@ class RentalsViewModel extends BaseViewModel {
     }
   }
 
-  void extendBooking(data, context) async {
+  void extendBooking(Map<String, dynamic> data, context) async {
     BaseDataModel? model = await runBusyFuture(
         _activities.extendEquipmentBook(data),
         busyObject: "extend");
@@ -340,5 +354,39 @@ class RentalsViewModel extends BaseViewModel {
       showToast("Successfully submitted review", context: context);
       _navigationService.clearTillFirstAndShow(Routes.rentals);
     }
+  }
+
+  int getDateDifference(String date) {
+    try {
+      // Parse the specific date string into a DateTime object
+      DateTime specificDate = date.toDate();
+
+      // Current date and time
+      DateTime currentDate = DateTime.now();
+
+      // Calculate the difference
+      Duration difference = currentDate.difference(specificDate);
+
+      // Extract the number of days
+      int differenceInDays = difference.inDays;
+
+      print('Difference in days: $differenceInDays days');
+      return differenceInDays;
+    } catch (e) {
+      print('Error parsing date: $e');
+      // Handle the error (return a specific value or rethrow the exception)
+      return -1; // or throw e; or any other appropriate handling
+    }
+  }
+}
+
+extension StringToDate on String {
+  DateTime toDate() {
+    List<String> dateParts = this.split('-');
+    int day = int.parse(dateParts[0]);
+    int month = int.parse(dateParts[1]);
+    int year = int.parse(dateParts[2]);
+
+    return DateTime(year, month, day);
   }
 }

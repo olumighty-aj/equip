@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -14,8 +13,8 @@ class CalenderPopupView extends StatefulWidget {
   final Function onCancelClick;
 
   const CalenderPopupView(
-      { Key? key,
-       this.minimumDate,
+      {Key? key,
+      this.minimumDate,
       required this.maximumDate,
       required this.barrierDismissible,
       required this.initialStartDate,

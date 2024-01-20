@@ -1,12 +1,13 @@
 import 'dart:convert';
+
+import 'package:equipro/core/model/error_model.dart';
+import 'package:equipro/core/model/success_model.dart';
 import 'package:equipro/utils/helpers.dart';
 import 'package:equipro/utils/locator.dart';
 import 'package:equipro/utils/router/navigation_service.dart';
 import 'package:equipro/utils/router/route_names.dart';
 import 'package:equipro/utils/tiny_db.dart';
 import 'package:http/http.dart' as http;
-import 'package:equipro/core/model/error_model.dart';
-import 'package:equipro/core/model/success_model.dart';
 
 handleResponse(http.Response response) {
   final NavService navigationService = locator<NavService>();

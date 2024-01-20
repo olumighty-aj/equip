@@ -1,14 +1,10 @@
 import 'dart:async';
+
 import 'package:equipro/app/app_setup.router.dart';
-import 'package:equipro/utils/colors.dart';
+import 'package:equipro/core/services/auth_service.dart';
 import 'package:flutter/material.dart';
-import 'package:equipro/utils/screensize.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:equipro/core/services/auth_service.dart';
-// import 'package:equipro/utils/locator.dart';
-import 'package:equipro/utils/router/navigation_service.dart';
-import 'package:equipro/utils/router/route_names.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 import '../../app/app.dart';
@@ -30,6 +26,7 @@ class SplashScreenState extends State<AnimatedSplashScreen>
   final _navigationService = locator<NavigationService>();
   late AnimationController animationController;
   bool? userExists;
+  bool? tokenExists;
   late Animation<double> animation;
   final Authentication _authentication = locator<Authentication>();
   startTime() async {
@@ -41,8 +38,11 @@ class SplashScreenState extends State<AnimatedSplashScreen>
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     var id = prefs.getString('currentUser');
-    if (id != null) {
+    var token = prefs.getString("token");
+    if (id != null && token != null) {
       _authentication.alreadyLoggedIn();
+    } else if (id != null && token == null) {
+      _navigationService.clearStackAndShow(Routes.login);
     } else {
       _navigationService.clearStackAndShow(Routes.onboardingScreen);
       // _navigationService.navigateReplacementTo(loginRoute);
@@ -52,6 +52,7 @@ class SplashScreenState extends State<AnimatedSplashScreen>
   void check() async {
     userExists = await App.checkIfUserIsNew();
     isHirer = await App.checkIfIsHirer();
+    tokenExists = await App.checkIfTokenExists();
   }
 
   @override
@@ -69,12 +70,18 @@ class SplashScreenState extends State<AnimatedSplashScreen>
     setState(() {
       _visible = !_visible;
     });
-    Future.delayed(Duration(seconds: 4)).then(
-        (value) => _navigationService.clearStackAndShow(userExists! && isHirer!
+    Future.delayed(Duration(seconds: 4)).then((value) {
+      if (tokenExists!) {
+        return _navigationService.clearStackAndShow(userExists! && isHirer!
             ? Routes.home
             : userExists! && !isHirer!
                 ? Routes.homeOwner
-                : Routes.onboardingScreen));
+                : Routes.onboardingScreen);
+      } else {
+        return _navigationService.clearStackAndShow(
+            userExists! ? Routes.login : Routes.onboardingScreen);
+      }
+    });
     // startTime();
   }
 

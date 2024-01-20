@@ -1,15 +1,15 @@
+import 'package:equipro/app/app_setup.logger.dart';
 import 'package:equipro/core/model/ActiveRentalsModel.dart';
 import 'package:equipro/ui/screens/hirer/active_rentals/rentals_view_model.dart';
 import 'package:equipro/ui/screens/profile/edit_profile.dart';
 import 'package:equipro/ui/widget/input_fields/custom_text_field.dart';
 import 'package:equipro/ui/widget/rental_tiles.dart';
+import 'package:equipro/utils/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:stacked/stacked.dart';
-import 'package:equipro/utils/colors.dart';
 
 import '../../../../utils/app_svgs.dart';
 
@@ -22,16 +22,11 @@ class Rentals extends StatefulWidget {
 
 class LoginState extends State<Rentals> with SingleTickerProviderStateMixin {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  late final TabController _controller;
-
-  ScrollPhysics scroll1Physics = BouncingScrollPhysics();
-  ScrollPhysics scroll2Physics = BouncingScrollPhysics();
+  late TabController _controller;
 
   @override
   void initState() {
     super.initState();
-
-    _controller = TabController(length: 4, vsync: this, initialIndex: 0);
   }
 
   ScrollController firstController = ScrollController();

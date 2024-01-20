@@ -1,10 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:equipro/core/model/onboarding_screen_model.dart';
-import 'package:equipro/utils/base_model.dart';
 import 'package:equipro/utils/colors.dart';
+import 'package:flutter/material.dart';
 // import 'package:equipro/utils/locator.dart';
-import 'package:equipro/utils/router/navigation_service.dart';
-import 'package:equipro/utils/router/route_names.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 

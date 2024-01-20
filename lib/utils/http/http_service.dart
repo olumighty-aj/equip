@@ -1,8 +1,9 @@
-import 'dart:convert';
 import 'dart:async';
+import 'dart:convert';
+
+import 'package:equipro/utils/http/response_handler.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:equipro/utils/http/response_handler.dart';
 
 class HttpService {
   final String _baseUrl;

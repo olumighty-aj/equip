@@ -9,23 +9,15 @@ import 'dimensions.dart';
 
 class ThemeNotifier with ChangeNotifier {
   final darkTheme = ThemeData(
-    // primarySwatch: AppColors.primarySwatch,
-    // primaryColor: AppColors.primarySwatch,
     primaryColor: AppColors.primaryColor,
     scaffoldBackgroundColor: const Color.fromARGB(255, 255, 255, 255),
     fontFamily: TextStyles.fontFamily,
     colorScheme: ColorScheme.fromSwatch(
       backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-      // primarySwatch: AppColors.primarySwatch,
-      // accentColor: AppColors.accentColor,
     ),
-    // dividerColor: AppColors.dividerColor,
     buttonTheme: const ButtonThemeData(
       buttonColor: Colors.white,
     ),
-    // inputDecorationTheme: InputDecorationTheme(
-    //   enabledBorder:
-    // ),
     appBarTheme: AppBarTheme(
       systemOverlayStyle: SystemUiOverlayStyle.dark,
       color: Color(0xFF1B1C1E),
@@ -50,24 +42,20 @@ class ThemeNotifier with ChangeNotifier {
   );
 
   final lightTheme = ThemeData(
-    // primarySwatch: AppColors.primarySwatch,
     primaryColor: AppColors.primaryColor,
     scaffoldBackgroundColor: Color(0xFFF5F5F5),
     fontFamily: TextStyles.fontFamily,
     colorScheme: ColorScheme.fromSwatch(
       backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-      // primarySwatch: AppColors.primarySwatch,
-      // accentColor: AppColors.accentColor,
     ),
-    // dividerColor: AppColors.dividerColor,
     buttonTheme: const ButtonThemeData(
       buttonColor: Colors.white,
     ),
     drawerTheme: const DrawerThemeData(scrimColor: Colors.black),
     appBarTheme: const AppBarTheme(
       systemOverlayStyle: SystemUiOverlayStyle.dark,
-      // color: Color(0xFF1B1C1E),
       iconTheme: IconThemeData(color: Colors.black),
+      scrolledUnderElevation: 0,
       centerTitle: true,
       backgroundColor: Colors.transparent,
       elevation: 0,

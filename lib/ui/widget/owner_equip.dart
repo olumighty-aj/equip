@@ -1,19 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:equipro/core/model/EquipmentModel.dart';
-import 'package:equipro/core/services/index.dart';
 import 'package:equipro/ui/screens/hirer/book/details_view_model.dart';
 import 'package:equipro/ui/widget/equip_tiles.dart';
-import 'package:equipro/ui/widget/general_button.dart';
-import 'package:equipro/utils/locator.dart';
-import 'package:equipro/utils/router/navigation_service.dart';
-import 'package:equipro/utils/router/route_names.dart';
-import 'package:flutter/material.dart';
 import 'package:equipro/utils/colors.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:gap/gap.dart';
 
 import '../../utils/app_svgs.dart';
-import '../screens/hirer/book/equip_details.dart';
 import '../screens/owner/home_owner/equip_owner_details.dart';
 
 class OwnerEquipTiles extends StatelessWidget {

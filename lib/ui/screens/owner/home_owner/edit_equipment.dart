@@ -1,11 +1,11 @@
 import 'dart:io';
 import 'dart:math';
+
 import 'package:equipro/core/model/EquipmentModel.dart';
-import 'package:equipro/core/services/index.dart';
 import 'package:equipro/ui/screens/drawer.dart';
 import 'package:equipro/ui/screens/owner/home_owner/home_view_model.dart';
 import 'package:equipro/ui/widget/base_button.dart';
-import 'package:equipro/ui/widget/general_button.dart';
+import 'package:equipro/utils/colors.dart';
 import 'package:equipro/utils/helpers.dart';
 import 'package:equipro/utils/locator.dart';
 import 'package:equipro/utils/router/navigation_service.dart';
@@ -14,15 +14,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker_bdaya/flutter_datetime_picker_bdaya.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:place_picker/place_picker.dart';
-import 'package:progress_indicator/progress_indicator.dart';
-import 'package:stacked/stacked.dart';
-import 'package:equipro/utils/colors.dart';
-import 'package:image/image.dart' as IM;
 import 'package:path_provider/path_provider.dart';
-import 'package:http/http.dart' as http;
+import 'package:place_picker/place_picker.dart';
+import 'package:stacked/stacked.dart';
 
 class EditEquipment extends StatefulWidget {
   final EquipmentModel model;
@@ -575,8 +572,7 @@ class LoginState extends State<EditEquipment> with TickerProviderStateMixin {
                                           decoration: BoxDecoration(
                                               //   color: AppColors.primaryColor.withOpacity(0.1),
                                               borderRadius: const BorderRadius
-                                                      .all(
-                                                  Radius.circular(
+                                                  .all(Radius.circular(
                                                       5.0) //                 <--- border radius here
                                                   ),
                                               border: Border.all(
@@ -635,8 +631,7 @@ class LoginState extends State<EditEquipment> with TickerProviderStateMixin {
                                           decoration: BoxDecoration(
                                               //   color: AppColors.primaryColor.withOpacity(0.1),
                                               borderRadius: const BorderRadius
-                                                      .all(
-                                                  Radius.circular(
+                                                  .all(Radius.circular(
                                                       5.0) //                 <--- border radius here
                                                   ),
                                               border: Border.all(

@@ -52,7 +52,7 @@ class PaymentOptionScreen extends StatelessWidget {
                                 ))
                             : null,
                       ),
-                    Divider(),
+                    Divider(color: Colors.grey),
                     ListTile(
                       onTap: () {
                         var totalAmount =
@@ -90,7 +90,7 @@ class PaymentOptionScreen extends StatelessWidget {
                               ))
                           : null,
                     ),
-                    Divider()
+                    Divider(color: Colors.grey)
                   ],
                 ),
               );

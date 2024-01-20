@@ -1,14 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:equipro/core/model/ChatListModel.dart';
 import 'package:equipro/core/model/ChatMessages.dart';
-import 'package:equipro/core/model/error_model.dart';
 import 'package:equipro/core/services/activities_service.dart';
 import 'package:equipro/core/services/auth_service.dart';
 import 'package:equipro/ui/screens/chat/chats_widget/chat_bubble.dart';
-import 'package:equipro/ui/widget/noti_widget.dart';
 import 'package:equipro/utils/colors.dart';
 import 'package:equipro/utils/extensions.dart';
 import 'package:equipro/utils/helpers.dart';
@@ -38,14 +35,12 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
   PusherChannelsFlutter pusher = PusherChannelsFlutter.getInstance();
   ScrollController scrollController = ScrollController();
   final logger = getLogger("ChatDetails");
-  String _log = 'output:\n';
   final Activities _activities = locator<Activities>();
   List<ChatMessages> chatResponse = [];
 
   log(String text) {
     print("LOG: $text");
     setState(() {
-      _log += text + "\n";
       Timer(
           const Duration(milliseconds: 100),
           () => scrollController

@@ -1,21 +1,13 @@
 import 'package:equipro/core/model/NotificationModel.dart';
-import 'package:equipro/ui/screens/login/login_view_model.dart';
 import 'package:equipro/ui/screens/owner/home_owner/home_view_model.dart';
-import 'package:equipro/ui/widget/chat_widget.dart';
-import 'package:equipro/ui/widget/input_fields/custom_text_field.dart';
 import 'package:equipro/ui/widget/noti_widget.dart';
 import 'package:equipro/utils/app_svgs.dart';
 import 'package:equipro/utils/colors.dart';
-import 'package:equipro/utils/locator.dart';
-import 'package:equipro/utils/router/navigation_service.dart';
-import 'package:equipro/utils/router/route_names.dart';
 import 'package:equipro/utils/screensize.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:stacked/stacked.dart';
-import 'package:stacked_services/stacked_services.dart';
 
 class NotificationPage extends StatefulWidget {
   const NotificationPage({Key? key}) : super(key: key);
@@ -25,7 +17,6 @@ class NotificationPage extends StatefulWidget {
 }
 
 class LoginState extends State<NotificationPage> {
-  final NavigationService _navigationService = locator<NavigationService>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   late String fcmToken;
   Future<List<NotificationModel>>? myFuture;
@@ -39,7 +30,7 @@ class LoginState extends State<NotificationPage> {
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<HomeOwnerViewModel>.reactive(
-        onModelReady: (model) {
+        onViewModelReady: (model) {
           myFuture = model.getNewNotification();
         },
         viewModelBuilder: () => HomeOwnerViewModel(),

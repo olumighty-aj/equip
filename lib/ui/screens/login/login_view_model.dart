@@ -1,7 +1,6 @@
 import 'package:equipro/app/app_setup.router.dart';
 import 'package:equipro/core/model/LoginPayload.dart';
 import 'package:equipro/core/model/VerifyForgotPassword.dart';
-import 'package:equipro/core/model/base_model.dart';
 import 'package:equipro/core/model/error_model.dart';
 import 'package:equipro/core/model/success_model.dart';
 import 'package:equipro/core/services/auth_service.dart';

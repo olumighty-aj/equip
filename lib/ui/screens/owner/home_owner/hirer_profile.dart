@@ -1,11 +1,10 @@
-import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:equipro/core/model/ReviewsModel.dart';
 import 'package:equipro/core/model/EquipmentModel.dart' as eq;
+import 'package:equipro/core/model/ReviewsModel.dart';
 import 'package:equipro/ui/screens/drawer.dart';
-import 'package:equipro/ui/screens/profile/edit_profile.dart';
 import 'package:equipro/ui/screens/profile/profile_view_model.dart';
 import 'package:equipro/ui/widget/reviews_widget.dart';
+import 'package:equipro/utils/colors.dart';
 import 'package:equipro/utils/locator.dart';
 import 'package:equipro/utils/router/navigation_service.dart';
 import 'package:equipro/utils/screensize.dart';
@@ -13,8 +12,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:stacked/stacked.dart';
-import 'package:equipro/ui/screens/login/login_view_model.dart';
-import 'package:equipro/utils/colors.dart';
 
 class HirerProfile extends StatefulWidget {
   final eq.Hirers feed;
@@ -294,7 +291,7 @@ class LoginState extends State<HirerProfile> with TickerProviderStateMixin {
                                                             .map((_) => Padding(
                                                                   padding:
                                                                       const EdgeInsets
-                                                                              .all(
+                                                                          .all(
                                                                           8.0),
                                                                   child: Row(
                                                                     crossAxisAlignment:
@@ -302,8 +299,10 @@ class LoginState extends State<HirerProfile> with TickerProviderStateMixin {
                                                                             .start,
                                                                     children: [
                                                                       Padding(
-                                                                        padding:
-                                                                            const EdgeInsets.symmetric(horizontal: 8.0),
+                                                                        padding: const EdgeInsets
+                                                                            .symmetric(
+                                                                            horizontal:
+                                                                                8.0),
                                                                       ),
                                                                       Expanded(
                                                                         child:

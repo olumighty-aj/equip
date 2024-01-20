@@ -3,11 +3,8 @@ import 'package:equipro/core/model/SignUpModel.dart';
 import 'package:equipro/core/model/error_model.dart';
 import 'package:equipro/core/model/success_model.dart';
 import 'package:equipro/core/services/auth_service.dart';
-import 'package:equipro/utils/base_model.dart';
 import 'package:equipro/utils/helpers.dart';
 import 'package:equipro/utils/locator.dart';
-import 'package:equipro/utils/router/navigation_service.dart';
-import 'package:equipro/utils/router/route_names.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 

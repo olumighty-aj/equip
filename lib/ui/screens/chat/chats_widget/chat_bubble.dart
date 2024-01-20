@@ -1,10 +1,8 @@
 import 'package:equipro/core/model/ChatMessages.dart';
 import 'package:equipro/core/services/auth_service.dart';
 import 'package:equipro/ui/screens/chat/chats_widget/colors.dart';
-import 'package:equipro/ui/screens/chat/chats_widget/message.dart';
 import 'package:equipro/ui/widget/noti_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 
 class ChatBubble extends StatelessWidget {

@@ -1,5 +1,5 @@
+import 'package:equipro/ui/dialogs/amount_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 import '../../app/app_setup.locator.dart';
@@ -9,7 +9,7 @@ import '../ui/dialogs/exit_app.dart';
 import '../ui/dialogs/loading_dialog.dart';
 import '../ui/dialogs/logout_dialog.dart';
 import '../ui/dialogs/notification_details.dart';
-import '../ui/dialogs/payment_method_dialog.dart';
+import '../ui/dialogs/owner_payment_method/payment_method_dialog.dart';
 import '../ui/dialogs/payment_successful.dart';
 import '../ui/dialogs/return_equip_dialog.dart';
 
@@ -53,6 +53,10 @@ void setupDialogUi() {
         ),
     DialogType.paymentMethod: (context, sheetRequest, completer) =>
         PaymentMethodDialog(
+          request: sheetRequest,
+          completer: completer,
+        ),
+    DialogType.amountDialog: (context, sheetRequest, completer) => AmountDialog(
           request: sheetRequest,
           completer: completer,
         ),

@@ -1,20 +1,17 @@
 import 'package:equipro/app/app_setup.logger.dart';
 import 'package:equipro/core/enums/dialog_type.dart';
-import 'package:equipro/core/model/ActiveRentalsModel.dart';
 import 'package:equipro/core/model/base_model.dart';
 import 'package:equipro/core/model/error_model.dart';
 import 'package:equipro/core/model/success_model.dart';
 import 'package:equipro/core/services/activities_service.dart';
 import 'package:equipro/core/services/auth_service.dart';
 import 'package:equipro/core/services/payment_services.dart';
-import 'package:equipro/utils/base_model.dart';
 import 'package:equipro/utils/helpers.dart';
 // import 'package:equipro/utils/locator.dart';
-import 'package:equipro/utils/router/navigation_service.dart';
-import 'package:equipro/utils/router/route_names.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
+
 // import 'package:flutter_paystack/flutter_paystack.dart';
 
 import '../../../../app/app_setup.locator.dart';
@@ -28,9 +25,11 @@ class EarningsViewModel extends BaseViewModel {
   final Activities _activities = locator<Activities>();
   final PaymentService _paymentService = locator<PaymentService>();
 
+  Map<String, dynamic> banks = {};
+
   TransactionModel? wallet;
 
-  bool paymentMethodEmpty = true;
+  // bool paymentMethodEmpty = true;
 
   String? get country => _authentication.currentUser.country;
 
@@ -52,6 +51,11 @@ class EarningsViewModel extends BaseViewModel {
     }
   }
 
+  void init() async {
+    getEarnings();
+    getAddedBank();
+  }
+
   withdraw(
     String amount,
   ) async {
@@ -69,6 +73,32 @@ class EarningsViewModel extends BaseViewModel {
       _navigationService.back();
       notifyListeners();
       return SuccessModel(result.data);
+    }
+  }
+
+  void getAddedBank() async {
+    BaseDataModel? res = await runBusyFuture(_activities.getPaymentBanks());
+    if (res?.status == true) {
+      banks = res!.payload;
+      notifyListeners();
+      _log.i("Gotten: ${res.payload}");
+    } else {
+      _log.e(res?.message);
+    }
+  }
+
+  void newWithdraw(context) async {
+    DialogResponse? res = await locator<DialogService>()
+        .showCustomDialog(variant: DialogType.amountDialog);
+    if (res?.data != null) {
+      BaseDataModel? model = await runBusyFuture(
+          _activities.withdrawEarnings(res!.data),
+          busyObject: "withdraw");
+      if (model?.status == true) {
+        showToast(model?.message ?? "Withdrawal Successful", context: context);
+      } else {
+        showErrorToast(model?.message ?? "", context: context);
+      }
     }
   }
 

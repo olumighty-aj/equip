@@ -1,12 +1,10 @@
 import 'package:equipro/core/model/VerifyForgotPassword.dart';
+import 'package:equipro/utils/colors.dart';
+import 'package:equipro/utils/helpers.dart';
 import 'package:equipro/utils/screensize.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:stacked/stacked.dart';
-import 'package:equipro/ui/screens/login/login_view_model.dart';
-import 'package:equipro/ui/widget/general_button.dart';
-import 'package:equipro/utils/colors.dart';
-import 'package:equipro/utils/helpers.dart';
 
 import '../../../widget/base_button.dart';
 import '../view_model.dart';

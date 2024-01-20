@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:gap/gap.dart';
 import 'package:stacked_services/stacked_services.dart';
 
-import '../../app/app_setup.locator.dart';
 import '../../utils/colors.dart';
 
 class LoadingDialog extends StatelessWidget {

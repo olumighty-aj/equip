@@ -1,11 +1,12 @@
-import 'package:equipro/utils/screensize.dart';
-import 'package:flutter/material.dart';
+import 'dart:io';
+
 import 'package:equipro/core/model/onboarding_screen_model.dart';
 import 'package:equipro/ui/widget/pageview_card.dart';
 import 'package:equipro/utils/colors.dart';
 import 'package:equipro/utils/helpers.dart';
-import 'dart:io';
+import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
+
 import 'onboardingscreen_viewmodel.dart';
 
 class OnboardingScreen extends StatefulWidget {

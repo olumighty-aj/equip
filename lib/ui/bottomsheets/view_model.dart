@@ -1,5 +1,5 @@
-import 'package:stacked/stacked.dart';
 import 'package:location/location.dart';
+import 'package:stacked/stacked.dart';
 
 class LocationSheetViewModel extends BaseViewModel {
   Location location = Location();
