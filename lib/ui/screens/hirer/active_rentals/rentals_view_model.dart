@@ -34,9 +34,10 @@ class RentalsViewModel extends BaseViewModel {
     BaseDataModel? model = await runBusyFuture(
         _activities.getActiveRentals("all"),
         busyObject: "all");
+    _log.i("All Rentals: ${model?.payload}");
     if (model!.payload!["content"].isNotEmpty) {
+      _allRentals = [];
       for (var i in model.payload["content"]) {
-        _allRentals = [];
         _allRentals!.add(ActiveRentalsModel.fromJson(i));
         notifyListeners();
       }
@@ -52,8 +53,8 @@ class RentalsViewModel extends BaseViewModel {
         busyObject: "booked");
     if (model?.status == true) {
       if (model!.payload!["content"].isNotEmpty) {
+        _bookedRentals = [];
         for (var i in model.payload["content"]) {
-          _bookedRentals = [];
           _bookedRentals!.add(ActiveRentalsModel.fromJson(i));
           notifyListeners();
         }
@@ -70,8 +71,8 @@ class RentalsViewModel extends BaseViewModel {
         busyObject: "received");
     if (model?.status == true) {
       if (model!.payload!["content"].isNotEmpty) {
+        _receivedRentals = [];
         for (var i in model.payload["content"]) {
-          _receivedRentals = [];
           _receivedRentals!.add(ActiveRentalsModel.fromJson(i));
           notifyListeners();
         }
@@ -88,8 +89,8 @@ class RentalsViewModel extends BaseViewModel {
         busyObject: "returned");
     if (model?.status == true) {
       if (model!.payload!["content"].isNotEmpty) {
+        _returnRentals = [];
         for (var i in model.payload["content"]) {
-          _returnRentals = [];
           _returnRentals!.add(ActiveRentalsModel.fromJson(i));
           notifyListeners();
         }
@@ -142,11 +143,6 @@ class RentalsViewModel extends BaseViewModel {
     // print(result);
     // return result;
   }
-
-  // void updateList(List<ActiveRentalsModel> list, index){
-  //   if()
-  //
-  // }
 
   Future<List<ActiveRentalsModel>> activeRentals(String type) async {
     //setBusy(true);

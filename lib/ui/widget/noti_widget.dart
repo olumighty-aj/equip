@@ -55,7 +55,7 @@ class NotiItem extends StatelessWidget {
                   ),
                   Expanded(
                     child: Container(
-                        padding: EdgeInsets.all(10),
+                        padding: EdgeInsets.all(8),
                         child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [

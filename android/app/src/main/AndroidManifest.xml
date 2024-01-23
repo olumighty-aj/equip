@@ -5,6 +5,7 @@
    <application
         android:label="Equippro"
         android:name="${applicationName}"
+        android:allowBackup="false"
         android:icon="@mipmap/launcher_icon">
        <meta-data android:name="com.google.android.geo.API_KEY"
            android:value="AIzaSyAsoaOKfTVMSJll6LvVcQ3sYgALbwJ0B9A"/>

@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:equipro/app/app_setup.logger.dart';
 import 'package:equipro/core/model/ChatListModel.dart';
 import 'package:equipro/ui/screens/chat/chat_view_model.dart';
 import 'package:equipro/ui/screens/chat/chats_widget/chat_details.dart';
@@ -117,6 +118,7 @@ class ChatListTile extends StatelessWidget {
       children: [
         ListTile(
           onTap: () {
+            // getLogger("ChatList Tile: ${model.toJson()}");
             Navigator.push(
                 context,
                 MaterialPageRoute(

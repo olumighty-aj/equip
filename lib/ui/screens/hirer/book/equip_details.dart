@@ -56,7 +56,7 @@ class LoginState extends State<EquipDetails> with TickerProviderStateMixin {
       parent: _navController!,
       curve: Curves.easeIn,
     ));
-    getLogger("EquipDetails").i(widget.model.toJson());
+    getLogger("EquipDetails").i("Equippppp Details: ${widget.model.toJson()}");
   }
 
   @override
@@ -251,147 +251,6 @@ class LoginState extends State<EquipDetails> with TickerProviderStateMixin {
                                           ),
                                         ),
                                       ),
-
-                                // AnimationLimiter(
-                                //     child: Row(
-                                //         mainAxisAlignment: MainAxisAlignment.center,
-                                //         children: AnimationConfiguration.toStaggeredList(
-                                //           duration: const Duration(milliseconds: 1000),
-                                //           childAnimationBuilder: (widget) => SlideAnimation(
-                                //             horizontalOffset:
-                                //                 MediaQuery.of(context).size.width / 4,
-                                //             child: FadeInAnimation(
-                                //                 curve: Curves.fastOutSlowIn, child: widget),
-                                //           ),
-                                //           children: [
-                                //             InkWell(
-                                //                 onTap: () {
-                                //                   setState(() {
-                                //                     selected = "1";
-                                //                   });
-                                //                 },
-                                //                 child: Container(
-                                //                     decoration: BoxDecoration(
-                                //                       borderRadius:
-                                //                           BorderRadius.circular(10),
-                                //                       color: selected != "1"
-                                //                           ? AppColors.primaryColor
-                                //                           : AppColors.white,
-                                //                     ),
-                                //                     height: 70,
-                                //                     width: 70,
-                                //                     child: Container(
-                                //                         height: 60,
-                                //                         width: 60,
-                                //                         padding: EdgeInsets.all(3),
-                                //                         child: ClipRRect(
-                                //                             borderRadius:
-                                //                                 BorderRadius.circular(10.0),
-                                //                             child: CachedNetworkImage(
-                                //                               imageUrl:
-                                //                                   "https://i.pravatar.cc/",
-                                //                               placeholder: (context, url) =>
-                                //                                   CircularProgressIndicator(),
-                                //                               errorWidget:
-                                //                                   (context, url, error) =>
-                                //                                       ClipRRect(
-                                //                                 borderRadius:
-                                //                                     BorderRadius.circular(
-                                //                                         8.0),
-                                //                                 child: Image.asset(
-                                //                                   "assets/images/logo.png",
-                                //                                   scale: 2,
-                                //                                 ),
-                                //                               ),
-                                //                             ))))),
-                                //             SizedBox(
-                                //               width: 10,
-                                //             ),
-                                //             InkWell(
-                                //                 onTap: () {
-                                //                   setState(() {
-                                //                     selected = "2";
-                                //                   });
-                                //                 },
-                                //                 child: Container(
-                                //                     decoration: BoxDecoration(
-                                //                       borderRadius:
-                                //                           BorderRadius.circular(10),
-                                //                       color: selected != "2"
-                                //                           ? AppColors.primaryColor
-                                //                           : AppColors.white,
-                                //                     ),
-                                //                     height: 70,
-                                //                     width: 70,
-                                //                     child: Container(
-                                //                         height: 60,
-                                //                         width: 60,
-                                //                         padding: EdgeInsets.all(3),
-                                //                         child: ClipRRect(
-                                //                             borderRadius:
-                                //                                 BorderRadius.circular(10.0),
-                                //                             child: CachedNetworkImage(
-                                //                               imageUrl:
-                                //                                   "https://i.pravatar.cc/",
-                                //                               placeholder: (context, url) =>
-                                //                                   CircularProgressIndicator(),
-                                //                               errorWidget:
-                                //                                   (context, url, error) =>
-                                //                                       ClipRRect(
-                                //                                 borderRadius:
-                                //                                     BorderRadius.circular(
-                                //                                         8.0),
-                                //                                 child: Image.asset(
-                                //                                   "assets/images/user.png",
-                                //                                   scale: 2,
-                                //                                 ),
-                                //                               ),
-                                //                             ))))),
-                                //             SizedBox(
-                                //               width: 10,
-                                //             ),
-                                //             InkWell(
-                                //                 onTap: () {
-                                //                   setState(() {
-                                //                     selected = "3";
-                                //                   });
-                                //                 },
-                                //                 child: Container(
-                                //                     decoration: BoxDecoration(
-                                //                       borderRadius:
-                                //                           BorderRadius.circular(10),
-                                //                       color: selected != "3"
-                                //                           ? AppColors.primaryColor
-                                //                           : AppColors.white,
-                                //                     ),
-                                //                     height: 70,
-                                //                     width: 70,
-                                //                     child: Container(
-                                //                         height: 70,
-                                //                         width: 70,
-                                //                         padding: EdgeInsets.all(3),
-                                //                         child: ClipRRect(
-                                //                             borderRadius:
-                                //                                 BorderRadius.circular(10.0),
-                                //                             child: CachedNetworkImage(
-                                //                               imageUrl:
-                                //                                   "https://i.pravatar.cc/",
-                                //                               placeholder: (context, url) =>
-                                //                                   CircularProgressIndicator(),
-                                //                               errorWidget:
-                                //                                   (context, url, error) =>
-                                //                                       ClipRRect(
-                                //                                 borderRadius:
-                                //                                     BorderRadius.circular(
-                                //                                         8.0),
-                                //                                 child: Image.asset(
-                                //                                   "assets/images/user.png",
-                                //                                   scale: 2,
-                                //                                 ),
-                                //                               ),
-                                //                             )))))
-                                //           ],
-                                //         )))
                               ]))),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -581,7 +440,7 @@ class LoginState extends State<EquipDetails> with TickerProviderStateMixin {
                                                           .currentUser
                                                           .id,
                                                       chatWithId:
-                                                          widget.model.hirersId,
+                                                          widget.model.ownersId,
                                                       messageCount: "",
                                                       lastMessage: "",
                                                       dateCreated: "",
@@ -646,3 +505,5 @@ class LoginState extends State<EquipDetails> with TickerProviderStateMixin {
         });
   }
 }
+
+//user_id: 5, owners_id: 1, owners.id: 1

@@ -244,13 +244,8 @@ class LoginState extends State<Home> {
                   color: AppColors.primaryColor,
                   onRefresh: () async {
                     try {
-                      await model.refresh(
-                          locationData != null
-                              ? locationData!.latitude.toString()
-                              : "6.4478",
-                          locationData != null
-                              ? locationData!.longitude.toString()
-                              : "3.4723");
+                      await model.refresh(locationData!.latitude.toString(),
+                          locationData!.longitude.toString());
                     } catch (e) {
                       print(e);
                     }

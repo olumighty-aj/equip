@@ -4,19 +4,14 @@ import 'package:equipro/core/model/SignUpModel.dart';
 import 'package:equipro/ui/screens/login/login_view.dart';
 import 'package:equipro/ui/screens/register/register_view_model.dart';
 import 'package:equipro/ui/widget/base_button.dart';
-import 'package:equipro/ui/widget/phonenoTextInput.dart';
 import 'package:equipro/utils/screensize.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
-import 'package:equipro/ui/screens/login/login_view_model.dart';
-import 'package:equipro/ui/widget/general_button.dart';
 import 'package:equipro/utils/colors.dart';
 import 'package:equipro/utils/helpers.dart';
 import 'package:equipro/utils/locator.dart';
-import 'package:equipro/utils/notification_helper.dart';
 import 'package:equipro/utils/router/navigation_service.dart';
-import 'package:equipro/utils/router/route_names.dart';
 
 class Register extends StatefulWidget {
   const Register({Key? key}) : super(key: key);
@@ -26,9 +21,10 @@ class Register extends StatefulWidget {
 }
 
 class RegisterState extends State<Register> {
-  final NavService _navigationService = locator<NavService>();
+  // final NavService _navigationService = locator<NavService>();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  TextEditingController confirmPasswordController = TextEditingController();
   TextEditingController fullNameController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -329,8 +325,6 @@ class RegisterState extends State<Register> {
                                                               //   onSelect: (){....},
                                                               // )
                                                               Container(
-                                                                //width: widthSizer(120, context),
-                                                                //height: heightSizer(16, context),
                                                                 child:
                                                                     CountryPickerDropdown(
                                                                         itemFilter: (c) =>
@@ -392,27 +386,6 @@ class RegisterState extends State<Register> {
                                                       }
                                                     },
                                                   )),
-                                              // PhoneNoTextInput(
-                                              //   onCountryChange:
-                                              //       (Country country) {
-                                              //     setState(() {
-                                              //       countryCode =
-                                              //           country.phoneCode;
-                                              //     });
-                                              //
-                                              //     print("$countryCode}");
-                                              //   },
-                                              //   onSaved: (phoneNum) {
-                                              //   print(phoneNum);
-                                              //   model.setPhoneNumber(
-                                              //       phoneNumber: "+" +
-                                              //           countryCode +
-                                              //           model
-                                              //               .sanitizePhoneNumberInput(
-                                              //               phoneNum));
-                                              //
-                                              //   },
-                                              // ),
                                               const SizedBox(
                                                 height: 30,
                                               ),
@@ -454,6 +427,45 @@ class RegisterState extends State<Register> {
                                               const SizedBox(
                                                 height: 20,
                                               ),
+                                              TextFormField(
+                                                validator: (val) {
+                                                  if (val !=
+                                                      passwordController.text) {
+                                                    return 'Passwords do not match';
+                                                  } else {
+                                                    return null;
+                                                  }
+                                                },
+                                                controller:
+                                                    confirmPasswordController,
+                                                decoration: InputDecoration(
+                                                  suffixIcon: IconButton(
+                                                    icon: Icon(
+                                                      passwordVisible
+                                                          ? Icons.visibility
+                                                          : Icons
+                                                              .visibility_off,
+                                                      color: Colors.black,
+                                                    ),
+                                                    onPressed: () {
+                                                      setState(() {
+                                                        passwordVisible =
+                                                            !passwordVisible;
+                                                      });
+                                                    },
+                                                  ),
+                                                  hintText: '******',
+                                                  hintStyle: const TextStyle(
+                                                    color: Colors.grey,
+                                                  ),
+                                                ),
+                                                obscureText: passwordVisible,
+                                                keyboardType: TextInputType
+                                                    .visiblePassword,
+                                                style: const TextStyle(
+                                                    color: Colors.black),
+                                                cursorColor: Colors.black,
+                                              ),
                                             ]))),
                                 const SizedBox(
                                   height: 10,
@@ -461,7 +473,9 @@ class RegisterState extends State<Register> {
                                 BaseButton(
                                   isBusy: model.busy("Register"),
                                   onPressed: () {
-                                    if (_formKey.currentState!.validate()) {
+                                    if (_formKey.currentState!.validate() &&
+                                        passwordController.text ==
+                                            confirmPasswordController.text) {
                                       model.newSignUp(
                                           SignUpModel(
                                               fullname: fullNameController.text,
@@ -490,7 +504,9 @@ class RegisterState extends State<Register> {
                                             style: TextStyle(
                                                 color: AppColors.primaryColor,
                                                 decoration:
-                                                    TextDecoration.underline))),
+                                                    TextDecoration.underline,
+                                                decorationColor:
+                                                    AppColors.primaryColor))),
                                   ],
                                 )
                               ],

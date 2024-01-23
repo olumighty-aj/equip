@@ -41,7 +41,9 @@ class NotificationDetail extends StatelessWidget {
                       child: Icon(Icons.close)),
                 ],
               ),
-              Divider(),
+              Divider(
+                color: Colors.grey,
+              ),
               Gap(10),
               Text(
                 request.data["message"],

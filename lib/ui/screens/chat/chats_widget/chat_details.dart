@@ -159,7 +159,6 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
   }
 
   fetchChats() async {
-    logger.i("Chat To Json: ${widget.feed.toJson()}");
     var result = await _activities.newFetchChatDetails(
         senderId: widget.feed.userId,
         receiverId: widget.feed.chatWithId.toString());
@@ -176,11 +175,6 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
         chatResponse = chatResponse.reversed.toList();
       });
     }
-
-    // setState(() {
-    //   chatResponse = result;
-    //   // print(chatResponse);
-    // });
 
     Timer(const Duration(seconds: 1), () {
       scrollController.animateTo(
@@ -212,33 +206,6 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
         emailRegExp.hasMatch(message);
   }
 
-  // bool containsSensitiveInformation(String message) {
-  //   // Regular expressions to match phone numbers and emails
-  //   final RegExp naijphoneRegExp = RegExp(r'\+?(234)?[789]\d{9}');
-  //   final RegExp ukphoneRegExp = RegExp(r'^\+(44\s?|0)\d{10,14}');
-  //   final RegExp emailRegExp =
-  //       RegExp(r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b');
-  //
-  //   // Check if the message contains a phone number or email
-  //   return naijphoneRegExp.hasMatch(message) ||
-  //       ukphoneRegExp.hasMatch(message) ||
-  //       emailRegExp.hasMatch(message);
-  // }
-
-  // void onTriggerEventPressed() async {
-  // //  var eventFormValidated = _eventFormKey.currentState!.validate();
-  //
-  //   // if (!eventFormValidated) {
-  //   //   return;
-  //   // }
-  //  // SharedPreferences prefs = await SharedPreferences.getInstance();
-  //  //  prefs.setString("eventName", _eventName.text);
-  //  //  prefs.setString("data", _data.text);
-  //   pusher.trigger(PusherEvent(
-  //       channelName: _channelName.text,
-  //       eventName: _eventName.text,
-  //       data: _data.text));
-  // }
   @override
   void initState() {
     fetchChats();
@@ -260,37 +227,23 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
-    // final deviceHeight = MediaQuery.of(context).size.height;
-    // final deviceWidth = MediaQuery.of(context).size.width;
-    // final messageList = ListView.builder(
-    //   controller: scrollController,
-    //   scrollDirection: Axis.vertical,
-    //   itemCount: chatResponse.length,
-    //   itemBuilder: (BuildContext context, int index) {
-    //     return ChatBubble(
-    //       message: chatResponse[index],
-    //       authentication: _authentication,
-    //     );
-    //   },
-    // );
-
-    final newMessageList = GroupedListView<ChatMessages, String>(
+    final newMessageList = GroupedListView<ChatMessages, DateTime>(
         controller: scrollController,
         physics: BouncingScrollPhysics(
             decelerationRate: ScrollDecelerationRate.fast),
         useStickyGroupSeparators: true,
         shrinkWrap: true,
         elements: chatResponse,
-        groupBy: (type) => DateTime.parse(type.dateModified!).toDate(),
+        groupBy: (type) => DateTime.parse(type.dateCreated!).toDateTimeDate(),
         groupComparator: (group1, group2) => group1.compareTo(group2),
-        itemComparator: (item1, item2) => DateTime.parse(item1.dateModified!)
+        itemComparator: (item1, item2) => DateTime.parse(item1.dateCreated!)
             .toDate()
-            .compareTo(DateTime.parse(item2.dateModified!).toDate()),
-        groupSeparatorBuilder: (String date) {
+            .compareTo(DateTime.parse(item2.dateCreated!).toDate()),
+        groupSeparatorBuilder: (DateTime date) {
           return Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              getDateSeparator(date.parseDateString()),
+              getDateSeparator(date),
               textAlign: TextAlign.center,
               style: Theme.of(context)
                   .textTheme
@@ -299,6 +252,7 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
             ),
           );
         },
+        order: GroupedListOrder.ASC,
         indexedItemBuilder: (context, ChatMessages model, index) {
           return ChatBubble(
             message: model,
@@ -382,12 +336,7 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
           borderSide: BorderSide(color: Colors.grey),
         ),
       ),
-      onChanged: (value) {
-        //  setState(() {
-        // searchWord = value;
-        // print(searchWord);
-        // });
-      },
+      onChanged: (value) {},
     );
 
     return Scaffold(

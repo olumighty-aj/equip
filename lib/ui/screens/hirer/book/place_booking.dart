@@ -265,7 +265,7 @@ class PlaceBookingState extends State<PlaceBooking>
                                                         .currentUser
                                                         .id,
                                                     chatWithId:
-                                                        widget.model.hirersId,
+                                                        widget.model.ownersId,
                                                     messageCount: "",
                                                     lastMessage: "",
                                                     dateCreated: "",

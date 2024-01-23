@@ -50,6 +50,20 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
     )..forward();
   }
 
+  // bool isDateInPast(String dateString) {
+  //   try {
+  //     DateTime givenDate = DateFormat("dd-MM-yyyy").parse(dateString);
+  //     DateTime currentDate = DateTime.now();
+  //     print("Given Date: ${givenDate.toDashDate()}");
+  //     print(
+  //         "Given Date: ${givenDate.toDate()}, CurrentDate: ${currentDate.toDate()}, isAfter: ${currentDate.isAfter(givenDate)}");
+  //     return currentDate.isAfter(givenDate);
+  //   } catch (e) {
+  //     print('Error parsing date: $e');
+  //     return false;
+  //   }
+  // }
+
   @override
   void dispose() {
     _navController!.dispose();
@@ -185,6 +199,8 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                   if (widget.feed.equipOrder?.paymentStatus !=
                                       "1")
                                     Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           "Booking",
@@ -633,26 +649,6 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                             "Process pending",
                                           ),
                                         ),
-                                  // if (widget.feed.equipDeliveryStatus != null &&
-                                  //     widget.feed.equipDeliveryStatus!
-                                  //             .deliveryStatus ==
-                                  //         "in_use")
-                                  //   Column(
-                                  //     children: [
-                                  //       Gap(10),
-                                  //       GestureDetector(
-                                  //           onTap: () {},
-                                  //           child: Text(
-                                  //             "Extend booking",
-                                  //             style: Theme.of(context)
-                                  //                 .textTheme
-                                  //                 .bodyLarge
-                                  //                 ?.copyWith(
-                                  //                     color: AppColors
-                                  //                         .primaryColor),
-                                  //           )),
-                                  //     ],
-                                  //   ),
                                   Gap(30),
                                   if (widget.feed.equipDeliveryStatus != null &&
                                       widget.feed.equipDeliveryStatus!
@@ -725,9 +721,12 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                               .clearStackAndShow(Routes.home),
                                     ),
                                   if (widget.feed.requestStatus == "accepted" &&
-                                      // widget.feed.equipPayment == null &&
-                                      widget.feed.equipOrder?.paymentStatus ==
-                                          "0")
+                                          widget.feed.equipOrder
+                                                  ?.paymentStatus ==
+                                              "0"
+                                      // &&
+                                      // !isDateInPast(widget.feed.rentalTo!)
+                                      )
                                     Column(
                                       children: [
                                         Gap(10),
@@ -743,6 +742,17 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                                         )))),
                                       ],
                                     ),
+                                  // if (isDateInPast(widget.feed.rentalTo!) &&
+                                  //     widget.feed.equipOrder?.paymentStatus ==
+                                  //         "0")
+                                  //   Text(
+                                  //     "Booking Expired",
+                                  //     style: Theme.of(context)
+                                  //         .textTheme
+                                  //         .bodyMedium
+                                  //         ?.copyWith(color: Colors.red),
+                                  //     textAlign: TextAlign.center,
+                                  //   ),
                                   if (widget.feed.equipPayment != null)
                                     if (widget.feed.requestStatus ==
                                             "accepted" &&
@@ -762,7 +772,6 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                                       context)),
                                         ],
                                       ),
-
                                   if (widget.feed.requestStatus == "received" &&
                                       widget.feed.equipDeliveryStatus!
                                               .deliveryStatus ==
@@ -794,7 +803,6 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                         ),
                                       ],
                                     ),
-
                                   if (widget.feed.equipDeliveryStatus
                                               ?.deliveryStatus ==
                                           "returned" ||
@@ -812,87 +820,7 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                                         .feed.equipmentsId!,
                                                   ))),
                                     ),
-                                  // if (widget.feed.equipDeliveryStatus
-                                  //         ?.deliveryStatus ==
-                                  //     "delivered_hirer")
-                                  //   BaseButton(
-                                  //     // isBusy: model.busy("InitPayment"),
-                                  //     label: "Return Equipment",
-                                  //     onPressed: () {},
-                                  //   ),
                                   Gap(10),
-                                  // GestureDetector(
-                                  //   onTap: () => Navigator.push(
-                                  //       context,
-                                  //       MaterialPageRoute(
-                                  //           builder: (context) =>
-                                  //               ChatDetailsPage(
-                                  //                   feed: ChatListModel(
-                                  //                       id: widget
-                                  //                           .feed
-                                  //                           .equipments!
-                                  //                           .ownersId,
-                                  //                       userId: "",
-                                  //                       chatWithId: "",
-                                  //                       messageCount: "",
-                                  //                       lastMessage: "",
-                                  //                       dateCreated: "",
-                                  //                       dateModified: "",
-                                  //                       chatWith: ChatWith(
-                                  //                         id: widget
-                                  //                             .feed
-                                  //                             .equipments!
-                                  //                             .ownersId,
-                                  //                         fullname: widget
-                                  //                             .feed
-                                  //                             .equipments!
-                                  //                             .ownersId,
-                                  //                         email: "",
-                                  //                         phoneNumber: "",
-                                  //                         gender: "",
-                                  //                         address: "",
-                                  //                         addressOpt: "",
-                                  //                         localState: "",
-                                  //                         country: "",
-                                  //                         latitude: "",
-                                  //                         longitude: "",
-                                  //                         hirersPath: widget
-                                  //                                     .feed
-                                  //                                     .hirers!
-                                  //                                     .hirersPath !=
-                                  //                                 null
-                                  //                             ? widget
-                                  //                                 .feed
-                                  //                                 .hirers!
-                                  //                                 .hirersPath!
-                                  //                             : "",
-                                  //                         status: "",
-                                  //                         dateModified: "",
-                                  //                         dateCreated: "",
-                                  //                       ))))),
-                                  //   child: Text(
-                                  //     "Chat Owner",
-                                  //     textAlign: TextAlign.center,
-                                  //     style: Theme.of(context)
-                                  //         .textTheme
-                                  //         .bodyLarge
-                                  //         ?.copyWith(
-                                  //             color: AppColors.primaryColor,
-                                  //             fontSize: 16,
-                                  //             fontWeight: FontWeight.w600,
-                                  //             decoration:
-                                  //                 TextDecoration.underline),
-                                  //   ),
-                                  // )
-                                  // widget.feed.requestStatus! == "returned"
-                                  //     ? GeneralButton(
-                                  //         onPressed: () {
-                                  //           _navigationService.navigateTo(
-                                  //               RatingRoute,
-                                  //               arguments: widget.feed.id);
-                                  //         },
-                                  //         buttonText: "Give Feedback")
-                                  //     : Container()
                                 ]))))),
           );
         });

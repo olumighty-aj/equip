@@ -285,7 +285,8 @@ class LoginContainer extends ViewModelWidget<NewLoginViewModel> {
                                   style: TextStyle(
                                       fontSize: 15,
                                       color: AppColors.primaryColor,
-                                      decoration: TextDecoration.underline),
+                                      decoration: TextDecoration.underline,
+                                      decorationColor: AppColors.primaryColor),
                                 ),
                                 Text(''),
                               ],
@@ -308,7 +309,8 @@ class LoginContainer extends ViewModelWidget<NewLoginViewModel> {
                       child: Text("Sign Up",
                           style: TextStyle(
                               color: AppColors.primaryColor,
-                              decoration: TextDecoration.underline))),
+                              decoration: TextDecoration.underline,
+                              decorationColor: AppColors.primaryColor))),
                 ],
               )
             ],
