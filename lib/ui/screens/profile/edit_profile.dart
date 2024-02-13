@@ -11,6 +11,7 @@ import 'package:equipro/utils/screensize.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:gap/gap.dart';
 import 'package:stacked/stacked.dart';
 
 import '../../../utils/app_svgs.dart';
@@ -57,7 +58,7 @@ class LoginState extends State<EditProfile> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<ProfileViewModel>.reactive(
-        onViewModelReady: (v) => v.init(),
+        onViewModelReady: (v) => v.initEditProfile(),
         viewModelBuilder: () => ProfileViewModel(),
         builder: (context, model, child) {
           return Scaffold(
@@ -176,13 +177,17 @@ class LoginState extends State<EditProfile> with TickerProviderStateMixin {
                                                 value: 0,
                                                 child: Text(
                                                   "Camera",
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyMedium,
                                                 ),
                                               ),
                                               PopupMenuItem(
                                                   value: 1,
-                                                  child: Text(
-                                                    "Gallery",
-                                                  )),
+                                                  child: Text("Gallery",
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .bodyMedium)),
                                             ],
                                             child: CircleAvatar(
                                               backgroundColor:
@@ -605,9 +610,7 @@ class LoginState extends State<EditProfile> with TickerProviderStateMixin {
                                                   fontWeight: FontWeight.bold,
                                                   color: Colors.grey),
                                             ),
-                                            SizedBox(
-                                              height: 10,
-                                            ),
+                                            Gap(10),
                                             GestureDetector(
                                                 onTap: () => model
                                                     .handleChooseFromGalleryId(),
@@ -666,9 +669,7 @@ class LoginState extends State<EditProfile> with TickerProviderStateMixin {
                                                 )),
                                           ],
                                         ),
-                                  SizedBox(
-                                    height: 20,
-                                  ),
+                                  Gap(20),
                                   Center(
                                       child: SlideTransition(
                                           position: _navAnimation!,

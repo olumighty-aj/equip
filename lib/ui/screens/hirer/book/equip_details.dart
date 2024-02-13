@@ -153,93 +153,99 @@ class LoginState extends State<EquipDetails> with TickerProviderStateMixin {
                                   height: Responsive.height(context) / 4,
                                 ),
                                 widget.model.equipImages != null
-                                    ? SingleChildScrollView(
-                                        scrollDirection: Axis.horizontal,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: List.generate(
-                                              widget.model.equipImages!.length,
-                                              (index) => Padding(
-                                                    padding: EdgeInsets.all(5),
-                                                    child: GestureDetector(
-                                                        onTap: () {
-                                                          setState(() {
-                                                            selected = widget
-                                                                .model
-                                                                .equipImages![
-                                                                    index]
-                                                                .equipImagesPath
-                                                                .toString();
-                                                          });
-                                                        },
-                                                        child: Container(
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          10),
-                                                              border: Border.all(
-                                                                  color: AppColors
-                                                                      .primaryColor,
-                                                                  width: 0.5),
-                                                              color: widget
-                                                                          .model
-                                                                          .equipImages![
-                                                                              index]
-                                                                          .equipImagesPath!
-                                                                          .toString() !=
-                                                                      selected
-                                                                  ? AppColors
-                                                                      .white
-                                                                  : AppColors
-                                                                      .primaryColor,
-                                                            ),
-                                                            height: 70,
-                                                            width: 70,
-                                                            child: Container(
-                                                                height: 60,
-                                                                width: 60,
-                                                                padding:
-                                                                    EdgeInsets
-                                                                        .all(3),
-                                                                child:
-                                                                    CachedNetworkImage(
-                                                                  imageUrl: widget
-                                                                      .model
-                                                                      .equipImages![
-                                                                          index]
-                                                                      .equipImagesPath!,
-                                                                  fit: BoxFit
-                                                                      .cover,
-                                                                  placeholder: (context,
-                                                                          url) =>
-                                                                      SizedBox(
-                                                                          height:
-                                                                              10,
-                                                                          width:
-                                                                              10,
-                                                                          child:
-                                                                              CircularProgressIndicator(
-                                                                            color:
-                                                                                AppColors.primaryColor,
-                                                                          )),
-                                                                  errorWidget: (context,
-                                                                          url,
-                                                                          error) =>
-                                                                      ClipRRect(
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(
-                                                                            8.0),
-                                                                    child: Image
-                                                                        .asset(
-                                                                      "assets/images/logo.png",
-                                                                      scale: 2,
+                                    ? Align(
+                                        alignment: Alignment.center,
+                                        child: SingleChildScrollView(
+                                          scrollDirection: Axis.horizontal,
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: List.generate(
+                                                widget
+                                                    .model.equipImages!.length,
+                                                (index) => Padding(
+                                                      padding:
+                                                          EdgeInsets.all(5),
+                                                      child: GestureDetector(
+                                                          onTap: () {
+                                                            setState(() {
+                                                              selected = widget
+                                                                  .model
+                                                                  .equipImages![
+                                                                      index]
+                                                                  .equipImagesPath
+                                                                  .toString();
+                                                            });
+                                                          },
+                                                          child: Container(
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            10),
+                                                                border: Border.all(
+                                                                    color: AppColors
+                                                                        .primaryColor,
+                                                                    width: 0.5),
+                                                                color: widget
+                                                                            .model
+                                                                            .equipImages![
+                                                                                index]
+                                                                            .equipImagesPath!
+                                                                            .toString() !=
+                                                                        selected
+                                                                    ? AppColors
+                                                                        .white
+                                                                    : AppColors
+                                                                        .primaryColor,
+                                                              ),
+                                                              height: 70,
+                                                              width: 70,
+                                                              child: Container(
+                                                                  height: 60,
+                                                                  width: 60,
+                                                                  padding:
+                                                                      EdgeInsets
+                                                                          .all(
+                                                                              3),
+                                                                  child:
+                                                                      CachedNetworkImage(
+                                                                    imageUrl: widget
+                                                                        .model
+                                                                        .equipImages![
+                                                                            index]
+                                                                        .equipImagesPath!,
+                                                                    fit: BoxFit
+                                                                        .cover,
+                                                                    placeholder: (context,
+                                                                            url) =>
+                                                                        SizedBox(
+                                                                            height:
+                                                                                10,
+                                                                            width:
+                                                                                10,
+                                                                            child:
+                                                                                CircularProgressIndicator(
+                                                                              color: AppColors.primaryColor,
+                                                                            )),
+                                                                    errorWidget: (context,
+                                                                            url,
+                                                                            error) =>
+                                                                        ClipRRect(
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              8.0),
+                                                                      child: Image
+                                                                          .asset(
+                                                                        "assets/images/logo.png",
+                                                                        scale:
+                                                                            2,
+                                                                      ),
                                                                     ),
-                                                                  ),
-                                                                )))),
-                                                  )),
+                                                                  )))),
+                                                    )),
+                                          ),
                                         ),
                                       )
                                     : Container(
@@ -292,7 +298,7 @@ class LoginState extends State<EquipDetails> with TickerProviderStateMixin {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    "${getCurrency(widget.model.owners!.country)}${widget.model.costOfHire} per ${widget.model.costOfHireInterval == "1" ? "Day" : widget.model.costOfHireInterval == "7" ? "Week" : "Month"}",
+                                    "${getCurrency(widget.model.owners!.country)}${widget.model.costOfHire!.withCommas} per ${widget.model.costOfHireInterval == "1" ? "Day" : widget.model.costOfHireInterval == "7" ? "Week" : "Month"}",
                                     style: TextStyle(
                                         fontSize: 15,
                                         color: AppColors.green,
@@ -332,7 +338,9 @@ class LoginState extends State<EquipDetails> with TickerProviderStateMixin {
                                           ?.copyWith(
                                               color: AppColors.primaryColor,
                                               decoration:
-                                                  TextDecoration.underline),
+                                                  TextDecoration.underline,
+                                              decorationColor:
+                                                  AppColors.primaryColor),
                                     ),
                                   ),
                                 ],
@@ -439,14 +447,15 @@ class LoginState extends State<EquipDetails> with TickerProviderStateMixin {
                                                               Authentication>()
                                                           .currentUser
                                                           .id,
-                                                      chatWithId:
-                                                          widget.model.ownersId,
+                                                      chatWithId: widget
+                                                          .model.owners!.id,
                                                       messageCount: "",
                                                       lastMessage: "",
                                                       dateCreated: "",
                                                       dateModified: "",
                                                       chatWith: ChatWith(
-                                                        id: widget.model.userId,
+                                                        id: widget
+                                                            .model.owners!.id,
                                                         fullname: widget.model
                                                             .owners!.fullname!,
                                                         email: "",

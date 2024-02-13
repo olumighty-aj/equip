@@ -277,23 +277,17 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
                 height: 20,
               ),
               BaseButton(
-                label: _authentication.currentUser.kycApproved! == "approved"
+                label: _authentication.isOwner == true
                     ? "Switch to Owner"
                     : "Become An Equipment Owner",
                 onPressed: () {
-                  if (_authentication.currentUser.kycApproved! == "approved") {
+                  if (_authentication.isOwner == true) {
                     displayDialog(context, model);
-                  } else if (_authentication.currentUser.kycApproved! ==
-                          "pending" &&
-                      _authentication.currentUser.kycUpdated == true) {
-                    showToast(
-                        "Your KYC is still pending approval from the admin, please try again later",
-                        context: context);
                   } else {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => EditProfile()));
+                    // Navigator.push(context,
+                    //     MaterialPageRoute(builder: (context) => EditProfile()));
                     showErrorToast(
-                        "Update your address and means of identification to become an equipment owner",
+                        "Oops, you're not an owner or yet to be verified.",
                         context: context);
                   }
                 },

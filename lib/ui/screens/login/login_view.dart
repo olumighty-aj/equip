@@ -130,7 +130,6 @@ class NewLogin extends StatelessWidget {
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        color: Colors.green,
         alignment: Alignment.topCenter,
         child: SingleChildScrollView(
           child: Column(

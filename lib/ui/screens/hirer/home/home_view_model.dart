@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equipro/app/app_setup.logger.dart';
 import 'package:equipro/app/app_setup.router.dart';
 import 'package:equipro/core/api/api_constants.dart';
@@ -46,15 +47,28 @@ class HomeViewModel extends BaseViewModel {
   int _nextPage = 2;
   int get nextPage => _nextPage;
 
-  init(lat, lng) async {
+  init(lat, lng, context) async {
     BaseDataModel data = await _authentication.getUserProfile();
     _authentication.updateUser(Details.fromJson(data.payload));
+    await ownerCheck(context);
     await newGetEquipments(lat, lng);
     notifyListeners();
   }
 
-  Future<void> refresh(lat, lng) async {
-    await init(lat, lng);
+  Future<void> ownerCheck(context) async {
+    BaseDataModel? res = await _authentication.ownerCheck();
+    if (res?.status == true) {
+      _log.d("HI I am here Home View owner check");
+      _authentication.setOwnerStatus(res?.status as bool);
+      // isOwner = res?.status as bool;
+      notifyListeners();
+    } else {
+      _authentication.setOwnerStatus(res?.status as bool);
+    }
+  }
+
+  Future<void> refresh(lat, lng, context) async {
+    await init(lat, lng, context);
   }
 
   List<EquipmentModel> _packageList = [];
@@ -67,14 +81,14 @@ class HomeViewModel extends BaseViewModel {
         busyObject: "Switch");
     if (res != null) {
       if (res.status == true) {
-        _log.i("Switch: ${res.payload}");
-        _log.i("User: ${_authentication.currentUser.toJson()}");
+        _log.d("Switch: ${res.payload}");
+        _log.d("User: ${_authentication.currentUser.toJson()}");
         _authentication.setCurrentUser(res.payload["details"]);
         SharedPrefsClient.saveData(
             "currentUser", jsonEncode(res.payload["details"]));
         ApiConstants.token = res.payload["token"];
         SharedPrefsClient.saveData("token", res.payload["token"]);
-        _log.i("User: ${_authentication.currentUser.toJson()}");
+        _log.d("User: ${_authentication.currentUser.toJson()}");
         notifyListeners();
         // showToast(res.message ?? "", context: context);
         _navigationService.clearStackAndShow(Routes.homeOwner);
@@ -138,7 +152,7 @@ class HomeViewModel extends BaseViewModel {
       _count = _activities.count;
       notifyListeners();
       setFetchState(LoadingState.done);
-      // _log.i("Package: ${_packageList[0].toJson()}");
+      // _log.d("Package: ${_packageList[0].toJson()}");
     }
     return _packageList;
   }
@@ -160,7 +174,7 @@ class HomeViewModel extends BaseViewModel {
     } else {
       _packageList = result;
       _count = _activities.count;
-      _log.i("Package: ${_packageList[0].toJson()}");
+      _log.d("Package: ${_packageList[0].toJson()}");
       notifyListeners();
       setFetchState(LoadingState.done);
       return result;

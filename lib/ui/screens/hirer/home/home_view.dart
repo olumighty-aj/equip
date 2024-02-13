@@ -209,7 +209,7 @@ class LoginState extends State<Home> {
         onViewModelReady: (v) async {
           await getUserLocation();
           v.init(locationData!.latitude.toString(),
-              locationData!.longitude.toString());
+              locationData!.longitude.toString(), context);
         },
         viewModelBuilder: () => HomeViewModel(),
         builder: (context, model, child) {
@@ -245,7 +245,7 @@ class LoginState extends State<Home> {
                   onRefresh: () async {
                     try {
                       await model.refresh(locationData!.latitude.toString(),
-                          locationData!.longitude.toString());
+                          locationData!.longitude.toString(), context);
                     } catch (e) {
                       print(e);
                     }

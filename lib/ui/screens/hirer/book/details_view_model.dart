@@ -1,3 +1,4 @@
+import 'package:equipro/app/app_setup.router.dart';
 import 'package:equipro/core/enums/dialog_type.dart';
 import 'package:equipro/core/model/BookModel.dart';
 import 'package:equipro/core/model/base_model.dart';
@@ -6,7 +7,6 @@ import 'package:equipro/core/model/success_model.dart';
 import 'package:equipro/core/services/activities_service.dart';
 import 'package:equipro/core/services/auth_service.dart';
 import 'package:equipro/utils/helpers.dart';
-// import 'package:equipro/utils/locator.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -48,6 +48,9 @@ class DetailsViewModel extends BaseViewModel {
         // _navigationService.clearStackAndShow(Routes.home);
       } else {
         showErrorToast(result.message ?? "", context: context);
+        if (result.message!.contains("KYC")) {
+          locator<NavigationService>().navigateTo(Routes.editProfile);
+        }
       }
     }
   }

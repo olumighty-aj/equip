@@ -448,14 +448,14 @@ class HomeOwnerViewModel extends BaseViewModel {
 
   void newEquipApproval(
       String id, String status, String pickDate, context) async {
-    BaseDataModel res = await runBusyFuture(
+    BaseDataModel? res = await runBusyFuture(
         _activities.newEquipApproval(id, status, pickDate),
         busyObject: "Approval");
-    if (res.status == true) {
-      showToast(res.message ?? "", context: context);
+    if (res?.status != false) {
+      showToast(res?.message ?? "Booking accepted", context: context);
       _navigationService.clearStackAndShow(Routes.homeOwner);
     } else {
-      showErrorToast(res.message ?? "", context: context);
+      showErrorToast(res?.message ?? "", context: context);
     }
   }
 

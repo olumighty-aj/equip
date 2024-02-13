@@ -15,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
+import 'package:roundcheckbox/roundcheckbox.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:stacked/stacked.dart';
 
@@ -57,7 +58,7 @@ class ProfileState extends State<Profile> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return ViewModelBuilder<ProfileViewModel>.reactive(
         viewModelBuilder: () => ProfileViewModel(),
-        onViewModelReady: (model) => model.init(),
+        onViewModelReady: (model) => model.initProfile(),
         builder: (context, model, child) {
           return Scaffold(
             backgroundColor: Color(0xFFF5F5F5),
@@ -296,7 +297,9 @@ class ProfileState extends State<Profile> with TickerProviderStateMixin {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Expanded(child: Text("Means of ID")),
+                                          // Expanded(child: Text("Means of ID")),
+                                          Expanded(
+                                              child: Text("KYC Verification")),
                                           if (model.verificationDetails !=
                                                   null &&
                                               model.verificationDetails!
@@ -305,40 +308,138 @@ class ProfileState extends State<Profile> with TickerProviderStateMixin {
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
-                                                Text(model.verificationDetails?[
-                                                        "document_name"] ??
-                                                    ""),
-                                                Gap(5),
-                                                Container(
-                                                  padding: EdgeInsets.all(10),
-                                                  decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10),
-                                                      color: model.verificationDetails?[
-                                                                      "verify_status"] ==
-                                                                  "verified" &&
-                                                              _authentication
-                                                                  .currentUser
-                                                                  .kycUpdated!
-                                                          ? Colors
-                                                              .green.shade200
-                                                          : AppColors
-                                                              .primaryColor
-                                                              .withOpacity(
-                                                                  0.4)),
-                                                  child: Text(
-                                                    "${model.verificationDetails?["verify_status"] == "verified" && _authentication.currentUser.kycUpdated! ? "Verified" : model.verificationDetails?["verify_status"] == "not_verified" && _authentication.currentUser.kycUpdated! ? "Not Verified" : "Pending"}",
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .bodySmall
-                                                        ?.copyWith(
-                                                            color: Colors.white,
-                                                            fontSize: 10),
+                                                // Text(model.verificationDetails?[
+                                                //         "document_name"] ??
+                                                //     ""),
+                                                // Gap(5),
+                                                // Container(
+                                                //   padding: EdgeInsets.all(10),
+                                                //   decoration: BoxDecoration(
+                                                //       borderRadius:
+                                                //           BorderRadius.circular(
+                                                //               10),
+                                                //       color: model.verificationDetails?[
+                                                //                       "verify_status"] ==
+                                                //                   "verified" &&
+                                                //               _authentication
+                                                //                   .currentUser
+                                                //                   .kycUpdated!
+                                                //           ? Colors
+                                                //               .green.shade200
+                                                //           : AppColors
+                                                //               .primaryColor
+                                                //               .withOpacity(
+                                                //                   0.4)),
+                                                //   child: Text(
+                                                //     "${model.verificationDetails?["verify_status"] == "verified" && _authentication.currentUser.kycUpdated! ? "Verified" : model.verificationDetails?["verify_status"] == "not_verified" && _authentication.currentUser.kycUpdated! ? "Not Verified" : "Pending"}",
+                                                //     style: Theme.of(context)
+                                                //         .textTheme
+                                                //         .bodySmall
+                                                //         ?.copyWith(
+                                                //             color: Colors.white,
+                                                //             fontSize: 10),
+                                                //   ),
+                                                // ),
+                                                RoundCheckBox(
+                                                  onTap: (_) {},
+                                                  checkedWidget: Icon(
+                                                    Icons.check,
+                                                    color: Colors.white,
+                                                    size: 20,
                                                   ),
+                                                  checkedColor: Colors.green,
+                                                  isChecked: model.kycApproved,
+                                                  size: 25,
                                                 )
                                               ],
                                             ),
+                                          Gap(20),
+                                          if (model.verificationDetails !=
+                                                  null &&
+                                              model
+                                                  .verificationDetails!.isEmpty)
+                                            Container(
+                                              padding: EdgeInsets.all(10),
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  color: Colors.red),
+                                              child: Text(
+                                                "Not Verified",
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodySmall
+                                                    ?.copyWith(
+                                                        color: Colors.white,
+                                                        fontSize: 10),
+                                              ),
+                                            )
+
+                                          // Expanded(
+                                          //   child: BaseButton(
+                                          //     onPressed: !_authentication
+                                          //             .currentUser
+                                          //             .kycApproved!
+                                          //         ? () {
+                                          //             showToast(
+                                          //                 "Kindly upload KYC to be verified",
+                                          //                 context: context);
+                                          //             Navigator.push(
+                                          //                 context,
+                                          //                 MaterialPageRoute(
+                                          //                     builder:
+                                          //                         (context) =>
+                                          //                             EditProfile()));
+                                          //           }
+                                          //         : null,
+                                          //     label: _authentication
+                                          //             .currentUser
+                                          //             .kycApproved!
+                                          //         ? "Verified"
+                                          //         : "Not Verified",
+                                          //     bgColor: !_authentication
+                                          //             .currentUser
+                                          //             .kycApproved!
+                                          //         ? AppColors.primaryColor
+                                          //             .withOpacity(0.6)
+                                          //         : Color(0xff247322),
+                                          //     labelStyle: Theme.of(context)
+                                          //         .textTheme
+                                          //         .bodySmall
+                                          //         ?.copyWith(
+                                          //             color: Colors.white),
+                                          //   ),
+                                          // )
+                                        ],
+                                      ),
+                                      Gap(20),
+                                      Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Expanded(
+                                              child: Text("Verified Owner")),
+
+                                          RoundCheckBox(
+                                            onTap: (_) {},
+                                            checkedColor: Colors.green,
+                                            isChecked: model.isOwner,
+                                            size: 25,
+                                            uncheckedColor: Colors.grey,
+                                            checkedWidget: Icon(
+                                              Icons.check,
+                                              color: Colors.white,
+                                              size: 20,
+                                            ),
+                                            uncheckedWidget: Icon(
+                                              Icons.close,
+                                              color: Colors.white,
+                                              size: 20,
+                                            ),
+                                          ),
+                                          Gap(20),
                                           if (model.verificationDetails !=
                                                   null &&
                                               model
@@ -400,6 +501,32 @@ class ProfileState extends State<Profile> with TickerProviderStateMixin {
                                     ],
                                   ),
                                 ),
+                                // Gap(15),
+                                // Row(
+                                //   mainAxisAlignment:
+                                //       MainAxisAlignment.spaceBetween,
+                                //   children: [
+                                //     Text(
+                                //       "Become an Owner",
+                                //       style: Theme.of(context)
+                                //           .textTheme
+                                //           .bodyMedium
+                                //           ?.copyWith(
+                                //               // fontSize: 18,
+                                //               fontWeight: FontWeight.w600),
+                                //     ),
+                                //     // Gap(5),
+                                //     Switch.adaptive(
+                                //       inactiveTrackColor: Colors.grey,
+                                //       activeColor: AppColors.primaryColor,
+                                //       value: model.isOwner,
+                                //       onChanged: model.isOwner
+                                //           ? null
+                                //           : (val) =>
+                                //               model.becomeOwner(context, val),
+                                //     ),
+                                //   ],
+                                // ),
                                 Gap(35),
                                 _authentication.currentUser.userType == "hirers"
                                     ? Container(

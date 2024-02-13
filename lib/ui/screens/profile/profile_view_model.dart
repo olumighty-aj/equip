@@ -47,8 +47,14 @@ class ProfileViewModel extends BaseViewModel {
       _authentication.currentUser.kycApproved! == "approved";
   bool get kycPendng => _authentication.currentUser.kycApproved! == "pending";
   bool get kycUpdated => _authentication.currentUser.kycUpdated!;
+  bool get isOwner => _authentication.isOwner ?? false;
 
-  void init() {
+  void initProfile() {
+    verifyKYC();
+    // ownerCheck(context);
+  }
+
+  void initEditProfile() {
     print("KYC Approved: $kycApproved");
     print("KYC Updated: $kycUpdated");
     print("KYC Pending: $kycPendng");
@@ -56,6 +62,7 @@ class ProfileViewModel extends BaseViewModel {
     stateController.text = _authentication.currentUser.localState ??
         _authentication.currentUser.address?.extractState() ??
         "";
+    // isOwner = _authentication.currentUser.isOwner == "FALSE" ? false : true;
     countryController.text = _authentication.currentUser.country ??
         _authentication.currentUser.address?.extractCountry() ??
         "";
@@ -84,7 +91,6 @@ class ProfileViewModel extends BaseViewModel {
             ? "Male"
             : "Female"
         : null;
-    verifyKYC();
   }
 
   void showPlacePicker() async {
@@ -181,16 +187,25 @@ class ProfileViewModel extends BaseViewModel {
     return result;
   }
 
+  void toggleOwnerStatus(val, context) async {
+    if (isOwner) {
+      // becomeOwner(context);
+    }
+    notifyListeners();
+  }
+
   void newEditProfile(context) async {
     _log.i("KYC APPROVED: ${_authentication.currentUser.kycApproved}");
+
     FormData data;
     if (_authentication.currentUser.kycApproved != "approved" &&
         _authentication.currentUser.kycApproved != "pending") {
-      data = FormData.fromMap({
+      var dataMap = {
         "address": addressController.text,
         "gender": selectedGender,
         "local_state": stateController.text,
         "country": countryController.text,
+        "become_owner": isOwner ? 1 : 0,
         "hirers_path":
             image != null ? await MultipartFile.fromFile(image!.path) : null,
         "kyc_name": selectedMOI == "International Passport"
@@ -207,16 +222,21 @@ class ProfileViewModel extends BaseViewModel {
             : null,
         "latitude": pickLat,
         "longitude": pickLng,
-      });
+      };
+      _log.i("Data map 2: $dataMap");
+      data = FormData.fromMap(dataMap);
     } else {
-      data = FormData.fromMap({
+      var dataMapTwo = {
         "address": addressController.text,
         "gender": selectedGender,
         "hirers_path":
             image != null ? await MultipartFile.fromFile(image!.path) : null,
         "latitude": pickLat,
         "longitude": pickLng,
-      });
+        "become_owner": isOwner ? 1 : 0,
+      };
+      _log.i("Data map 2: $dataMapTwo");
+      data = FormData.fromMap(dataMapTwo);
     }
     var res = await runBusyFuture(_authentication.editNewProfile(data),
         busyObject: "Edit");
@@ -240,6 +260,28 @@ class ProfileViewModel extends BaseViewModel {
 
   void getHirersProfile() async {
     BaseDataModel? res = await _authentication.getHirersProfile();
+  }
+
+  void becomeOwner(context, val) async {
+    BaseDataModel? res = await _authentication.becomeOwner();
+    if (res?.status == true) {
+      _authentication.setOwnerStatus(true);
+      notifyListeners();
+      showToast(
+          "Success!\nYour request to be an owner is currently being reviewed by the admin",
+          context: context);
+    } else {
+      showErrorToast(res?.message ?? "", context: context);
+    }
+  }
+
+  void ownerCheck(context) async {
+    BaseDataModel? res = await _authentication.ownerCheck();
+    if (res?.status == true) {
+      _authentication.setOwnerStatus(res?.payload);
+      // isOwner = res?.status as bool;
+      notifyListeners();
+    }
   }
 
   void verifyKYC() async {

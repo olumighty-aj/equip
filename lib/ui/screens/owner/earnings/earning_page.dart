@@ -73,6 +73,9 @@ class LoginState extends State<EarningPage> with TickerProviderStateMixin {
               ),
               body: Builder(builder: (context) {
                 if (!model.busy("Earnings") && model.earningsWallet != null) {
+                  String amount = model.earningsWallet!["content"]
+                          ["balance_amount"]
+                      .toStringAsFixed(2);
                   return Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: RefreshIndicator(
@@ -113,7 +116,7 @@ class LoginState extends State<EarningPage> with TickerProviderStateMixin {
                                             ?.copyWith(fontSize: 15)),
                                     TextSpan(
                                         text:
-                                            "${getCurrency(locator<Authentication>().currentUser.country)}${model.earningsWallet!["content"]["balance_amount"].toString().withCommas}",
+                                            "${getCurrency(locator<Authentication>().currentUser.country)}${amount.toString().withCommas}",
                                         style: Theme.of(context)
                                             .textTheme
                                             .bodyMedium
@@ -134,7 +137,7 @@ class LoginState extends State<EarningPage> with TickerProviderStateMixin {
                                                       .isNotEmpty
                                               ? () => model.newWithdraw(context)
                                               : () => showErrorToast(
-                                                  "Kindly add a payment method to withdraw",
+                                                  "Kindly add Bank details to withdraw",
                                                   context: context),
                                         ),
                                       ),
@@ -151,7 +154,7 @@ class LoginState extends State<EarningPage> with TickerProviderStateMixin {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        "Payment Method",
+                                        "Bank Details",
                                         style: Theme.of(context)
                                             .textTheme
                                             .bodyMedium
@@ -160,7 +163,9 @@ class LoginState extends State<EarningPage> with TickerProviderStateMixin {
                                                 fontWeight: FontWeight.w600),
                                       ),
                                       Visibility(
-                                        visible: model.banks["content"].isEmpty,
+                                        visible:
+                                            model.banks["content"] != null &&
+                                                model.banks["content"].isEmpty,
                                         child: GestureDetector(
                                           onTap: model.addPaymentMethod,
                                           child: Icon(
@@ -169,11 +174,22 @@ class LoginState extends State<EarningPage> with TickerProviderStateMixin {
                                           ),
                                         ),
                                         replacement: GestureDetector(
-                                          onTap: () {},
-                                          child: Icon(
-                                            Icons.delete_outline,
-                                            color: AppColors.primaryColor,
-                                          ),
+                                          onTap: () =>
+                                              model.deleteBankDetails(context),
+                                          child: !model.busy("delete")
+                                              ? Icon(
+                                                  Icons.delete_outline,
+                                                  color: AppColors.primaryColor,
+                                                )
+                                              : SizedBox(
+                                                  height: 10,
+                                                  width: 10,
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                    color:
+                                                        AppColors.primaryColor,
+                                                    strokeWidth: 2,
+                                                  )),
                                         ),
                                       ),
                                     ],

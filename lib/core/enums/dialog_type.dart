@@ -7,5 +7,6 @@ enum DialogType {
   returnEquip,
   paymentSuccessful,
   paymentMethod,
-  amountDialog
+  amountDialog,
+  deleteBankDialog,
 }

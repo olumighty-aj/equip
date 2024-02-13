@@ -5,6 +5,7 @@ import 'package:equipro/core/model/success_model.dart';
 import 'package:equipro/core/services/activities_service.dart';
 import 'package:equipro/utils/extensions.dart';
 import 'package:equipro/utils/helpers.dart';
+import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -34,7 +35,7 @@ class RentalsViewModel extends BaseViewModel {
     BaseDataModel? model = await runBusyFuture(
         _activities.getActiveRentals("all"),
         busyObject: "all");
-    _log.i("All Rentals: ${model?.payload}");
+    _log.d("All Rentals: ${model?.payload}");
     if (model!.payload!["content"].isNotEmpty) {
       _allRentals = [];
       for (var i in model.payload["content"]) {
@@ -241,11 +242,11 @@ class RentalsViewModel extends BaseViewModel {
     BaseDataModel? model = await runBusyFuture(
         _activities.updateDeliveryStatus(equipOrderId, "delivered_hirer"),
         busyObject: "pickedOwner");
-    _log.i("Received raw: ${model?.toJson()}");
+    _log.d("Received raw: ${model?.toJson()}");
     if (model?.status != false) {
       // showToast("Equipment status updated", context: context);
       // _navigationService.back();
-      _log.i("I have received: ${model?.toJson()}");
+      _log.d("I have received: ${model?.toJson()}");
       await inUse(equipOrderId, context);
     } else {
       showErrorToast(model?.message ?? "", context: context);
@@ -258,7 +259,7 @@ class RentalsViewModel extends BaseViewModel {
         _activities.updateDeliveryStatus(equipOrderId, "picked_from_owner"),
         busyObject: "pickedOwner");
     if (model?.status != false) {
-      _log.i("Picked from owner: ${model?.toJson()}");
+      _log.d("Picked from owner: ${model?.toJson()}");
       await iHaveReceivedEquipment(equipOrderId, context);
     } else {
       _log.e(model?.toJson());
@@ -270,7 +271,7 @@ class RentalsViewModel extends BaseViewModel {
         _activities.updateDeliveryStatus(equipOrderId, "in_use"),
         busyObject: "pickedOwner");
     if (model?.status != false) {
-      _log.i("In use: ${model?.toJson()}");
+      _log.d("In use: ${model?.toJson()}");
       showToast("Equipment status updated", context: context);
       _navigationService.clearTillFirstAndShow(Routes.rentals);
     } else {
@@ -287,7 +288,7 @@ class RentalsViewModel extends BaseViewModel {
           _activities.updateDeliveryStatus(equipOrderId, "returned"),
           busyObject: "returned");
       if (model?.status != false) {
-        _log.i("Return Equipment: ${model?.toJson()}");
+        _log.d("Return Equipment: ${model?.toJson()}");
         showToast("Equipment status updated", context: context);
         _navigationService.back();
       } else {
@@ -302,7 +303,7 @@ class RentalsViewModel extends BaseViewModel {
         _activities.updateDeliveryStatus(equipOrderId, "picked_from_hirer"),
         busyObject: "returned");
     if (model.status == true) {
-      _log.i("Picked from hirer: ${model.toJson()}");
+      _log.d("Picked from hirer: ${model.toJson()}");
       await returnEquipment(equipOrderId, context);
     } else {
       _log.e(model.toJson());
@@ -314,7 +315,7 @@ class RentalsViewModel extends BaseViewModel {
         _activities.createPayment(model.payload["equip_order_id"],
             model.payload["receipt_ref"], amount, paymentType, currency),
         busyObject: "InitPayment");
-    // _log.i(model.payload);
+    // _log.d(model.payload);
 
     if (res != null) {
       _navigationService.navigateTo(Routes.paymentWebView,
@@ -330,7 +331,7 @@ class RentalsViewModel extends BaseViewModel {
         _activities.extendEquipmentBook(data),
         busyObject: "extend");
     if (model?.status == true) {
-      _log.i("Extend equipment response: ${model!.payload}");
+      _log.d("Extend equipment response: ${model!.payload}");
       _dialog.showCustomDialog(variant: DialogType.bookingRequest);
       // showToast(model.message ?? "", context: context);
       _navigationService.clearTillFirstAndShow(Routes.rentals);
@@ -382,6 +383,7 @@ extension StringToDate on String {
     int day = int.parse(dateParts[0]);
     int month = int.parse(dateParts[1]);
     int year = int.parse(dateParts[2]);
+    // DateFormat()
 
     return DateTime(year, month, day);
   }

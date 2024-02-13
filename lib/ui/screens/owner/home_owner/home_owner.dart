@@ -368,11 +368,14 @@ class NewEquipListBuilder extends StatelessWidget {
         );
       } else if (model.fetchState == LoadingState.done &&
           model.packageList.isEmpty) {
-        return Column(
-          children: [
-            SvgPicture.asset(AppSvgs.emptyRental),
-            Text("No equipments saved yet")
-          ],
+        return Center(
+          child: Column(
+            children: [
+              Gap(100),
+              SvgPicture.asset(AppSvgs.emptyRental),
+              Text("No equipments saved yet")
+            ],
+          ),
         );
       } else {
         return Center(child: Text("Network Error"));

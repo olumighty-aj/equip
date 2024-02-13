@@ -29,6 +29,9 @@ class NewRegisterViewModel extends BaseViewModel {
   int maxLength = 10;
   String initialSelection = '+234';
 
+  String _errorMessage = "";
+  String get errorMessage => _errorMessage;
+
   signUp(SignUpModel signUpModel) async {
     setBusy(true);
     var result = await _authentication.signUp(signUpModel.toJson());
@@ -68,6 +71,41 @@ class NewRegisterViewModel extends BaseViewModel {
             context: context);
       }
     }
+  }
+
+  // bool isStrongPassword(String password) {
+  // Define a regular expression for a strong password
+  // RegExp regex = RegExp(r'^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+{}|;:\'",.<>?/\\~-]).{8,}$',);
+
+  // Test if the password matches the regex
+  // return regex.hasMatch(password);
+  // }
+
+  bool validatePassword(String password) {
+    // Reset error message
+    _errorMessage = '';
+    // Password length greater than 6
+    if (password.length < 6) {
+      _errorMessage += 'Password must be longer than 6 characters.\n';
+    }
+    // Contains at least one uppercase letter
+    if (!password.contains(RegExp(r'[A-Z]'))) {
+      _errorMessage += '• Uppercase letter is missing.\n';
+    }
+    // Contains at least one lowercase letter
+    if (!password.contains(RegExp(r'[a-z]'))) {
+      _errorMessage += '• Lowercase letter is missing.\n';
+    }
+    // Contains at least one digit
+    if (!password.contains(RegExp(r'[0-9]'))) {
+      _errorMessage += '• Digit is missing.\n';
+    }
+    // Contains at least one special character
+    if (!password.contains(RegExp(r'[!@#%^&*(),.?":{}|<>]'))) {
+      _errorMessage += '• Special character is missing.\n';
+    }
+    // If there are no error messages, the password is valid
+    return _errorMessage.isEmpty;
   }
 
   String? phoneNumber;

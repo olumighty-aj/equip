@@ -28,6 +28,10 @@ class Authentication {
   late Details _currentUser;
   Details get currentUser => _currentUser;
 
+  bool? _isOwner;
+  bool? get isOwner => _isOwner;
+  // bool get isJ => _currentUser;
+
   // WalletBalance? _walletBalance;
   // WalletBalance? get walletBalance => _walletBalance;
 
@@ -202,6 +206,36 @@ class Authentication {
     try {
       Response res = await _apiService.getRequest(null, Paths.profile);
       if (res.statusCode == 200) {
+        return BaseDataModel.fromJson(res.data);
+      }
+    } on DioException catch (e) {
+      _log.e(e.message);
+    }
+  }
+
+  void setOwnerStatus(bool stat) {
+    _isOwner = stat;
+  }
+
+  Future<BaseDataModel?> becomeOwner() async {
+    try {
+      Response res =
+          await _apiService.postRequest({"become_owner": 1}, "become_a_owner");
+      if (res.statusCode == 200) {
+        _log.i("Become owner: ${res.data}");
+        return BaseDataModel.fromJson(res.data);
+      }
+    } on DioException catch (e) {
+      _log.e(e.message);
+    }
+  }
+
+  Future<BaseDataModel?> ownerCheck() async {
+    try {
+      Response res = await _apiService.postRequest(null, "is_owner");
+      if (res.statusCode == 200) {
+        _log.i("is owner: ${res.data}");
+        // _isOwner = res.data["payload"];
         return BaseDataModel.fromJson(res.data);
       }
     } on DioException catch (e) {

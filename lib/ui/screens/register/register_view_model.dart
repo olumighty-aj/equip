@@ -5,6 +5,7 @@ import 'package:equipro/core/model/success_model.dart';
 import 'package:equipro/core/services/auth_service.dart';
 import 'package:equipro/utils/helpers.dart';
 import 'package:equipro/utils/locator.dart';
+import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -28,6 +29,61 @@ class RegisterViewModel extends BaseViewModel {
       notifyListeners();
       return SuccessModel(result.data);
     }
+  }
+
+  String _errorMessage = "";
+  String get errorMessage => _errorMessage;
+
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController confirmPasswordController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController postalController = TextEditingController();
+  TextEditingController fullNameController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
+  TextEditingController controller = TextEditingController();
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    passwordController.dispose();
+    confirmPasswordController.dispose();
+    emailController.dispose();
+    fullNameController.dispose();
+    phoneController.dispose();
+    controller.dispose();
+  }
+
+  bool validatePassword(String password) {
+    // Reset error message
+    _errorMessage = '';
+    // Password length greater than 6
+    if (password.length < 8) {
+      _errorMessage += '• Password must be longer than 8 characters.\n';
+      notifyListeners();
+    }
+    // Contains at least one uppercase letter
+    if (!password.contains(RegExp(r'[A-Z]'))) {
+      _errorMessage += '• Uppercase letter is missing.\n';
+      notifyListeners();
+    }
+    // Contains at least one lowercase letter
+    if (!password.contains(RegExp(r'[a-z]'))) {
+      _errorMessage += '• Lowercase letter is missing.\n';
+      notifyListeners();
+    }
+    // Contains at least one digit
+    if (!password.contains(RegExp(r'[0-9]'))) {
+      _errorMessage += '• Digit is missing.\n';
+      notifyListeners();
+    }
+    // Contains at least one special character
+    if (!password.contains(RegExp(r'[!@#%^&*(),.?":{}|<>]'))) {
+      _errorMessage += '• Special character is missing.\n';
+      notifyListeners();
+    }
+    // If there are no error messages, the password is valid
+    return _errorMessage.isEmpty;
   }
 
   void newSignUp(SignUpModel model, context) async {

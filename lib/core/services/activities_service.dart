@@ -991,6 +991,21 @@ class Activities {
     }
   }
 
+  Future<BaseDataModel?> deleteBankDetails(id) async {
+    try {
+      Response res = await _api.postRequest(null, Paths.deleteBank + id);
+      _log.i(res.data);
+      if (res.statusCode == 200) {
+        _log.i(res.data);
+        return BaseDataModel.fromJson(res.data);
+      }
+    } on DioException catch (e) {
+      _log.e(e.message);
+    } catch (e) {
+      _log.e(e);
+    }
+  }
+
   Future<BaseDataModel?> withdrawEarnings(String amount) async {
     try {
       Response res =

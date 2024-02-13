@@ -87,6 +87,22 @@ class EarningsViewModel extends BaseViewModel {
     }
   }
 
+  void deleteBankDetails(context) async {
+    DialogResponse? dialogResponse = await _dialogService.showCustomDialog(
+        variant: DialogType.deleteBankDialog);
+    if (dialogResponse?.data == true) {
+      BaseDataModel? res = await runBusyFuture(
+          _activities.deleteBankDetails(banks["content"].first["ID"]),
+          busyObject: "delete");
+      if (res?.status == true) {
+        showToast("Bank successfully deleted!", context: context);
+        init();
+      } else {
+        showErrorToast(res?.message ?? "", context: context);
+      }
+    }
+  }
+
   void newWithdraw(context) async {
     DialogResponse? res = await locator<DialogService>()
         .showCustomDialog(variant: DialogType.amountDialog);
@@ -105,6 +121,7 @@ class EarningsViewModel extends BaseViewModel {
   void addPaymentMethod() async {
     DialogResponse? res = await _dialogService.showCustomDialog(
         variant: DialogType.paymentMethod, barrierDismissible: false);
+    init();
   }
 
   getWalletBalance(context) async {

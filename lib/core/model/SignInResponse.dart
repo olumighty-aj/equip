@@ -89,6 +89,8 @@ class Details {
     String? lastChangePassword,
     bool? kycUpdated,
     String? kycApproved,
+    String? becomeOwner,
+    String? isOwner,
   }) {
     _id = id;
     _fullname = fullname;
@@ -104,6 +106,7 @@ class Details {
     _hirersPath = hirersPath;
     _status = status;
     _dateModified = dateModified;
+    _become_owner = becomeOwner;
     _dateCreated = dateCreated;
     _username = username;
     _userType = userType;
@@ -114,6 +117,7 @@ class Details {
     _lastChangePassword = lastChangePassword;
     _kycUpdated = kycUpdated;
     _kycApproved = kycApproved;
+    _isOwner = isOwner;
   }
 
   Details.fromJson(dynamic json) {
@@ -129,6 +133,7 @@ class Details {
     _latitude = json['latitude'];
     _longitude = json['longitude'];
     _hirersPath = json['hirers_path'];
+    _become_owner = json["become_owner"];
     _status = json['status'];
     _dateModified = json['date_modified'];
     _dateCreated = json['date_created'];
@@ -141,6 +146,7 @@ class Details {
     _lastChangePassword = json['last_change_password'];
     _kycUpdated = json['kyc_updated'];
     _kycApproved = json['kyc_approved'];
+    _isOwner = json["is_owners"];
   }
   String? _id;
   String? _fullname;
@@ -149,6 +155,7 @@ class Details {
   String? _gender;
   String? _address;
   dynamic _addressOpt;
+  String? _become_owner;
   dynamic _localState;
   String? _country;
   dynamic _latitude;
@@ -164,6 +171,7 @@ class Details {
   String? _fcmToken;
   dynamic _lastLogout;
   String? _lastChangePassword;
+  String? _isOwner;
   bool? _kycUpdated;
   String? _kycApproved;
   Details copyWith({
@@ -179,6 +187,7 @@ class Details {
     dynamic latitude,
     dynamic longitude,
     dynamic hirersPath,
+    String? becomeOwner,
     String? status,
     String? dateModified,
     String? dateCreated,
@@ -186,6 +195,7 @@ class Details {
     String? userType,
     String? lastLogin,
     String? activityLog,
+    String? isOwner,
     String? fcmToken,
     dynamic lastLogout,
     String? lastChangePassword,
@@ -209,6 +219,7 @@ class Details {
         dateModified: dateModified ?? _dateModified,
         dateCreated: dateCreated ?? _dateCreated,
         username: username ?? _username,
+        becomeOwner: becomeOwner ?? _become_owner,
         userType: userType ?? _userType,
         lastLogin: lastLogin ?? _lastLogin,
         activityLog: activityLog ?? _activityLog,
@@ -217,17 +228,20 @@ class Details {
         lastChangePassword: lastChangePassword ?? _lastChangePassword,
         kycUpdated: kycUpdated ?? _kycUpdated,
         kycApproved: kycApproved ?? _kycApproved,
+        isOwner: isOwner ?? _isOwner,
       );
   String? get id => _id;
   String? get fullname => _fullname;
   String? get email => _email;
   String? get phoneNumber => _phoneNumber;
   String? get gender => _gender;
+  String? get becomeOwner => _become_owner;
   String? get address => _address;
   dynamic get addressOpt => _addressOpt;
   dynamic get localState => _localState;
   String? get country => _country;
   dynamic get latitude => _latitude;
+  dynamic get isOwner => _isOwner;
   dynamic get longitude => _longitude;
   dynamic get hirersPath => _hirersPath;
   String? get status => _status;

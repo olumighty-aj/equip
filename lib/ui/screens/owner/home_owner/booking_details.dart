@@ -16,6 +16,7 @@ import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 
 import '../../../../app/app_setup.logger.dart';
+import '../../../../core/services/auth_service.dart';
 import '../../../../utils/app_svgs.dart';
 
 class BookingDetails extends StatefulWidget {
@@ -187,50 +188,65 @@ class LoginState extends State<BookingDetails> with TickerProviderStateMixin {
                                               Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
-                                                      builder: (context) => ChatDetailsPage(
-                                                          feed: ChatListModel(
-                                                              id: widget.feed["hirers_id"],
-                                                              userId: "",
-                                                              chatWithId: "",
-                                                              messageCount: "",
-                                                              lastMessage: "",
-                                                              dateCreated: "",
-                                                              dateModified: "",
-                                                              chatWith: ChatWith(
-                                                                id: widget
-                                                                        .feed[
-                                                                            "equip_request"]
-                                                                        .first[
-                                                                    "hirers"]["ID"],
-                                                                fullname: widget
-                                                                        .feed[
-                                                                            "equip_request"]
-                                                                        .first["hirers"]
-                                                                    [
-                                                                    "fullname"],
-                                                                email: "",
-                                                                phoneNumber: "",
-                                                                gender: "",
-                                                                address: "",
-                                                                addressOpt: "",
-                                                                localState: "",
-                                                                country: "",
-                                                                latitude: "",
-                                                                longitude: "",
-                                                                hirersPath: widget.feed["equip_request"].first["hirers"]
-                                                                            [
-                                                                            "hirers_path"] !=
-                                                                        null
-                                                                    ? widget
-                                                                        .feed[
-                                                                            "equip_request"]
-                                                                        .first["hirers"]["hirers_path"]
-                                                                    : "",
-                                                                status: "",
-                                                                dateModified:
-                                                                    "",
-                                                                dateCreated: "",
-                                                              )))));
+                                                      builder: (context) =>
+                                                          ChatDetailsPage(
+                                                              feed:
+                                                                  ChatListModel(
+                                                                      id: widget
+                                                                              .feed[
+                                                                          "ID"],
+                                                                      userId: locator<
+                                                                              Authentication>()
+                                                                          .currentUser
+                                                                          .id,
+                                                                      chatWithId: widget
+                                                                              .feed["equip_request"].first["hirers"][
+                                                                          "ID"],
+                                                                      messageCount:
+                                                                          "",
+                                                                      lastMessage:
+                                                                          "",
+                                                                      dateCreated:
+                                                                          "",
+                                                                      dateModified:
+                                                                          "",
+                                                                      chatWith:
+                                                                          ChatWith(
+                                                                        id: widget
+                                                                            .feed["equip_request"]
+                                                                            .first["hirers"]["ID"],
+                                                                        fullname: widget
+                                                                            .feed["equip_request"]
+                                                                            .first["hirers"]["fullname"],
+                                                                        email:
+                                                                            "",
+                                                                        phoneNumber:
+                                                                            "",
+                                                                        gender:
+                                                                            "",
+                                                                        address:
+                                                                            "",
+                                                                        addressOpt:
+                                                                            "",
+                                                                        localState:
+                                                                            "",
+                                                                        country:
+                                                                            "",
+                                                                        latitude:
+                                                                            "",
+                                                                        longitude:
+                                                                            "",
+                                                                        hirersPath: widget.feed["equip_request"].first["hirers"]["hirers_path"] !=
+                                                                                null
+                                                                            ? widget.feed["equip_request"].first["hirers"]["hirers_path"]
+                                                                            : "",
+                                                                        status:
+                                                                            "",
+                                                                        dateModified:
+                                                                            "",
+                                                                        dateCreated:
+                                                                            "",
+                                                                      )))));
                                             },
                                             child: Row(
                                               children: [

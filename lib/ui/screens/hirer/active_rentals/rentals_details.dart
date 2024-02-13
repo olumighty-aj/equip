@@ -50,19 +50,19 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
     )..forward();
   }
 
-  // bool isDateInPast(String dateString) {
-  //   try {
-  //     DateTime givenDate = DateFormat("dd-MM-yyyy").parse(dateString);
-  //     DateTime currentDate = DateTime.now();
-  //     print("Given Date: ${givenDate.toDashDate()}");
-  //     print(
-  //         "Given Date: ${givenDate.toDate()}, CurrentDate: ${currentDate.toDate()}, isAfter: ${currentDate.isAfter(givenDate)}");
-  //     return currentDate.isAfter(givenDate);
-  //   } catch (e) {
-  //     print('Error parsing date: $e');
-  //     return false;
-  //   }
-  // }
+  bool isDateInPast(String dateString) {
+    try {
+      DateTime givenDate = DateFormat("yyyy-MM-dd").parse(dateString);
+      DateTime currentDate = DateTime.now();
+      print("Given Date: ${givenDate.toDashDate()}");
+      print(
+          "Given Date: ${givenDate.toString()}, CurrentDate: ${currentDate.toString()}, isAfter: ${currentDate.isAfter(givenDate)}");
+      return currentDate.isAfter(givenDate);
+    } catch (e) {
+      print('Error parsing date: $e');
+      return false;
+    }
+  }
 
   @override
   void dispose() {
@@ -188,7 +188,9 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                                       color: AppColors
                                                           .primaryColor,
                                                       decoration: TextDecoration
-                                                          .underline),
+                                                          .underline,
+                                                      decorationColor: AppColors
+                                                          .primaryColor),
                                             ),
                                           )
                                       ],
@@ -742,17 +744,17 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                                         )))),
                                       ],
                                     ),
-                                  // if (isDateInPast(widget.feed.rentalTo!) &&
-                                  //     widget.feed.equipOrder?.paymentStatus ==
-                                  //         "0")
-                                  //   Text(
-                                  //     "Booking Expired",
-                                  //     style: Theme.of(context)
-                                  //         .textTheme
-                                  //         .bodyMedium
-                                  //         ?.copyWith(color: Colors.red),
-                                  //     textAlign: TextAlign.center,
-                                  //   ),
+                                  if (isDateInPast(widget.feed.rentalTo!) &&
+                                      widget.feed.equipOrder?.paymentStatus ==
+                                          "0")
+                                    Text(
+                                      "Booking Expired",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium
+                                          ?.copyWith(color: Colors.red),
+                                      textAlign: TextAlign.center,
+                                    ),
                                   if (widget.feed.equipPayment != null)
                                     if (widget.feed.requestStatus ==
                                             "accepted" &&

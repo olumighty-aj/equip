@@ -7,6 +7,7 @@ import 'package:equipro/ui/widget/base_button.dart';
 import 'package:equipro/utils/screensize.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:stacked/stacked.dart';
 import 'package:equipro/utils/colors.dart';
 import 'package:equipro/utils/helpers.dart';
@@ -22,11 +23,7 @@ class Register extends StatefulWidget {
 
 class RegisterState extends State<Register> {
   // final NavService _navigationService = locator<NavService>();
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  TextEditingController confirmPasswordController = TextEditingController();
-  TextEditingController fullNameController = TextEditingController();
-  TextEditingController phoneController = TextEditingController();
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late bool passwordVisible;
   String countryCode = "234";
@@ -184,7 +181,8 @@ class RegisterState extends State<Register> {
                                               ),
                                               TextFormField(
                                                 validator: Validators().isEmpty,
-                                                controller: fullNameController,
+                                                controller:
+                                                    model.fullNameController,
                                                 // maxLength: 11,
                                                 decoration: InputDecoration(
                                                   hintText: 'John Deo',
@@ -214,7 +212,8 @@ class RegisterState extends State<Register> {
                                               ),
                                               TextFormField(
                                                 validator: Validators().isEmpty,
-                                                controller: emailController,
+                                                controller:
+                                                    model.emailController,
                                                 // maxLength: 11,
                                                 decoration: InputDecoration(
                                                   hintText: 'deo@gmail.com',
@@ -318,12 +317,6 @@ class RegisterState extends State<Register> {
                                                                 MainAxisAlignment
                                                                     .spaceEvenly,
                                                             children: [
-                                                              // showCountryPickerDialog(),
-                                                              // showCountryPicker(
-                                                              //   context: context,
-                                                              //   countryFilter: <String>['CD', 'CG', 'KE', 'UG'], // only specific countries
-                                                              //   onSelect: (){....},
-                                                              // )
                                                               Container(
                                                                 child:
                                                                     CountryPickerDropdown(
@@ -386,12 +379,66 @@ class RegisterState extends State<Register> {
                                                       }
                                                     },
                                                   )),
+                                              // if (countryCode != "234")
+                                              //   Column(
+                                              //     crossAxisAlignment:
+                                              //         CrossAxisAlignment.start,
+                                              //     children: [
+                                              //       Gap(30),
+                                              //       Text(
+                                              //         "Postal Code",
+                                              //         style: TextStyle(
+                                              //             color: Colors.grey,
+                                              //             fontWeight:
+                                              //                 FontWeight.bold,
+                                              //             fontSize: 14),
+                                              //       ),
+                                              //       Gap(5),
+                                              //       TextFormField(
+                                              //         validator:
+                                              //             Validators().isEmpty,
+                                              //         controller:
+                                              //             postalController,
+                                              //         // maxLength: 11,
+                                              //         decoration:
+                                              //             InputDecoration(
+                                              //           hintText:
+                                              //               'Enter postal code',
+                                              //           hintStyle:
+                                              //               const TextStyle(
+                                              //                   color: Colors
+                                              //                       .grey),
+                                              //           labelStyle:
+                                              //               const TextStyle(
+                                              //                   color: AppColors
+                                              //                       .black),
+                                              //         ),
+                                              //         onChanged: (v) {
+                                              //           setState(() {});
+                                              //         },
+                                              //         keyboardType:
+                                              //             TextInputType
+                                              //                 .emailAddress,
+                                              //         style: const TextStyle(
+                                              //             color: Colors.black),
+                                              //         cursorColor: Colors.black,
+                                              //       ),
+                                              //     ],
+                                              //   ),
                                               const SizedBox(
                                                 height: 30,
                                               ),
                                               TextFormField(
-                                                validator: Validators().isEmpty,
-                                                controller: passwordController,
+                                                validator: (val) {
+                                                  if (!model
+                                                      .validatePassword(val!)) {
+                                                    return model.errorMessage;
+                                                  } else {
+                                                    return null;
+                                                  }
+                                                },
+                                                controller:
+                                                    model.passwordController,
                                                 decoration: InputDecoration(
                                                   suffixIcon: IconButton(
                                                     icon: Icon(
@@ -430,14 +477,15 @@ class RegisterState extends State<Register> {
                                               TextFormField(
                                                 validator: (val) {
                                                   if (val !=
-                                                      passwordController.text) {
-                                                    return 'Passwords do not match';
+                                                      model.passwordController
+                                                          .text) {
+                                                    return "Does not match password";
                                                   } else {
                                                     return null;
                                                   }
                                                 },
-                                                controller:
-                                                    confirmPasswordController,
+                                                controller: model
+                                                    .confirmPasswordController,
                                                 decoration: InputDecoration(
                                                   suffixIcon: IconButton(
                                                     icon: Icon(
@@ -473,16 +521,17 @@ class RegisterState extends State<Register> {
                                 BaseButton(
                                   isBusy: model.busy("Register"),
                                   onPressed: () {
-                                    if (_formKey.currentState!.validate() &&
-                                        passwordController.text ==
-                                            confirmPasswordController.text) {
+                                    if (_formKey.currentState!.validate()) {
                                       model.newSignUp(
                                           SignUpModel(
-                                              fullname: fullNameController.text,
-                                              email: emailController.text,
+                                              fullname:
+                                                  model.fullNameController.text,
+                                              email: model.emailController.text,
                                               phoneNumber: model.phoneNumber,
                                               password:
-                                                  passwordController.text),
+                                                  model.passwordController.text,
+                                              postalCode:
+                                                  model.postalController.text),
                                           context);
                                     }
                                   },

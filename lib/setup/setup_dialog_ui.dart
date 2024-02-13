@@ -1,4 +1,5 @@
 import 'package:equipro/ui/dialogs/amount_dialog.dart';
+import 'package:equipro/ui/dialogs/delete_bank_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -57,6 +58,11 @@ void setupDialogUi() {
           completer: completer,
         ),
     DialogType.amountDialog: (context, sheetRequest, completer) => AmountDialog(
+          request: sheetRequest,
+          completer: completer,
+        ),
+    DialogType.deleteBankDialog: (context, sheetRequest, completer) =>
+        DeleteBankDialog(
           request: sheetRequest,
           completer: completer,
         ),

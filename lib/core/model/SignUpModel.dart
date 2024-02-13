@@ -5,15 +5,17 @@
 
 class SignUpModel {
   SignUpModel({
-      String? fullname, 
-      String? email, 
-      String? phoneNumber, 
-      String? password,}){
+    String? fullname,
+    String? email,
+    String? phoneNumber,
+    String? postalCode,
+    String? password,
+  }) {
     _fullname = fullname;
     _email = email;
     _phoneNumber = phoneNumber;
     _password = password;
-}
+  }
 
   SignUpModel.fromJson(dynamic json) {
     _fullname = json['fullname'];
@@ -25,15 +27,21 @@ class SignUpModel {
   String? _email;
   String? _phoneNumber;
   String? _password;
-SignUpModel copyWith({  String? fullname,
-  String? email,
-  String? phoneNumber,
-  String? password,
-}) => SignUpModel(  fullname: fullname ?? _fullname,
-  email: email ?? _email,
-  phoneNumber: phoneNumber ?? _phoneNumber,
-  password: password ?? _password,
-);
+  String? _postalCode;
+  SignUpModel copyWith({
+    String? fullname,
+    String? email,
+    String? phoneNumber,
+    String? password,
+    String? postalCode,
+  }) =>
+      SignUpModel(
+        fullname: fullname ?? _fullname,
+        email: email ?? _email,
+        phoneNumber: phoneNumber ?? _phoneNumber,
+        password: password ?? _password,
+        postalCode: postalCode ?? _postalCode,
+      );
   String? get fullname => _fullname;
   String? get email => _email;
   String? get phoneNumber => _phoneNumber;
@@ -47,5 +55,4 @@ SignUpModel copyWith({  String? fullname,
     map['password'] = _password;
     return map;
   }
-
 }
