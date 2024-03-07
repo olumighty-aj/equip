@@ -11,8 +11,6 @@ import 'package:gap/gap.dart';
 import 'package:stacked/stacked.dart';
 import 'package:equipro/utils/colors.dart';
 import 'package:equipro/utils/helpers.dart';
-import 'package:equipro/utils/locator.dart';
-import 'package:equipro/utils/router/navigation_service.dart';
 
 class Register extends StatefulWidget {
   const Register({Key? key}) : super(key: key);
@@ -72,6 +70,7 @@ class RegisterState extends State<Register> {
   Widget build(BuildContext context) {
     return ViewModelBuilder<RegisterViewModel>.reactive(
         viewModelBuilder: () => RegisterViewModel(),
+        // onViewModelReady: (model) => model.setCountry(),
         builder: (context, model, child) {
           return Scaffold(
               body: SingleChildScrollView(
@@ -346,6 +345,10 @@ class RegisterState extends State<Register> {
                                                                               () {
                                                                             countryCode =
                                                                                 f.phoneCode;
+                                                                            if (countryCode ==
+                                                                                "234") {
+                                                                              model.countryController.text = "Nigeria";
+                                                                            }
                                                                           });
                                                                           model.setPhoneNumber(
                                                                               phoneNumber: "+" + countryCode + model.sanitizePhoneNumberInput(controller.text));
@@ -379,55 +382,111 @@ class RegisterState extends State<Register> {
                                                       }
                                                     },
                                                   )),
-                                              // if (countryCode != "234")
-                                              //   Column(
-                                              //     crossAxisAlignment:
-                                              //         CrossAxisAlignment.start,
-                                              //     children: [
-                                              //       Gap(30),
-                                              //       Text(
-                                              //         "Postal Code",
-                                              //         style: TextStyle(
-                                              //             color: Colors.grey,
-                                              //             fontWeight:
-                                              //                 FontWeight.bold,
-                                              //             fontSize: 14),
-                                              //       ),
-                                              //       Gap(5),
-                                              //       TextFormField(
-                                              //         validator:
-                                              //             Validators().isEmpty,
-                                              //         controller:
-                                              //             postalController,
-                                              //         // maxLength: 11,
-                                              //         decoration:
-                                              //             InputDecoration(
-                                              //           hintText:
-                                              //               'Enter postal code',
-                                              //           hintStyle:
-                                              //               const TextStyle(
-                                              //                   color: Colors
-                                              //                       .grey),
-                                              //           labelStyle:
-                                              //               const TextStyle(
-                                              //                   color: AppColors
-                                              //                       .black),
-                                              //         ),
-                                              //         onChanged: (v) {
-                                              //           setState(() {});
-                                              //         },
-                                              //         keyboardType:
-                                              //             TextInputType
-                                              //                 .emailAddress,
-                                              //         style: const TextStyle(
-                                              //             color: Colors.black),
-                                              //         cursorColor: Colors.black,
-                                              //       ),
-                                              //     ],
-                                              //   ),
+                                              if (countryCode != "234")
+                                                Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Gap(30),
+                                                    Text(
+                                                      "Postal Code",
+                                                      style: TextStyle(
+                                                          color: Colors.grey,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize: 14),
+                                                    ),
+                                                    Gap(5),
+                                                    TextFormField(
+                                                      validator:
+                                                          Validators().isEmpty,
+                                                      controller: model
+                                                          .postalController,
+                                                      // maxLength: 11,
+                                                      decoration:
+                                                          InputDecoration(
+                                                        hintText:
+                                                            'Enter postal code',
+                                                        hintStyle:
+                                                            const TextStyle(
+                                                                color: Colors
+                                                                    .grey),
+                                                        labelStyle:
+                                                            const TextStyle(
+                                                                color: AppColors
+                                                                    .black),
+                                                      ),
+                                                      onChanged: (val) => model
+                                                          .onChangePostCode(
+                                                              val, context),
+                                                      keyboardType:
+                                                          TextInputType.text,
+                                                      style: const TextStyle(
+                                                          color: Colors.black),
+                                                      cursorColor: Colors.black,
+                                                    ),
+                                                  ],
+                                                ),
+                                              Gap(5),
+                                              Align(
+                                                alignment:
+                                                    Alignment.centerRight,
+                                                child: Visibility(
+                                                  visible: model.busy("post"),
+                                                  child: SizedBox(
+                                                      height: 20,
+                                                      width: 20,
+                                                      child:
+                                                          CircularProgressIndicator(
+                                                        color: AppColors
+                                                            .primaryColor,
+                                                        strokeWidth: 2,
+                                                      )),
+                                                ),
+                                              ),
                                               const SizedBox(
                                                 height: 30,
                                               ),
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    "Country",
+                                                    style: TextStyle(
+                                                        color: Colors.grey,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 14),
+                                                  ),
+                                                  Gap(5),
+                                                  TextFormField(
+                                                    validator:
+                                                        Validators().isEmpty,
+                                                    controller:
+                                                        model.countryController,
+                                                    // maxLength: 11,
+                                                    enabled: false,
+                                                    decoration: InputDecoration(
+                                                      hintText: 'Enter Country',
+                                                      hintStyle:
+                                                          const TextStyle(
+                                                              color:
+                                                                  Colors.grey),
+                                                      labelStyle:
+                                                          const TextStyle(
+                                                              color: AppColors
+                                                                  .black),
+                                                    ),
+                                                    keyboardType: TextInputType
+                                                        .emailAddress,
+                                                    style: const TextStyle(
+                                                        color: Colors.black),
+                                                    cursorColor: Colors.black,
+                                                  ),
+                                                ],
+                                              ),
+                                              Gap(30),
                                               TextFormField(
                                                 validator: (val) {
                                                   if (!model
@@ -461,9 +520,6 @@ class RegisterState extends State<Register> {
                                                     color: Colors.grey,
                                                   ),
                                                 ),
-                                                onChanged: (v) {
-                                                  setState(() {});
-                                                },
                                                 obscureText: passwordVisible,
                                                 keyboardType: TextInputType
                                                     .visiblePassword,
@@ -524,14 +580,19 @@ class RegisterState extends State<Register> {
                                     if (_formKey.currentState!.validate()) {
                                       model.newSignUp(
                                           SignUpModel(
-                                              fullname:
-                                                  model.fullNameController.text,
-                                              email: model.emailController.text,
-                                              phoneNumber: model.phoneNumber,
-                                              password:
-                                                  model.passwordController.text,
-                                              postalCode:
-                                                  model.postalController.text),
+                                            fullname:
+                                                model.fullNameController.text,
+                                            email: model.emailController.text,
+                                            phoneNumber: model.phoneNumber,
+                                            password:
+                                                model.passwordController.text,
+                                            country:
+                                                model.countryController.text,
+                                            postalCode:
+                                                model.postalController.text,
+                                            longitude: model.longitude,
+                                            latitude: model.latitude,
+                                          ),
                                           context);
                                     }
                                   },

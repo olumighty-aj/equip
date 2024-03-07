@@ -4,6 +4,7 @@ import 'package:equipro/core/services/payment_services.dart';
 import 'package:equipro/ui/screens/hirer/active_rentals/active_rentals.dart';
 import 'package:equipro/ui/screens/hirer/home/home_view.dart';
 import 'package:equipro/ui/screens/profile/edit_profile.dart';
+import 'package:equipro/ui/screens/profile/profile.dart';
 import 'package:equipro/utils/progressBarManager/dialog_service.dart';
 import 'package:equipro/utils/router/navigation_service.dart';
 import 'package:place_picker/widgets/place_picker.dart';
@@ -66,9 +67,9 @@ import '../ui/screens/splashscreen.dart';
     MaterialRoute(
       page: EditProfile,
     ),
-    // MaterialRoute(
-    //   page: ActiveR,
-    // ),
+    MaterialRoute(
+      page: Profile,
+    ),
   ],
   dependencies: [
     LazySingleton(classType: NavigationService),

@@ -5,6 +5,8 @@ import 'package:equipro/core/services/auth_service.dart';
 import 'package:equipro/core/services/index.dart';
 import 'package:equipro/ui/screens/drawer.dart';
 import 'package:equipro/ui/screens/profile/edit_profile.dart';
+import 'package:equipro/ui/screens/profile/kyc_verif/become_owner.dart';
+import 'package:equipro/ui/screens/profile/kyc_verif/verify_kyc.dart';
 import 'package:equipro/ui/screens/profile/profile_view_model.dart';
 import 'package:equipro/ui/widget/reviews_widget.dart';
 import 'package:equipro/utils/app_svgs.dart';
@@ -206,7 +208,7 @@ class ProfileState extends State<Profile> with TickerProviderStateMixin {
                                 SizedBox(
                                   height: 15,
                                 ),
-                                InkWell(
+                                GestureDetector(
                                     onTap: () => Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -229,19 +231,7 @@ class ProfileState extends State<Profile> with TickerProviderStateMixin {
                                                 fontWeight: FontWeight.w400),
                                           ),
                                         ])),
-                                // SizedBox(
-                                //   height: 20,
-                                // ),
-                                // Text(
-                                //   "Profile 60% Completed",
-                                //   style: TextStyle(
-                                //       color: AppColors.red,
-                                //       fontWeight: FontWeight.w400,
-                                //       fontSize: 15),
-                                // ),
-                                SizedBox(
-                                  height: 30,
-                                ),
+                                Gap(30),
                                 Container(
                                   decoration: BoxDecoration(
                                     color: Colors.white,
@@ -268,265 +258,170 @@ class ProfileState extends State<Profile> with TickerProviderStateMixin {
                                           )
                                         ],
                                       ),
-                                      Gap(30),
-                                      Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text("Address"),
-                                          Gap(10),
-                                          Expanded(
-                                            child: Text(
-                                              _authentication.currentUser
-                                                          .address !=
-                                                      null
-                                                  ? _authentication
-                                                      .currentUser.address!
-                                                  : "Not updated ",
-                                              textAlign: TextAlign.end,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      Gap(30),
-                                      Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          // Expanded(child: Text("Means of ID")),
-                                          Expanded(
-                                              child: Text("KYC Verification")),
-                                          if (model.verificationDetails !=
-                                                  null &&
-                                              model.verificationDetails!
-                                                  .isNotEmpty)
-                                            Column(
+                                      if (model.isNigerian)
+                                        Column(
+                                          children: [
+                                            Gap(30),
+                                            Row(
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               children: [
-                                                // Text(model.verificationDetails?[
-                                                //         "document_name"] ??
-                                                //     ""),
-                                                // Gap(5),
-                                                // Container(
-                                                //   padding: EdgeInsets.all(10),
-                                                //   decoration: BoxDecoration(
-                                                //       borderRadius:
-                                                //           BorderRadius.circular(
-                                                //               10),
-                                                //       color: model.verificationDetails?[
-                                                //                       "verify_status"] ==
-                                                //                   "verified" &&
-                                                //               _authentication
-                                                //                   .currentUser
-                                                //                   .kycUpdated!
-                                                //           ? Colors
-                                                //               .green.shade200
-                                                //           : AppColors
-                                                //               .primaryColor
-                                                //               .withOpacity(
-                                                //                   0.4)),
-                                                //   child: Text(
-                                                //     "${model.verificationDetails?["verify_status"] == "verified" && _authentication.currentUser.kycUpdated! ? "Verified" : model.verificationDetails?["verify_status"] == "not_verified" && _authentication.currentUser.kycUpdated! ? "Not Verified" : "Pending"}",
-                                                //     style: Theme.of(context)
-                                                //         .textTheme
-                                                //         .bodySmall
-                                                //         ?.copyWith(
-                                                //             color: Colors.white,
-                                                //             fontSize: 10),
-                                                //   ),
-                                                // ),
-                                                RoundCheckBox(
-                                                  onTap: (_) {},
-                                                  checkedWidget: Icon(
-                                                    Icons.check,
-                                                    color: Colors.white,
-                                                    size: 20,
+                                                Text("Address"),
+                                                Gap(10),
+                                                Expanded(
+                                                  child: Text(
+                                                    _authentication.currentUser
+                                                                .address !=
+                                                            null
+                                                        ? _authentication
+                                                            .currentUser
+                                                            .address!
+                                                        : "Not updated ",
+                                                    textAlign: TextAlign.end,
                                                   ),
-                                                  checkedColor: Colors.green,
-                                                  isChecked: model.kycApproved,
-                                                  size: 25,
-                                                )
+                                                ),
                                               ],
                                             ),
-                                          Gap(20),
-                                          if (model.verificationDetails !=
-                                                  null &&
-                                              model
-                                                  .verificationDetails!.isEmpty)
-                                            Container(
-                                              padding: EdgeInsets.all(10),
-                                              decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                  color: Colors.red),
-                                              child: Text(
-                                                "Not Verified",
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .bodySmall
-                                                    ?.copyWith(
-                                                        color: Colors.white,
-                                                        fontSize: 10),
-                                              ),
-                                            )
-
-                                          // Expanded(
-                                          //   child: BaseButton(
-                                          //     onPressed: !_authentication
-                                          //             .currentUser
-                                          //             .kycApproved!
-                                          //         ? () {
-                                          //             showToast(
-                                          //                 "Kindly upload KYC to be verified",
-                                          //                 context: context);
-                                          //             Navigator.push(
-                                          //                 context,
-                                          //                 MaterialPageRoute(
-                                          //                     builder:
-                                          //                         (context) =>
-                                          //                             EditProfile()));
-                                          //           }
-                                          //         : null,
-                                          //     label: _authentication
-                                          //             .currentUser
-                                          //             .kycApproved!
-                                          //         ? "Verified"
-                                          //         : "Not Verified",
-                                          //     bgColor: !_authentication
-                                          //             .currentUser
-                                          //             .kycApproved!
-                                          //         ? AppColors.primaryColor
-                                          //             .withOpacity(0.6)
-                                          //         : Color(0xff247322),
-                                          //     labelStyle: Theme.of(context)
-                                          //         .textTheme
-                                          //         .bodySmall
-                                          //         ?.copyWith(
-                                          //             color: Colors.white),
-                                          //   ),
-                                          // )
-                                        ],
-                                      ),
-                                      Gap(20),
-                                      Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Expanded(
-                                              child: Text("Verified Owner")),
-
-                                          RoundCheckBox(
-                                            onTap: (_) {},
-                                            checkedColor: Colors.green,
-                                            isChecked: model.isOwner,
-                                            size: 25,
-                                            uncheckedColor: Colors.grey,
-                                            checkedWidget: Icon(
-                                              Icons.check,
-                                              color: Colors.white,
-                                              size: 20,
-                                            ),
-                                            uncheckedWidget: Icon(
-                                              Icons.close,
-                                              color: Colors.white,
-                                              size: 20,
-                                            ),
-                                          ),
-                                          Gap(20),
-                                          if (model.verificationDetails !=
-                                                  null &&
-                                              model
-                                                  .verificationDetails!.isEmpty)
-                                            Container(
-                                              padding: EdgeInsets.all(10),
-                                              decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                  color: Colors.red),
-                                              child: Text(
-                                                "Not Verified",
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .bodySmall
-                                                    ?.copyWith(
-                                                        color: Colors.white,
-                                                        fontSize: 10),
-                                              ),
-                                            )
-
-                                          // Expanded(
-                                          //   child: BaseButton(
-                                          //     onPressed: !_authentication
-                                          //             .currentUser
-                                          //             .kycApproved!
-                                          //         ? () {
-                                          //             showToast(
-                                          //                 "Kindly upload KYC to be verified",
-                                          //                 context: context);
-                                          //             Navigator.push(
-                                          //                 context,
-                                          //                 MaterialPageRoute(
-                                          //                     builder:
-                                          //                         (context) =>
-                                          //                             EditProfile()));
-                                          //           }
-                                          //         : null,
-                                          //     label: _authentication
-                                          //             .currentUser
-                                          //             .kycApproved!
-                                          //         ? "Verified"
-                                          //         : "Not Verified",
-                                          //     bgColor: !_authentication
-                                          //             .currentUser
-                                          //             .kycApproved!
-                                          //         ? AppColors.primaryColor
-                                          //             .withOpacity(0.6)
-                                          //         : Color(0xff247322),
-                                          //     labelStyle: Theme.of(context)
-                                          //         .textTheme
-                                          //         .bodySmall
-                                          //         ?.copyWith(
-                                          //             color: Colors.white),
-                                          //   ),
-                                          // )
-                                        ],
-                                      ),
+                                          ],
+                                        ),
                                     ],
                                   ),
                                 ),
-                                // Gap(15),
-                                // Row(
-                                //   mainAxisAlignment:
-                                //       MainAxisAlignment.spaceBetween,
-                                //   children: [
-                                //     Text(
-                                //       "Become an Owner",
-                                //       style: Theme.of(context)
-                                //           .textTheme
-                                //           .bodyMedium
-                                //           ?.copyWith(
-                                //               // fontSize: 18,
-                                //               fontWeight: FontWeight.w600),
-                                //     ),
-                                //     // Gap(5),
-                                //     Switch.adaptive(
-                                //       inactiveTrackColor: Colors.grey,
-                                //       activeColor: AppColors.primaryColor,
-                                //       value: model.isOwner,
-                                //       onChanged: model.isOwner
-                                //           ? null
-                                //           : (val) =>
-                                //               model.becomeOwner(context, val),
-                                //     ),
-                                //   ],
-                                // ),
+                                Gap(15),
+                                GestureDetector(
+                                  onTap: !model.kycApproved
+                                      ? () => Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  KYCVerificationScreen()))
+                                      : null,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    padding: EdgeInsets.all(20),
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        // Expanded(child: Text("Means of ID")),
+                                        Expanded(
+                                            child: Text("KYC Verification")),
+                                        RoundCheckBox(
+                                          onTap: null,
+                                          disabledColor: model.kycApproved
+                                              ? Colors.green
+                                              : Colors.red,
+                                          uncheckedWidget: Icon(
+                                            Icons.close,
+                                            color: Colors.white,
+                                            size: 20,
+                                          ),
+                                          checkedWidget: Icon(
+                                            Icons.check,
+                                            color: Colors.white,
+                                            size: 20,
+                                          ),
+                                          uncheckedColor: Colors.red,
+                                          checkedColor: Colors.green,
+                                          isChecked: model.kycApproved,
+                                          size: 25,
+                                        ),
+                                        Gap(20),
+                                        if (model.verificationDetails != null &&
+                                            model.verificationDetails!.isEmpty)
+                                          Container(
+                                            padding: EdgeInsets.all(10),
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                color: Colors.red),
+                                            child: Text(
+                                              "Not Verified",
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodySmall
+                                                  ?.copyWith(
+                                                      color: Colors.white,
+                                                      fontSize: 10),
+                                            ),
+                                          )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Gap(10),
+                                GestureDetector(
+                                  onTap: !model.isOwner
+                                      ? () => Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  BecomeOwnerScreen()))
+                                      : null,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    padding: EdgeInsets.all(20),
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Expanded(child: Text("Verified Owner")),
+                                        RoundCheckBox(
+                                          onTap: null,
+                                          disabledColor: model.isOwner
+                                              ? Colors.green
+                                              : Colors.red,
+                                          checkedColor: Colors.green,
+                                          isChecked: model.isOwner,
+                                          size: 25,
+                                          uncheckedColor: Colors.red,
+                                          checkedWidget: Icon(
+                                            Icons.check,
+                                            color: Colors.white,
+                                            size: 20,
+                                          ),
+                                          uncheckedWidget: Icon(
+                                            Icons.close,
+                                            color: Colors.white,
+                                            size: 20,
+                                          ),
+                                        ),
+                                        Gap(20),
+                                        if (model.verificationDetails != null &&
+                                            model.verificationDetails!.isEmpty)
+                                          Container(
+                                            padding: EdgeInsets.all(10),
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                color: Colors.red),
+                                            child: Text(
+                                              "Not Verified",
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodySmall
+                                                  ?.copyWith(
+                                                      color: Colors.white,
+                                                      fontSize: 10),
+                                            ),
+                                          )
+                                      ],
+                                    ),
+                                  ),
+                                ),
                                 Gap(35),
                                 _authentication.currentUser.userType == "hirers"
                                     ? Container(
@@ -625,10 +520,6 @@ class ProfileState extends State<Profile> with TickerProviderStateMixin {
                                                     ),
                                                     Gap(18),
                                                     Column(
-                                                        // shrinkWrap: true,
-                                                        // scrollDirection:
-                                                        //     Axis.vertical,
-                                                        // shrinkWrap: true,
                                                         children: snapshot.data!
                                                             .map((feed) =>
                                                                 Padding(

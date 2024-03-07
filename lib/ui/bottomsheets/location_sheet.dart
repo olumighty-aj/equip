@@ -45,7 +45,7 @@ class LocationSheet extends StatelessWidget {
                   BaseButton(
                     label: "Turn on",
                     onPressed: () async {
-                      bool isActive = await model.requestLocationPermission();
+                      bool isActive = await model.requestPermission();
                       if (isActive) {
                         completer(
                             SheetResponse(confirmed: true, data: isActive));

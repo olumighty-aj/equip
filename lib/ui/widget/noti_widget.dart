@@ -64,9 +64,9 @@ class NotiItem extends StatelessWidget {
                                   feed.message ?? "",
                                   style: const TextStyle(
                                     fontSize: 13,
-                                    // overflow: TextOverflow.ellipsis,
+                                    overflow: TextOverflow.fade,
                                   ),
-                                  // maxLines: 2,
+                                  maxLines: 2,
                                 ),
                               ),
                               SizedBox(

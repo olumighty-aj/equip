@@ -1,5 +1,7 @@
 import 'dart:io';
+import 'dart:ui';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 import 'package:equipro/app/app_setup.logger.dart';
 import 'package:equipro/core/model/ReviewsModel.dart';
@@ -30,6 +32,7 @@ class ProfileViewModel extends BaseViewModel {
   String? pickLat;
   String? pickLng;
   File? image;
+  Map<String, dynamic>? postCodeDetail;
 
   Map<String, dynamic>? verificationDetails;
 
@@ -40,6 +43,7 @@ class ProfileViewModel extends BaseViewModel {
   TextEditingController phoneController = TextEditingController();
   TextEditingController stateController = TextEditingController();
   TextEditingController countryController = TextEditingController();
+  TextEditingController postCodeController = TextEditingController();
 
   String? get hirersPath => _authentication.currentUser.hirersPath;
 
@@ -51,22 +55,38 @@ class ProfileViewModel extends BaseViewModel {
 
   void initProfile() {
     verifyKYC();
+    // checkPostCode();
     // ownerCheck(context);
   }
 
+  bool get isNigerian => _authentication.currentUser.country == "Nigeria";
+
+  void checkPostCode() async {
+    if (stateController.text.isEmpty && postCodeController.text.isNotEmpty) {
+      postCodeDetail =
+          await _authentication.fetchPostDetails(postCodeController.text);
+      if (postCodeDetail?["status"] == 200) {
+        stateController.text = postCodeDetail!["result"]["region"];
+        // longitude = postCodeDetail!["result"]["longitude"];
+        // latitude = postCodeDetail!["result"]["latitude"];
+        // _log.i("Lng: $longitude, Lat: $latitude");
+        notifyListeners();
+      }
+    }
+  }
+
   void initEditProfile() {
-    print("KYC Approved: $kycApproved");
-    print("KYC Updated: $kycUpdated");
-    print("KYC Pending: $kycPendng");
     _log.i(_authentication.currentUser.toJson());
     stateController.text = _authentication.currentUser.localState ??
         _authentication.currentUser.address?.extractState() ??
         "";
+
     // isOwner = _authentication.currentUser.isOwner == "FALSE" ? false : true;
     countryController.text = _authentication.currentUser.country ??
         _authentication.currentUser.address?.extractCountry() ??
         "";
     nameController.text = _authentication.currentUser.fullname!;
+    postCodeController.text = _authentication.currentUser.postalCode ?? "";
     addressController.text = _authentication.currentUser.address != null
         ? _authentication.currentUser.address!
         : "";
@@ -91,6 +111,22 @@ class ProfileViewModel extends BaseViewModel {
             ? "Male"
             : "Female"
         : null;
+    checkPostCode();
+  }
+
+  void onChangePostCode(String val, context) async {
+    if (val.length >= 7) {
+      _log.i("About to check code");
+      postCodeDetail = await runBusyFuture(
+          _authentication.fetchPostDetails(val),
+          busyObject: "post");
+      if (postCodeDetail?["status"] == 200) {
+        countryController.text = postCodeDetail!["result"]["country"];
+        notifyListeners();
+      } else {
+        showErrorToast(postCodeDetail!["error"], context: context);
+      }
+    }
   }
 
   void showPlacePicker() async {
@@ -159,18 +195,8 @@ class ProfileViewModel extends BaseViewModel {
           displayPicture: image?.path ?? "",
           address: addressController.text,
           gender: selectedGender!,
-          lat: pickLat.toString(),
-          lng: pickLng.toString(),
-          kyc_name: selectedMOI == "International Passport"
-              ? "international_passport"
-              : selectedMOI == "Voters Card"
-                  ? "voters_card"
-                  : selectedMOI == "National ID"
-                      ? "national_id_card"
-                      : selectedMOI == "Driver License"
-                          ? "driver_license"
-                          : "",
-          kyc_document_path: uploadController.text,
+          lat: _authentication.currentUser.longitude,
+          lng: _authentication.currentUser.latitude,
         ),
         busyObject: "Edit");
     if (result == null) {
@@ -187,57 +213,26 @@ class ProfileViewModel extends BaseViewModel {
     return result;
   }
 
-  void toggleOwnerStatus(val, context) async {
-    if (isOwner) {
-      // becomeOwner(context);
-    }
-    notifyListeners();
-  }
-
   void newEditProfile(context) async {
     _log.i("KYC APPROVED: ${_authentication.currentUser.kycApproved}");
 
     FormData data;
-    if (_authentication.currentUser.kycApproved != "approved" &&
-        _authentication.currentUser.kycApproved != "pending") {
-      var dataMap = {
-        "address": addressController.text,
-        "gender": selectedGender,
-        "local_state": stateController.text,
-        "country": countryController.text,
-        "become_owner": isOwner ? 1 : 0,
-        "hirers_path":
-            image != null ? await MultipartFile.fromFile(image!.path) : null,
-        "kyc_name": selectedMOI == "International Passport"
-            ? "international_passport"
-            : selectedMOI == "Voters Card"
-                ? "voters_card"
-                : selectedMOI == "National ID"
-                    ? "national_id_card"
-                    : selectedMOI == "Driver License"
-                        ? "driver_license"
-                        : null,
-        "kyc_document_path[]": uploadController.text.isNotEmpty
-            ? await MultipartFile.fromFile(uploadController.text)
-            : null,
-        "latitude": pickLat,
-        "longitude": pickLng,
-      };
-      _log.i("Data map 2: $dataMap");
-      data = FormData.fromMap(dataMap);
-    } else {
-      var dataMapTwo = {
-        "address": addressController.text,
-        "gender": selectedGender,
-        "hirers_path":
-            image != null ? await MultipartFile.fromFile(image!.path) : null,
-        "latitude": pickLat,
-        "longitude": pickLng,
-        "become_owner": isOwner ? 1 : 0,
-      };
-      _log.i("Data map 2: $dataMapTwo");
-      data = FormData.fromMap(dataMapTwo);
-    }
+    var dataMapTwo = {
+      "address": addressController.text,
+      "gender": selectedGender,
+      "hirers_path":
+          image != null ? await MultipartFile.fromFile(image!.path) : null,
+      "latitude": isNigerian
+          ? pickLat
+          : _authentication.currentUser.latitude ?? pickLat,
+      "local_state": stateController.text,
+      "longitude": isNigerian
+          ? pickLng
+          : _authentication.currentUser.longitude ?? pickLng,
+      "become_owner": isOwner ? 1 : 0,
+    };
+    _log.i("Data map 2: $dataMapTwo");
+    data = FormData.fromMap(dataMapTwo);
     var res = await runBusyFuture(_authentication.editNewProfile(data),
         busyObject: "Edit");
     if (res != null) {
@@ -255,32 +250,6 @@ class ProfileViewModel extends BaseViewModel {
       // _log.i("Profile Update res${res}");
       showErrorToast("Profile Update failed! Please try again",
           context: context);
-    }
-  }
-
-  void getHirersProfile() async {
-    BaseDataModel? res = await _authentication.getHirersProfile();
-  }
-
-  void becomeOwner(context, val) async {
-    BaseDataModel? res = await _authentication.becomeOwner();
-    if (res?.status == true) {
-      _authentication.setOwnerStatus(true);
-      notifyListeners();
-      showToast(
-          "Success!\nYour request to be an owner is currently being reviewed by the admin",
-          context: context);
-    } else {
-      showErrorToast(res?.message ?? "", context: context);
-    }
-  }
-
-  void ownerCheck(context) async {
-    BaseDataModel? res = await _authentication.ownerCheck();
-    if (res?.status == true) {
-      _authentication.setOwnerStatus(res?.payload);
-      // isOwner = res?.status as bool;
-      notifyListeners();
     }
   }
 

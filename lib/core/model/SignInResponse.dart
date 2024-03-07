@@ -91,8 +91,10 @@ class Details {
     String? kycApproved,
     String? becomeOwner,
     String? isOwner,
+    String? postalCode,
   }) {
     _id = id;
+    _postalCode = postalCode;
     _fullname = fullname;
     _email = email;
     _phoneNumber = phoneNumber;
@@ -122,6 +124,7 @@ class Details {
 
   Details.fromJson(dynamic json) {
     _id = json['ID'];
+    _postalCode = json["postal_code"];
     _fullname = json['fullname'];
     _email = json['email'];
     _phoneNumber = json['phone_number'];
@@ -151,6 +154,7 @@ class Details {
   String? _id;
   String? _fullname;
   String? _email;
+  String? _postalCode;
   String? _phoneNumber;
   String? _gender;
   String? _address;
@@ -176,6 +180,7 @@ class Details {
   String? _kycApproved;
   Details copyWith({
     String? id,
+    String? postalCode,
     String? fullname,
     String? email,
     String? phoneNumber,
@@ -204,6 +209,7 @@ class Details {
   }) =>
       Details(
         id: id ?? _id,
+        postalCode: postalCode ?? _postalCode,
         fullname: fullname ?? _fullname,
         email: email ?? _email,
         phoneNumber: phoneNumber ?? _phoneNumber,
@@ -231,6 +237,7 @@ class Details {
         isOwner: isOwner ?? _isOwner,
       );
   String? get id => _id;
+  String? get postalCode => _postalCode;
   String? get fullname => _fullname;
   String? get email => _email;
   String? get phoneNumber => _phoneNumber;
@@ -262,6 +269,7 @@ class Details {
     map['ID'] = _id;
     map['fullname'] = _fullname;
     map['email'] = _email;
+    map["postal_code"] = _postalCode;
     map['phone_number'] = _phoneNumber;
     map['gender'] = _gender;
     map['address'] = _address;

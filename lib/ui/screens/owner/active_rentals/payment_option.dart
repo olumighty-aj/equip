@@ -25,14 +25,18 @@ class PaymentOptionScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
                   children: [
-                    if (!feed.deliveryLocation!.contains("Nigeria"))
+                    if (!model.isNigerian)
                       ListTile(
                         onTap: () {
                           var totalAmount =
                               double.parse(feed.equipOrder!.serviceCharge!) +
                                   double.parse(feed.equipOrder!.totalAmount!);
-                          model.initPayment(feed.equipOrderId!,
-                              totalAmount.toString(), "paypal", "gbp");
+                          model.initPayment(
+                              feed.equipOrderId!,
+                              totalAmount.toString(),
+                              "paypal",
+                              "gbp",
+                              PaymentType.paypal);
                         },
                         leading: Container(
                           padding: EdgeInsets.all(16),
@@ -42,7 +46,7 @@ class PaymentOptionScreen extends StatelessWidget {
                           child: SvgPicture.asset(AppSvgs.paypal),
                         ),
                         title: Text("Paypal"),
-                        trailing: model.busy("InitPayment")
+                        trailing: model.busy("PaypalInitPayment")
                             ? SizedBox(
                                 height: 10,
                                 width: 10,
@@ -62,9 +66,8 @@ class PaymentOptionScreen extends StatelessWidget {
                             feed.equipOrderId!,
                             totalAmount.toString(),
                             "stripe",
-                            feed.deliveryLocation!.contains("Nigeria")
-                                ? "ngn"
-                                : "gbp");
+                            model.isNigerian ? "ngn" : "gbp",
+                            PaymentType.stripe);
                       },
 
                       leading: Container(
@@ -80,7 +83,7 @@ class PaymentOptionScreen extends StatelessWidget {
 
                       // ),
                       title: Text("Stripe"),
-                      trailing: model.busy("InitPayment")
+                      trailing: model.busy("StripeInitPayment")
                           ? SizedBox(
                               height: 10,
                               width: 10,

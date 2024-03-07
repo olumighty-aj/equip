@@ -52,6 +52,38 @@ class Authentication {
     _phoneNumber = phone;
   }
 
+  Future<Map<String, dynamic>?> fetchPostDetails(postCode) async{
+    try{
+      _log.i("Hi I am fetching post details");
+      Dio dio  = Dio();
+      _log.i("Links: ${Paths.postCodeBaseUrl+postCode}");
+      Response res = await dio.get(Paths.postCodeBaseUrl+postCode);
+      if(res.statusCode==200){
+        _log.i("Post Code details: ${res.data}");
+        return res.data;
+      }
+    }
+    on DioException catch (e) {
+      _log.e(e.message);
+      _log.e(e.response.toString());
+      return e.response?.data;
+    }
+  }
+
+  Future<BaseDataModel?> newVerifyKyc(FormData data) async{
+    try {
+      Response res = await _apiService.postRequest(
+         data, Paths.verifyKYC);
+      if (res.statusCode == 200) {
+        return BaseDataModel.fromJson(res.data);
+      }
+    } on DioException catch (e) {
+      _log.e(e.message);
+      _log.e(e.response.toString());
+      return BaseDataModel.fromJson(e.response?.data);
+    }
+  }
+
   login(Map<dynamic, dynamic> payload) async {
     try {
       final result = await http.post(Paths.login, payload);

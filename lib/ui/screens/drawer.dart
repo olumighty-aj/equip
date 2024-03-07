@@ -4,6 +4,8 @@ import 'package:equipro/ui/screens/chat/chat.dart';
 import 'package:equipro/ui/screens/hirer/active_rentals/active_rentals.dart';
 import 'package:equipro/ui/screens/hirer/home/home_view_model.dart';
 import 'package:equipro/ui/screens/profile/edit_profile.dart';
+import 'package:equipro/ui/screens/profile/kyc_verif/become_owner.dart';
+import 'package:equipro/ui/screens/profile/kyc_verif/verify_kyc.dart';
 import 'package:equipro/ui/screens/profile/profile.dart';
 import 'package:equipro/ui/screens/terms_and_condition/terms_condition_screen.dart';
 import 'package:equipro/ui/widget/base_button.dart';
@@ -273,8 +275,12 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
                     ),
                   ],
                 ),
-              SizedBox(
-                height: 20,
+              Column(
+                children: [
+                  SizedBox(
+                    height: 20,
+                  ),
+                ],
               ),
               BaseButton(
                 label: _authentication.isOwner == true
@@ -284,10 +290,10 @@ class CollapsingNavigationDrawerState extends State<CollapsingNavigationDrawer>
                   if (_authentication.isOwner == true) {
                     displayDialog(context, model);
                   } else {
-                    // Navigator.push(context,
-                    //     MaterialPageRoute(builder: (context) => EditProfile()));
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => BecomeOwnerScreen()));
                     showErrorToast(
-                        "Oops, you're not an owner or yet to be verified.",
+                        "Kindly use the toggle switch to become an owner",
                         context: context);
                   }
                 },

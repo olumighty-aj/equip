@@ -1,6 +1,7 @@
 class Paths {
   //  API ENDPOINTS
   static const baseUrl = 'https://admin.equippro.io/api/';
+  static const postCodeBaseUrl = 'https://api.postcodes.io/postcodes/';
   static const String signUp = 'signup';
   static const String login = 'auth';
   static const String forgotPassword = 'reset_password';
@@ -32,7 +33,7 @@ class Paths {
   static const String chatDetails = 'get_chat_details?sender=';
   static const String sendChat = 'send_chat';
   static const String getNotification = 'notification';
-  static const String verifyKYC = 'verify_document?hirers_id=';
+  // static const String verifyKYC = 'verify_document?hirers_id=';
   static const String logout = 'logout';
   static const String initPayment = 'init_payment';
   static const String createPayment = 'payment/create';
@@ -45,4 +46,5 @@ class Paths {
   static const String addBank = 'owners/users_payment_details';
   static const String deleteBank = 'users_payment_details/delete/';
   static const String withdrawal = 'owners/withdrawal_request';
+  static const String verifyKYC = 'validate_kyc';
 }

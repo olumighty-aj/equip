@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:equipro/core/api/api_constants.dart';
 import 'package:logger/logger.dart';
 
 import '../../utils/http/paths.dart';
@@ -80,6 +81,15 @@ class ApiService {
     Response res = await _dio.get(path,
         queryParameters: data ?? null, options: Options(headers: getHeaders()));
     _log.i("Response: ${res.data}");
+    return res;
+  }
+
+  Future<Response> getPostCode( String postCode) async{
+    _dio.options.baseUrl = Paths.postCodeBaseUrl;
+    _dio.options.headers = {};
+    _log.i("Post code: $postCode");
+    Response res = await dio.get(postCode);
+    _log.i("Response: ${res.data  }");
     return res;
   }
 }

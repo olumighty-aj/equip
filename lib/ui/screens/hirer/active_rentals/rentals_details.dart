@@ -241,8 +241,7 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                             ),
                                             Expanded(
                                               child: Text(
-                                                  widget.feed.equipOrder!
-                                                      .totalAmount!.withCommas,
+                                                  "${model.isNigerian ? "NGN " : "GBP "}${widget.feed.equipOrder!.totalAmount!.withCommas}",
                                                   style: Theme.of(context)
                                                       .textTheme
                                                       .bodyMedium
@@ -725,7 +724,8 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                   if (widget.feed.requestStatus == "accepted" &&
                                           widget.feed.equipOrder
                                                   ?.paymentStatus ==
-                                              "0"
+                                              "0" &&
+                                          !isDateInPast(widget.feed.rentalTo!)
                                       // &&
                                       // !isDateInPast(widget.feed.rentalTo!)
                                       )

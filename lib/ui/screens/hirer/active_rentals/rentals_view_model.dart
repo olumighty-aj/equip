@@ -3,6 +3,7 @@ import 'package:equipro/core/model/base_model.dart';
 import 'package:equipro/core/model/error_model.dart';
 import 'package:equipro/core/model/success_model.dart';
 import 'package:equipro/core/services/activities_service.dart';
+import 'package:equipro/core/services/auth_service.dart';
 import 'package:equipro/utils/extensions.dart';
 import 'package:equipro/utils/helpers.dart';
 import 'package:intl/intl.dart';
@@ -18,9 +19,12 @@ class RentalsViewModel extends BaseViewModel {
   final _navigationService = locator<NavigationService>();
   final _dialog = locator<DialogService>();
   final Activities _activities = locator<Activities>();
+  final Authentication _authentication = locator<Authentication>();
   final _log = getLogger("RentalsViewModel");
 
   int? dateDifference;
+
+  bool get isNigerian => _authentication.currentUser.country == "Nigeria";
 
   List<ActiveRentalsModel>? _allRentals;
   List<ActiveRentalsModel>? get allRentals => _allRentals;
@@ -30,6 +34,8 @@ class RentalsViewModel extends BaseViewModel {
   List<ActiveRentalsModel>? get receivedRentals => _receivedRentals;
   List<ActiveRentalsModel>? _returnRentals;
   List<ActiveRentalsModel>? get returnRentals => _returnRentals;
+
+  PaymentType? paymentType;
 
   Future<void> getAllRentals() async {
     BaseDataModel? model = await runBusyFuture(
@@ -229,10 +235,15 @@ class RentalsViewModel extends BaseViewModel {
     }
   }
 
-  initPayment(
-      String orderId, String amount, paymentType, String currency) async {
+  initPayment(String orderId, String amount, paymentType, String currency,
+      PaymentType type) async {
+    this.paymentType = type;
+    notifyListeners();
+
     BaseDataModel model = await runBusyFuture(_activities.initPayment(orderId),
-        busyObject: "InitPayment");
+        busyObject: type == PaymentType.paypal
+            ? "PaypalInitPayment"
+            : "StripeInitPayment");
     if (model.status == true) {
       createPayment(model, amount, paymentType, currency);
     }
@@ -310,7 +321,8 @@ class RentalsViewModel extends BaseViewModel {
     }
   }
 
-  void createPayment(BaseDataModel model, amount, paymentType, currency) async {
+  void createPayment(
+      BaseDataModel model, amount, String paymentType, currency) async {
     Map<String, dynamic>? res = await runBusyFuture(
         _activities.createPayment(model.payload["equip_order_id"],
             model.payload["receipt_ref"], amount, paymentType, currency),
@@ -320,7 +332,7 @@ class RentalsViewModel extends BaseViewModel {
     if (res != null) {
       _navigationService.navigateTo(Routes.paymentWebView,
           arguments: PaymentWebViewArguments(
-              url: res["payment_link"], amount: amount));
+              url: res["payment_link"] ?? res["approval_url"], amount: amount));
     } else {
       _log.e(model.message);
     }
@@ -388,3 +400,5 @@ extension StringToDate on String {
     return DateTime(year, month, day);
   }
 }
+
+enum PaymentType { stripe, paypal }

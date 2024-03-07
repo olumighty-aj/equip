@@ -6,7 +6,6 @@ import 'package:equipro/utils/locator.dart';
 import 'package:equipro/utils/router/navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
 import '../../app/app_setup.logger.dart';
 import '../../core/services/activities_service.dart';
 import '../../utils/app_svgs.dart';

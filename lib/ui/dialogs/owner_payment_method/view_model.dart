@@ -8,7 +8,7 @@ import 'package:stacked/stacked.dart';
 
 class PaymentMethodViewModel extends BaseViewModel {
   final _activities = locator<Activities>();
-  final _user = locator<Authentication>();
+  final user = locator<Authentication>();
   TextEditingController accountNameController = TextEditingController();
   TextEditingController accountNumberController = TextEditingController();
   TextEditingController bankNameController = TextEditingController();
@@ -19,7 +19,7 @@ class PaymentMethodViewModel extends BaseViewModel {
           "account_name": accountNameController.text,
           "account_number": accountNumberController.text,
           "bank_name": bankNameController.text,
-          "owners_id": _user.currentUser.id,
+          "owners_id": user.currentUser.id,
           "status": "1"
         }),
         busyObject: "paymentMethod");

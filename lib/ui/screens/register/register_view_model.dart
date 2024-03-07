@@ -9,9 +9,16 @@ import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
+import '../../../app/app_setup.logger.dart';
+
 class RegisterViewModel extends BaseViewModel {
+  final _log = getLogger("RegisterViewModel");
   final Authentication _authentication = locator<Authentication>();
   final _navigationService = locator<NavigationService>();
+
+  double? longitude;
+  double? latitude;
+
   signUp(SignUpModel signUpModel, context) async {
     setBusy(true);
     var result = await _authentication.signUp(signUpModel.toJson());
@@ -31,6 +38,8 @@ class RegisterViewModel extends BaseViewModel {
     }
   }
 
+  Map<String, dynamic>? postCodeDetail;
+
   String _errorMessage = "";
   String get errorMessage => _errorMessage;
 
@@ -38,6 +47,7 @@ class RegisterViewModel extends BaseViewModel {
   TextEditingController confirmPasswordController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController postalController = TextEditingController();
+  TextEditingController countryController = TextEditingController();
   TextEditingController fullNameController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   TextEditingController controller = TextEditingController();
@@ -52,6 +62,13 @@ class RegisterViewModel extends BaseViewModel {
     fullNameController.dispose();
     phoneController.dispose();
     controller.dispose();
+  }
+
+  void setCountry(countryCode) {
+    if (countryCode == "234") {
+      countryController.text = "Nigeria";
+    }
+    notifyListeners();
   }
 
   bool validatePassword(String password) {
@@ -84,6 +101,24 @@ class RegisterViewModel extends BaseViewModel {
     }
     // If there are no error messages, the password is valid
     return _errorMessage.isEmpty;
+  }
+
+  void onChangePostCode(String val, context) async {
+    if (val.length >= 7) {
+      _log.i("About to check code");
+      postCodeDetail = await runBusyFuture(
+          _authentication.fetchPostDetails(val),
+          busyObject: "post");
+      if (postCodeDetail?["status"] == 200) {
+        countryController.text = postCodeDetail!["result"]["country"];
+        longitude = postCodeDetail!["result"]["longitude"];
+        latitude = postCodeDetail!["result"]["latitude"];
+        _log.i("Lng: $longitude, Lat: $latitude");
+        notifyListeners();
+      } else {
+        showErrorToast(postCodeDetail!["error"], context: context);
+      }
+    }
   }
 
   void newSignUp(SignUpModel model, context) async {

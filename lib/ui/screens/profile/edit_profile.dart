@@ -354,7 +354,7 @@ class LoginState extends State<EditProfile> with TickerProviderStateMixin {
                                     height: 20,
                                   ),
                                   Text(
-                                    "State",
+                                    model.isNigerian ? "State" : "Region",
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color: Colors.grey),
@@ -401,51 +401,139 @@ class LoginState extends State<EditProfile> with TickerProviderStateMixin {
                                   SizedBox(
                                     height: 20,
                                   ),
-                                  Text(
-                                    "Country",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.grey),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Country",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.grey),
+                                      ),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      TextFormField(
+                                        enabled: model.isNigerian,
+                                        controller: model.countryController,
+                                        decoration: InputDecoration(
+                                          hintText: '',
+                                          hintStyle: const TextStyle(
+                                            color: Colors.grey,
+                                          ),
+                                          focusedBorder:
+                                              const OutlineInputBorder(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(4)),
+                                            borderSide: BorderSide(
+                                                width: 1, color: Colors.grey),
+                                          ),
+                                          disabledBorder:
+                                              const OutlineInputBorder(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(4)),
+                                            borderSide: BorderSide(
+                                                width: 1, color: Colors.grey),
+                                          ),
+                                          enabledBorder:
+                                              const OutlineInputBorder(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(4)),
+                                            borderSide: BorderSide(
+                                                width: 1, color: Colors.grey),
+                                          ),
+                                          border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(5.0),
+                                            borderSide: const BorderSide(),
+                                          ),
+                                        ),
+                                        keyboardType:
+                                            TextInputType.emailAddress,
+                                        style: const TextStyle(
+                                            color: Colors.black),
+                                        cursorColor: Colors.black,
+                                      ),
+                                    ],
                                   ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  TextFormField(
-                                    enabled: true,
-                                    controller: model.countryController,
-                                    decoration: InputDecoration(
-                                      hintText: '',
-                                      hintStyle: const TextStyle(
-                                        color: Colors.grey,
-                                      ),
-                                      focusedBorder: const OutlineInputBorder(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(4)),
-                                        borderSide: BorderSide(
-                                            width: 1, color: Colors.grey),
-                                      ),
-                                      disabledBorder: const OutlineInputBorder(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(4)),
-                                        borderSide: BorderSide(
-                                            width: 1, color: Colors.grey),
-                                      ),
-                                      enabledBorder: const OutlineInputBorder(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(4)),
-                                        borderSide: BorderSide(
-                                            width: 1, color: Colors.grey),
-                                      ),
-                                      border: OutlineInputBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(5.0),
-                                        borderSide: const BorderSide(),
-                                      ),
+                                  if (!model.isNigerian)
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        SizedBox(
+                                          height: 20,
+                                        ),
+                                        Text(
+                                          "Post Code",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.grey),
+                                        ),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        TextFormField(
+                                          enabled: true,
+                                          onChanged: (val) => model
+                                              .onChangePostCode(val, context),
+                                          controller: model.postCodeController,
+                                          decoration: InputDecoration(
+                                            hintText: 'Enter post code',
+                                            hintStyle: const TextStyle(
+                                              color: Colors.grey,
+                                            ),
+                                            focusedBorder:
+                                                const OutlineInputBorder(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(4)),
+                                              borderSide: BorderSide(
+                                                  width: 1, color: Colors.grey),
+                                            ),
+                                            disabledBorder:
+                                                const OutlineInputBorder(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(4)),
+                                              borderSide: BorderSide(
+                                                  width: 1, color: Colors.grey),
+                                            ),
+                                            enabledBorder:
+                                                const OutlineInputBorder(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(4)),
+                                              borderSide: BorderSide(
+                                                  width: 1, color: Colors.grey),
+                                            ),
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(5.0),
+                                              borderSide: const BorderSide(),
+                                            ),
+                                          ),
+                                          keyboardType:
+                                              TextInputType.emailAddress,
+                                          style: const TextStyle(
+                                              color: Colors.black),
+                                          cursorColor: Colors.black,
+                                        ),
+                                        Gap(5),
+                                        Align(
+                                          alignment: Alignment.centerRight,
+                                          child: Visibility(
+                                            visible: model.busy("post"),
+                                            child: SizedBox(
+                                                height: 20,
+                                                width: 20,
+                                                child:
+                                                    CircularProgressIndicator(
+                                                  color: AppColors.primaryColor,
+                                                  strokeWidth: 2,
+                                                )),
+                                          ),
+                                        )
+                                      ],
                                     ),
-                                    keyboardType: TextInputType.emailAddress,
-                                    style: const TextStyle(color: Colors.black),
-                                    cursorColor: Colors.black,
-                                  ),
                                   SizedBox(
                                     height: 20,
                                   ),
@@ -490,185 +578,75 @@ class LoginState extends State<EditProfile> with TickerProviderStateMixin {
                                   SizedBox(
                                     height: 30,
                                   ),
-                                  Text(
-                                    "Address",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.grey),
-                                  ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  GestureDetector(
-                                      onTap: () => model.showPlacePicker(),
-                                      child: TextFormField(
-                                        enabled: false,
-                                        controller: model.addressController,
-                                        decoration: InputDecoration(
-                                          hintText: '',
-                                          hintStyle: const TextStyle(
-                                            color: Colors.grey,
-                                          ),
-                                          focusedBorder:
-                                              const OutlineInputBorder(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(4)),
-                                            borderSide: BorderSide(
-                                                width: 1, color: Colors.grey),
-                                          ),
-                                          disabledBorder:
-                                              const OutlineInputBorder(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(4)),
-                                            borderSide: BorderSide(
-                                                width: 1, color: Colors.grey),
-                                          ),
-                                          enabledBorder:
-                                              const OutlineInputBorder(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(4)),
-                                            borderSide: BorderSide(
-                                                width: 1, color: Colors.grey),
-                                          ),
-                                          border: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(5.0),
-                                            borderSide: const BorderSide(),
-                                          ),
+                                  if (model.isNigerian)
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "Address",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.grey),
                                         ),
-                                        keyboardType:
-                                            TextInputType.emailAddress,
-                                        style: const TextStyle(
-                                            color: Colors.black),
-                                        cursorColor: Colors.black,
-                                      )),
-                                  SizedBox(
-                                    height: 20,
-                                  ),
-                                  model.kycApproved ||
-                                          model.kycPendng && model.kycUpdated
-                                      // || model.kycPendng
-                                      ? Container()
-                                      : Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              "Means Of Identification",
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.grey),
-                                            ),
-                                            SizedBox(
-                                              height: 10,
-                                            ),
-                                            Container(
-                                              padding: EdgeInsets.all(10),
-                                              width: Responsive.width(context),
-                                              height: 60,
-                                              decoration: BoxDecoration(
-                                                border: Border.all(
-                                                    color: Colors.grey),
-                                                borderRadius:
-                                                    BorderRadius.circular(5.0),
-                                              ),
-                                              child: Center(
-                                                child: DropdownButtonFormField<
-                                                    String>(
-                                                  decoration:
-                                                      InputDecoration.collapsed(
-                                                          hintText:
-                                                              'Select One'),
-                                                  isExpanded: true,
-                                                  value: model.selectedMOI,
-                                                  onChanged: (val) =>
-                                                      model.onChangedMOI(val),
-                                                  items: <String>[
-                                                    'International Passport',
-                                                    'Voters Card',
-                                                    'National ID',
-                                                    'Driver License',
-                                                  ].map<
-                                                          DropdownMenuItem<
-                                                              String>>(
-                                                      (String value) {
-                                                    return DropdownMenuItem<
-                                                        String>(
-                                                      value: value,
-                                                      child: Text(value),
-                                                    );
-                                                  }).toList(),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        GestureDetector(
+                                            onTap: () =>
+                                                model.showPlacePicker(),
+                                            child: TextFormField(
+                                              enabled: false,
+                                              controller:
+                                                  model.addressController,
+                                              decoration: InputDecoration(
+                                                hintText: '',
+                                                hintStyle: const TextStyle(
+                                                  color: Colors.grey,
+                                                ),
+                                                focusedBorder:
+                                                    const OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(4)),
+                                                  borderSide: BorderSide(
+                                                      width: 1,
+                                                      color: Colors.grey),
+                                                ),
+                                                disabledBorder:
+                                                    const OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(4)),
+                                                  borderSide: BorderSide(
+                                                      width: 1,
+                                                      color: Colors.grey),
+                                                ),
+                                                enabledBorder:
+                                                    const OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(4)),
+                                                  borderSide: BorderSide(
+                                                      width: 1,
+                                                      color: Colors.grey),
+                                                ),
+                                                border: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          5.0),
+                                                  borderSide:
+                                                      const BorderSide(),
                                                 ),
                                               ),
-                                            ),
-                                            SizedBox(
-                                              height: 20,
-                                            ),
-                                            Text(
-                                              "Upload the image",
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.grey),
-                                            ),
-                                            Gap(10),
-                                            GestureDetector(
-                                                onTap: () => model
-                                                    .handleChooseFromGalleryId(),
-                                                child: TextFormField(
-                                                  enabled: false,
-                                                  controller:
-                                                      model.uploadController,
-                                                  decoration: InputDecoration(
-                                                    hintText: 'Upload ID',
-                                                    hintStyle: const TextStyle(
-                                                      color: Colors.grey,
-                                                    ),
-                                                    focusedBorder:
-                                                        const OutlineInputBorder(
-                                                      borderRadius:
-                                                          BorderRadius.all(
-                                                              Radius.circular(
-                                                                  4)),
-                                                      borderSide: BorderSide(
-                                                          width: 1,
-                                                          color: Colors.grey),
-                                                    ),
-                                                    disabledBorder:
-                                                        const OutlineInputBorder(
-                                                      borderRadius:
-                                                          BorderRadius.all(
-                                                              Radius.circular(
-                                                                  4)),
-                                                      borderSide: BorderSide(
-                                                          width: 1,
-                                                          color: Colors.grey),
-                                                    ),
-                                                    enabledBorder:
-                                                        const OutlineInputBorder(
-                                                      borderRadius:
-                                                          BorderRadius.all(
-                                                              Radius.circular(
-                                                                  4)),
-                                                      borderSide: BorderSide(
-                                                          width: 1,
-                                                          color: Colors.grey),
-                                                    ),
-                                                    border: OutlineInputBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              5.0),
-                                                      borderSide:
-                                                          const BorderSide(),
-                                                    ),
-                                                  ),
-                                                  keyboardType: TextInputType
-                                                      .emailAddress,
-                                                  style: const TextStyle(
-                                                      color: Colors.black),
-                                                  cursorColor: Colors.black,
-                                                )),
-                                          ],
-                                        ),
+                                              keyboardType:
+                                                  TextInputType.emailAddress,
+                                              style: const TextStyle(
+                                                  color: Colors.black),
+                                              cursorColor: Colors.black,
+                                            )),
+                                      ],
+                                    ),
                                   Gap(20),
                                   Center(
                                       child: SlideTransition(

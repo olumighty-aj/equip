@@ -59,6 +59,20 @@ class PaymentMethodDialog extends StatelessWidget {
                       controller: model.bankNameController,
                     ),
                     Gap(10),
+                    if(!model.user.currentUser.address!.contains("Nigeria"))
+                      Column(
+                        children: [
+
+                          CustomTextField(
+                            fillColor: AppColors.primaryColor.withOpacity(0.15),
+                            label: "Sort Code",
+                            keyboardType: TextInputType.number,
+                            hintText: "Enter sort code",
+                            controller: model.accountNumberController,
+                          ),
+                          Gap(10),
+                        ],
+                      ),
                     CustomTextField(
                       fillColor: AppColors.primaryColor.withOpacity(0.15),
                       label: "Account Number",
