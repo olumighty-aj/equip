@@ -12,6 +12,7 @@ import 'package:shimmer/shimmer.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 import '../../app/app_setup.locator.dart';
+import '../../core/model/active_rentals/active_rentals.dart';
 
 class RentalTiles extends StatelessWidget {
   final ActiveRentalsModel feed;
@@ -64,7 +65,8 @@ class RentalTiles extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10.0),
                       child: CachedNetworkImage(
                         imageUrl: feed.equipments!.id != null
-                            ? feed.equipments!.equipImages![0].equipImagesPath!
+                            ? feed
+                                .equipments!.equip_images![0].equip_images_path!
                             : "",
                         placeholder: (context, url) => Container(
                             height: 400,
@@ -109,8 +111,8 @@ class RentalTiles extends StatelessWidget {
                   // mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Text(
-                      feed.equipments!.equipName != null
-                          ? feed.equipments!.equipName!
+                      feed.equipments!.equip_name != null
+                          ? feed.equipments!.equip_name!
                           : "",
                       style: Theme.of(context)
                           .textTheme
@@ -132,7 +134,7 @@ class RentalTiles extends StatelessWidget {
                         Expanded(
                           // flex: 2,
                           child: Text(
-                            feed.deliveryLocation!,
+                            feed.delivery_location ?? "",
                             style: Theme.of(context)
                                 .textTheme
                                 .bodySmall
@@ -150,21 +152,21 @@ class RentalTiles extends StatelessWidget {
                         padding:
                             EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                         decoration: BoxDecoration(
-                            color: feed.requestStatus! == "pending"
+                            color: feed.request_status! == "pending"
                                 ? Colors.orange.withOpacity(0.4)
-                                : feed.requestStatus! == "rejected"
+                                : feed.request_status! == "rejected"
                                     ? AppColors.red.withOpacity(0.3)
-                                    : feed.requestStatus! == "returned"
+                                    : feed.request_status! == "returned"
                                         ? AppColors.green.withOpacity(0.3)
-                                        : feed.requestStatus! == "received"
+                                        : feed.request_status! == "received"
                                             ? AppColors.blue.withOpacity(0.3)
-                                            : feed.requestStatus! == "accepted"
+                                            : feed.request_status! == "accepted"
                                                 ? Colors.green.shade500
                                                 : AppColors.primaryColor
                                                     .withOpacity(0.3),
                             borderRadius: BorderRadius.circular(10)),
                         child: Text(
-                          toBeginningOfSentenceCase(feed.requestStatus!)!,
+                          toBeginningOfSentenceCase(feed.request_status!)!,
                           style: Theme.of(context)
                               .textTheme
                               .bodySmall

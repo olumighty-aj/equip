@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:equipro/app/app_setup.logger.dart';
-import 'package:equipro/core/model/ChatListModel.dart';
+import 'package:equipro/core/model/chat_list/chat_list.dart';
 import 'package:equipro/ui/screens/chat/chat_view_model.dart';
 import 'package:equipro/ui/screens/chat/chats_widget/chat_details.dart';
 import 'package:equipro/ui/widget/noti_widget.dart';
@@ -126,8 +126,8 @@ class ChatListTile extends StatelessWidget {
           },
           leading: CachedNetworkImage(
             fit: BoxFit.cover,
-            imageUrl: model.chatWith?.hirersPath != null
-                ? model.chatWith?.hirersPath!
+            imageUrl: model.chat_with?.hirers_path != null
+                ? model.chat_with?.hirers_path!
                 : "",
             imageBuilder: (context, imageProvider) => Container(
               width: 40.0,
@@ -162,14 +162,14 @@ class ChatListTile extends StatelessWidget {
           //         ),
           // ),
           title: Text(
-            model.chatWith?.fullname ?? "",
+            model.chat_with?.fullname ?? "",
             style: Theme.of(context)
                 .textTheme
                 .bodyLarge
                 ?.copyWith(fontWeight: FontWeight.w500),
           ),
           subtitle: Text(
-            model.lastMessage ?? "",
+            model.last_message ?? "",
             style: Theme.of(context)
                 .textTheme
                 .bodySmall
@@ -179,8 +179,8 @@ class ChatListTile extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Text(
-                model.dateModified != null
-                    ? formatDateTime(DateTime.parse(model.dateModified!))
+                model.date_modified != null
+                    ? formatDateTime(DateTime.parse(model.date_modified!))
                     : "",
                 style: Theme.of(context)
                     .textTheme

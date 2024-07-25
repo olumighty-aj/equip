@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'dart:math';
 
-import 'package:equipro/core/model/EquipmentModel.dart';
 import 'package:equipro/ui/screens/drawer.dart';
 import 'package:equipro/ui/screens/owner/home_owner/home_view_model.dart';
 import 'package:equipro/ui/widget/base_button.dart';
@@ -20,6 +19,10 @@ import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:place_picker/place_picker.dart';
 import 'package:stacked/stacked.dart';
+
+import '../../../../core/model/equip_booking_model.dart';
+import '../../../../core/model/equip_images/equip_images.dart';
+import '../../../../core/model/equipments/equipments.dart';
 
 class EditEquipment extends StatefulWidget {
   final EquipmentModel model;
@@ -68,7 +71,7 @@ class LoginState extends State<EditEquipment> with TickerProviderStateMixin {
   }
 
   convertCatalogue() async {
-    for (EquipImages multipleFile in widget.model.equipImages!) {
+    for (EquipImages multipleFile in widget.model.equip_images!) {
       // count++;
       print(multipleFile);
 
@@ -82,7 +85,7 @@ class LoginState extends State<EditEquipment> with TickerProviderStateMixin {
           new File('$tempPath' + (rng.nextInt(1000)).toString() + '.png');
 // call http.get method and pass imageUrl into it to get response.
       http.Response response =
-          await http.get(Uri.parse(multipleFile.equipImagesPath!));
+          await http.get(Uri.parse(multipleFile.equip_images_path!));
 // write bodyBytes received in response to file.
       await file.writeAsBytes(response.bodyBytes);
 // now return the file which is created with random name in
@@ -97,22 +100,22 @@ class LoginState extends State<EditEquipment> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     convertCatalogue();
-    nameController.text = widget.model.equipName!;
-    costController.text = widget.model.costOfHire!;
+    nameController.text = widget.model.equip_name!;
+    costController.text = widget.model.cost_of_hire!;
     descriptionController.text = widget.model.description!;
     selectedQuantity = widget.model.quantity!;
     selectedDate = DateFormat(
       "y-MM-dd",
-    ).format(DateTime.parse(widget.model.availFrom!)).toString();
+    ).format(DateTime.parse(widget.model.avail_from!)).toString();
     selectedDateTo = DateFormat(
       "y-MM-dd",
-    ).format(DateTime.parse(widget.model.availTo!)).toString();
-    selectedPer = widget.model.costOfHireInterval == "1"
+    ).format(DateTime.parse(widget.model.avail_to!)).toString();
+    selectedPer = widget.model.cost_of_hire_interval == "1"
         ? "Day 1"
-        : widget.model.costOfHireInterval == "7"
+        : widget.model.cost_of_hire_interval == "7"
             ? "Week 7"
             : "Month 30";
-    selectedPerNumber = widget.model.costOfHireInterval!;
+    selectedPerNumber = widget.model.cost_of_hire_interval!;
     deliveryController.text = widget.model.address!;
     pickLng = widget.model.longitude;
     pickLat = widget.model.latitude;

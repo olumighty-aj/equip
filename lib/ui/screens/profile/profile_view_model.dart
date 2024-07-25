@@ -5,8 +5,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 import 'package:equipro/app/app_setup.logger.dart';
 import 'package:equipro/core/model/ReviewsModel.dart';
-import 'package:equipro/core/model/base_model.dart';
 import 'package:equipro/core/model/error_model.dart';
+import 'package:equipro/core/model/reviews/reviews.dart';
 import 'package:equipro/core/services/auth_service.dart';
 import 'package:equipro/utils/extensions.dart';
 import 'package:equipro/utils/helpers.dart';
@@ -18,6 +18,7 @@ import 'package:stacked_services/stacked_services.dart';
 
 import '../../../app/app_setup.locator.dart';
 import '../../../app/app_setup.router.dart';
+import '../../../core/model/base_model/base_model.dart';
 
 class ProfileViewModel extends BaseViewModel {
   final _log = getLogger("ProfileViewModel");
@@ -256,6 +257,7 @@ class ProfileViewModel extends BaseViewModel {
   void verifyKYC() async {
     BaseDataModel res =
         await runBusyFuture(_authentication.getKYC(), busyObject: "verify");
+    _log.i(res.toJson());
     if (res.status == true && res.payload["content"].isNotEmpty) {
       verificationDetails = res.payload["content"][0];
       notifyListeners();
@@ -266,7 +268,7 @@ class ProfileViewModel extends BaseViewModel {
     }
   }
 
-  Future<List<ReviewsModel>> getReviews() async {
+  Future<List<Reviews>> getReviews() async {
     //setBusy(true);
     var result = await _authentication.getReviews();
     if (result is ErrorModel) {
@@ -280,7 +282,7 @@ class ProfileViewModel extends BaseViewModel {
     return result;
   }
 
-  Future<List<ReviewsModel>> getHirerReviews(String id) async {
+  Future<List<Reviews>> getHirerReviews(String id) async {
     //setBusy(true);
     var result = await _authentication.getHirerReviews(id);
     if (result is ErrorModel) {

@@ -11,6 +11,7 @@ import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 
+import '../../../../core/model/active_rentals/active_rentals.dart';
 import '../../../widget/equip_tiles.dart';
 
 class ExtendBookingScreen extends StatefulWidget {
@@ -39,7 +40,7 @@ class _ExtendBookingScreenState extends State<ExtendBookingScreen> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Text(
-                    widget.feed.equipments!.equipName!,
+                    widget.feed.equipments!.equip_name!,
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                         fontSize: 25,
                         color: AppColors.primaryColor,
@@ -49,13 +50,13 @@ class _ExtendBookingScreenState extends State<ExtendBookingScreen> {
                   Row(
                     children: [
                       Text(
-                          "${getCurrency(widget.feed.hirers!.country) + widget.feed.equipments!.costOfHire!}",
+                          "${getCurrency(widget.feed.hirers!.country) + widget.feed.equipments!.cost_of_hire!}",
                           style: Theme.of(context)
                               .textTheme
                               .bodyLarge
                               ?.copyWith(color: AppColors.green)),
                       Text(
-                          " per ${widget.feed.equipments!.costOfHireInterval == "1" ? "Day" : widget.feed.equipments!.costOfHireInterval == "7" ? "Week" : "Month"}",
+                          " per ${widget.feed.equipments!.cost_of_hire_interval == "1" ? "Day" : widget.feed.equipments!.cost_of_hire_interval == "7" ? "Week" : "Month"}",
                           style: Theme.of(context)
                               .textTheme
                               .bodyLarge
@@ -73,7 +74,7 @@ class _ExtendBookingScreenState extends State<ExtendBookingScreen> {
                             ?.copyWith(fontWeight: FontWeight.w700),
                       ),
                       Text(
-                        "${DateTime.parse(widget.feed.rentalFrom!).toDate()} - ${DateTime.parse(widget.feed.rentalTo!).toDate()}",
+                        "${DateTime.parse(widget.feed.rental_from!).toDate()} - ${DateTime.parse(widget.feed.rental_to!).toDate()}",
                         style: Theme.of(context)
                             .textTheme
                             .bodySmall
@@ -170,15 +171,15 @@ class _ExtendBookingScreenState extends State<ExtendBookingScreen> {
                     isBusy: model.busy("extend"),
                     label: "Send Booking Request",
                     onPressed: () {
-                      DateTime parsedDate =
-                          DateFormat('yyyy-MM-dd').parse(widget.feed.rentalTo!);
+                      DateTime parsedDate = DateFormat('yyyy-MM-dd')
+                          .parse(widget.feed.rental_to!);
                       int numberOfWeeks = int.tryParse(selectedWeek!) ?? 0;
                       DateTime resultDate =
                           parsedDate.add(Duration(days: numberOfWeeks * 7));
                       print("New Date: $resultDate");
                       model.extendBooking({
                         "rental_end": resultDate.toDashDate(),
-                        "prev_equip_order_id": widget.feed.equipOrderId,
+                        "prev_equip_order_id": widget.feed.equip_order_id,
                         "longitude":
                             locator<Authentication>().currentUser.longitude,
                         "latitude":

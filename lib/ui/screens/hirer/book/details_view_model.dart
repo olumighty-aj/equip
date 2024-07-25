@@ -1,7 +1,6 @@
 import 'package:equipro/app/app_setup.router.dart';
 import 'package:equipro/core/enums/dialog_type.dart';
-import 'package:equipro/core/model/BookModel.dart';
-import 'package:equipro/core/model/base_model.dart';
+import 'package:equipro/core/model/book_model/book_model.dart';
 import 'package:equipro/core/model/error_model.dart';
 import 'package:equipro/core/model/success_model.dart';
 import 'package:equipro/core/services/activities_service.dart';
@@ -11,6 +10,7 @@ import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 import '../../../../app/app_setup.locator.dart';
+import '../../../../core/model/base_model/base_model.dart';
 
 class DetailsViewModel extends BaseViewModel {
   final Authentication authentication = locator<Authentication>();
@@ -43,7 +43,7 @@ class DetailsViewModel extends BaseViewModel {
       if (result.status == true) {
         print("Status ${result.status}");
         print("Status ${result.message}");
-        showToast(result.message!, context: context);
+        // showToast(result.message!, context: context);
         _dialogService.showCustomDialog(variant: DialogType.bookingRequest);
         // _navigationService.clearStackAndShow(Routes.home);
       } else {

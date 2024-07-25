@@ -13,6 +13,7 @@ import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 import '../../../app/app_setup.locator.dart';
+import '../../../core/model/login_payload/login_payload.dart';
 
 class LoginViewModel extends BaseViewModel with BusyMixin {
   final Authentication _authentication = locator<Authentication>();

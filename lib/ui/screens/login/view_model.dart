@@ -5,7 +5,6 @@ import 'package:equipro/core/api/dio_service.dart';
 import 'package:equipro/core/enums/dialog_type.dart';
 import 'package:equipro/core/model/LoginPayload.dart';
 import 'package:equipro/core/model/VerifyForgotPassword.dart';
-import 'package:equipro/core/model/base_model.dart';
 import 'package:equipro/core/model/error_model.dart';
 import 'package:equipro/core/model/success_model.dart';
 import 'package:equipro/core/services/auth_service.dart';
@@ -19,6 +18,8 @@ import 'package:stacked_services/stacked_services.dart';
 
 import '../../../app/app_setup.logger.dart';
 import '../../../app/app_setup.router.dart';
+import '../../../core/model/base_model/base_model.dart';
+import '../../../core/model/login_payload/login_payload.dart';
 import '../../../utils/notification_helper.dart';
 import '../../../utils/progressBarManager/dialog_service.dart';
 

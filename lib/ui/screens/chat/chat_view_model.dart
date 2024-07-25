@@ -1,6 +1,5 @@
 import 'package:equipro/app/app_setup.logger.dart';
-import 'package:equipro/core/model/ChatListModel.dart';
-import 'package:equipro/core/model/base_model.dart';
+import 'package:equipro/core/model/chat_list/chat_list.dart';
 import 'package:equipro/core/model/error_model.dart';
 import 'package:equipro/core/model/success_model.dart';
 import 'package:equipro/core/services/activities_service.dart';
@@ -10,13 +9,15 @@ import 'package:equipro/utils/router/navigation_service.dart';
 import 'package:equipro/utils/router/route_names.dart';
 import 'package:stacked/stacked.dart';
 
+import '../../../core/model/base_model/base_model.dart';
+
 class ChatViewModel extends BaseViewModel {
   final NavService _navigationService = locator<NavService>();
   final Activities _activities = locator<Activities>();
 
   List<ChatListModel>? _chatList = [];
   List<ChatListModel>? get chats =>
-      _chatList?.where((element) => element.chatWith != null).toList();
+      _chatList?.where((element) => element.chat_with != null).toList();
 
   String? emptyChatText;
 

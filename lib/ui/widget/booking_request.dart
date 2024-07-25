@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:equipro/core/model/EquipmentModel.dart';
 import 'package:equipro/ui/screens/owner/home_owner/booking_details.dart';
 import 'package:equipro/utils/colors.dart';
 import 'package:equipro/utils/locator.dart';
@@ -7,6 +6,7 @@ import 'package:equipro/utils/router/navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../app/app_setup.logger.dart';
+import '../../core/model/equipments/equipments.dart';
 import '../../core/services/activities_service.dart';
 import '../../utils/app_svgs.dart';
 
@@ -28,7 +28,10 @@ class BookingRequest extends StatelessWidget {
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => BookingDetails(feed: feed)));
+                  builder: (context) => BookingDetails(
+                        feed: feed,
+                        model: model!,
+                      )));
         },
         child: Container(
           margin: EdgeInsets.only(bottom: 20),

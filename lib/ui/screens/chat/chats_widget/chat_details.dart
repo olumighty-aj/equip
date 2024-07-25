@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:equipro/core/model/ChatListModel.dart';
-import 'package:equipro/core/model/ChatMessages.dart';
+import 'package:equipro/core/model/chat_list/chat_list.dart';
+import 'package:equipro/core/model/chat_messages.dart';
 import 'package:equipro/core/services/activities_service.dart';
 import 'package:equipro/core/services/auth_service.dart';
 import 'package:equipro/ui/screens/chat/chats_widget/chat_bubble.dart';
@@ -160,10 +160,10 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
 
   fetchChats() async {
     var result = await _activities.newFetchChatDetails(
-        senderId: widget.feed.userId,
-        receiverId: widget.feed.chatWithId.toString());
+        senderId: widget.feed.user_id,
+        receiverId: widget.feed.chat_with_id.toString());
     logger.i(
-        "Receiver ID ${widget.feed.chatWith!.id.toString()}, Sender ID ${_authentication.currentUser.id}");
+        "Receiver ID ${widget.feed.chat_with!.id.toString()}, Sender ID ${_authentication.currentUser.id}");
     print("resulttt: ${result.toString()}");
     if (result is Map<String, dynamic>) {
       print("Result: ${result["message"]}");
@@ -234,11 +234,11 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
         useStickyGroupSeparators: true,
         shrinkWrap: true,
         elements: chatResponse,
-        groupBy: (type) => DateTime.parse(type.dateCreated!).toDateTimeDate(),
+        groupBy: (type) => DateTime.parse(type.date_created!).toDateTimeDate(),
         groupComparator: (group1, group2) => group1.compareTo(group2),
-        itemComparator: (item1, item2) => DateTime.parse(item1.dateCreated!)
+        itemComparator: (item1, item2) => DateTime.parse(item1.date_created!)
             .toDate()
-            .compareTo(DateTime.parse(item2.dateCreated!).toDate()),
+            .compareTo(DateTime.parse(item2.date_created!).toDate()),
         groupSeparatorBuilder: (DateTime date) {
           return Padding(
             padding: const EdgeInsets.all(8.0),
@@ -280,10 +280,10 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
                   !containsEmailOrPhoneNumber(textController.text)) {
                 //Send the message as JSON data to send_message event
                 var data;
-                print("ID: ${widget.feed.chatWith!.id}");
+                print("ID: ${widget.feed.chat_with!.id}");
                 data = {
-                  "sender_id": widget.feed.userId,
-                  "receiver_id": widget.feed.chatWithId,
+                  "sender_id": widget.feed.user_id,
+                  "receiver_id": widget.feed.chat_with_id,
                   "message": textController.text,
                 };
 
@@ -291,14 +291,14 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
                 setState(() {
                   chatResponse.add(ChatMessages(
                     id: "",
-                    senderId: _authentication.currentUser.id,
-                    receiverId: widget.feed.chatWith!.id!,
+                    sender_id: _authentication.currentUser.id,
+                    receiver_id: widget.feed.chat_with!.id!,
                     message: textController.text,
                     type: "sent",
-                    inboxId: "1",
+                    inbox_id: "1",
                     status: "0",
-                    dateModified: DateTime.now().toString(),
-                    dateCreated: DateTime.now().toString(),
+                    date_modified: DateTime.now().toString(),
+                    date_created: DateTime.now().toString(),
                   ));
                 });
                 textController.text = '';
@@ -379,7 +379,7 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
                       )),
                   Column(
                     children: [
-                      Text(widget.feed.chatWith?.fullname ?? "",
+                      Text(widget.feed.chat_with?.fullname ?? "",
                           textAlign: TextAlign.center,
                           style: Theme.of(context)
                               .textTheme
@@ -408,7 +408,7 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
                             SvgPicture.asset(AppSvgs.emptyChat),
                             Gap(10),
                             Text(
-                                "Ask ${widget.feed.chatWith!.fullname} a question"),
+                                "Ask ${widget.feed.chat_with!.fullname} a question"),
                           ],
                         )
                 ],

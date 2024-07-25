@@ -10,6 +10,7 @@ import 'package:gap/gap.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:stacked/stacked.dart';
 
+import '../../../../core/model/active_rentals/active_rentals.dart';
 import '../../../../utils/app_svgs.dart';
 import '../../profile/edit_profile.dart';
 

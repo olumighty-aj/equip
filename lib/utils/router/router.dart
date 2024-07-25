@@ -1,7 +1,5 @@
 import 'package:equipro/core/model/ActiveRentalsModel.dart';
-import 'package:equipro/core/model/ChatListModel.dart';
-import 'package:equipro/core/model/EquipmentModel.dart' as eq;
-import 'package:equipro/core/model/EquipmentModel.dart';
+import 'package:equipro/core/model/chat_list/chat_list.dart';
 import 'package:equipro/ui/screens/chat/chat.dart';
 import 'package:equipro/ui/screens/chat/chats_widget/chat_details.dart';
 import 'package:equipro/ui/screens/hirer/active_rentals/active_rentals.dart';
@@ -31,6 +29,11 @@ import 'package:equipro/ui/screens/register/register_view.dart';
 import 'package:equipro/ui/screens/register/verification_view.dart';
 import 'package:equipro/utils/router/route_names.dart';
 import 'package:flutter/material.dart';
+
+import '../../core/model/ReviewsModel.dart';
+import '../../core/model/active_rentals/active_rentals.dart';
+import '../../core/model/equipments/equipments.dart';
+import '../../core/model/hirers/hirers.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
@@ -210,7 +213,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     //   );
 
     case HirerProfileRoute:
-      eq.Hirers model = settings.arguments as eq.Hirers;
+      Hirers model = settings.arguments as Hirers;
       return _getPageRoute(
         routeName: settings.name!,
         viewToShow: HirerProfile(

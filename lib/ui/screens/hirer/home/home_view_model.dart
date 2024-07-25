@@ -4,8 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equipro/app/app_setup.logger.dart';
 import 'package:equipro/app/app_setup.router.dart';
 import 'package:equipro/core/api/api_constants.dart';
-import 'package:equipro/core/model/EquipmentModel.dart';
-import 'package:equipro/core/model/base_model.dart';
 import 'package:equipro/core/model/enums.dart';
 import 'package:equipro/core/model/error_model.dart';
 import 'package:equipro/core/model/success_model.dart';
@@ -18,6 +16,8 @@ import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 import '../../../../core/model/SignInResponse.dart';
+import '../../../../core/model/base_model/base_model.dart';
+import '../../../../core/model/equipments/equipments.dart';
 import '../../../../core/services/shared_prefs.dart';
 
 class HomeViewModel extends BaseViewModel {
@@ -63,6 +63,7 @@ class HomeViewModel extends BaseViewModel {
       // isOwner = res?.status as bool;
       notifyListeners();
     } else {
+      _log.i("Owner check: ${res?.payload}");
       _authentication.setOwnerStatus(res?.status as bool);
     }
   }
@@ -145,6 +146,7 @@ class HomeViewModel extends BaseViewModel {
       _refreshedList.clear();
       for (var i in res.payload["content"]) {
         EquipmentModel equip = EquipmentModel.fromJson(i);
+        _log.i("Equip package: ${equip.toJson()}");
         _refreshedList.add(equip);
         notifyListeners();
       }
@@ -174,7 +176,7 @@ class HomeViewModel extends BaseViewModel {
     } else {
       _packageList = result;
       _count = _activities.count;
-      _log.d("Package: ${_packageList[0].toJson()}");
+      _log.d("Packages: ${_packageList[0].toJson()}");
       notifyListeners();
       setFetchState(LoadingState.done);
       return result;

@@ -1,10 +1,10 @@
 import 'package:equipro/app/app_setup.locator.dart';
-import 'package:equipro/core/model/base_model.dart';
 import 'package:equipro/core/services/auth_service.dart';
 import 'package:equipro/utils/helpers.dart';
 import 'package:stacked/stacked.dart';
 
 import '../../../app/app_setup.logger.dart';
+import '../../../core/model/base_model/base_model.dart';
 import '../../../core/services/activities_service.dart';
 
 class SettingsViewModel extends BaseViewModel {

@@ -1,5 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:equipro/core/model/ChatListModel.dart';
+import 'package:equipro/core/model/chat_list/chat_list.dart';
 import 'package:equipro/ui/screens/chat/chats_widget/chat_details.dart';
 import 'package:equipro/ui/screens/hirer/book/details_view_model.dart';
 import 'package:equipro/ui/screens/owner/home_owner/home_view_model.dart';
@@ -16,12 +16,16 @@ import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 
 import '../../../../app/app_setup.logger.dart';
+import '../../../../core/model/chat_with/chat_with.dart';
+import '../../../../core/model/equipments/equipments.dart';
 import '../../../../core/services/auth_service.dart';
 import '../../../../utils/app_svgs.dart';
 
 class BookingDetails extends StatefulWidget {
   final Map<String, dynamic> feed;
-  const BookingDetails({Key? key, required this.feed}) : super(key: key);
+  final EquipmentModel model;
+  const BookingDetails({Key? key, required this.feed, required this.model})
+      : super(key: key);
 
   @override
   LoginState createState() => LoginState();
@@ -195,22 +199,22 @@ class LoginState extends State<BookingDetails> with TickerProviderStateMixin {
                                                                       id: widget
                                                                               .feed[
                                                                           "ID"],
-                                                                      userId: locator<
+                                                                      user_id: locator<
                                                                               Authentication>()
                                                                           .currentUser
                                                                           .id,
-                                                                      chatWithId: widget
+                                                                      chat_with_id: widget
                                                                               .feed["equip_request"].first["hirers"][
                                                                           "ID"],
-                                                                      messageCount:
+                                                                      message_count:
                                                                           "",
-                                                                      lastMessage:
+                                                                      last_message:
                                                                           "",
-                                                                      dateCreated:
+                                                                      date_created:
                                                                           "",
-                                                                      dateModified:
+                                                                      date_modified:
                                                                           "",
-                                                                      chatWith:
+                                                                      chat_with:
                                                                           ChatWith(
                                                                         id: widget
                                                                             .feed["equip_request"]
@@ -220,15 +224,15 @@ class LoginState extends State<BookingDetails> with TickerProviderStateMixin {
                                                                             .first["hirers"]["fullname"],
                                                                         email:
                                                                             "",
-                                                                        phoneNumber:
+                                                                        phone_number:
                                                                             "",
                                                                         gender:
                                                                             "",
                                                                         address:
                                                                             "",
-                                                                        addressOpt:
+                                                                        address_opt:
                                                                             "",
-                                                                        localState:
+                                                                        local_state:
                                                                             "",
                                                                         country:
                                                                             "",
@@ -236,15 +240,15 @@ class LoginState extends State<BookingDetails> with TickerProviderStateMixin {
                                                                             "",
                                                                         longitude:
                                                                             "",
-                                                                        hirersPath: widget.feed["equip_request"].first["hirers"]["hirers_path"] !=
+                                                                        hirers_path: widget.feed["equip_request"].first["hirers"]["hirers_path"] !=
                                                                                 null
                                                                             ? widget.feed["equip_request"].first["hirers"]["hirers_path"]
                                                                             : "",
                                                                         status:
                                                                             "",
-                                                                        dateModified:
+                                                                        date_modified:
                                                                             "",
-                                                                        dateCreated:
+                                                                        date_created:
                                                                             "",
                                                                       )))));
                                             },
@@ -440,7 +444,7 @@ class LoginState extends State<BookingDetails> with TickerProviderStateMixin {
                                         width: 10,
                                       ),
                                       Text(
-                                          "${widget.feed["equip_request"].first["delivery_location"].contains("Nigeria") ? "NGN" : "GBP"}${widget.feed["total_amount"].toString().withCommas}",
+                                          "${widget.model.currency}${widget.feed["total_amount"].toString().withCommas}",
                                           style: Theme.of(context)
                                               .textTheme
                                               .bodyMedium

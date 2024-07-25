@@ -11,6 +11,8 @@ import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 
+import '../../../../core/model/active_rentals/active_rentals.dart';
+
 class OwnerRentalDetails extends StatefulWidget {
   final ActiveRentalsModel feed;
   const OwnerRentalDetails({Key? key, required this.feed}) : super(key: key);
@@ -195,7 +197,7 @@ class LoginState extends State<OwnerRentalDetails>
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          widget.feed.equipments!.equipName!,
+                                          widget.feed.equipments!.equip_name!,
                                           style: TextStyle(
                                               color: AppColors.primaryColor,
                                               fontWeight: FontWeight.bold,
@@ -206,19 +208,19 @@ class LoginState extends State<OwnerRentalDetails>
                                                 vertical: 5, horizontal: 10),
                                             decoration: BoxDecoration(
                                                 color: widget.feed
-                                                            .requestStatus! ==
+                                                            .request_status! ==
                                                         "pending"
                                                     ? Colors.blue
                                                     : widget.feed
-                                                                .requestStatus! ==
+                                                                .request_status! ==
                                                             "rejected"
                                                         ? AppColors.red
                                                         : widget.feed
-                                                                    .requestStatus! ==
+                                                                    .request_status! ==
                                                                 "returned"
                                                             ? AppColors.green
                                                             : widget.feed
-                                                                        .requestStatus! ==
+                                                                        .request_status! ==
                                                                     "received"
                                                                 ? AppColors.blue
                                                                 : AppColors
@@ -227,7 +229,7 @@ class LoginState extends State<OwnerRentalDetails>
                                                     BorderRadius.circular(10)),
                                             child: Text(
                                               toBeginningOfSentenceCase(
-                                                  widget.feed.requestStatus!)!,
+                                                  widget.feed.request_status!)!,
                                               // ! ==
                                               //     "pending" ||
                                               //     widget.feed
@@ -303,7 +305,7 @@ class LoginState extends State<OwnerRentalDetails>
                                       ),
                                       Gap(50),
                                       Text(
-                                        widget.feed.equipOrder!.totalAmount!,
+                                        widget.feed.equip_order!.total_amount!,
                                         style: Theme.of(context)
                                             .textTheme
                                             .bodyMedium,
@@ -327,7 +329,7 @@ class LoginState extends State<OwnerRentalDetails>
                                         width: 70,
                                       ),
                                       Text(
-                                        widget.feed.equipOrder!.quantity!,
+                                        widget.feed.equip_order!.quantity!,
                                         style: Theme.of(context)
                                             .textTheme
                                             .bodyMedium,
@@ -351,12 +353,12 @@ class LoginState extends State<OwnerRentalDetails>
                                         width: 28,
                                       ),
                                       Text(
-                                        widget.feed.rentalFrom != null
+                                        widget.feed.rental_from != null
                                             ? DateFormat(
                                                 "dd MMM, yyyy",
                                               )
                                                 .format(DateTime.parse(
-                                                    widget.feed.rentalFrom!))
+                                                    widget.feed.rental_from!))
                                                 .toString()
                                             : "Unknown",
                                         style: Theme.of(context)
@@ -382,12 +384,12 @@ class LoginState extends State<OwnerRentalDetails>
                                         width: 40,
                                       ),
                                       Text(
-                                        widget.feed.rentalTo != null
+                                        widget.feed.rental_to != null
                                             ? DateFormat(
                                                 "dd MMM, yyyy",
                                               )
                                                 .format(DateTime.parse(
-                                                    widget.feed.rentalTo!))
+                                                    widget.feed.rental_to!))
                                                 .toString()
                                             : "Unknown",
                                         style: Theme.of(context)
@@ -414,7 +416,7 @@ class LoginState extends State<OwnerRentalDetails>
                                       ),
                                       Expanded(
                                         child: Text(
-                                          widget.feed.deliveryLocation!,
+                                          widget.feed.delivery_location!,
                                           style: Theme.of(context)
                                               .textTheme
                                               .bodyMedium,
@@ -431,15 +433,15 @@ class LoginState extends State<OwnerRentalDetails>
                                           .textTheme
                                           .bodyLarge
                                           ?.copyWith(color: Colors.grey)),
-                                  widget.feed.equipDeliveryStatus != null
+                                  widget.feed.equip_delivery_status != null
                                       ? ListView.builder(
                                           shrinkWrap: true,
                                           physics:
                                               NeverScrollableScrollPhysics(),
                                           itemCount: widget
                                               .feed
-                                              .equipDeliveryStatus!
-                                              .deliveryStatusLists!
+                                              .equip_delivery_status!
+                                              .delivery_status_lists!
                                               .length,
                                           itemBuilder: (context, i) {
                                             return Row(
@@ -476,24 +478,24 @@ class LoginState extends State<OwnerRentalDetails>
                                                       Text(
                                                           widget
                                                                       .feed
-                                                                      .equipDeliveryStatus!
-                                                                      .deliveryStatusLists![
+                                                                      .equip_delivery_status!
+                                                                      .delivery_status_lists![
                                                                           i]
-                                                                      .deliveryStatus! ==
+                                                                      .delivery_status! ==
                                                                   "pending"
                                                               ? "Pending"
                                                               : widget
                                                                           .feed
-                                                                          .equipDeliveryStatus!
-                                                                          .deliveryStatusLists![
+                                                                          .equip_delivery_status!
+                                                                          .delivery_status_lists![
                                                                               i]
-                                                                          .deliveryStatus! ==
+                                                                          .delivery_status! ==
                                                                       "picked_from_owner"
                                                                   ? "Equipment Picked Up"
-                                                                  : widget.feed.equipDeliveryStatus!.deliveryStatusLists![i].deliveryStatus! ==
+                                                                  : widget.feed.equip_delivery_status!.delivery_status_lists![i].delivery_status! ==
                                                                           "delivered_hirer"
                                                                       ? "Owner confirmed Pick-Up"
-                                                                      : widget.feed.equipDeliveryStatus!.deliveryStatusLists![i].deliveryStatus! ==
+                                                                      : widget.feed.equip_delivery_status!.delivery_status_lists![i].delivery_status! ==
                                                                               "picked_from_hirer"
                                                                           ? "Equipment Returned"
                                                                           : "Confirmed Returned",
@@ -510,9 +512,10 @@ class LoginState extends State<OwnerRentalDetails>
                                                       "dd MMM, yyyy, hh:mm aa",
                                                     ).format(DateTime.parse(widget
                                                         .feed
-                                                        .equipDeliveryStatus!
-                                                        .deliveryStatusLists![i]
-                                                        .dateCreated!
+                                                        .equip_delivery_status!
+                                                        .delivery_status_lists![
+                                                            i]
+                                                        .date_created!
                                                         .toString())),
                                                     style: Theme.of(context)
                                                         .textTheme

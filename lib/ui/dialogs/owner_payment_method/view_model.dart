@@ -1,10 +1,11 @@
 import 'package:equipro/app/app_setup.locator.dart';
-import 'package:equipro/core/model/base_model.dart';
 import 'package:equipro/core/services/activities_service.dart';
 import 'package:equipro/core/services/auth_service.dart';
 import 'package:equipro/utils/helpers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:stacked/stacked.dart';
+
+import '../../../core/model/base_model/base_model.dart';
 
 class PaymentMethodViewModel extends BaseViewModel {
   final _activities = locator<Activities>();

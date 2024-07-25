@@ -1,11 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:equipro/core/model/EquipmentModel.dart';
 import 'package:equipro/ui/screens/hirer/book/details_view_model.dart';
 import 'package:equipro/ui/widget/equip_tiles.dart';
 import 'package:equipro/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../../core/model/equipments/equipments.dart';
 import '../../utils/app_svgs.dart';
 import '../screens/owner/home_owner/equip_owner_details.dart';
 
@@ -48,10 +48,10 @@ class OwnerEquipTiles extends StatelessWidget {
                   height: 90,
                   width: 90,
                   child: Hero(
-                      tag: model.id!,
+                      tag: model.ID!,
                       child: CachedNetworkImage(
-                        imageUrl: model.equipImages!.isNotEmpty
-                            ? model.equipImages!.first.equipImagesPath!
+                        imageUrl: model.equip_images!.isNotEmpty
+                            ? model.equip_images!.first.equip_images_path!
                             : "",
                         placeholder: (context, url) => Center(
                             child: SizedBox(
@@ -75,7 +75,7 @@ class OwnerEquipTiles extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      model.equipName!,
+                      model.equip_name!,
                       style: Theme.of(context)
                           .textTheme
                           .bodyLarge
@@ -87,10 +87,10 @@ class OwnerEquipTiles extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                            "${getCurrency(model.owners!.country)}${model.costOfHire!.withCommas}",
+                            "${getCurrency(model.owners!.country)}${model.cost_of_hire!.withCommas}",
                             style: Theme.of(context).textTheme.bodySmall),
                         Text(
-                            " per ${model.costOfHireInterval == "1" ? "Day" : model.costOfHireInterval == "7" ? "Week" : "Month"}",
+                            " per ${model.cost_of_hire_interval == "1" ? "Day" : model.cost_of_hire_interval == "7" ? "Week" : "Month"}",
                             style: Theme.of(context).textTheme.bodySmall),
                       ],
                     ),
@@ -98,7 +98,7 @@ class OwnerEquipTiles extends StatelessWidget {
                       height: 20,
                     ),
                     Text(
-                      "${model.equipRequest?.length.toString() ?? " "} booking requests received",
+                      "${model.equip_request?.length.toString() ?? " "} booking requests received",
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context)
                           .textTheme

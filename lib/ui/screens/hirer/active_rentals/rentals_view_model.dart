@@ -1,5 +1,4 @@
 import 'package:equipro/core/model/ActiveRentalsModel.dart';
-import 'package:equipro/core/model/base_model.dart';
 import 'package:equipro/core/model/error_model.dart';
 import 'package:equipro/core/model/success_model.dart';
 import 'package:equipro/core/services/activities_service.dart';
@@ -14,6 +13,8 @@ import '../../../../app/app_setup.locator.dart';
 import '../../../../app/app_setup.logger.dart';
 import '../../../../app/app_setup.router.dart';
 import '../../../../core/enums/dialog_type.dart';
+import '../../../../core/model/active_rentals/active_rentals.dart';
+import '../../../../core/model/base_model/base_model.dart';
 
 class RentalsViewModel extends BaseViewModel {
   final _navigationService = locator<NavigationService>();

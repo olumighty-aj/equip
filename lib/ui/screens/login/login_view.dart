@@ -227,6 +227,12 @@ class LoginContainer extends ViewModelWidget<NewLoginViewModel> {
                             hintText: 'deo@gmail.com',
                             hintStyle: const TextStyle(color: Colors.grey),
                             labelStyle: const TextStyle(color: AppColors.black),
+                            border: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.grey)),
+                            focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.grey)),
+                            enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.grey)),
                           ),
                           keyboardType: TextInputType.emailAddress,
                           style: Theme.of(context).textTheme.bodyMedium,
@@ -248,6 +254,12 @@ class LoginContainer extends ViewModelWidget<NewLoginViewModel> {
                               validator: Validators().isEmpty,
                               controller: model.passwordController,
                               decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.grey)),
+                                focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.grey)),
+                                enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.grey)),
                                 suffixIcon: IconButton(
                                     icon: Icon(
                                       // Based on passwordVisible state choose the icon

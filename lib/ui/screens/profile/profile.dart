@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:equipro/core/model/ReviewsModel.dart';
+import 'package:equipro/core/model/reviews/reviews.dart';
 import 'package:equipro/core/services/auth_service.dart';
 import 'package:equipro/core/services/index.dart';
 import 'package:equipro/ui/screens/drawer.dart';
@@ -385,7 +386,7 @@ class ProfileState extends State<Profile> with TickerProviderStateMixin {
                                               ? Colors.green
                                               : Colors.red,
                                           checkedColor: Colors.green,
-                                          isChecked: model.isOwner,
+                                          isChecked: model.isOwner == true,
                                           size: 25,
                                           uncheckedColor: Colors.red,
                                           checkedWidget: Icon(
@@ -427,7 +428,7 @@ class ProfileState extends State<Profile> with TickerProviderStateMixin {
                                     ? Container(
                                         height: Responsive.height(context) / 3,
                                         child: FutureBuilder<
-                                                List<ReviewsModel>>(
+                                                List<Reviews>>(
                                             future: model.getReviews(),
                                             builder: (context, snapshot) {
                                               if (!snapshot.hasData) {

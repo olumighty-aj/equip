@@ -1,6 +1,5 @@
 import 'package:equipro/app/app_setup.logger.dart';
 import 'package:equipro/core/enums/dialog_type.dart';
-import 'package:equipro/core/model/base_model.dart';
 import 'package:equipro/core/model/error_model.dart';
 import 'package:equipro/core/model/success_model.dart';
 import 'package:equipro/core/services/activities_service.dart';
@@ -16,6 +15,7 @@ import 'package:stacked_services/stacked_services.dart';
 
 import '../../../../app/app_setup.locator.dart';
 import '../../../../core/model/TransactionModel.dart';
+import '../../../../core/model/base_model/base_model.dart';
 
 class EarningsViewModel extends BaseViewModel {
   final _log = getLogger("EarningsViewModel");

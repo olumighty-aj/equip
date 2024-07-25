@@ -1,4 +1,4 @@
-import 'package:equipro/core/model/ChatMessages.dart';
+import 'package:equipro/core/model/chat_messages.dart';
 import 'package:equipro/core/services/auth_service.dart';
 import 'package:equipro/ui/screens/chat/chats_widget/colors.dart';
 import 'package:equipro/ui/widget/noti_widget.dart';
@@ -15,7 +15,7 @@ class ChatBubble extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final messageBody = message.message;
-    final bool fromMe = message.senderId == authentication.currentUser.id;
+    final bool fromMe = message.sender_id == authentication.currentUser.id;
     return GestureDetector(
         onTap: () {
           // showModalBottomSheet(
@@ -157,7 +157,7 @@ class ChatBubble extends StatelessWidget {
                 ),
                 Gap(5),
                 Text(
-                  DateTime.parse(message.dateModified!)
+                  DateTime.parse(message.date_modified!)
                       .formatTimeIn12HourFormat(),
                   style: Theme.of(context)
                       .textTheme

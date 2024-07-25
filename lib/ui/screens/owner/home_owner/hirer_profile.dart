@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:equipro/core/model/EquipmentModel.dart' as eq;
 import 'package:equipro/core/model/ReviewsModel.dart';
 import 'package:equipro/ui/screens/drawer.dart';
 import 'package:equipro/ui/screens/profile/profile_view_model.dart';
@@ -13,8 +12,11 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:stacked/stacked.dart';
 
+import '../../../../core/model/hirers/hirers.dart';
+import '../../../../core/model/reviews/reviews.dart';
+
 class HirerProfile extends StatefulWidget {
-  final eq.Hirers feed;
+  final Hirers feed;
 
   const HirerProfile({Key? key, required this.feed}) : super(key: key);
 
@@ -118,8 +120,8 @@ class LoginState extends State<HirerProfile> with TickerProviderStateMixin {
                                               left: 15, top: 13),
                                           child: CachedNetworkImage(
                                             imageUrl:
-                                                widget.feed.hirersPath != null
-                                                    ? widget.feed.hirersPath!
+                                                widget.feed.hirers_path != null
+                                                    ? widget.feed.hirers_path!
                                                     : "",
                                             imageBuilder:
                                                 (context, imageProvider) =>
@@ -218,7 +220,7 @@ class LoginState extends State<HirerProfile> with TickerProviderStateMixin {
                                                 height: 70,
                                                 width: 200,
                                                 child: Text(
-                                                  widget.feed.phoneNumber!,
+                                                  widget.feed.phone_number!,
                                                   style: TextStyle(
                                                       color: Colors.grey,
                                                       fontSize: 15,
@@ -268,7 +270,7 @@ class LoginState extends State<HirerProfile> with TickerProviderStateMixin {
                                   ),
                                   Container(
                                     height: Responsive.height(context) / 3,
-                                    child: FutureBuilder<List<ReviewsModel>>(
+                                    child: FutureBuilder<List<Reviews>>(
                                         future: model.getHirerReviews(
                                             widget.feed.id.toString()),
                                         builder: (context, snapshot) {

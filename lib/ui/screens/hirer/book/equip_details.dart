@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:equipro/core/model/ChatListModel.dart';
-import 'package:equipro/core/model/EquipmentModel.dart';
+import 'package:equipro/core/model/chat_list/chat_list.dart';
 import 'package:equipro/core/services/auth_service.dart';
 // import 'package:equipro/core/services/stripe_payment_service.dart';
 import 'package:equipro/ui/screens/chat/chats_widget/chat_details.dart';
@@ -23,6 +22,8 @@ import 'package:stacked/stacked.dart';
 
 import '../../../../app/app_setup.locator.dart';
 import '../../../../app/app_setup.logger.dart';
+import '../../../../core/model/chat_with/chat_with.dart';
+import '../../../../core/model/equipments/equipments.dart';
 import '../../../../utils/text_styles.dart';
 
 class EquipDetails extends StatefulWidget {
@@ -83,7 +84,7 @@ class LoginState extends State<EquipDetails> with TickerProviderStateMixin {
                       tag: widget.model.id.toString(),
                       child: CachedNetworkImage(
                         imageUrl: selected ??
-                            widget.model.equipImages!.first.equipImagesPath!,
+                            widget.model.equip_images!.first.equip_images_path!,
                         imageBuilder: (context, imageProvider) => Container(
                           width: Responsive.width(context),
                           height: Responsive.height(context) / 2.5,
@@ -152,7 +153,7 @@ class LoginState extends State<EquipDetails> with TickerProviderStateMixin {
                                 SizedBox(
                                   height: Responsive.height(context) / 4,
                                 ),
-                                widget.model.equipImages != null
+                                widget.model.equip_images != null
                                     ? Align(
                                         alignment: Alignment.center,
                                         child: SingleChildScrollView(
@@ -162,7 +163,7 @@ class LoginState extends State<EquipDetails> with TickerProviderStateMixin {
                                                 MainAxisAlignment.center,
                                             children: List.generate(
                                                 widget
-                                                    .model.equipImages!.length,
+                                                    .model.equip_images!.length,
                                                 (index) => Padding(
                                                       padding:
                                                           EdgeInsets.all(5),
@@ -171,9 +172,9 @@ class LoginState extends State<EquipDetails> with TickerProviderStateMixin {
                                                             setState(() {
                                                               selected = widget
                                                                   .model
-                                                                  .equipImages![
+                                                                  .equip_images![
                                                                       index]
-                                                                  .equipImagesPath
+                                                                  .equip_images_path
                                                                   .toString();
                                                             });
                                                           },
@@ -190,9 +191,9 @@ class LoginState extends State<EquipDetails> with TickerProviderStateMixin {
                                                                     width: 0.5),
                                                                 color: widget
                                                                             .model
-                                                                            .equipImages![
+                                                                            .equip_images![
                                                                                 index]
-                                                                            .equipImagesPath!
+                                                                            .equip_images_path!
                                                                             .toString() !=
                                                                         selected
                                                                     ? AppColors
@@ -213,9 +214,9 @@ class LoginState extends State<EquipDetails> with TickerProviderStateMixin {
                                                                       CachedNetworkImage(
                                                                     imageUrl: widget
                                                                         .model
-                                                                        .equipImages![
+                                                                        .equip_images![
                                                                             index]
-                                                                        .equipImagesPath!,
+                                                                        .equip_images_path!,
                                                                     fit: BoxFit
                                                                         .cover,
                                                                     placeholder: (context,
@@ -284,7 +285,7 @@ class LoginState extends State<EquipDetails> with TickerProviderStateMixin {
                                 height: 30,
                               ),
                               Text(
-                                widget.model.equipName!,
+                                widget.model.equip_name!,
                                 style: TextStyle(
                                     fontSize: 24,
                                     color: AppColors.primaryColor,
@@ -298,7 +299,7 @@ class LoginState extends State<EquipDetails> with TickerProviderStateMixin {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    "${getCurrency(widget.model.owners!.country)}${widget.model.costOfHire!.withCommas} per ${widget.model.costOfHireInterval == "1" ? "Day" : widget.model.costOfHireInterval == "7" ? "Week" : "Month"}",
+                                    "${widget.model.currency}${widget.model.cost_of_hire!.withCommas} per ${widget.model.cost_of_hire_interval == "1" ? "Day" : widget.model.cost_of_hire_interval == "7" ? "Week" : "Month"}",
                                     style: TextStyle(
                                         fontSize: 15,
                                         color: AppColors.green,
@@ -354,9 +355,9 @@ class LoginState extends State<EquipDetails> with TickerProviderStateMixin {
                               Text(
                                   "Availability: ${DateFormat(
                                     "dd MMM, yyyy",
-                                  ).format(DateTime.parse(widget.model.availFrom!)).toString()} - ${DateFormat(
+                                  ).format(DateTime.parse(widget.model.avail_from!)).toString()} - ${DateFormat(
                                     "dd MMM, yyyy",
-                                  ).format(DateTime.parse(widget.model.availTo!)).toString()}",
+                                  ).format(DateTime.parse(widget.model.avail_to!)).toString()}",
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodySmall
@@ -385,10 +386,10 @@ class LoginState extends State<EquipDetails> with TickerProviderStateMixin {
                                       onRated: (v) {},
                                       starCount: 5,
                                       rating:
-                                          widget.model.averageRating == "0.00"
+                                          widget.model.average_rating == "0.00"
                                               ? 5.0
                                               : double.parse(widget
-                                                  .model.averageRating!
+                                                  .model.average_rating!
                                                   .toString()),
                                       size: 20,
                                       isReadOnly: true,
@@ -412,7 +413,7 @@ class LoginState extends State<EquipDetails> with TickerProviderStateMixin {
                                 height: 20,
                               ),
                               Text(
-                                'Location: ${widget.model.owners!.localState}',
+                                'Location: ${widget.model.owners!.local_state}',
                                 style: TextStyle(
                                     fontSize: 15, fontWeight: FontWeight.w600),
                               ),
@@ -442,44 +443,44 @@ class LoginState extends State<EquipDetails> with TickerProviderStateMixin {
                                                   "Chat details: ${widget.model.toJson()}");
                                               return ChatDetailsPage(
                                                   feed: ChatListModel(
-                                                      id: widget.model.userId,
-                                                      userId: locator<
+                                                      id: widget.model.user_id,
+                                                      user_id: locator<
                                                               Authentication>()
                                                           .currentUser
                                                           .id,
-                                                      chatWithId: widget
+                                                      chat_with_id: widget
                                                           .model.owners!.id,
-                                                      messageCount: "",
-                                                      lastMessage: "",
-                                                      dateCreated: "",
-                                                      dateModified: "",
-                                                      chatWith: ChatWith(
+                                                      message_count: "",
+                                                      last_message: "",
+                                                      date_created: "",
+                                                      date_modified: "",
+                                                      chat_with: ChatWith(
                                                         id: widget
                                                             .model.owners!.id,
                                                         fullname: widget.model
                                                             .owners!.fullname!,
                                                         email: "",
-                                                        phoneNumber: "",
+                                                        phone_number: "",
                                                         gender: "",
                                                         address: "",
-                                                        addressOpt: "",
-                                                        localState: "",
+                                                        address_opt: "",
+                                                        local_state: "",
                                                         country: "",
                                                         latitude: "",
                                                         longitude: "",
-                                                        hirersPath: widget
+                                                        hirers_path: widget
                                                                     .model
                                                                     .owners!
-                                                                    .hirersPath !=
+                                                                    .hirers_path !=
                                                                 null
                                                             ? widget
                                                                 .model
                                                                 .owners!
-                                                                .hirersPath!
+                                                                .hirers_path!
                                                             : "",
                                                         status: "",
-                                                        dateModified: "",
-                                                        dateCreated: "",
+                                                        date_modified: "",
+                                                        date_created: "",
                                                       )));
                                             })),
                                           ),

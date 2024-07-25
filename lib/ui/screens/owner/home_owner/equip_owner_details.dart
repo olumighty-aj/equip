@@ -1,4 +1,3 @@
-import 'package:equipro/core/model/EquipmentModel.dart';
 import 'package:equipro/ui/screens/drawer.dart';
 import 'package:equipro/ui/screens/hirer/book/details_view_model.dart';
 import 'package:equipro/ui/screens/owner/home_owner/edit_equipment.dart';
@@ -16,6 +15,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
+
+import '../../../../core/model/equipments/equipments.dart';
 
 class EquipOwnerDetails extends StatefulWidget {
   final EquipmentModel model;
@@ -119,7 +120,7 @@ class LoginState extends State<EquipOwnerDetails>
     return ViewModelBuilder<HomeOwnerViewModel>.reactive(
         viewModelBuilder: () => HomeOwnerViewModel(),
         onViewModelReady: (model) =>
-            model.getEquipmentBookingDetails(widget.model.id, context),
+            model.getEquipmentBookingDetails(widget.model.ID, context),
         builder: (context, model, child) {
           return Scaffold(
             key: _scaffoldKey,
@@ -150,7 +151,7 @@ class LoginState extends State<EquipOwnerDetails>
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        widget.model.equipName!,
+                                        widget.model.equip_name!,
                                         style: TextStyle(
                                             color: AppColors.black,
                                             fontWeight: FontWeight.bold,
@@ -182,12 +183,18 @@ class LoginState extends State<EquipOwnerDetails>
                                             value: 0,
                                             child: Text(
                                               "Edit Details",
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodySmall,
                                             ),
                                           ),
                                           PopupMenuItem(
                                               value: 1,
                                               child: Text(
                                                 "Delete",
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodySmall,
                                               )),
                                         ],
                                       )
@@ -201,7 +208,7 @@ class LoginState extends State<EquipOwnerDetails>
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          "${widget.model.address.toString().contains("Nigeria") ? "NGN" : "GBP"}${widget.model.costOfHire!.withCommas} per ${widget.model.costOfHireInterval == "1" ? "Day" : widget.model.costOfHireInterval == "7" ? "Week" : "Month"}",
+                                          "${widget.model.currency}${widget.model.cost_of_hire!.withCommas} per ${widget.model.cost_of_hire_interval == "1" ? "Day" : widget.model.cost_of_hire_interval == "7" ? "Week" : "Month"}",
                                           style: TextStyle(
                                               fontSize: 15,
                                               color: AppColors.green,
@@ -241,9 +248,9 @@ class LoginState extends State<EquipOwnerDetails>
                                   Text(
                                     "Availability: ${DateFormat(
                                       "y-MM-dd",
-                                    ).format(DateTime.parse(widget.model.availFrom!)).toString()} - ${DateFormat(
+                                    ).format(DateTime.parse(widget.model.avail_from!)).toString()} - ${DateFormat(
                                       "y-MM-dd",
-                                    ).format(DateTime.parse(widget.model.availTo!)).toString()}",
+                                    ).format(DateTime.parse(widget.model.avail_to!)).toString()}",
                                     style: TextStyle(
                                         color: Colors.black,
                                         fontWeight: FontWeight.bold,
@@ -283,8 +290,10 @@ class LoginState extends State<EquipOwnerDetails>
                                           children: List.generate(
                                               model.bookingDetails.length,
                                               (index) => BookingRequest(
-                                                  feed: model
-                                                      .bookingDetails[index])),
+                                                    feed: model
+                                                        .bookingDetails[index],
+                                                    model: widget.model,
+                                                  )),
                                         )
                                       : Container(
                                           child: Text(

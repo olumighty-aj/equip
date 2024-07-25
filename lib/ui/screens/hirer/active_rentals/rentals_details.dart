@@ -22,6 +22,7 @@ import 'package:stacked_services/stacked_services.dart';
 
 import '../../../../app/app_setup.locator.dart';
 import '../../../../app/app_setup.logger.dart';
+import '../../../../core/model/active_rentals/active_rentals.dart';
 import '../../../widget/equip_tiles.dart';
 import '../../owner/active_rentals/payment_option.dart';
 import '../../profile/edit_profile.dart';
@@ -104,7 +105,8 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text(widget.feed.equipments!.equipName!,
+                                        Text(
+                                            widget.feed.equipments!.equip_name!,
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .bodyLarge
@@ -122,10 +124,10 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                                 borderRadius:
                                                     BorderRadius.circular(10)),
                                             child: Text(
-                                              widget.feed.requestStatus! ==
+                                              widget.feed.request_status! ==
                                                           "pending" ||
                                                       widget.feed
-                                                              .requestStatus! ==
+                                                              .request_status! ==
                                                           "accepted"
                                                   ? "Booked"
                                                   : "Received",
@@ -146,17 +148,17 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                   SizedBox(
                                     height: 10,
                                   ),
-                                  if (widget.feed.equipOrder?.paymentStatus !=
+                                  if (widget.feed.equip_order?.payment_status !=
                                       "1")
                                     Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                            widget.feed.requestStatus! ==
+                                            widget.feed.request_status! ==
                                                     "pending"
                                                 ? "Booking approval pending"
-                                                : widget.feed.requestStatus! ==
+                                                : widget.feed.request_status! ==
                                                         "accepted"
                                                     ? "Your booking has been approved"
                                                     : "null",
@@ -165,11 +167,11 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                                 .bodyMedium
                                                 ?.copyWith(
                                                     color: widget.feed
-                                                                .requestStatus! ==
+                                                                .request_status! ==
                                                             "pending"
                                                         ? Colors.red
                                                         : Colors.green)),
-                                        if (widget.feed.requestStatus! ==
+                                        if (widget.feed.request_status! ==
                                             "pending")
                                           GestureDetector(
                                             onTap: () => Navigator.push(
@@ -198,7 +200,7 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                   SizedBox(
                                     height: 30,
                                   ),
-                                  if (widget.feed.equipOrder?.paymentStatus !=
+                                  if (widget.feed.equip_order?.payment_status !=
                                       "1")
                                     Column(
                                       crossAxisAlignment:
@@ -219,7 +221,7 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                       ],
                                     ),
                                   Gap(10),
-                                  if (widget.feed.equipOrder?.paymentStatus ==
+                                  if (widget.feed.equip_order?.payment_status ==
                                       "1")
                                     Column(
                                       children: [
@@ -241,7 +243,7 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                             ),
                                             Expanded(
                                               child: Text(
-                                                  "${model.isNigerian ? "NGN " : "GBP "}${widget.feed.equipOrder!.totalAmount!.withCommas}",
+                                                  "${model.isNigerian ? "NGN " : "GBP "}${widget.feed.equip_order!.total_amount!.withCommas}",
                                                   style: Theme.of(context)
                                                       .textTheme
                                                       .bodyMedium
@@ -280,7 +282,7 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                       ),
                                       Expanded(
                                         child: Text(
-                                            widget.feed.equipOrder!.quantity!,
+                                            widget.feed.equip_order!.quantity!,
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .bodyMedium
@@ -310,13 +312,13 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                       ),
                                       Expanded(
                                         child: Text(
-                                            widget.feed.rentalFrom != null
+                                            widget.feed.rental_from != null
                                                 ? DateFormat(
                                                     "dd MMM, yyyy",
                                                   )
                                                     .format(DateTime.parse(
                                                         widget
-                                                            .feed.rentalFrom!))
+                                                            .feed.rental_from!))
                                                     .toString()
                                                 : "Unknown",
                                             style: Theme.of(context)
@@ -346,12 +348,12 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                       ),
                                       Expanded(
                                         child: Text(
-                                            widget.feed.rentalTo != null
+                                            widget.feed.rental_to != null
                                                 ? DateFormat(
                                                     "dd MMM, yyyy",
                                                   )
                                                     .format(DateTime.parse(
-                                                        widget.feed.rentalTo!))
+                                                        widget.feed.rental_to!))
                                                     .toString()
                                                 : "Unknown",
                                             style: Theme.of(context)
@@ -383,7 +385,7 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                       ),
                                       Expanded(
                                         child: Text(
-                                            widget.feed.deliveryLocation!,
+                                            widget.feed.delivery_location!,
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .bodyMedium
@@ -394,8 +396,8 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                   SizedBox(
                                     height: 40,
                                   ),
-                                  if (widget.feed.equipOrder != null &&
-                                      widget.feed.equipOrder?.paymentStatus ==
+                                  if (widget.feed.equip_order != null &&
+                                      widget.feed.equip_order?.payment_status ==
                                           "0")
                                     Column(
                                       crossAxisAlignment:
@@ -427,7 +429,7 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                             Gap(20),
                                             Expanded(
                                               child: Text(
-                                                "${getCurrency(widget.feed.equipments!.address)} ${widget.feed.equipOrder!.deliveryCharge ?? "0"}",
+                                                "${widget.feed.equipments!.currency} ${widget.feed.equip_order!.delivery_charge ?? "0"}",
                                                 style: Theme.of(context)
                                                     .textTheme
                                                     .bodyLarge
@@ -453,7 +455,7 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                             Gap(20),
                                             Expanded(
                                               child: Text(
-                                                "${getCurrency(widget.feed.equipments!.address)} ${widget.feed.equipOrder!.serviceCharge!.withCommas}",
+                                                "${widget.feed.equipments!.currency} ${widget.feed.equip_order!.service_charge!.withCommas}",
                                                 style: Theme.of(context)
                                                     .textTheme
                                                     .bodyLarge
@@ -479,7 +481,7 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                             Gap(80),
                                             Expanded(
                                               child: Text(
-                                                "${getCurrency(widget.feed.equipments!.address)} ${widget.feed.equipOrder!.discount ?? "0"}",
+                                                "${widget.feed.equipments!.currency} ${widget.feed.equip_order!.discount ?? "0"}",
                                                 style: Theme.of(context)
                                                     .textTheme
                                                     .bodyLarge
@@ -505,7 +507,7 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                             Gap(45),
                                             Expanded(
                                               child: Text(
-                                                "${getCurrency(widget.feed.equipments!.address)} ${widget.feed.equipOrder!.totalAmount!.withCommas}",
+                                                "${widget.feed.equipments!.currency} ${widget.feed.equip_order!.total_amount!.withCommas}",
                                                 style: Theme.of(context)
                                                     .textTheme
                                                     .bodyLarge
@@ -521,8 +523,8 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                       ],
                                     ),
                                   Gap(30),
-                                  if (widget.feed.equipDeliveryStatus!
-                                          .deliveryStatus !=
+                                  if (widget.feed.equip_delivery_status!
+                                          .delivery_status !=
                                       null)
                                     Column(
                                       crossAxisAlignment:
@@ -544,8 +546,8 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                     color: Colors.grey,
                                   ),
                                   Gap(10),
-                                  widget.feed.equipDeliveryStatus!
-                                              .deliveryStatus !=
+                                  widget.feed.equip_delivery_status!
+                                              .delivery_status !=
                                           null
                                       ? ListView.builder(
                                           shrinkWrap: true,
@@ -553,8 +555,8 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                               NeverScrollableScrollPhysics(),
                                           itemCount: widget
                                               .feed
-                                              .equipDeliveryStatus!
-                                              .deliveryStatusLists!
+                                              .equip_delivery_status!
+                                              .delivery_status_lists!
                                               .length,
                                           itemBuilder: (context, i) {
                                             return Row(
@@ -591,30 +593,30 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                                       Text(
                                                           widget
                                                                       .feed
-                                                                      .equipDeliveryStatus!
-                                                                      .deliveryStatusLists![
+                                                                      .equip_delivery_status!
+                                                                      .delivery_status_lists![
                                                                           i]
-                                                                      .deliveryStatus! ==
+                                                                      .delivery_status! ==
                                                                   "pending"
                                                               ? "Pending"
                                                               : widget
                                                                           .feed
-                                                                          .equipDeliveryStatus!
-                                                                          .deliveryStatusLists![
+                                                                          .equip_delivery_status!
+                                                                          .delivery_status_lists![
                                                                               i]
-                                                                          .deliveryStatus! ==
+                                                                          .delivery_status! ==
                                                                       "picked_from_owner"
                                                                   ? "Picked up from owner"
-                                                                  : widget.feed.equipDeliveryStatus!.deliveryStatusLists![i].deliveryStatus! ==
+                                                                  : widget.feed.equip_payment!.delivery_status_lists![i].delivery_status! ==
                                                                           "delivered_hirer"
                                                                       ? "Delivered to hirer"
-                                                                      : widget.feed.equipDeliveryStatus!.deliveryStatusLists![i].deliveryStatus! ==
+                                                                      : widget.feed.equip_delivery_status!.delivery_status_lists![i].delivery_status! ==
                                                                               "picked_from_hirer"
                                                                           ? "Picked up from hirer"
-                                                                          : widget.feed.equipDeliveryStatus!.deliveryStatusLists![i].deliveryStatus! ==
+                                                                          : widget.feed.equip_delivery_status!.delivery_status_lists![i].delivery_status! ==
                                                                                   "in_use"
                                                                               ? "Equipment in use"
-                                                                              : widget.feed.equipDeliveryStatus!.deliveryStatusLists![i].deliveryStatus! ==
+                                                                              : widget.feed.equip_delivery_status!.delivery_status_lists![i].delivery_status! ==
                                                                                       "picked_from_owner"
                                                                                   ? "Picked up from hirer"
                                                                                   : "Returned to owner",
@@ -629,10 +631,10 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                                   child: Text(
                                                     DateTime.parse(widget
                                                             .feed
-                                                            .equipDeliveryStatus!
-                                                            .deliveryStatusLists![
+                                                            .equip_delivery_status!
+                                                            .delivery_status_lists![
                                                                 i]
-                                                            .dateCreated!)
+                                                            .date_created!)
                                                         .toDate(),
                                                     style: Theme.of(context)
                                                         .textTheme
@@ -651,12 +653,13 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                           ),
                                         ),
                                   Gap(30),
-                                  if (widget.feed.equipDeliveryStatus != null &&
-                                      widget.feed.equipDeliveryStatus!
-                                              .deliveryStatus ==
+                                  if (widget.feed.equip_delivery_status !=
+                                          null &&
+                                      widget.feed.equip_delivery_status!
+                                              .delivery_status ==
                                           "in_use" &&
                                       model.getDateDifference(
-                                              widget.feed.rentalTo!) ==
+                                              widget.feed.rental_to!) ==
                                           2)
                                     Column(
                                       children: [
@@ -713,7 +716,7 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                         Gap(20),
                                       ],
                                     ),
-                                  if (widget.feed.requestStatus == "declined")
+                                  if (widget.feed.request_status == "declined")
                                     BaseButton(
                                       // isBusy: model.busy("InitPayment"),
                                       label: "Search other related equipments",
@@ -721,11 +724,12 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                           locator<NavigationService>()
                                               .clearStackAndShow(Routes.home),
                                     ),
-                                  if (widget.feed.requestStatus == "accepted" &&
-                                          widget.feed.equipOrder
-                                                  ?.paymentStatus ==
+                                  if (widget.feed.request_status ==
+                                              "accepted" &&
+                                          widget.feed.equip_order
+                                                  ?.payment_status ==
                                               "0" &&
-                                          !isDateInPast(widget.feed.rentalTo!)
+                                          !isDateInPast(widget.feed.rental_to!)
                                       // &&
                                       // !isDateInPast(widget.feed.rentalTo!)
                                       )
@@ -744,8 +748,8 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                                         )))),
                                       ],
                                     ),
-                                  if (isDateInPast(widget.feed.rentalTo!) &&
-                                      widget.feed.equipOrder?.paymentStatus ==
+                                  if (isDateInPast(widget.feed.rental_to!) &&
+                                      widget.feed.equip_order?.payment_status ==
                                           "0")
                                     Text(
                                       "Booking Expired",
@@ -755,10 +759,10 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                           ?.copyWith(color: Colors.red),
                                       textAlign: TextAlign.center,
                                     ),
-                                  if (widget.feed.equipPayment != null)
-                                    if (widget.feed.requestStatus ==
+                                  if (widget.feed.equip_payment != null)
+                                    if (widget.feed.request_status ==
                                             "accepted" &&
-                                        widget.feed.equipPayment[
+                                        widget.feed.equip_payment[
                                                 "payment_status"] ==
                                             "1")
                                       Column(
@@ -770,13 +774,15 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                                   "I Have Received The Equipment ",
                                               onPressed: () =>
                                                   model.pickedUpFromOwner(
-                                                      widget.feed.equipOrderId!,
+                                                      widget
+                                                          .feed.equip_order_id!,
                                                       context)),
                                         ],
                                       ),
-                                  if (widget.feed.requestStatus == "received" &&
-                                      widget.feed.equipDeliveryStatus!
-                                              .deliveryStatus ==
+                                  if (widget.feed.request_status ==
+                                          "received" &&
+                                      widget.feed.equip_delivery_status!
+                                              .delivery_status ==
                                           "delivered_hirer")
                                     Column(
                                       children: [
@@ -785,12 +791,12 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                             isBusy: model.busy("pickedOwner"),
                                             label: "Equipment in use ",
                                             onPressed: () => model.inUse(
-                                                widget.feed.equipOrderId!,
+                                                widget.feed.equip_order_id!,
                                                 context)),
                                       ],
                                     ),
-                                  if (widget.feed.equipDeliveryStatus
-                                          ?.deliveryStatus ==
+                                  if (widget.feed.equip_delivery_status
+                                          ?.delivery_status ==
                                       "in_use")
                                     Column(
                                       children: [
@@ -800,16 +806,16 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                           label: "Return Equipment",
                                           onPressed: () =>
                                               model.pickedFromHirer(
-                                                  widget.feed.equipOrderId!,
+                                                  widget.feed.equip_order_id!,
                                                   context),
                                         ),
                                       ],
                                     ),
-                                  if (widget.feed.equipDeliveryStatus
-                                              ?.deliveryStatus ==
+                                  if (widget.feed.equip_delivery_status
+                                              ?.delivery_status ==
                                           "returned" ||
-                                      widget.feed.equipDeliveryStatus
-                                              ?.deliveryStatus ==
+                                      widget.feed.equip_delivery_status
+                                              ?.delivery_status ==
                                           "picked_from_hirer")
                                     BaseButton(
                                       // isBusy: model.busy("returned"),
@@ -819,7 +825,7 @@ class LoginState extends State<RentalDetails> with TickerProviderStateMixin {
                                           MaterialPageRoute(
                                               builder: (context) => Rating(
                                                     id: widget
-                                                        .feed.equipmentsId!,
+                                                        .feed.equipments_id!,
                                                   ))),
                                     ),
                                   Gap(10),

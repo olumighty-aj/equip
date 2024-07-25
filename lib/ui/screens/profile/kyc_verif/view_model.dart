@@ -4,11 +4,12 @@ import 'package:dio/dio.dart';
 import 'package:equipro/app/app_setup.router.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 import '../../../../app/app_setup.locator.dart';
-import '../../../../core/model/base_model.dart';
+import '../../../../core/model/base_model/base_model.dart';
 import '../../../../core/services/auth_service.dart';
 import '../../../../utils/helpers.dart';
 
@@ -18,6 +19,8 @@ class KYCViewModel extends BaseViewModel {
 
   TextEditingController uploadController = TextEditingController();
   TextEditingController countryController = TextEditingController();
+
+  String? filePath;
 
   void init() async {
     countryController.text = _authentication.currentUser.country ?? "";
@@ -45,7 +48,9 @@ class KYCViewModel extends BaseViewModel {
           source: ImageSource.gallery,
         )
         .then((pickedFile) => pickedFile!.path));
-    uploadController.text = file.path;
+    filePath = file.path;
+
+    uploadController.text = basename(file.path);
     // image = file;
     notifyListeners();
   }
@@ -62,7 +67,7 @@ class KYCViewModel extends BaseViewModel {
                       ? "driver_license"
                       : null,
       "kyc_document_path[]": uploadController.text.isNotEmpty
-          ? await MultipartFile.fromFile(uploadController.text)
+          ? await MultipartFile.fromFile(filePath!)
           : null,
       "country": countryController.text
     };

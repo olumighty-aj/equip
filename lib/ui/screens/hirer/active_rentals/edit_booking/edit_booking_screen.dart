@@ -10,8 +10,10 @@ import 'package:place_picker/entities/location_result.dart';
 import 'package:place_picker/widgets/place_picker.dart';
 import 'package:stacked/stacked.dart';
 
+import '../../../../../core/model/active_rentals/active_rentals.dart';
+
 class EditBookings extends StatefulWidget {
-  final active.ActiveRentalsModel model;
+  final ActiveRentalsModel model;
   const EditBookings({Key? key, required this.model}) : super(key: key);
 
   @override
@@ -50,10 +52,10 @@ class _EditBookingsState extends State<EditBookings> {
     quantityList =
         List<int>.generate(int.parse(widget.model.quantity!), (i) => i + 1);
     setState(() {
-      selectedDate = widget.model.rentalFrom;
-      selectedDateTo = widget.model.rentalTo;
+      selectedDate = widget.model.rental_from;
+      selectedDateTo = widget.model.rental_to;
       selectedQuantity = int.parse(widget.model.quantity!);
-      deliveryController.text = widget.model.deliveryLocation!;
+      deliveryController.text = widget.model.delivery_location!;
     });
     super.initState();
   }

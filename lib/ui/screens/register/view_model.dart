@@ -1,4 +1,3 @@
-import 'package:equipro/core/model/base_model.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -7,6 +6,7 @@ import '../../../app/app_setup.locator.dart';
 import '../../../app/app_setup.logger.dart';
 import '../../../app/app_setup.router.dart';
 import '../../../core/model/SignUpModel.dart';
+import '../../../core/model/base_model/base_model.dart';
 import '../../../core/model/error_model.dart';
 import '../../../core/model/success_model.dart';
 import '../../../core/services/auth_service.dart';

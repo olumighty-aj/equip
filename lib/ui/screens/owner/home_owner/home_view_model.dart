@@ -3,10 +3,8 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:equipro/app/app_setup.logger.dart';
 import 'package:equipro/app/app_setup.router.dart';
-import 'package:equipro/core/model/EquipmentModel.dart';
 import 'package:equipro/core/model/NotificationModel.dart';
 import 'package:equipro/core/model/ReviewsModel.dart';
-import 'package:equipro/core/model/base_model.dart';
 import 'package:equipro/core/model/enums.dart';
 import 'package:equipro/core/model/error_model.dart';
 import 'package:equipro/core/model/success_model.dart';
@@ -20,6 +18,9 @@ import 'package:stacked_services/stacked_services.dart';
 
 import '../../../../app/app_setup.locator.dart';
 import '../../../../core/api/api_constants.dart';
+import '../../../../core/model/base_model/base_model.dart';
+import '../../../../core/model/equipments/equipments.dart';
+import '../../../../core/model/reviews/reviews.dart';
 import '../../../../core/services/shared_prefs.dart';
 
 class HomeOwnerViewModel extends BaseViewModel {
@@ -474,7 +475,7 @@ class HomeOwnerViewModel extends BaseViewModel {
     return result;
   }
 
-  Future<List<ReviewsModel>> getReviews() async {
+  Future<List<Reviews>> getReviews() async {
     //setBusy(true);
     var result = await _authentication.getReviews();
     if (result is ErrorModel) {

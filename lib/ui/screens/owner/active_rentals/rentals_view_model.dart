@@ -8,6 +8,8 @@ import 'package:equipro/utils/locator.dart';
 import 'package:equipro/utils/router/navigation_service.dart';
 import 'package:equipro/utils/router/route_names.dart';
 
+import '../../../../core/model/active_rentals/active_rentals.dart';
+
 class OwnerRentalsViewModel extends BaseModel {
   final NavService _navigationService = locator<NavService>();
   final Activities _activities = locator<Activities>();

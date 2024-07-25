@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:equipro/core/model/ReviewsModel.dart';
+import 'package:equipro/core/model/reviews/reviews.dart';
 import 'package:equipro/utils/app_svgs.dart';
 import 'package:equipro/utils/colors.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +9,7 @@ import 'package:gap/gap.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 class ReviewItem extends StatelessWidget {
-  final ReviewsModel feed;
+  final Reviews feed;
 
   ReviewItem({
     required this.feed,
@@ -25,7 +26,7 @@ class ReviewItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CachedNetworkImage(
-                imageUrl: feed.hirers!.hirersPath!,
+                imageUrl: feed.hirers!.hirers_path!,
                 imageBuilder: (context, imageProvider) => Container(
                   width: 35.0,
                   height: 35.0,

@@ -1,5 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:equipro/core/model/ChatListModel.dart';
+import 'package:equipro/core/model/chat_list/chat_list.dart';
 import 'package:equipro/utils/colors.dart';
 import 'package:equipro/utils/locator.dart';
 import 'package:equipro/utils/router/navigation_service.dart';
@@ -30,8 +30,8 @@ class ChatItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   CachedNetworkImage(
-                    imageUrl: model.chatWith!.hirersPath != null
-                        ? model.chatWith!.hirersPath!
+                    imageUrl: model.chat_with!.hirers_path != null
+                        ? model.chat_with!.hirers_path!
                         : "",
                     imageBuilder: (context, imageProvider) => Container(
                       width: 35.0,
@@ -64,7 +64,7 @@ class ChatItem extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                model.chatWith!.fullname!,
+                                model.chat_with!.fullname!,
                                 //  _authentication.currentUser.firstName! + " " + _authentication.currentUser.lastName!,
                                 style: const TextStyle(
                                   fontWeight: FontWeight.w600,
@@ -78,7 +78,7 @@ class ChatItem extends StatelessWidget {
                                 DateFormat(
                                   "dd MMM, hh:mm aa",
                                 ).format(DateTime.parse(
-                                    model.dateCreated.toString())),
+                                    model.date_created.toString())),
                                 //  _authentication.currentUser.firstName! + " " + _authentication.currentUser.lastName!,
                                 style: const TextStyle(
                                   color: Colors.grey,
@@ -90,7 +90,7 @@ class ChatItem extends StatelessWidget {
                           height: 5,
                         ),
                         Text(
-                          model.lastMessage!,
+                          model.last_message!,
                           //  _authentication.currentUser.firstName! + " " + _authentication.currentUser.lastName!,
                           style: const TextStyle(
                             fontSize: 13,

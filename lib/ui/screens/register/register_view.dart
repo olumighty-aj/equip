@@ -70,7 +70,7 @@ class RegisterState extends State<Register> {
   Widget build(BuildContext context) {
     return ViewModelBuilder<RegisterViewModel>.reactive(
         viewModelBuilder: () => RegisterViewModel(),
-        // onViewModelReady: (model) => model.setCountry(),
+        onViewModelReady: (model) => model.setCountry(),
         builder: (context, model, child) {
           return Scaffold(
               body: SingleChildScrollView(
@@ -184,6 +184,21 @@ class RegisterState extends State<Register> {
                                                     model.fullNameController,
                                                 // maxLength: 11,
                                                 decoration: InputDecoration(
+                                                  border: OutlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                          color: Colors.grey)),
+                                                  focusedBorder:
+                                                      OutlineInputBorder(
+                                                          borderSide:
+                                                              BorderSide(
+                                                                  color: Colors
+                                                                      .grey)),
+                                                  enabledBorder:
+                                                      OutlineInputBorder(
+                                                          borderSide:
+                                                              BorderSide(
+                                                                  color: Colors
+                                                                      .grey)),
                                                   hintText: 'John Deo',
                                                   hintStyle: const TextStyle(
                                                       color: Colors.grey),
@@ -215,6 +230,21 @@ class RegisterState extends State<Register> {
                                                     model.emailController,
                                                 // maxLength: 11,
                                                 decoration: InputDecoration(
+                                                  border: OutlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                          color: Colors.grey)),
+                                                  focusedBorder:
+                                                      OutlineInputBorder(
+                                                          borderSide:
+                                                              BorderSide(
+                                                                  color: Colors
+                                                                      .grey)),
+                                                  enabledBorder:
+                                                      OutlineInputBorder(
+                                                          borderSide:
+                                                              BorderSide(
+                                                                  color: Colors
+                                                                      .grey)),
                                                   hintText: 'deo@gmail.com',
                                                   hintStyle: const TextStyle(
                                                       color: Colors.grey),
@@ -274,6 +304,21 @@ class RegisterState extends State<Register> {
                                                         fontSize: widthSizer(
                                                             16.0, context)),
                                                     decoration: InputDecoration(
+                                                      border: OutlineInputBorder(
+                                                          borderSide:
+                                                              BorderSide(
+                                                                  color: Colors
+                                                                      .grey)),
+                                                      focusedBorder:
+                                                          OutlineInputBorder(
+                                                              borderSide: BorderSide(
+                                                                  color: Colors
+                                                                      .grey)),
+                                                      enabledBorder:
+                                                          OutlineInputBorder(
+                                                              borderSide: BorderSide(
+                                                                  color: Colors
+                                                                      .grey)),
                                                       contentPadding:
                                                           EdgeInsets.symmetric(
                                                               vertical:
@@ -405,6 +450,21 @@ class RegisterState extends State<Register> {
                                                       // maxLength: 11,
                                                       decoration:
                                                           InputDecoration(
+                                                        border: OutlineInputBorder(
+                                                            borderSide:
+                                                                BorderSide(
+                                                                    color: Colors
+                                                                        .grey)),
+                                                        focusedBorder:
+                                                            OutlineInputBorder(
+                                                                borderSide: BorderSide(
+                                                                    color: Colors
+                                                                        .grey)),
+                                                        enabledBorder:
+                                                            OutlineInputBorder(
+                                                                borderSide: BorderSide(
+                                                                    color: Colors
+                                                                        .grey)),
                                                         hintText:
                                                             'Enter postal code',
                                                         hintStyle:
@@ -468,6 +528,21 @@ class RegisterState extends State<Register> {
                                                     // maxLength: 11,
                                                     enabled: false,
                                                     decoration: InputDecoration(
+                                                      border: OutlineInputBorder(
+                                                          borderSide:
+                                                              BorderSide(
+                                                                  color: Colors
+                                                                      .grey)),
+                                                      focusedBorder:
+                                                          OutlineInputBorder(
+                                                              borderSide: BorderSide(
+                                                                  color: Colors
+                                                                      .grey)),
+                                                      enabledBorder:
+                                                          OutlineInputBorder(
+                                                              borderSide: BorderSide(
+                                                                  color: Colors
+                                                                      .grey)),
                                                       hintText: 'Enter Country',
                                                       hintStyle:
                                                           const TextStyle(
@@ -499,6 +574,21 @@ class RegisterState extends State<Register> {
                                                 controller:
                                                     model.passwordController,
                                                 decoration: InputDecoration(
+                                                  border: OutlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                          color: Colors.grey)),
+                                                  focusedBorder:
+                                                      OutlineInputBorder(
+                                                          borderSide:
+                                                              BorderSide(
+                                                                  color: Colors
+                                                                      .grey)),
+                                                  enabledBorder:
+                                                      OutlineInputBorder(
+                                                          borderSide:
+                                                              BorderSide(
+                                                                  color: Colors
+                                                                      .grey)),
                                                   suffixIcon: IconButton(
                                                     icon: Icon(
                                                       // Based on passwordVisible state choose the icon
@@ -543,6 +633,21 @@ class RegisterState extends State<Register> {
                                                 controller: model
                                                     .confirmPasswordController,
                                                 decoration: InputDecoration(
+                                                  border: OutlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                          color: Colors.grey)),
+                                                  focusedBorder:
+                                                      OutlineInputBorder(
+                                                          borderSide:
+                                                              BorderSide(
+                                                                  color: Colors
+                                                                      .grey)),
+                                                  enabledBorder:
+                                                      OutlineInputBorder(
+                                                          borderSide:
+                                                              BorderSide(
+                                                                  color: Colors
+                                                                      .grey)),
                                                   suffixIcon: IconButton(
                                                     icon: Icon(
                                                       passwordVisible

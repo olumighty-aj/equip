@@ -5,11 +5,9 @@ import 'package:equipro/app/app_setup.logger.dart';
 import 'package:equipro/core/api/api_constants.dart';
 import 'package:equipro/core/api/dio_service.dart';
 import 'package:equipro/core/model/ActiveRentalsModel.dart';
-import 'package:equipro/core/model/ChatListModel.dart';
-import 'package:equipro/core/model/ChatMessages.dart';
-import 'package:equipro/core/model/EquipmentModel.dart';
+import 'package:equipro/core/model/chat_list/chat_list.dart';
+import 'package:equipro/core/model/chat_messages.dart';
 import 'package:equipro/core/model/NotificationModel.dart';
-import 'package:equipro/core/model/base_model.dart';
 import 'package:equipro/core/model/error_model.dart';
 import 'package:equipro/core/model/success_model.dart';
 import 'package:equipro/core/services/auth_service.dart';
@@ -22,6 +20,9 @@ import 'package:http/http.dart' as htp;
 import 'package:image_picker/image_picker.dart';
 
 import '../../app/app_setup.locator.dart';
+import '../model/active_rentals/active_rentals.dart';
+import '../model/base_model/base_model.dart';
+import '../model/equipments/equipments.dart';
 
 class Activities {
   final _log = getLogger("Activities");

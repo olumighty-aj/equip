@@ -10,7 +10,7 @@ import 'package:equipro/utils/locator.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
-import '../model/base_model.dart';
+import '../model/base_model/base_model.dart';
 
 class PaymentService {
   // PaystackPlugin plugin = PaystackPlugin();

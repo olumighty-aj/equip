@@ -2,10 +2,8 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:equipro/core/api/dio_service.dart';
-import 'package:equipro/core/model/ReviewsModel.dart';
 import 'package:equipro/core/model/SignInResponse.dart';
 import 'package:equipro/core/model/auth_model.dart';
-import 'package:equipro/core/model/base_model.dart';
 import 'package:equipro/core/model/error_model.dart';
 import 'package:equipro/core/model/success_model.dart';
 import 'package:equipro/core/services/index.dart';
@@ -19,6 +17,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../app/app_setup.locator.dart';
 import '../../app/app_setup.logger.dart';
+import '../model/base_model/base_model.dart';
+import '../model/reviews/reviews.dart';
 
 class Authentication {
   final _log = getLogger("Authentication");
@@ -52,28 +52,26 @@ class Authentication {
     _phoneNumber = phone;
   }
 
-  Future<Map<String, dynamic>?> fetchPostDetails(postCode) async{
-    try{
+  Future<Map<String, dynamic>?> fetchPostDetails(postCode) async {
+    try {
       _log.i("Hi I am fetching post details");
-      Dio dio  = Dio();
-      _log.i("Links: ${Paths.postCodeBaseUrl+postCode}");
-      Response res = await dio.get(Paths.postCodeBaseUrl+postCode);
-      if(res.statusCode==200){
+      Dio dio = Dio();
+      _log.i("Links: ${Paths.postCodeBaseUrl + postCode}");
+      Response res = await dio.get(Paths.postCodeBaseUrl + postCode);
+      if (res.statusCode == 200) {
         _log.i("Post Code details: ${res.data}");
         return res.data;
       }
-    }
-    on DioException catch (e) {
+    } on DioException catch (e) {
       _log.e(e.message);
       _log.e(e.response.toString());
       return e.response?.data;
     }
   }
 
-  Future<BaseDataModel?> newVerifyKyc(FormData data) async{
+  Future<BaseDataModel?> newVerifyKyc(FormData data) async {
     try {
-      Response res = await _apiService.postRequest(
-         data, Paths.verifyKYC);
+      Response res = await _apiService.postRequest(data, Paths.verifyKYC);
       if (res.statusCode == 200) {
         return BaseDataModel.fromJson(res.data);
       }
@@ -571,6 +569,7 @@ class Authentication {
   Future<BaseDataModel> getKYC() async {
     Response res =
         await _apiService.getRequest(null, Paths.verifyKYC + currentUser.id!);
+    _log.i(res.data);
     _log.i("STATUS code: ${res.statusCode}");
     _log.i("Here: ${res.data}");
     return BaseDataModel.fromJson(res.data);
@@ -597,13 +596,13 @@ class Authentication {
         print("ERROR");
         print(result.error);
         var data = result.error;
-        List<ReviewsModel> packageList = List<ReviewsModel>.from(
-            data.map((item) => ReviewsModel.fromJson(item)));
+        List<Reviews> packageList =
+            List<Reviews>.from(data.map((item) => Reviews.fromJson(item)));
         return ErrorModel(packageList);
       }
       var data = result.data["payload"]['content'];
-      List<ReviewsModel> packageList = List<ReviewsModel>.from(
-          data.map((item) => ReviewsModel.fromJson(item)));
+      List<Reviews> packageList =
+          List<Reviews>.from(data.map((item) => Reviews.fromJson(item)));
       print(packageList);
       return packageList;
     } catch (e) {
@@ -629,13 +628,13 @@ class Authentication {
         print("ERROR");
         print(result.error);
         var data = result.error;
-        List<ReviewsModel> packageList = List<ReviewsModel>.from(
-            data.map((item) => ReviewsModel.fromJson(item)));
+        List<Reviews> packageList =
+            List<Reviews>.from(data.map((item) => Reviews.fromJson(item)));
         return ErrorModel(packageList);
       }
       var data = result.data["payload"]['content'];
-      List<ReviewsModel> packageList = List<ReviewsModel>.from(
-          data.map((item) => ReviewsModel.fromJson(item)));
+      List<Reviews> packageList =
+          List<Reviews>.from(data.map((item) => Reviews.fromJson(item)));
       print(packageList);
       return packageList;
     } catch (e) {

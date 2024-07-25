@@ -11,6 +11,7 @@ import 'package:gap/gap.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:stacked/stacked.dart';
 
+import '../../../../core/model/active_rentals/active_rentals.dart';
 import '../../../../utils/app_svgs.dart';
 
 class Rentals extends StatefulWidget {
@@ -22,15 +23,11 @@ class Rentals extends StatefulWidget {
 
 class LoginState extends State<Rentals> with SingleTickerProviderStateMixin {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  late TabController _controller;
 
   @override
   void initState() {
     super.initState();
   }
-
-  ScrollController firstController = ScrollController();
-  ScrollController secondController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -44,104 +41,6 @@ class LoginState extends State<Rentals> with SingleTickerProviderStateMixin {
               ),
               key: _scaffoldKey,
               body: NewActiveRentalsBody(model: model));
-          // Padding(
-          //     padding: EdgeInsets.all(20),
-          //     child: DefaultTabController(
-          //       length: 4,
-          //       child: SingleChildScrollView(
-          //           controller: firstController,
-          //           physics: BouncingScrollPhysics(),
-          //           child: Column(
-          //             crossAxisAlignment: CrossAxisAlignment.stretch,
-          //             children: [
-          //               Text(
-          //                 "Active Rentals",
-          //                 style: TextStyle(
-          //                     fontSize: 25, fontWeight: FontWeight.bold),
-          //               ),
-          //               SizedBox(
-          //                 height: 20,
-          //               ),
-          //               CustomSearchField(
-          //                 hintText: "Search",
-          //               ),
-          //               SizedBox(
-          //                 height: 20,
-          //               ),
-          //               TabBar(
-          //                 controller: _controller,
-          //                 unselectedLabelColor: Colors.grey,
-          //                 indicatorWeight: 3,
-          //                 labelStyle: TextStyle(fontSize: 12),
-          //                 labelColor: AppColors.primaryColor,
-          //                 indicatorColor: AppColors.primaryColor,
-          //                 isScrollable: true,
-          //                 tabs: [
-          //                   Tab(
-          //                     text: "All",
-          //                   ),
-          //                   Tab(
-          //                     text: "Booked",
-          //                   ),
-          //                   Tab(
-          //                     text: "Received",
-          //                   ),
-          //                   Tab(
-          //                     text: "Returned",
-          //                   )
-          //                 ],
-          //               ),
-          //               SizedBox(
-          //                 height: 20,
-          //               ),
-          //               // SizedBox(
-          //               //   height: 10,
-          //               // ),
-          //               Builder(builder: (context) {
-          //                 // if (secondController.hasClients &&
-          //                 //     secondController.position.minScrollExtent ==
-          //                 //         0) {
-          //                 //   print(
-          //                 //       "Second controller position: ${secondController.position}");
-          //                 //   setState(() {
-          //                 //     scroll2Physics =
-          //                 //         NeverScrollableScrollPhysics();
-          //                 //     scroll1Physics = BouncingScrollPhysics();
-          //                 //   });
-          //                 // }
-          //
-          //                 return SizedBox(
-          //                   height: MediaQuery.of(context).size.height,
-          //                   // child: TabBarView(
-          //                   //   controller: _controller,
-          //                   //   children: [
-          //                   //     AllRentals(
-          //                   //       model: model,
-          //                   //       controller: secondController,
-          //                   //       physics: scroll2Physics,
-          //                   //     ),
-          //                   //     BookedRentals(
-          //                   //       model: model,
-          //                   //       controller: secondController,
-          //                   //       physics: scroll2Physics,
-          //                   //     ),
-          //                   //     ReceivedRentals(
-          //                   //       model: model,
-          //                   //       controller: secondController,
-          //                   //       physics: scroll2Physics,
-          //                   //     ),
-          //                   //     ReturnedRentals(
-          //                   //       model: model,
-          //                   //       controller: secondController,
-          //                   //       physics: scroll2Physics,
-          //                   //     ),
-          //                   //   ],
-          //                   // ),
-          //                 );
-          //               }),
-          //             ],
-          //           )),
-          //     )));
         });
   }
 }
@@ -839,11 +738,9 @@ class NewBookedRentals extends StatelessWidget {
         return SingleChildScrollView(
           child: Column(
               children: model.bookedRentals!
-                  .map((feed) => GestureDetector(
-                      onTap: () {},
-                      child: RentalTiles(
+                  .map((feed) => RentalTiles(
                         feed: feed,
-                      )))
+                      ))
                   .toList()),
         );
       } else if (model.bookedRentals != null && model.bookedRentals!.isEmpty) {

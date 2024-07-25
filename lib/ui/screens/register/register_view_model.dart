@@ -26,7 +26,6 @@ class RegisterViewModel extends BaseViewModel {
     if (result is ErrorModel) {
       setBusy(false);
       showErrorToast(result.error, context: context);
-      notifyListeners();
       return ErrorModel(result.error);
     }
     if (result is SuccessModel) {
@@ -64,11 +63,11 @@ class RegisterViewModel extends BaseViewModel {
     controller.dispose();
   }
 
-  void setCountry(countryCode) {
-    if (countryCode == "234") {
+  void setCountry() {
+    // if (countryCode == "234") {
       countryController.text = "Nigeria";
-    }
-    notifyListeners();
+    // }
+    // notifyListeners();
   }
 
   bool validatePassword(String password) {
@@ -77,27 +76,22 @@ class RegisterViewModel extends BaseViewModel {
     // Password length greater than 6
     if (password.length < 8) {
       _errorMessage += '• Password must be longer than 8 characters.\n';
-      notifyListeners();
     }
     // Contains at least one uppercase letter
     if (!password.contains(RegExp(r'[A-Z]'))) {
       _errorMessage += '• Uppercase letter is missing.\n';
-      notifyListeners();
     }
     // Contains at least one lowercase letter
     if (!password.contains(RegExp(r'[a-z]'))) {
       _errorMessage += '• Lowercase letter is missing.\n';
-      notifyListeners();
     }
     // Contains at least one digit
     if (!password.contains(RegExp(r'[0-9]'))) {
       _errorMessage += '• Digit is missing.\n';
-      notifyListeners();
     }
     // Contains at least one special character
     if (!password.contains(RegExp(r'[!@#%^&*(),.?":{}|<>]'))) {
       _errorMessage += '• Special character is missing.\n';
-      notifyListeners();
     }
     // If there are no error messages, the password is valid
     return _errorMessage.isEmpty;

@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:equipro/core/model/EquipmentModel.dart';
 import 'package:equipro/ui/screens/hirer/book/details_view_model.dart';
 import 'package:equipro/utils/colors.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +8,7 @@ import 'package:stacked_services/stacked_services.dart';
 
 import '../../app/app_setup.locator.dart';
 import '../../app/app_setup.router.dart';
+import '../../core/model/equipments/equipments.dart';
 
 class EquipTiles extends StatelessWidget {
   final EquipmentModel model;
@@ -53,7 +53,7 @@ class EquipTiles extends StatelessWidget {
                   child: Hero(
                       tag: model.id.toString(),
                       child: CachedNetworkImage(
-                        imageUrl: model.equipImages!.first.equipImagesPath!,
+                        imageUrl: model.equip_images!.first.equip_images_path!,
                         placeholder: (context, url) => Center(
                             child: SizedBox(
                                 height: 20,
@@ -78,17 +78,17 @@ class EquipTiles extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(model.equipName!,
+                    Text(model.equip_name!,
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                             fontWeight: FontWeight.w600, fontSize: 15)),
                     Gap(10),
                     Row(
                       children: [
                         Text(
-                            "${getCurrency(model.owners!.country) + model.costOfHire!.withCommas}",
+                            "${model.currency! + model.cost_of_hire!.withCommas}",
                             style: Theme.of(context).textTheme.bodySmall),
                         Text(
-                            " per ${model.costOfHireInterval == "1" ? "Day" : model.costOfHireInterval == "7" ? "Week" : "Month"}",
+                            " per ${model.cost_of_hire_interval == "1" ? "Day" : model.cost_of_hire_interval == "7" ? "Week" : "Month"}",
                             style: Theme.of(context).textTheme.bodySmall),
                       ],
                     ),
@@ -104,7 +104,7 @@ class EquipTiles extends StatelessWidget {
                               ),
                               Gap(5),
                               Expanded(
-                                child: Text(model.owners?.localState ?? "",
+                                child: Text(model.owners?.local_state ?? "",
                                     overflow: TextOverflow.ellipsis,
                                     style: Theme.of(context)
                                         .textTheme

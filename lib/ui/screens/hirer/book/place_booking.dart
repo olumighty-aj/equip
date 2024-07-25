@@ -1,6 +1,5 @@
-import 'package:equipro/core/model/BookModel.dart';
-import 'package:equipro/core/model/ChatListModel.dart';
-import 'package:equipro/core/model/EquipmentModel.dart';
+import 'package:equipro/core/model/book_model/book_model.dart';
+import 'package:equipro/core/model/chat_list/chat_list.dart';
 import 'package:equipro/ui/screens/chat/chats_widget/chat_details.dart';
 import 'package:equipro/ui/screens/drawer.dart';
 import 'package:equipro/ui/screens/hirer/book/details_view_model.dart';
@@ -20,6 +19,8 @@ import 'package:stacked_services/stacked_services.dart';
 import '../../../../app/app_setup.locator.dart';
 import '../../../../app/app_setup.logger.dart';
 import '../../../../app/app_setup.router.dart';
+import '../../../../core/model/chat_with/chat_with.dart';
+import '../../../../core/model/equipments/equipments.dart';
 import '../../../../core/services/auth_service.dart';
 import '../../../../utils/text_styles.dart';
 
@@ -190,7 +191,7 @@ class PlaceBookingState extends State<PlaceBooking>
                                   SizedBox(
                                     height: 30,
                                   ),
-                                  Text(widget.model.equipName!,
+                                  Text(widget.model.equip_name!,
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodyLarge
@@ -206,7 +207,7 @@ class PlaceBookingState extends State<PlaceBooking>
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          "${getCurrency(widget.model.owners!.country)}${widget.model.costOfHire} per ${widget.model.costOfHireInterval == "1" ? "Day" : widget.model.costOfHireInterval == "7" ? "Week" : "Month"}",
+                                          "${getCurrency(widget.model.owners!.country)}${widget.model.cost_of_hire} per ${widget.model.cost_of_hire_interval == "1" ? "Day" : widget.model.cost_of_hire_interval == "7" ? "Week" : "Month"}",
                                           style: TextStyle(
                                               fontSize: 15,
                                               color: AppColors.green,
@@ -228,9 +229,9 @@ class PlaceBookingState extends State<PlaceBooking>
                                   Text(
                                     "Availability: ${DateFormat(
                                       "dd MMM, yyyy",
-                                    ).format(DateTime.parse(widget.model.availFrom!)).toString()} - ${DateFormat(
+                                    ).format(DateTime.parse(widget.model.avail_from!)).toString()} - ${DateFormat(
                                       "dd MMM, yyyy",
-                                    ).format(DateTime.parse(widget.model.availTo!)).toString()}",
+                                    ).format(DateTime.parse(widget.model.avail_to!)).toString()}",
                                     style: TextStyle(
                                         color: Colors.black,
                                         fontWeight: FontWeight.bold,
@@ -259,42 +260,42 @@ class PlaceBookingState extends State<PlaceBooking>
                                                   builder: (context) {
                                             return ChatDetailsPage(
                                                 feed: ChatListModel(
-                                                    id: widget.model.userId,
-                                                    userId: locator<
+                                                    id: widget.model.user_id,
+                                                    user_id: locator<
                                                             Authentication>()
                                                         .currentUser
                                                         .id,
-                                                    chatWithId:
+                                                    chat_with_id:
                                                         widget.model.owners!.id,
-                                                    messageCount: "",
-                                                    lastMessage: "",
-                                                    dateCreated: "",
-                                                    dateModified: "",
-                                                    chatWith: ChatWith(
+                                                    message_count: "",
+                                                    last_message: "",
+                                                    date_created: "",
+                                                    date_modified: "",
+                                                    chat_with: ChatWith(
                                                       id: widget
                                                           .model.owners!.id,
                                                       fullname: widget.model
                                                           .owners!.fullname!,
                                                       email: "",
-                                                      phoneNumber: "",
+                                                      phone_number: "",
                                                       gender: "",
                                                       address: "",
-                                                      addressOpt: "",
-                                                      localState: "",
+                                                      address_opt: "",
+                                                      local_state: "",
                                                       country: "",
                                                       latitude: "",
                                                       longitude: "",
-                                                      hirersPath: widget
+                                                      hirers_path: widget
                                                                   .model
                                                                   .owners!
-                                                                  .hirersPath !=
+                                                                  .hirers_path !=
                                                               null
                                                           ? widget.model.owners!
-                                                              .hirersPath!
+                                                              .hirers_path!
                                                           : "",
                                                       status: "",
-                                                      dateModified: "",
-                                                      dateCreated: "",
+                                                      date_modified: "",
+                                                      date_created: "",
                                                     )));
                                           }));
                                         },
@@ -562,18 +563,18 @@ class PlaceBookingState extends State<PlaceBooking>
                                               isBusy: model.busy("Book"),
                                               onPressed: () => model.newBook(
                                                   BookModel(
-                                                      equipmentsId: widget
+                                                      equipments_id: widget
                                                           .model.id
                                                           .toString(),
                                                       quantity: selectedQuantity
                                                           .toString(),
-                                                      rentalFrom: selectedDate,
-                                                      rentalTo: selectedDateTo,
+                                                      rental_from: selectedDate,
+                                                      rental_to: selectedDateTo,
                                                       latitude:
                                                           pickLat.toString(),
                                                       longitude:
                                                           pickLng.toString(),
-                                                      deliveryLocation:
+                                                      delivery_location:
                                                           deliveryController
                                                               .text),
                                                   context),

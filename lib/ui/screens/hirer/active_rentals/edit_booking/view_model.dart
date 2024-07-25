@@ -1,9 +1,9 @@
-import 'package:equipro/core/model/base_model.dart';
 import 'package:equipro/utils/helpers.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 import '../../../../../app/app_setup.locator.dart';
+import '../../../../../core/model/base_model/base_model.dart';
 import '../../../../../core/services/activities_service.dart';
 
 class EditBookingViewModel extends BaseViewModel {

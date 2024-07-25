@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:stacked/stacked.dart';
 
+import '../../../../core/model/active_rentals/active_rentals.dart';
 import '../../../../utils/app_svgs.dart';
 
 class PaymentOptionScreen extends StatelessWidget {
@@ -29,10 +30,10 @@ class PaymentOptionScreen extends StatelessWidget {
                       ListTile(
                         onTap: () {
                           var totalAmount =
-                              double.parse(feed.equipOrder!.serviceCharge!) +
-                                  double.parse(feed.equipOrder!.totalAmount!);
+                              double.parse(feed.equip_order!.service_charge!) +
+                                  double.parse(feed.equip_order!.total_amount!);
                           model.initPayment(
-                              feed.equipOrderId!,
+                              feed.equip_order_id!,
                               totalAmount.toString(),
                               "paypal",
                               "gbp",
@@ -60,10 +61,10 @@ class PaymentOptionScreen extends StatelessWidget {
                     ListTile(
                       onTap: () {
                         var totalAmount =
-                            double.parse(feed.equipOrder!.serviceCharge!) +
-                                double.parse(feed.equipOrder!.totalAmount!);
+                            double.parse(feed.equip_order!.service_charge!) +
+                                double.parse(feed.equip_order!.total_amount!);
                         model.initPayment(
-                            feed.equipOrderId!,
+                            feed.equip_order_id!,
                             totalAmount.toString(),
                             "stripe",
                             model.isNigerian ? "ngn" : "gbp",
