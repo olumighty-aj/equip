@@ -564,7 +564,7 @@ class PlaceBookingState extends State<PlaceBooking>
                                               onPressed: () => model.newBook(
                                                   BookModel(
                                                       equipments_id: widget
-                                                          .model.id
+                                                          .model.ID
                                                           .toString(),
                                                       quantity: selectedQuantity
                                                           .toString(),

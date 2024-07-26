@@ -170,7 +170,7 @@ class LoginState extends State<EditEquipment> with TickerProviderStateMixin {
         selectedDateTo!,
         selectedQuantity!,
         descriptionController.text,
-        widget.model.id!,
+        widget.model.ID!,
         pickLat.toString(),
         pickLng.toString(),
         deliveryController.text,

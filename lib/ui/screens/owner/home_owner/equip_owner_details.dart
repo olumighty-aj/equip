@@ -81,7 +81,7 @@ class LoginState extends State<EquipOwnerDetails>
                         onPressed: () {
                           Navigator.pop(context);
                           model.newDeleteEquip(
-                              widget.model.id.toString(), context);
+                              widget.model.ID.toString(), context);
                         },
                       ),
                     ),

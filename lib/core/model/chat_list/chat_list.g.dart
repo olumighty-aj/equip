@@ -8,7 +8,7 @@ part of 'chat_list.dart';
 
 ChatListModel _$ChatListModelFromJson(Map<String, dynamic> json) =>
     ChatListModel(
-      id: json['id'] as String?,
+      id: json['ID'] as String?,
       user_id: json['user_id'] as String?,
       chat_with_id: json['chat_with_id'] as String?,
       message_count: json['message_count'] as String?,

@@ -292,7 +292,7 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
                   chatResponse.add(ChatMessages(
                     id: "",
                     sender_id: _authentication.currentUser.id,
-                    receiver_id: widget.feed.chat_with!.id!,
+                    receiver_id: widget.feed.chat_with!.id,
                     message: textController.text,
                     type: "sent",
                     inbox_id: "1",
@@ -301,7 +301,7 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
                     date_created: DateTime.now().toString(),
                   ));
                 });
-                textController.text = '';
+                textController.clear();
                 //Scrolldown the list to show the latest message
                 scrollController.animateTo(
                   scrollController.position.maxScrollExtent,
